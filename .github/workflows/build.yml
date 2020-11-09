@@ -33,62 +33,6 @@ jobs:
         --no-restore
         /maxCpuCount
 
-  validate-codeql:
-    name: Validate – CodeQL
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 2
-    - name: CodeQL – Initialize
-      uses: github/codeql-action/init@v1
-      with:
-        languages: csharp
-        queries: security-extended,security-and-quality
-    - name: CodeQL – Build
-      uses: github/codeql-action/autobuild@v1
-    - name: CodeQL – Analyze
-      uses: github/codeql-action/analyze@v1
-
-  validate-codacy:
-    name: Validate – Codacy Security Scan
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-      - name: Codacy Security Scan – Analyze
-        uses: codacy/codacy-analysis-cli-action@1.1.0
-      - name: Codacy Security Scan – Upload Results
-        uses: github/codeql-action/upload-sarif@v1
-
-  validate-shiftleft:
-    name: todo
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-      - name: Perform Scan
-        uses: ShiftLeftSecurity/scan-action@master
-        env:
-          WORKSPACE: ""
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SCAN_AUTO_BUILD: true
-        with:
-          output: reports
-          type: credscan
-      - name: Upload report
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: reports
-
   validate:
     name: Validate
     runs-on: ubuntu-latest
@@ -115,3 +59,26 @@ jobs:
         path: ./.github
     - name: Markdown – Validate Links
       uses: gaurav-nelson/github-action-markdown-link-check@1.0.8
+    - name: Perform Scan
+      uses: ShiftLeftSecurity/scan-action@v1.3.0
+    - name: Upload report
+      uses: github/codeql-action/upload-sarif@v1
+
+  validate-codeql:
+    name: Validate – CodeQL
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+    - name: CodeQL – Initialize
+      uses: github/codeql-action/init@v1
+      with:
+        languages: csharp
+        queries: security-extended,security-and-quality
+    - name: CodeQL – Build
+      uses: github/codeql-action/autobuild@v1
+    - name: CodeQL – Analyze
+      uses: github/codeql-action/analyze@v1
