@@ -1,0 +1,36 @@
+// © Muiris Woulfe
+// Licensed under the MIT License
+
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Debug",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "--configuration",
+        "Debug",
+        "/maxCpuCount",
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+      ],
+      "group": "build",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Build Release",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "--configuration",
+        "Release",
+        "/maxCpuCount",
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+      ],
+      "group": "build",
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+  "settings": {
+    "documentationRules": {
+      "companyName": "Muiris Woulfe",
+      "copyrightText": "© Muiris Woulfe\nLicensed under the MIT License",
+      "documentPrivateElements": true,
+      "documentPrivateFields": true
+    },
+    "layoutRules": {
+      "allowConsecutiveUsings": false,
+      "newlineAtEndOfFile": "require"
+    },
+    "orderingRules": {
+      "blankLinesBetweenUsingGroups": "omit"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+// © Muiris Woulfe
+// Licensed under the MIT License
+
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Debug",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Build Debug",
+      "program": "${workspaceFolder}/src/NuGet.TransitiveDependency.Finder.ConsoleApp/bin/Debug/netcoreapp3.1/NuGet.TransitiveDependency.Finder.ConsoleApp.dll",
+      "args": [
+          "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "externalTerminal"
+    },
+    {
+      "name": "Launch Release",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Build Release",
+      "program": "${workspaceFolder}/src/NuGet.TransitiveDependency.Finder.ConsoleApp/bin/Release/netcoreapp3.1/NuGet.TransitiveDependency.Finder.ConsoleApp.dll",
+      "args": [
+          "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "externalTerminal"
+    }
+  ]
+}
