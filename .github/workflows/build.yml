@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
 
     strategy:
@@ -19,6 +20,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
     - name: Install .NET
       uses: actions/setup-dotnet@v1
     - name: Install NuGet Dependencies
@@ -30,12 +33,34 @@ jobs:
         --no-restore
         /maxCpuCount
 
-  validate:
+  analyze:
+    name: Analyze
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+    - name: CodeQL – Initialize
+      uses: github/codeql-action/init@v1
+      with:
+        languages: csharp
+        queries: security-extended,security-and-quality
+    - name: CodeQL – Build
+      uses: github/codeql-action/autobuild@v1
+    - name: CodeQL – Analyze
+      uses: github/codeql-action/analyze@v1
+
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
     - name: EditorConfig – Download
       run: >-
         curl -L
