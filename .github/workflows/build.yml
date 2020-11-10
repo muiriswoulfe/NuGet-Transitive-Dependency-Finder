@@ -103,7 +103,6 @@ jobs:
     - name: CodeQL – Initialize
       uses: github/codeql-action/init@v1
       with:
-        paths-ignore: '**/obj/**'
         queries: security-and-quality
 
     - name: CodeQL – Build

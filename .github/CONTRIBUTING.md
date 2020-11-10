@@ -24,18 +24,18 @@ You should try to provide details for all appropriate headings in the bug report
 template:
 
 1. **Summary:** A summary outlining the nature of the issue.
-1. **Reproduction Steps:** A set of clear steps that can be used to reproduce
+2. **Reproduction Steps:** A set of clear steps that can be used to reproduce
    the issue on another device.
-1. **Actual Behavior:** The behavior that was observed after performing the
+3. **Actual Behavior:** The behavior that was observed after performing the
    reproduction steps.
-1. **Expected Behavior:** The behavior that was expected, instead of the actual
+4. **Expected Behavior:** The behavior that was expected, instead of the actual
    behavior. It is beneficial to also include information about why the
    specified behavior was expected.
-1. **Console Output:** If applicable, the output printed to the console.
-1. **System Information:** Information about the system on which the issue
+5. **Console Output:** If applicable, the output printed to the console.
+6. **System Information:** Information about the system on which the issue
    occurred, including but not limited to the operating system name and version,
    .NET version, and IDE or compiler name and version.
-1. **Additional Information:** Any additional information that may be relevant
+7. **Additional Information:** Any additional information that may be relevant
    to the issue. This might include the lines of code that you have identified
    as causing the bug, and potential solutions with your opinions as to their
    merits.
@@ -58,13 +58,13 @@ You should try to provide details for all appropriate headings in the feature
 request template:
 
 1. **Summary:** A summary outlining the nature of the request.
-1. **Proposed Solution:** A detailed explanation of how you believe the feature
+2. **Proposed Solution:** A detailed explanation of how you believe the feature
    should behave.
-1. **Alternatives Considered:** An optional set of alternative solutions that
+3. **Alternatives Considered:** An optional set of alternative solutions that
    you considered in place of the proposed solution. These could include any
    workarounds that you are currently using, but which you hope to remove once
    the feature request has been addressed.
-1. **Additional Information:** Any additional information that may be relevant
+4. **Additional Information:** Any additional information that may be relevant
    to the request. This might include proposed code changes or a discussion as
    to the desired architecture of the solution.
 
@@ -75,18 +75,19 @@ addressing one of the issues identified as a [good first issue][goodfirstissue].
 
 Before creating a new PR, please consult the following list.
 
-- First, create a [bug report][bugreport] or [feature request][featurerequest]
-  as appropriate to track the issue.
-- Ensure there is sufficient support for addressing the issue before embarking
-  on a solution. Otherwise, you risk spending time working on something that may
-  not be approved for merging into the project.
-- Ensure you adhere to the coding guidelines. These are not explicitly listed,
-  but whenever you push to any branch of the repo, the automatically invoked
-  build process will validate compliance with the coding guidelines. If you
-  believe there is an implicit rule being adhered to but not enforced, please
-  file a [bug report][bugreport].
-- By contributing to the project, you agree to license your contribution under
-  the [MIT License][license].
+1. First, create a [bug report][bugreport] or [feature request][featurerequest]
+   as appropriate to track the issue.
+2. Ensure there is sufficient support for addressing the issue before embarking
+   on a solution. Otherwise, you risk spending time working on something that
+   may not be approved for merging into the project.
+3. Ensure you adhere to the coding guidelines. These are not explicitly listed,
+   but whenever you push to any branch of the repo, the automatically invoked
+   build process will validate compliance with the coding guidelines. If you
+   believe there is an implicit rule being adhered to but not enforced, please
+   file a [bug report][bugreport].
+
+By contributing to the project, you agree to license your contribution under the
+[MIT License][license].
 
 [security]: SECURITY.md
 [bugreport]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/issues/new?assignees=muiriswoulfe&labels=bug&template=bug-report.md

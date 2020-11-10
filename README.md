@@ -63,23 +63,23 @@ The easiest way to build the NuGet Transitive Dependency Finder is to open
 #### Visual Studio Code
 
 1. Select *File* > *Open...*
-1. Navigate to your local copy of
+2. Navigate to your local copy of
    [NuGetTransitiveDependencyFinder.sln][codesolution] and click *Open*.
-1. Select *View* > *Command Palette...*
-1. In the *Command Palette*, enter *Task: Run Build Task*.
-1. In the next *Command Palette* view, enter *Build Debug* or *Build Release*
+3. Select *View* > *Command Palette...*
+4. In the *Command Palette*, enter *Task: Run Build Task*.
+5. In the next *Command Palette* view, enter *Build Debug* or *Build Release*
    depending on which configuration you wish to build. Most consumers should use
    the Release configuration.
 
 #### Visual Studio
 
 1. Select *File* > *Open* > *Project/Solution...*
-1. Navigate to your local copy of
+2. Navigate to your local copy of
    [NuGetTransitiveDependencyFinder.sln][codesolution] and click *Open*.
-1. In the toolbar, click the *Solution Configurations* dropdown to select the
+3. In the toolbar, click the *Solution Configurations* dropdown to select the
    configuration you wish to build. Most consumers should use the Release
    configuration.
-1. In the *Solution Explorer* window, right-click on the solution file and
+4. In the *Solution Explorer* window, right-click on the solution file and
    select *Build Solution*.
 
 #### Command Line

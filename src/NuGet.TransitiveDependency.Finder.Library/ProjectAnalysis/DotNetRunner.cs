@@ -5,7 +5,6 @@
 
 namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
 {
-    using System.Diagnostics;
     using NuGet.TransitiveDependency.Finder.Library.Input;
 
     /// <summary>
