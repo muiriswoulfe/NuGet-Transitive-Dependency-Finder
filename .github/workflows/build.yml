@@ -85,9 +85,6 @@ jobs:
 
     - name: CodeQL – Initialize
       uses: github/codeql-action/init@v1
-      with:
-        languages: csharp
-        queries: security-extended,security-and-quality
 
     - name: CodeQL – Build
       uses: github/codeql-action/autobuild@v1
