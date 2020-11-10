@@ -92,6 +92,7 @@ jobs:
     - name: CodeQL – Initialize
       uses: github/codeql-action/init@v1
       with:
+        disable-default-queries: true
         queries: ${{ matrix.query }}
 
     - name: CodeQL – Build
