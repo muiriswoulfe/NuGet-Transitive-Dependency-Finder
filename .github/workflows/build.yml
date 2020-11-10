@@ -14,18 +14,20 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
         configuration: [Debug, Release]
 
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-      with:
-        fetch-depth: 2
+
     - name: Install .NET
       uses: actions/setup-dotnet@v1
+
     - name: Install NuGet Dependencies
       run: dotnet restore
+
     - name: Build – ${{ matrix.configuration }}
       run: >-
         dotnet build
@@ -40,45 +42,51 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-      with:
-        fetch-depth: 2
+
     - name: EditorConfig – Download
       run: >-
         curl -L
         ${{ github.server_url }}/editorconfig-checker/editorconfig-checker/releases/download/2.2.0/ec-linux-amd64.tar.gz
         > ec-linux-amd64.tar.gz
+
     - name: EditorConfig – Extract
       run: tar zxvf ec-linux-amd64.tar.gz
+
     - name: EditorConfig – Validate
       run: ./bin/ec-linux-amd64
+
     - name: Markdown – Validate
       uses: actionshub/markdownlint@1.2.2
+
     - name: Markdown – Validate .github
       uses: actionshub/markdownlint@1.2.2
       with:
         path: ./.github
+
     - name: Markdown – Validate Links
       uses: gaurav-nelson/github-action-markdown-link-check@1.0.8
+
     - name: Security Scan – Validate
       uses: ShiftLeftSecurity/scan-action@v1.3.0
       with:
         type: credscan,depscan
+
     - name: Security Scan – Upload Report
       uses: github/codeql-action/upload-sarif@v1
       with:
         sarif_file: reports
 
   validate-codacy:
-    name: Validate – Codacy Security Scan
+    name: Validate – Codacy
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
+
       - name: Codacy Security Scan – Analyze
         uses: codacy/codacy-analysis-cli-action@1.1.0
+
       - name: Codacy Security Scan – Upload Results
         uses: github/codeql-action/upload-sarif@v1
 
@@ -89,14 +97,14 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-      with:
-        fetch-depth: 2
+
     - name: CodeQL – Initialize
       uses: github/codeql-action/init@v1
       with:
-        languages: csharp
-        queries: security-extended,security-and-quality
+        queries: security-and-quality
+
     - name: CodeQL – Build
       uses: github/codeql-action/autobuild@v1
+
     - name: CodeQL – Analyze
       uses: github/codeql-action/analyze@v1
