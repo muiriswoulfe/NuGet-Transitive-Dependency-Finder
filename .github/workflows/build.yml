@@ -79,12 +79,18 @@ jobs:
     name: Validate – CodeQL
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        query: [security-extended, security-and-quality]
+
     steps:
     - name: Checkout
       uses: actions/checkout@v2
 
     - name: CodeQL – Initialize
       uses: github/codeql-action/init@v1
+      with:
+        queries: ${{ matrix.query }}
 
     - name: CodeQL – Build
       uses: github/codeql-action/autobuild@v1
