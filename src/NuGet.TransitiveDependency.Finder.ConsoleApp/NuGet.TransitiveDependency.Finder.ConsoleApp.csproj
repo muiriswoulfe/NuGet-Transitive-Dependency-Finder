@@ -5,7 +5,6 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <Product>NuGet Transitive Dependency Finder Console App</Product>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
