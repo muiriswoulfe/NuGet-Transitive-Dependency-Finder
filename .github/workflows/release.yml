@@ -8,7 +8,8 @@ on:
     types: [created]
 
 jobs:
-  update:
+  update-description:
+    name: Update Description
     runs-on: ubuntu-latest
 
     steps:
@@ -17,6 +18,7 @@ jobs:
         uses: bruceadams/get-release@v1.2.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Update Release
         uses: tubone24/update_release@v1.1.0
         env:
@@ -36,7 +38,8 @@ jobs:
 
             [issues]: ${{ github.server_url }}/${{ github.repository }}/issues?q=is%3Aissue+milestone%3A%22${{ steps.get_release.outputs.tag_name }}%22+is%3Aclosed
 
-  upload:
+  create-asset:
+    name: Create Asset
     runs-on: ubuntu-latest
 
     strategy:
@@ -55,13 +58,16 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+
     - name: Install .NET
       uses: actions/setup-dotnet@v1
+
     - name: Install NuGet Dependencies
       run: >-
         dotnet restore
         --runtime ${{ matrix.runtime }}
         ./src/${{ env.project }}/${{ env.project }}.csproj
+
     - name: Build
       run: >-
         dotnet build
@@ -70,6 +76,7 @@ jobs:
         --no-restore
         /maxCpuCount
         ./src/${{ env.project }}/${{ env.project }}.csproj
+
     - name: Publish
       run: >-
         dotnet publish
@@ -80,20 +87,24 @@ jobs:
         /property:PublishSingleFile=true
         /property:PublishTrimmed=true
         ./src/${{ env.project }}/${{ env.project }}.csproj
+
     - name: Get Release
       id: get_release
       uses: bruceadams/get-release@v1.2.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Extract Platform from Runtime
       uses: jungwinter/split@v1
       id: split
       with:
         msg: ${{ matrix.runtime }}
         seperator: '-'
+
     - name: Set Current Extension
       id: setter
       run: echo '::set-output name=current_extension::${{ fromJson(env.extension)[steps.split.outputs._0] }}'
+
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
