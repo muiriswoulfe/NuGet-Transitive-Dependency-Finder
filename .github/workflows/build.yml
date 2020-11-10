@@ -68,6 +68,20 @@ jobs:
       with:
         sarif_file: reports
 
+  validate-codacy:
+    name: Validate – Codacy Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Codacy Security Scan – Analyze
+        uses: codacy/codacy-analysis-cli-action@1.1.0
+      - name: Codacy Security Scan – Upload Results
+        uses: github/codeql-action/upload-sarif@v1
+
   validate-codeql:
     name: Validate – CodeQL
     runs-on: ubuntu-latest
