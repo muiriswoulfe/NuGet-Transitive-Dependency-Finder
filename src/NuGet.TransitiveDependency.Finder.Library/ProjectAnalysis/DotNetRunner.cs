@@ -70,7 +70,7 @@ namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event parameters.</param>
         private void LogError(object sender, DataReceivedEventArgs e) =>
-            this.logger.LogError(e.Data);
+            this.logger.LogError(e.Data ?? string.Empty);
 
         /// <summary>
         /// Logs messages sent to the Standard Output stream.
@@ -78,6 +78,6 @@ namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event parameters.</param>
         private void LogOutput(object sender, DataReceivedEventArgs e) =>
-            this.logger.LogOutput(e.Data);
+            this.logger.LogOutput(e.Data ?? string.Empty);
     }
 }

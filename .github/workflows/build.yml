@@ -24,6 +24,8 @@ jobs:
 
     - name: Install .NET
       uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
 
     - name: Install NuGet Dependencies
       run: dotnet restore
@@ -87,6 +89,7 @@ jobs:
     - name: CodeQL – Initialize
       uses: github/codeql-action/init@v1
       with:
+        paths-ignore: '**/obj/**'
         queries: security-and-quality
 
     - name: CodeQL – Build
