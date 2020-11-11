@@ -5,10 +5,8 @@
 
 namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Resources
 {
-    using System;
     using System.Globalization;
     using System.Resources;
-    using static System.FormattableString;
 
     /// <summary>
     /// A strongly-typed resource class for accessing localized strings.
