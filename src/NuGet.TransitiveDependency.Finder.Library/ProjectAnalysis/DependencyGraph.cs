@@ -80,7 +80,10 @@ namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
         /// <inheritdoc/>
         public void Dispose()
         {
-            this.Dispose(true);
+            // The suppression below is safe as the code follows the recommended .NET IDisposable pattern, which means
+            // that the instance of this.Dispose() being called is guaranteed to be the instance present in this object.
+            this.Dispose(true); // lgtm[cs/virtual-call-in-constructor]
+
             GC.SuppressFinalize(this);
         }
 
