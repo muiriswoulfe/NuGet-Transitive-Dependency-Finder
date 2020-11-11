@@ -4,22 +4,15 @@
 
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <Authors>Muiris Woulfe</Authors>
-    <Company>$(Authors)</Company>
-    <Copyright>© $(Authors). Licensed under the MIT License.</Copyright>
-    <Description>The NuGet Transitive Dependency Finder analyzes .NET solutions to find superfluous dependencies that
-    have been explicitly added to projects. The goal is to simplify dependency management.</Description>
     <DocumentationFile>bin\$(MSBuildProjectName).xml</DocumentationFile>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <LangVersion>latest</LangVersion>
-    <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>CA1062</NoWarn>
     <Nullable>enable</Nullable>
-    <PackageLicenseFile>$(MSBuildThisFileDirectory)\..\LICENSE.md</PackageLicenseFile>
-    <RepositoryUrl>https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder</RepositoryUrl>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <TargetFramework>net5.0</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <Version>1.0.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
@@ -34,6 +27,9 @@
 
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)\stylecop.json" />
+    <Compile Include="$(MSBuildThisFileDirectory)\Shared\Properties\AssemblyAttributes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\Shared\Properties\AssemblyInfo.cs" />
+    <None Include="$(MSBuildThisFileDirectory)\..\LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
   </ItemGroup>
 
   <ItemGroup>

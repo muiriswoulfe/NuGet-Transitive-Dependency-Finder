@@ -4,7 +4,6 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <Product>NuGet Transitive Dependency Finder Library</Product>
   </PropertyGroup>
 
   <ItemGroup>

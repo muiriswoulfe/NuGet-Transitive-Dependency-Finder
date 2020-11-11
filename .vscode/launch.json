@@ -9,7 +9,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Debug",
-      "program": "${workspaceFolder}/src/NuGet.TransitiveDependency.Finder.ConsoleApp/bin/Debug/netcoreapp3.1/NuGet.TransitiveDependency.Finder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/NuGet.TransitiveDependency.Finder.ConsoleApp/bin/Debug/net5.0/NuGet.TransitiveDependency.Finder.ConsoleApp.dll",
       "args": [
           "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
       ],
@@ -21,7 +21,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Release",
-      "program": "${workspaceFolder}/src/NuGet.TransitiveDependency.Finder.ConsoleApp/bin/Release/netcoreapp3.1/NuGet.TransitiveDependency.Finder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/NuGet.TransitiveDependency.Finder.ConsoleApp/bin/Release/net5.0/NuGet.TransitiveDependency.Finder.ConsoleApp.dll",
       "args": [
           "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
       ],
