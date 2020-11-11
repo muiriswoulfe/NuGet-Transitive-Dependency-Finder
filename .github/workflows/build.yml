@@ -57,13 +57,13 @@ jobs:
     - name: EditorConfig – Validate
       run: ./bin/ec-linux-amd64
 
-    - name: Markdown – Validate
-      uses: actionshub/markdownlint@1.2.2
+    # - name: Markdown – Validate
+    #   uses: actionshub/markdownlint@1.2.2
 
-    - name: Markdown – Validate .github
-      uses: actionshub/markdownlint@1.2.2
-      with:
-        path: ./.github
+    # - name: Markdown – Validate .github
+    #   uses: actionshub/markdownlint@1.2.2
+    #   with:
+    #     path: ./.github
 
     - name: Markdown – Validate Links
       uses: gaurav-nelson/github-action-markdown-link-check@1.0.8

@@ -4,26 +4,22 @@
 
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
     <Authors>Muiris Woulfe</Authors>
-    <CLSCompliant>true</CLSCompliant>
     <Company>$(Authors)</Company>
     <ComVisible>false</ComVisible>
     <Copyright>© $(Authors). Licensed under the MIT License.</Copyright>
-    <Description>The NuGet Transitive Dependency Finder analyzes .NET solutions to find superfluous dependencies that
-    have been explicitly added to projects. The goal is to simplify dependency management.</Description>
+    <Description>The NuGet Transitive Dependency Finder analyzes .NET solutions to find superfluous dependencies that have been explicitly added to projects. The goal is to simplify dependency management.</Description>
     <DocumentationFile>bin\$(MSBuildProjectName).xml</DocumentationFile>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <LangVersion>latest</LangVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <NeutralResourcesLanguageAttribute/>
     <NoWarn>CA1062</NoWarn>
     <Nullable>enable</Nullable>
     <PackageLicenseFile>$(MSBuildThisFileDirectory)\..\LICENSE.md</PackageLicenseFile>
     <RepositoryUrl>https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder</RepositoryUrl>
     <TargetFramework>net5.0</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <Version>$(AssemblyVersion)</Version>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
