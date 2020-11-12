@@ -70,6 +70,7 @@ jobs:
       with:
         sarif_file: reports
 
+#https://docs.codacy.com/repositories-configure/codacy-configuration-file/
   validate-codacy:
     name: Validate – Codacy
     runs-on: ubuntu-latest
@@ -80,6 +81,11 @@ jobs:
 
     - name: Codacy Security Scan – Analyze
       uses: codacy/codacy-analysis-cli-action@1.1.0
+      with:
+          tool: spotbugs
+          verbose: true
+          upload: true
+          allow-network: true
 
     - name: Codacy Security Scan – Upload Results
       uses: github/codeql-action/upload-sarif@v1
