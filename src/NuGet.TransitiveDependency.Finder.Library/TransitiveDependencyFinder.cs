@@ -120,12 +120,12 @@ namespace NuGet.TransitiveDependency.Finder.Library
             TargetFrameworkInformation framework,
             IReadOnlyDictionary<string, LockFileTargetLibrary> libraries)
         {
-            foreach (var dependency in framework.Dependencies)
+            foreach (var library in framework
+                .Dependencies
+                .Select(dependency => libraries.TryGetValue(dependency.Name, out var library) ? library : null)
+                .Where(library => library != null))
             {
-                if (libraries.TryGetValue(dependency.Name, out var library))
-                {
-                    this.RecordDependency(true, library, libraries);
-                }
+                this.RecordDependency(true, library!, libraries);
             }
         }
 
@@ -171,13 +171,13 @@ namespace NuGet.TransitiveDependency.Finder.Library
         private Framework FindTransitiveDependencies(TargetFrameworkInformation framework)
         {
             var result = new Framework(framework.Dependencies.Count, framework.FrameworkName);
-            foreach (var dependency in framework.Dependencies)
+            foreach (var dependency in framework
+                .Dependencies
+                .Where(dependency =>
+                    !string.Equals(dependency.Name, "NETStandard.Library", StringComparison.OrdinalIgnoreCase) &&
+                    this.dependencies.Contains(dependency.Name)))
             {
-                if (!string.Equals(dependency.Name, "NETStandard.Library", StringComparison.OrdinalIgnoreCase) &&
-                    this.dependencies.Contains(dependency.Name))
-                {
-                    result.Add(dependency.Name);
-                }
+                result.Add(dependency.Name);
             }
 
             return result;

@@ -3,8 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-using System;
-using System.Runtime.InteropServices;
+using System.Reflection;
 
-[assembly:CLSCompliant(true)]
-[assembly:ComVisible(false)]
+[assembly: AssemblyProductAttribute("NuGet Transitive Dependency Finder Console App")]
+[assembly: AssemblyTitleAttribute("NuGet.TransitiveDependency.Finder.ConsoleApp")]

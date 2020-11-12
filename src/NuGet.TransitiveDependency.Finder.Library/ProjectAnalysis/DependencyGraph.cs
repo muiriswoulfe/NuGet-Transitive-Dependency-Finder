@@ -14,7 +14,7 @@ namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
     /// <summary>
     /// A class representing a dependency graph of .NET projects and their NuGet dependencies.
     /// </summary>
-    internal class DependencyGraph : IDisposable
+    internal sealed class DependencyGraph : IDisposable
     {
         /// <summary>
         /// The logger for asynchronous messages that have been created by external processes.
@@ -89,7 +89,7 @@ namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
         /// </summary>
         /// <param name="disposing">A value indicating whether disposal should be performed for managed as well as
         /// unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (this.disposedValue)
             {
