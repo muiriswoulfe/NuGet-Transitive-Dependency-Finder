@@ -1,0 +1,9 @@
+---
+
+# © Muiris Woulfe
+# Licensed under the MIT License
+
+engines:
+  sonarcsharp:
+    exclude_paths:
+    - '**'

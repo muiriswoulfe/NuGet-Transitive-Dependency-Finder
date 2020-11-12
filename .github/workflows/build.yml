@@ -6,7 +6,7 @@ name: Build
 on:
   push:
   schedule:
-    - cron: '0 0 * * 1'
+  - cron: '0 0 * * 1'
 
 jobs:
   build:
@@ -57,14 +57,6 @@ jobs:
     - name: EditorConfig – Validate
       run: ./bin/ec-linux-amd64
 
-    # - name: Markdown – Validate
-    #   uses: actionshub/markdownlint@1.2.2
-
-    # - name: Markdown – Validate .github
-    #   uses: actionshub/markdownlint@1.2.2
-    #   with:
-    #     path: ./.github
-
     - name: Markdown – Validate Links
       uses: gaurav-nelson/github-action-markdown-link-check@1.0.8
 
@@ -83,14 +75,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
 
-      - name: Codacy Security Scan – Analyze
-        uses: codacy/codacy-analysis-cli-action@1.1.0
+    - name: Codacy Security Scan – Analyze
+      uses: codacy/codacy-analysis-cli-action@1.1.0
 
-      - name: Codacy Security Scan – Upload Results
-        uses: github/codeql-action/upload-sarif@v1
+    - name: Codacy Security Scan – Upload Results
+      uses: github/codeql-action/upload-sarif@v1
 
   validate-codeql:
     name: Validate – CodeQL
