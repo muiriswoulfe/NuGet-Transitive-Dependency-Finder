@@ -28,7 +28,7 @@ jobs:
         body: |
           ## Changes
 
-          This release resolves the issues listed [here][issues] with the pull requests listed [here][prs].
+          This release resolves the issues listed [here][issues] via the pull requests listed [here][prs].
 
           ## Notes
 
