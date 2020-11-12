@@ -6,7 +6,7 @@
 namespace NuGet.TransitiveDependency.Finder.Properties
 {
     /// <summary>
-    /// A class containing shared attributes to be applied to all NuGet Transitive Dependency Finder assemblies.
+    /// A class comprising shared attributes to be applied to all NuGet Transitive Dependency Finder assemblies.
     /// </summary>
     internal static class AssemblyAttributes
     {
