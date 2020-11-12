@@ -8,6 +8,7 @@
     <DocumentationFile>bin\$(MSBuildProjectName).xml</DocumentationFile>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <LangVersion>latest</LangVersion>
     <NoWarn>CA1062</NoWarn>
     <Nullable>enable</Nullable>

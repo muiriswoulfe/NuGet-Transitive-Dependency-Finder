@@ -7,6 +7,7 @@ using System;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using NuGet.TransitiveDependency.Finder.Properties;
 
 [assembly: AssemblyCompanyAttribute("Muiris Woulfe")]
@@ -22,4 +23,5 @@ using NuGet.TransitiveDependency.Finder.Properties;
 [assembly: AssemblyVersionAttribute(AssemblyAttributes.Version)]
 [assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]
+[assembly: TargetFrameworkAttribute(".NETCoreApp,Version=v5.0", FrameworkDisplayName = "")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
