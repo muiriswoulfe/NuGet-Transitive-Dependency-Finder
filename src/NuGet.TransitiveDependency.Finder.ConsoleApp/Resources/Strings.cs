@@ -34,7 +34,8 @@ namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Resources
         public static class Error
         {
             /// <summary>
-            /// Gets a localized string containing the error message displayed when no command-line parameter is provided.
+            /// Gets a localized string containing the error message displayed when no command-line parameter is
+            /// provided.
             /// </summary>
             public static string MissingParameter =>
                 GetErrorString(nameof(MissingParameter));
@@ -60,7 +61,8 @@ namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Resources
                 GetInformationString(nameof(CommencingAnalysis));
 
             /// <summary>
-            /// Gets a localized string containing the message displayed when no transitive NuGet dependencies are found.
+            /// Gets a localized string containing the message displayed when no transitive NuGet dependencies are
+            /// found.
             /// </summary>
             public static string NoTransitiveNuGetDependencies =>
                 GetInformationString(nameof(NoTransitiveNuGetDependencies));
