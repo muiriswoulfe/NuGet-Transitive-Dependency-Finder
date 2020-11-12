@@ -4,6 +4,7 @@
 
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\key.snk</AssemblyOriginatorKeyFile>
     <DocumentationFile>bin\$(MSBuildProjectName).xml</DocumentationFile>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -11,6 +12,7 @@
     <NoWarn>CA1062</NoWarn>
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <SignAssembly>true</SignAssembly>
     <TargetFramework>net5.0</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
@@ -50,7 +52,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118 ">
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
