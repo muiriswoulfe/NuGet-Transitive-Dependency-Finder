@@ -83,7 +83,7 @@ jobs:
       with:
         allow-network: true
         format: sarif
-        verbose: true
+        output: ../results.sarif
 
     - name: Codacy Security Scan – Upload Results
       uses: github/codeql-action/upload-sarif@v1
