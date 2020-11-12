@@ -4,11 +4,10 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <Product>NuGet Transitive Dependency Finder Library</Product>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NuGet.ProjectModel" Version="5.7.0" />
+    <PackageReference Include="NuGet.ProjectModel" Version="5.8.0" />
   </ItemGroup>
 
 </Project>

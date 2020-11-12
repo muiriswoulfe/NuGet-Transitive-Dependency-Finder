@@ -409,12 +409,20 @@ max_line_length = 120
 [.editorconfig]
 max_line_length = unset
 
-[*.{Designer.cs,json,md,sln,yml}]
+[*.{json,md,sln,yml}]
 max_line_length = unset
 
 [*.md]
 indent_size = unset
 trim_trailing_whitespace = true
+
+[*.snk]
+charset = unset
+indent_style = unset
+indent_size = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+max_line_length = unset
 
 ##########################################
 # License

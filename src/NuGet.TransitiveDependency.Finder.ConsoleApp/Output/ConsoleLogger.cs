@@ -5,20 +5,20 @@
 
 namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Output
 {
-    using FluentColorConsole;
+    using System;
     using NuGet.TransitiveDependency.Finder.Library.Input;
 
     /// <summary>
     /// A class for logging, to the console, asynchronous messages that have been created by external processes.
     /// </summary>
-    public class ConsoleLogger : ILogger
+    internal class ConsoleLogger : ILogger
     {
         /// <inheritdoc/>
         public void LogError(string message) =>
-            ColorConsole.WithRedText.WriteLine(message);
+            ColorConsole.WriteLine(message, ConsoleColor.Red);
 
         /// <inheritdoc/>
         public void LogOutput(string message) =>
-            ColorConsole.WithDarkYellowText.WriteLine(message);
+            ColorConsole.WriteLine(message, ConsoleColor.DarkYellow);
     }
 }

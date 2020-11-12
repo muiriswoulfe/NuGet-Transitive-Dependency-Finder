@@ -6,7 +6,7 @@ name: Build
 on:
   push:
   schedule:
-    - cron: '0 0 * * 1'
+  - cron: '0 0 * * 1'
 
 jobs:
   build:
@@ -89,7 +89,6 @@ jobs:
     - name: CodeQL – Initialize
       uses: github/codeql-action/init@v1
       with:
-        paths-ignore: '**/obj/**'
         queries: security-and-quality
 
     - name: CodeQL – Build

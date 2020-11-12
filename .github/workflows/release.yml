@@ -13,30 +13,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get Release
-        id: get_release
-        uses: bruceadams/get-release@v1.2.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Get Release
+      id: get_release
+      uses: bruceadams/get-release@v1.2.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update Release
-        uses: tubone24/update_release@v1.1.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          release_name: Release ${{ steps.get_release.outputs.tag_name }}
-          body: |
-            ## Changes
+    - name: Update Release
+      uses: tubone24/update_release@v1.1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        release_name: Release ${{ steps.get_release.outputs.tag_name }}
+        body: |
+          ## Changes
 
-            This release resolves the issues listed [here][issues].
+          This release resolves the issues listed [here][issues] via the pull requests listed [here][prs].
 
-            ## Notes
+          ## Notes
 
-            - No dependencies are required for any platform.
-            - Under Linux and macOS, you will need to run `chmod +x <filename>` from the console prior to starting the app.
-            - Under macOS, the first time you run the app, you will encounter a security error. Click *Cancel* and go to *Apple* > *System Preferences...* > *Security & Privacy* and click *Allow Anyway*. The app should run successfully on the subsequent run.
+          - No dependencies are required for any platform.
+          - Under Linux and macOS, you will need to run `chmod +x <filename>` from the console prior to starting the app.
+          - Under macOS, the first time you run the app, you will encounter a security error. Click *Cancel* and go to *Apple* > *System Preferences...* > *Security & Privacy* and click *Allow Anyway*. The app should run successfully on the subsequent run.
 
-            [issues]: ${{ github.server_url }}/${{ github.repository }}/issues?q=is%3Aissue+milestone%3A%22${{ steps.get_release.outputs.tag_name }}%22+is%3Aclosed
+          [issues]: ${{ github.server_url }}/${{ github.repository }}/issues?q=is%3Aissue+milestone%3A%22${{ steps.get_release.outputs.tag_name }}%22+is%3Aclosed
+          [prs]: ${{ github.server_url }}/${{ github.repository }}/pulls?q=is%3Apr+milestone%3A%22${{ steps.get_release.outputs.tag_name }}%22+is%3Aclosed
 
   create-asset:
     name: Create Asset
@@ -114,6 +115,6 @@ jobs:
       with:
         upload_url: ${{ steps.get_release.outputs.upload_url }}
         asset_path: >-
-          ${{ github.workspace }}/src/${{ env.project }}/bin/Release/netcoreapp3.1/${{ matrix.runtime }}/publish/${{ env.project }}${{ steps.setter.outputs.current_extension }}
+          ${{ github.workspace }}/src/${{ env.project }}/bin/Release/net5.0/${{ matrix.runtime }}/publish/${{ env.project }}${{ steps.setter.outputs.current_extension }}
         asset_name: NuGetTransitiveDependencyFinder.${{ matrix.runtime }}${{ steps.setter.outputs.current_extension }}
         asset_content_type: application/octet-stream

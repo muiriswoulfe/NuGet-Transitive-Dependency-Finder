@@ -12,7 +12,7 @@ namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Output
     /// <summary>
     /// A class for writing transitive NuGet dependency information to the console.
     /// </summary>
-    public static class ConsoleWriter
+    internal static class ConsoleWriter
     {
         /// <summary>
         /// Writes the transitive NuGet dependency information to the console.
@@ -22,7 +22,7 @@ namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Output
         {
             if (!projects.HasChildren)
             {
-                Console.WriteLine(Strings.InfoNoTransitiveNuGetDependencies);
+                Console.WriteLine(Strings.Information.NoTransitiveNuGetDependencies);
                 return;
             }
 
