@@ -77,10 +77,10 @@ Before creating a new PR, please consult the following list.
 
 1. First, create a [bug report][bugreport] or [feature request][featurerequest]
    as appropriate to track the issue.
-2. Ensure there is sufficient support for addressing the issue before embarking
+1. Ensure there is sufficient support for addressing the issue before embarking
    on a solution. Otherwise, you risk spending time working on something that
    may not be approved for merging into the project.
-3. Ensure you adhere to the coding guidelines. These are not explicitly listed,
+1. Ensure you adhere to the coding guidelines. These are not explicitly listed,
    but whenever you push to any branch of the repo, the automatically invoked
    build process will validate compliance with the coding guidelines. If you
    believe there is an implicit rule being adhered to but not enforced, please

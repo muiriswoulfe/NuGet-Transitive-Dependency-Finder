@@ -9,8 +9,8 @@ namespace NuGet.TransitiveDependency.Finder.Library
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
+    using Microsoft.Extensions.Logging;
     using NuGet.ProjectModel;
-    using NuGet.TransitiveDependency.Finder.Library.Input;
     using NuGet.TransitiveDependency.Finder.Library.Output;
     using NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis;
     using static System.FormattableString;
@@ -21,9 +21,9 @@ namespace NuGet.TransitiveDependency.Finder.Library
     public class TransitiveDependencyFinder
     {
         /// <summary>
-        /// The logger for asynchronous messages that have been created by external processes.
+        /// The logger factory from which a logger will be created.
         /// </summary>
-        private readonly ILogger logger;
+        private readonly ILoggerFactory loggerFactory;
 
         /// <summary>
         /// The collection of dependencies recorded and stored temporarily for the purposes of finding transitive NuGet
@@ -34,10 +34,9 @@ namespace NuGet.TransitiveDependency.Finder.Library
         /// <summary>
         /// Initializes a new instance of the <see cref="TransitiveDependencyFinder"/> class.
         /// </summary>
-        /// <param name="logger">The logger for asynchronous messages that have been created by external
-        /// processes.</param>
-        public TransitiveDependencyFinder(ILogger logger) =>
-            this.logger = logger;
+        /// <param name="loggerFactory">The logger factory from which a logger will be created.</param>
+        public TransitiveDependencyFinder(ILoggerFactory loggerFactory) =>
+            this.loggerFactory = loggerFactory;
 
         /// <summary>
         /// Runs the logic for finding transitive NuGet dependencies.
@@ -95,7 +94,7 @@ namespace NuGet.TransitiveDependency.Finder.Library
         /// <returns>The project dependency graph.</returns>
         private DependencyGraphSpec CreateProjectDependencyGraph(string solutionPath)
         {
-            using var dependencyGraph = new DependencyGraph(this.logger, solutionPath);
+            using var dependencyGraph = new DependencyGraph(this.loggerFactory, solutionPath);
             return dependencyGraph.Create();
         }
 
@@ -106,7 +105,7 @@ namespace NuGet.TransitiveDependency.Finder.Library
         /// <returns>The collection of assets files.</returns>
         private IReadOnlyCollection<LockFileTarget>? CreateAssetsFiles(PackageSpec project)
         {
-            var assets = new Assets(this.logger, project.FilePath, project.RestoreMetadata.OutputPath);
+            var assets = new Assets(this.loggerFactory, project.FilePath, project.RestoreMetadata.OutputPath);
             return assets.Create()?.Targets?.ToArray();
         }
 

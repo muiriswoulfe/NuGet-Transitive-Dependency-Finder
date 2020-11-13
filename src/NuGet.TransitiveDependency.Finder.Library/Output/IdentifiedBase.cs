@@ -32,6 +32,13 @@ namespace NuGet.TransitiveDependency.Finder.Library.Output
         /// </summary>
         public TIdentifier Identifier { get; }
 
+        /// <summary>
+        /// Gets a hash code for the current object.
+        /// </summary>
+        /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
+        protected int BaseHashCode =>
+            StringComparer.OrdinalIgnoreCase.GetHashCode(this.Identifier.ToString() !);
+
         /// <inheritdoc/>
         /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
         public override string ToString() =>
@@ -86,11 +93,11 @@ namespace NuGet.TransitiveDependency.Finder.Library.Output
         }
 
         /// <summary>
-        /// Calculates a hash code for the current object.
+        /// Determines whether performing an <see cref="Base{TChild}.Add(TChild)"/> operation on the specified child
+        /// element is valid.
         /// </summary>
-        /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
-        /// <returns>The hash code.</returns>
-        protected int GetBaseHashCode() =>
-            StringComparer.OrdinalIgnoreCase.GetHashCode(this.Identifier.ToString() !);
+        /// <param name="child">The child element to check.</param>
+        /// <returns>A value indicating whether the child element should be added the collection.</returns>
+        protected override abstract bool IsAddValid(TChild child);
     }
 }

@@ -6,6 +6,8 @@
 namespace NuGet.TransitiveDependency.Finder.ConsoleApp
 {
     using System;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Console;
     using NuGet.TransitiveDependency.Finder.ConsoleApp.Output;
     using NuGet.TransitiveDependency.Finder.ConsoleApp.Resources;
     using NuGet.TransitiveDependency.Finder.Library;
@@ -21,16 +23,24 @@ namespace NuGet.TransitiveDependency.Finder.ConsoleApp
         /// <param name="parameters">A collection of command-line parameters.</param>
         public static void Main(string[] parameters)
         {
+            using var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole(options => options.FormatterName = nameof(Formatter))
+                    .AddConsoleFormatter<Formatter, ConsoleFormatterOptions>()
+                    .SetMinimumLevel(LogLevel.Trace);
+            });
+
+            var logger = loggerFactory.CreateLogger(nameof(Program));
             if (parameters.Length != 1)
             {
-                ColorConsole.WriteLine(Strings.Error.MissingParameter, ConsoleColor.Red);
+                logger.LogError(Strings.Error.MissingParameter);
                 return;
             }
 
-            Console.WriteLine(Strings.Information.CommencingAnalysis);
-            var finder = new TransitiveDependencyFinder(new ConsoleLogger());
+            logger.LogInformation(Strings.Information.CommencingAnalysis);
+            var finder = new TransitiveDependencyFinder(loggerFactory);
             var projects = finder.Run(parameters[0]);
-            ConsoleWriter.Write(projects);
+            new Writer(loggerFactory).Write(projects);
         }
     }
 }
