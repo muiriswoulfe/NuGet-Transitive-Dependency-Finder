@@ -1,8 +1,4 @@
 ---
-
-# © Muiris Woulfe
-# Licensed under the MIT License
-
 engines:
   sonarscharp:
     exclude_paths:
