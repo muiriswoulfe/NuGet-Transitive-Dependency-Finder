@@ -83,6 +83,7 @@ jobs:
       with:
         allow-network: true
         format: sarif
+        verbose: true
         output: ../results
 
     - name: Codacy Security Scan – Upload Report
