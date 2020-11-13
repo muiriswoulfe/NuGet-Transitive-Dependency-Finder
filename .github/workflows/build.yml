@@ -83,6 +83,7 @@ jobs:
       with:
         allow-network: true
         format: sarif
+        tools: sonarscharp
         verbose: true
         output: ../results
 
