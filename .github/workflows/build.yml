@@ -81,7 +81,7 @@ jobs:
     - name: Codacy Security Scan – Analyze
       uses: codacy/codacy-analysis-cli-action@1.1.0
       with:
-        allow-network: true
+        #allow-network: true
         format: sarif
         tools: sonarscharp
         verbose: true
