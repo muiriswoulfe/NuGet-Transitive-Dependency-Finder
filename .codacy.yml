@@ -1,5 +1,5 @@
----
-engines:
-  sonarscharp:
-    exclude_paths:
-    - '**'
+# ---
+# engines:
+#   sonarscharp:
+#     exclude_paths:
+#     - '**'
