@@ -16,8 +16,6 @@ assignees: muiriswoulfe
 
 ## Reproduction Steps
 
-1.
-
 ## Actual Behavior
 
 ## Expected Behavior

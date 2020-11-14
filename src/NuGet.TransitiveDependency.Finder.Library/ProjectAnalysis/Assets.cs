@@ -6,10 +6,11 @@
 namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
 {
     using System.IO;
+    using Microsoft.Extensions.Logging;
     using NuGet.Common;
     using NuGet.ProjectModel;
     using static System.FormattableString;
-    using ILogger = NuGet.TransitiveDependency.Finder.Library.Input.ILogger;
+    using ILogger = Microsoft.Extensions.Logging.ILogger;
 
     /// <summary>
     /// A class representing the contents of a "project.assets.json" file.
@@ -17,9 +18,9 @@ namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
     internal class Assets
     {
         /// <summary>
-        /// The logger for asynchronous messages that have been created by external processes.
+        /// The logger factory from which a logger will be created.
         /// </summary>
-        private readonly ILogger logger;
+        private readonly ILoggerFactory loggerFactory;
 
         /// <summary>
         /// The path of the directory containing the .NET project file.
@@ -39,14 +40,13 @@ namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
         /// <summary>
         /// Initializes a new instance of the <see cref="Assets"/> class.
         /// </summary>
-        /// <param name="logger">The logger for asynchronous messages that have been created by external
-        /// processes.</param>
+        /// <param name="loggerFactory">The logger factory from which a logger will be created.</param>
         /// <param name="projectPath">The path of the .NET project file, including the file name.</param>
         /// <param name="outputDirectory">The path of the directory in which to store the project restore
         /// outputs.</param>
-        public Assets(ILogger logger, string projectPath, string outputDirectory)
+        public Assets(ILoggerFactory loggerFactory, string projectPath, string outputDirectory)
         {
-            this.logger = logger;
+            this.loggerFactory = loggerFactory;
             this.projectDirectory = Path.GetDirectoryName(projectPath) !;
             this.outputDirectory = outputDirectory;
             this.parameters = Invariant($"restore \"{projectPath}\"");
@@ -58,7 +58,7 @@ namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
         /// <returns>The <see cref="LockFile"/> object.</returns>
         public LockFile? Create()
         {
-            var dotNetRunner = new DotNetRunner(this.logger, this.parameters, this.projectDirectory);
+            var dotNetRunner = new DotNetRunner(this.loggerFactory, this.parameters, this.projectDirectory);
             dotNetRunner.Run();
 
             var projectAssetsFilePath = Path.Combine(this.outputDirectory, "project.assets.json");

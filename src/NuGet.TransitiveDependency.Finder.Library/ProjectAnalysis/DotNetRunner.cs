@@ -6,7 +6,7 @@
 namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
 {
     using System.Diagnostics;
-    using NuGet.TransitiveDependency.Finder.Library.Input;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// A class that manages the running of .NET commands on project and solution files.
@@ -26,15 +26,14 @@ namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
         /// <summary>
         /// Initializes a new instance of the <see cref="DotNetRunner"/> class.
         /// </summary>
-        /// <param name="logger">The logger for asynchronous messages that have been created by external
-        /// processes.</param>
+        /// <param name="loggerFactory">The logger factory from which a logger will be created.</param>
         /// <param name="parameters">The parameters to pass to the "dotnet" command, excluding the file name of the
         /// executable.</param>
         /// <param name="workingDirectory">The path of the directory in which to store the files created after running
         /// the "dotnet" command.</param>
-        public DotNetRunner(ILogger logger, string parameters, string workingDirectory)
+        public DotNetRunner(ILoggerFactory loggerFactory, string parameters, string workingDirectory)
         {
-            this.logger = logger;
+            this.logger = loggerFactory.CreateLogger(nameof(DotNetRunner));
             this.processStartInfo = new ProcessStartInfo("dotnet", parameters)
             {
                 RedirectStandardError = true,
@@ -78,6 +77,6 @@ namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event parameters.</param>
         private void LogOutput(object sender, DataReceivedEventArgs e) =>
-            this.logger.LogOutput(e.Data ?? string.Empty);
+            this.logger.LogDebug(e.Data ?? string.Empty);
     }
 }

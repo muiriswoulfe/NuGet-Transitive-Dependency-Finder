@@ -7,8 +7,8 @@ namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
 {
     using System;
     using System.IO;
+    using Microsoft.Extensions.Logging;
     using NuGet.ProjectModel;
-    using NuGet.TransitiveDependency.Finder.Library.Input;
     using static System.FormattableString;
 
     /// <summary>
@@ -17,9 +17,9 @@ namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
     internal sealed class DependencyGraph : IDisposable
     {
         /// <summary>
-        /// The logger for asynchronous messages that have been created by external processes.
+        /// The logger factory from which a logger will be created.
         /// </summary>
-        private readonly ILogger logger;
+        private readonly ILoggerFactory loggerFactory;
 
         /// <summary>
         /// A temporary file for storing the dependency graph information.
@@ -45,12 +45,11 @@ namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
         /// <summary>
         /// Initializes a new instance of the <see cref="DependencyGraph"/> class.
         /// </summary>
-        /// <param name="logger">The logger for asynchronous messages that have been created by external
-        /// processes.</param>
+        /// <param name="loggerFactory">The logger factory from which a logger will be created.</param>
         /// <param name="solutionPath">The path of the .NET solution file, including the file name.</param>
-        public DependencyGraph(ILogger logger, string solutionPath)
+        public DependencyGraph(ILoggerFactory loggerFactory, string solutionPath)
         {
-            this.logger = logger;
+            this.loggerFactory = loggerFactory;
             this.filePath = Path.GetTempFileName();
             this.solutionDirectory = Path.GetDirectoryName(solutionPath) !;
 
@@ -71,7 +70,7 @@ namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
         /// <returns>The <see cref="DependencyGraphSpec"/> object.</returns>
         public DependencyGraphSpec Create()
         {
-            var dotNetRunner = new DotNetRunner(this.logger, this.arguments, this.solutionDirectory);
+            var dotNetRunner = new DotNetRunner(this.loggerFactory, this.arguments, this.solutionDirectory);
             dotNetRunner.Run();
 
             return DependencyGraphSpec.Load(this.filePath);

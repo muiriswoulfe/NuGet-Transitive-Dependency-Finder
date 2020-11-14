@@ -118,7 +118,7 @@ namespace NuGet.TransitiveDependency.Finder.Library.Output
         /// <remarks>The result of this method is solely dependent on
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         public override int GetHashCode() =>
-            this.GetBaseHashCode();
+            this.BaseHashCode;
 
         /// <inheritdoc/>
         protected override bool IsAddValid(Framework child) =>

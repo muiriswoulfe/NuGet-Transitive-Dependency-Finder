@@ -62,7 +62,7 @@ representative at an online or offline event.
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the community leaders responsible for enforcement at
-[INSERT CONTACT METHOD].
+[mw.github@outlook.com][email].
 All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the
@@ -128,3 +128,5 @@ enforcement ladder](https://github.com/mozilla/diversity).
 For answers to common questions about this code of conduct, see the FAQ at
 <https://www.contributor-covenant.org/faq>. Translations are available at
 <https://www.contributor-covenant.org/translations>.
+
+[email]: mailto:mw.github@outlook.com?subject=CODE%20OF%20CONDUCT:%20NuGet%20Transitive%20Dependency%20Finder

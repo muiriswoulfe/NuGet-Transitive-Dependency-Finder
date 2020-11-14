@@ -26,7 +26,7 @@ namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Resources
         /// <param name="name">The name of the localized string to be accessed.</param>
         /// <returns>The contents of the localized string.</returns>
         private static string GetString(string name) =>
-            ResourceManager.GetString(name, CultureInfo.CurrentUICulture) !;
+            ResourceManager.GetString(name, CultureInfo.CurrentCulture) !;
 
         /// <summary>
         /// A strongly typed resource class for accessing localized error strings.

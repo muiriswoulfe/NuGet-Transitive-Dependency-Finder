@@ -75,18 +75,19 @@ addressing one of the issues identified as a [good first issue][goodfirstissue].
 
 Before creating a new PR, please consult the following list.
 
-- First, create a [bug report][bugreport] or [feature request][featurerequest]
-  as appropriate to track the issue.
-- Ensure there is sufficient support for addressing the issue before embarking
-  on a solution. Otherwise, you risk spending time working on something that may
-  not be approved for merging into the project.
-- Ensure you adhere to the coding guidelines. These are not explicitly listed,
-  but whenever you push to any branch of the repo, the automatically invoked
-  build process will validate compliance with the coding guidelines. If you
-  believe there is an implicit rule being adhered to but not enforced, please
-  file a [bug report][bugreport].
-- By contributing to the project, you agree to license your contribution under
-  the [MIT License][license].
+1. First, create a [bug report][bugreport] or [feature request][featurerequest]
+   as appropriate to track the issue.
+1. Ensure there is sufficient support for addressing the issue before embarking
+   on a solution. Otherwise, you risk spending time working on something that
+   may not be approved for merging into the project.
+1. Ensure you adhere to the coding guidelines. These are not explicitly listed,
+   but whenever you push to any branch of the repo, the automatically invoked
+   build process will validate compliance with the coding guidelines. If you
+   believe there is an implicit rule being adhered to but not enforced, please
+   file a [bug report][bugreport].
+
+By contributing to the project, you agree to license your contribution under the
+[MIT License][license].
 
 [security]: SECURITY.md
 [bugreport]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/issues/new?assignees=muiriswoulfe&labels=bug&template=bug-report.md
