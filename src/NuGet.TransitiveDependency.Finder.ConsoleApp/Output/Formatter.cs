@@ -60,14 +60,22 @@ namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Output
         private static string GetColorAndFormatting(LogLevel logLevel) =>
             logLevel switch
             {
-                LogLevel.Trace => "\x1B[32m", // Green
-                LogLevel.Debug => "\x1B[32m", // Green
-                LogLevel.Information => "\x1B[1m", // Bold
-                LogLevel.Warning => "\x1B[1m\x1B[33m", // Bold Dark Yellow
-                LogLevel.Error => "\x1B[1m\x1B[31m", // Bold Red
-                LogLevel.Critical => "\x1B[1m\x1B[31m", // Bold Red
-                LogLevel.None => string.Empty,
-                _ => throw new ArgumentOutOfRangeException(nameof(logLevel))
+                LogLevel.Trace =>
+                    "\x1B[32m", // Green
+                LogLevel.Debug =>
+                    "\x1B[32m", // Green
+                LogLevel.Information =>
+                    "\x1B[1m", // Bold
+                LogLevel.Warning =>
+                    "\x1B[1m\x1B[33m", // Bold Dark Yellow
+                LogLevel.Error =>
+                    "\x1B[1m\x1B[31m", // Bold Red
+                LogLevel.Critical =>
+                    "\x1B[1m\x1B[31m", // Bold Red
+                LogLevel.None =>
+                    string.Empty,
+                _ =>
+                    throw new ArgumentOutOfRangeException(nameof(logLevel))
             };
 
         /// <summary>
