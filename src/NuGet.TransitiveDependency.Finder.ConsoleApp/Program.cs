@@ -5,7 +5,6 @@
 
 namespace NuGet.TransitiveDependency.Finder.ConsoleApp
 {
-    using System;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Console;
     using NuGet.TransitiveDependency.Finder.ConsoleApp.Output;
