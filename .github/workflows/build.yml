@@ -99,7 +99,7 @@ jobs:
 
   validate-sonarcloud:
     name: Validate – SonarCloud
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
@@ -127,20 +127,36 @@ jobs:
         key: ${{ runner.os }}-sonar-scanner
         restore-keys: ${{ runner.os }}-sonar-scanner
 
-    - name: SonarCloud – Install scanner
+    - name: SonarCloud – Install Scanner
       if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
       shell: pwsh
       run: |
         New-Item -Path .\.sonar\scanner -ItemType Directory
         dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
-    - name: SonarCloud – Build & Analyze
+    - name: SonarCloud – Initialize
+      shell: pwsh
+      run: >-
+        .\.sonar\scanner\dotnet-sonarscanner
+        begin
+        /k:"muiriswoulfe_NuGet-Transitive-Dependency-Finder"
+        /o:"muiriswoulfe"
+        /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        /d:sonar.host.url="https://sonarcloud.io"
+
+    - name: Install NuGet Dependencies
+      run: dotnet restore
+
+    - name: Build – Release
+      run: >-
+        dotnet build
+        --configuration Release
+        --no-restore
+        /maxCpuCount
+
+    - name: SonarCloud – Analyze
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       shell: pwsh
-      run: |
-        .\.sonar\scanner\dotnet-sonarscanner begin /k:"muiriswoulfe_NuGet-Transitive-Dependency-Finder" /o:"muiriswoulfe" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-        dotnet restore
-        dotnet build --configuration Release --no-restore /maxCpuCount
-        .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+      run: .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
