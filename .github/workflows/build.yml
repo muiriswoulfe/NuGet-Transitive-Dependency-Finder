@@ -70,6 +70,19 @@ jobs:
       with:
         sarif_file: reports
 
+    - name: Remark Action
+      # You may pin to the exact commit or the version.
+      # uses: ocular-d/action-remark@74035a23b4975236c9fdeb0248f30f2f8ad64b1e
+      uses: ocular-d/action-remark@0.0.10
+      with:
+        # Name of the directory remark should check
+        check_dir: .
+
+    - name: json-lint
+      # You may pin to the exact commit or the version.
+      # uses: ocular-d/json-linter@80bcf763ed12bc904e59ecd011f775401fd2e1d6
+      uses: ocular-d/json-linter@0.0.1
+
   validate-codacy:
     name: Validate Codacy
     runs-on: ubuntu-latest
