@@ -24,11 +24,6 @@ namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Output
     internal class Formatter : ConsoleFormatter
     {
         /// <summary>
-        /// The ASCII code for resetting the console color and formatting to their defaults.
-        /// </summary>
-        private const string GetColorAndFormattingReset = "\x1B[39m\x1B[22m";
-
-        /// <summary>
         /// The set of formatting options.
         /// </summary>
         private readonly IOptionsMonitor<ConsoleFormatterOptions> options;
@@ -47,11 +42,11 @@ namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Output
             IExternalScopeProvider scopeProvider,
             TextWriter textWriter)
         {
-            var currentOptions = this.options.CurrentValue;
-            var timestamp = currentOptions.UseUtcTimestamp ? DateTime.UtcNow : DateTime.Now;
+            const string GetColorAndFormattingReset = "\x1B[39m\x1B[22m";
+
             textWriter.WriteLine(
-                "{0} {1}{2}{3}",
-                timestamp.ToString(currentOptions.TimestampFormat ?? "s", CultureInfo.CurrentCulture),
+                "{0}\t{1}{2}{3}",
+                this.GetTimestamp(),
                 GetColorAndFormatting(logEntry.LogLevel),
                 logEntry.Formatter(logEntry.State, logEntry.Exception),
                 GetColorAndFormattingReset);
@@ -74,5 +69,16 @@ namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Output
                 LogLevel.None => string.Empty,
                 _ => throw new ArgumentOutOfRangeException(nameof(logLevel))
             };
+
+        /// <summary>
+        /// Gets the timestamp written at the start of each log entry.
+        /// </summary>
+        /// <returns>The timestamp formatted as a string.</returns>
+        private string GetTimestamp()
+        {
+            var currentOptions = this.options.CurrentValue;
+            var timestamp = currentOptions.UseUtcTimestamp ? DateTime.UtcNow : DateTime.Now;
+            return timestamp.ToString(currentOptions.TimestampFormat ?? "s", CultureInfo.CurrentCulture);
+        }
     }
 }

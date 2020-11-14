@@ -16,21 +16,6 @@ namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Output
     internal class Writer
     {
         /// <summary>
-        /// The number of characters used for each level of indentation.
-        /// </summary>
-        private const int IndentationSize = 4;
-
-        /// <summary>
-        /// The level of indentation to use when writing framework information.
-        /// </summary>
-        private const int FrameworkIndentationLevel = 1;
-
-        /// <summary>
-        /// The level of indentation to use when writing transitive dependency information.
-        /// </summary>
-        private const int TransitiveDependencyIndentationLevel = 2;
-
-        /// <summary>
         /// The logger object to which to send the output.
         /// </summary>
         private readonly ILogger logger;
@@ -48,6 +33,9 @@ namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Output
         /// <param name="projects">The details of the projects.</param>
         public void Write(Projects projects)
         {
+            const int FrameworkIndentationLevel = 1;
+            const int TransitiveDependencyIndentationLevel = 2;
+
             if (!projects.HasChildren)
             {
                 this.logger.LogInformation(Strings.Information.NoTransitiveNuGetDependencies);
@@ -81,7 +69,11 @@ namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Output
         /// </summary>
         /// <param name="indentLevel">The level to which to indent.</param>
         /// <returns>A string comprising the appropriate level of indentation.</returns>
-        private static string CreatePrefix(int indentLevel) =>
-            new string(' ', indentLevel * IndentationSize);
+        private static string CreatePrefix(int indentLevel)
+        {
+            const int IndentationSize = 4;
+
+            return new string(' ', indentLevel * IndentationSize);
+        }
     }
 }
