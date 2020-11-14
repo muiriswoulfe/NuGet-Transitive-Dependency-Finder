@@ -42,20 +42,20 @@ namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Output
             IExternalScopeProvider scopeProvider,
             TextWriter textWriter)
         {
-            const string GetColorAndFormattingReset = "\x1B[39m\x1B[22m";
+            const string ResetColorAndFormatting = "\x1B[39m\x1B[22m";
 
             textWriter.WriteLine(
-                "{0}\t{1}{2}{3}",
+                "{0} {1}{2}{3}",
                 this.GetTimestamp(),
                 GetColorAndFormatting(logEntry.LogLevel),
                 logEntry.Formatter(logEntry.State, logEntry.Exception),
-                GetColorAndFormattingReset);
+                ResetColorAndFormatting);
         }
 
         /// <summary>
         /// Gets the ASCII color and formatting codes for the corresponding log level.
         /// </summary>
-        /// <param name="logLevel">The log level for which to get the formatting.</param>
+        /// <param name="logLevel">The log level for which to get the color and formatting codes.</param>
         /// <returns>A string comprising the ASCII color and formatting codes.</returns>
         private static string GetColorAndFormatting(LogLevel logLevel) =>
             logLevel switch
