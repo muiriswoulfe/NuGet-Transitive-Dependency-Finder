@@ -129,13 +129,13 @@ jobs:
 
     - name: SonarCloud – Install Scanner
       if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-      shell: pwsh
+      shell: powershell
       run: |
         New-Item -Path .\.sonar\scanner -ItemType Directory
         dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
     - name: SonarCloud – Initialize
-      shell: pwsh
+      shell: powershell
       run: >-
         .\.sonar\scanner\dotnet-sonarscanner
         begin
@@ -158,5 +158,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      shell: pwsh
+      shell: powershell
       run: .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
