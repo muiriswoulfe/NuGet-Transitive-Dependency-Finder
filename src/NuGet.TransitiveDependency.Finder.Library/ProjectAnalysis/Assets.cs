@@ -10,7 +10,6 @@ namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
     using NuGet.Common;
     using NuGet.ProjectModel;
     using static System.FormattableString;
-    using ILogger = Microsoft.Extensions.Logging.ILogger;
 
     /// <summary>
     /// A class representing the contents of a "project.assets.json" file.
