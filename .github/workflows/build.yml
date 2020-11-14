@@ -38,6 +38,11 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Install Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: 15
+
     - name: Install .NET
       uses: actions/setup-dotnet@v1
       with:
