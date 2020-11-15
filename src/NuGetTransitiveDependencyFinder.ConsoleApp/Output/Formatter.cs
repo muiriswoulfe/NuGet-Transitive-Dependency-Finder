@@ -3,7 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Output
+namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
 {
     using System;
     using System.Diagnostics.CodeAnalysis;

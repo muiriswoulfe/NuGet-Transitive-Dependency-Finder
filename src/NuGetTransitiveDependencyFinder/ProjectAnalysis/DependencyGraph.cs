@@ -3,7 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGet.TransitiveDependency.Finder.ProjectAnalysis
+namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 {
     using System;
     using System.IO;

@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using NuGet.TransitiveDependency.Finder.Properties;
+using NuGetTransitiveDependencyFinder.Properties;
 
 [assembly: AssemblyCompanyAttribute("Muiris Woulfe")]
 [assembly: AssemblyCopyrightAttribute("© Muiris Woulfe. Licensed under the MIT License.")]
@@ -19,7 +19,7 @@ using NuGet.TransitiveDependency.Finder.Properties;
 [assembly: AssemblyInformationalVersionAttribute(AssemblyAttributes.Version)]
 [assembly: AssemblyMetadataAttribute(
     "RepositoryUrl",
-    "https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder")]
+    "https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder.git")]
 [assembly: AssemblyVersionAttribute(AssemblyAttributes.Version)]
 [assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]

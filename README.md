@@ -16,10 +16,11 @@ dependencies implicitly specified as part of a package dependency chain.
 
 The solution comprises two projects for finding transitive dependencies:
 
-- [`NuGet.TransitiveDependency.Finder`][codelibrary]. This project provides a
-  .NET library that can be used in any application or service for finding
-  transitive dependencies.
-- [`NuGet.TransitiveDependency.Finder.ConsoleApp`][codeconsoleapp]. This project
+- [`NuGetTransitiveDependencyFinder`][codelibrary]. This project provides a .NET
+  library that can be used in any application or service for finding transitive
+  dependencies.
+- [`NuGetTransitiveDependencyFinder.ConsoleApp`][codeconsoleapp]. This project
+  runs the NuGet transitive dependency finder logic against a specified .NET
   solution. It is expected to be the standard mechanism through which consumers
   use the NuGet Transitive Dependency Finder.
 
@@ -101,7 +102,7 @@ Once you have a built a version copy the solution, navigate to the folder
 containing the build outputs and enter:
 
 ```Batchfile
-dotnet NuGet.TransitiveDependency.Finder.ConsoleApp.dll <SolutionToAnalyze>
+dotnet NuGetTransitiveDependencyFinder.ConsoleApp.dll <SolutionToAnalyze>
 ```
 
 `<SolutionToAnalyze>` should be replaced by the relative or absolute path of
@@ -135,8 +136,8 @@ be located [here][sonarcloud].
 [buildbadge]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/workflows/Build/badge.svg
 [sonarcloudbadge]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=alert_status
 [sonarcloud]: https://sonarcloud.io/dashboard?id=muiriswoulfe_NuGet-Transitive-Dependency-Finder
-[codelibrary]:  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/NuGet.TransitiveDependency.Finder
-[codeconsoleapp]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/NuGet.TransitiveDependency.Finder.ConsoleApp
+[codelibrary]:  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/NuGetTransitiveDependencyFinder
+[codeconsoleapp]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/NuGetTransitiveDependencyFinder.ConsoleApp
 [codesolution]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/blob/main/NuGetTransitiveDependencyFinder.sln
 [git]: https://git-scm.com/
 [github]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder

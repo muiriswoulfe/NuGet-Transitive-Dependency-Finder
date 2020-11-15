@@ -48,7 +48,7 @@ jobs:
         runtime: [linux-arm, linux-arm64, linux-musl-x64, linux-x64, osx-x64, win-arm, win-arm64, win-x64, win-x86]
 
     env:
-      project: NuGet.TransitiveDependency.Finder.ConsoleApp
+      project: NuGetTransitiveDependencyFinder.ConsoleApp
       extension: >-
         {
           linux: '',
