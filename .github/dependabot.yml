@@ -5,10 +5,10 @@ version: 2
 
 updates:
   - package-ecosystem: "nuget"
-    directory: "/src/NuGet.TransitiveDependency.Finder.ConsoleApp/"
+    directory: "/src/NuGetTransitiveDependencyFinder.ConsoleApp/"
     schedule:
       interval: "daily"
   - package-ecosystem: "nuget"
-    directory: "/src/NuGet.TransitiveDependency.Finder/"
+    directory: "/src/NuGetTransitiveDependencyFinder/"
     schedule:
       interval: "daily"

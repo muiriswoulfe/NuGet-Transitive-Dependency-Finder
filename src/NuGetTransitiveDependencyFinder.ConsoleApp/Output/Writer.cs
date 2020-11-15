@@ -3,11 +3,11 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Output
+namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
 {
     using Microsoft.Extensions.Logging;
-    using NuGet.TransitiveDependency.Finder.ConsoleApp.Resources;
-    using NuGet.TransitiveDependency.Finder.Output;
+    using NuGetTransitiveDependencyFinder.ConsoleApp.Resources;
+    using NuGetTransitiveDependencyFinder.Output;
 
     /// <summary>
     /// A class for writing transitive NuGet dependency information.

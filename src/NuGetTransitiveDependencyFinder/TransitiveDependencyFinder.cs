@@ -3,7 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGet.TransitiveDependency.Finder
+namespace NuGetTransitiveDependencyFinder
 {
     using System;
     using System.Collections.Generic;
@@ -11,8 +11,8 @@ namespace NuGet.TransitiveDependency.Finder
     using System.Linq;
     using Microsoft.Extensions.Logging;
     using NuGet.ProjectModel;
-    using NuGet.TransitiveDependency.Finder.Output;
-    using NuGet.TransitiveDependency.Finder.ProjectAnalysis;
+    using NuGetTransitiveDependencyFinder.Output;
+    using NuGetTransitiveDependencyFinder.ProjectAnalysis;
     using static System.FormattableString;
 
     /// <summary>

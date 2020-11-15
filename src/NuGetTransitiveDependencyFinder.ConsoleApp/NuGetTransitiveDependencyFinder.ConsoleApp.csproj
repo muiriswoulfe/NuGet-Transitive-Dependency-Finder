@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference
-      Include="..\NuGet.TransitiveDependency.Finder\NuGet.TransitiveDependency.Finder.csproj" />
+      Include="..\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj" />
   </ItemGroup>
 
 </Project>

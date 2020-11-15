@@ -3,7 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGet.TransitiveDependency.Finder.Properties
+namespace NuGetTransitiveDependencyFinder.Properties
 {
     /// <summary>
     /// A class comprising shared attributes to be applied to all NuGet Transitive Dependency Finder assemblies.

@@ -3,7 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Resources
+namespace NuGetTransitiveDependencyFinder.ConsoleApp.Resources
 {
     using System.Globalization;
     using System.Resources;

@@ -6,4 +6,4 @@
 using System.Reflection;
 
 [assembly: AssemblyProductAttribute("NuGet Transitive Dependency Finder Console App")]
-[assembly: AssemblyTitleAttribute("NuGet.TransitiveDependency.Finder.ConsoleApp")]
+[assembly: AssemblyTitleAttribute("NuGetTransitiveDependencyFinder.ConsoleApp")]
