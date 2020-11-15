@@ -3,7 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGet.TransitiveDependency.Finder.Library.Output
+namespace NuGet.TransitiveDependency.Finder.Output
 {
     using System;
     using NuGet.Frameworks;

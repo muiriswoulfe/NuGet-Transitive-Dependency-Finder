@@ -3,7 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGet.TransitiveDependency.Finder.Library.ProjectAnalysis
+namespace NuGet.TransitiveDependency.Finder.ProjectAnalysis
 {
     using System.Diagnostics;
     using Microsoft.Extensions.Logging;

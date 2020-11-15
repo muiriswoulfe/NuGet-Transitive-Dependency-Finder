@@ -7,7 +7,7 @@ namespace NuGet.TransitiveDependency.Finder.ConsoleApp.Output
 {
     using Microsoft.Extensions.Logging;
     using NuGet.TransitiveDependency.Finder.ConsoleApp.Resources;
-    using NuGet.TransitiveDependency.Finder.Library.Output;
+    using NuGet.TransitiveDependency.Finder.Output;
 
     /// <summary>
     /// A class for writing transitive NuGet dependency information.

@@ -16,12 +16,12 @@ dependencies implicitly specified as part of a package dependency chain.
 
 The solution comprises two projects for finding transitive dependencies:
 
+- [`NuGet.TransitiveDependency.Finder`][codelibrary]. This project provides a
+  .NET library that can be used in any application or service for finding
+  transitive dependencies.
 - [`NuGet.TransitiveDependency.Finder.ConsoleApp`][codeconsoleapp]. This project
   solution. It is expected to be the standard mechanism through which consumers
   use the NuGet Transitive Dependency Finder.
-- [`NuGet.TransitiveDependency.Finder.Library`][codelibrary]. This project
-  provides a .NET Standard library that can be used in any application or
-  service for finding transitive dependencies.
 
 It is not always possible to remove all transitive dependencies. Some transitive
 dependencies are required to explicitly specify a dependency version different
@@ -135,8 +135,8 @@ be located [here][sonarcloud].
 [buildbadge]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/workflows/Build/badge.svg
 [sonarcloudbadge]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=alert_status
 [sonarcloud]: https://sonarcloud.io/dashboard?id=muiriswoulfe_NuGet-Transitive-Dependency-Finder
+[codelibrary]:  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/NuGet.TransitiveDependency.Finder
 [codeconsoleapp]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/NuGet.TransitiveDependency.Finder.ConsoleApp
-[codelibrary]:  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/NuGet.TransitiveDependency.Finder.Library
 [codesolution]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/blob/main/NuGetTransitiveDependencyFinder.sln
 [git]: https://git-scm.com/
 [github]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder

@@ -9,7 +9,6 @@ namespace NuGet.TransitiveDependency.Finder.ConsoleApp
     using Microsoft.Extensions.Logging.Console;
     using NuGet.TransitiveDependency.Finder.ConsoleApp.Output;
     using NuGet.TransitiveDependency.Finder.ConsoleApp.Resources;
-    using NuGet.TransitiveDependency.Finder.Library;
 
     /// <summary>
     /// The main class of the application, defining the entry point and all interaction.
