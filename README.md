@@ -3,6 +3,7 @@
 # NuGet Transitive Dependency Finder
 
 ![Build Status][buildbadge]
+[![SonarCloud Quality Gate Status][sonarcloudbadge]][sonarcloud]
 
 **The NuGet Transitive Dependency Finder analyzes .NET solutions to find
 superfluous dependencies that have been explicitly added to projects. The goal
@@ -106,7 +107,34 @@ dotnet NuGet.TransitiveDependency.Finder.ConsoleApp.dll <SolutionToAnalyze>
 `<SolutionToAnalyze>` should be replaced by the relative or absolute path of
 the .NET solution you wish to analyze for transitive NuGet dependencies.
 
+# SonarCloud Status
+
+The complete SonarCloud analysis for the NuGet Transitive Dependency Finder can
+be located [here][sonarcloud].
+
+![SonarCloud Maintainability Rating][sonarcloudmaintainability]
+
+![SonarCloud Reliability Rating][sonarcloudreliability]
+
+![SonarCloud Security Rating][sonarcloudsecurity]
+
+![SonarCloud Bugs][sonarcloudbugs]
+
+![SonarCloud Code Smells][sonarcloudcodesmells]
+
+![SonarCloud Technical Debt][sonarcloudtechnicaldebt]
+
+![SonarCloud Vulnerabilities][sonarcloudvulnerabilities]
+
+![SonarCloud Duplicated Lines][sonarcloudduplicatedlines]
+
+![SonarCloud Test Coverage][sonarcloudtestcoverage]
+
+![SonarCloud Lines of Code][sonarcloudlinesofcode]
+
 [buildbadge]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/workflows/Build/badge.svg
+[sonarcloudbadge]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=alert_status
+[sonarcloud]: https://sonarcloud.io/dashboard?id=muiriswoulfe_NuGet-Transitive-Dependency-Finder
 [codelibrary]:  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/NuGet.TransitiveDependency.Finder
 [codeconsoleapp]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/NuGet.TransitiveDependency.Finder.ConsoleApp
 [codesolution]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/blob/main/NuGetTransitiveDependencyFinder.sln
@@ -116,3 +144,13 @@ the .NET solution you wish to analyze for transitive NuGet dependencies.
 [vs]: https://visualstudio.microsoft.com/
 [vscode]: https://code.visualstudio.com/
 [vscodecsharp]: https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp
+[sonarcloudmaintainability]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=sqale_rating
+[sonarcloudreliability]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=reliability_rating
+[sonarcloudsecurity]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=security_rating
+[sonarcloudbugs]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=bugs
+[sonarcloudcodesmells]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=code_smells
+[sonarcloudtechnicaldebt]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=sqale_index
+[sonarcloudvulnerabilities]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=vulnerabilities
+[sonarcloudduplicatedlines]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=duplicated_lines_density
+[sonarcloudtestcoverage]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=coverage
+[sonarcloudlinesofcode]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=ncloc
