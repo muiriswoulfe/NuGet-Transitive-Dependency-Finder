@@ -171,8 +171,6 @@ namespace NuGetTransitiveDependencyFinder
         private Framework FindTransitiveDependencies(TargetFrameworkInformation framework)
         {
             var result = new Framework(framework.Dependencies.Count, framework.FrameworkName);
-
-            // CAN WE SIMPLIFY THIS LOOP?
             foreach (var dependency in framework
                 .Dependencies
                 .Select(dependency =>
@@ -183,11 +181,7 @@ namespace NuGetTransitiveDependencyFinder
                 dependency!.IsTransitiveDependency = true;
             }
 
-            foreach (var dependency in this.dependencies.Values)
-            {
-                result.Add(dependency.Identifier + dependency.Version.ToString() + dependency.IsTransitiveDependency);
-            }
-
+            result.Add(this.dependencies.Values);
             return result;
         }
     }

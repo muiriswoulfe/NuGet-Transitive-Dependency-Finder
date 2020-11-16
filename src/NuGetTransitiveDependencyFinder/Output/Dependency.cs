@@ -10,7 +10,7 @@ namespace NuGetTransitiveDependencyFinder.Output
     /// <summary>
     /// A class representing the outputted .NET dependency information for each project and framework combination.
     /// </summary>
-    internal class Dependency
+    public class Dependency
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Dependency"/> class.
