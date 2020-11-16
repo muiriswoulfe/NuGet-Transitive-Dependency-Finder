@@ -181,7 +181,7 @@ namespace NuGetTransitiveDependencyFinder
                 dependency!.IsTransitiveDependency = true;
             }
 
-            result.Add(this.dependencies.Values);
+            result.SetChildren(this.dependencies.Values);
             return result;
         }
     }

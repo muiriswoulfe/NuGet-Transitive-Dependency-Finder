@@ -6,6 +6,7 @@
 namespace NuGetTransitiveDependencyFinder.Output
 {
     using System;
+    using System.Collections.Generic;
     using NuGet.Frameworks;
 
     /// <summary>
@@ -26,11 +27,6 @@ namespace NuGetTransitiveDependencyFinder.Output
         public Framework(int capacity, NuGetFramework identifier)
             : base(capacity, identifier)
         {
-        }
-
-        public void Add(IEnumerable<Dependency> dependencies)
-        {
-
         }
 
         /// <summary>
@@ -128,6 +124,13 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         public override int GetHashCode() =>
             this.BaseHashCode;
+
+        /// <summary>
+        /// Sets the collection of child elements to the current collection.
+        /// </summary>
+        /// <param name="dependencies">The collection of child elements to be added.</param>
+        public void SetChildren(IEnumerable<Dependency> dependencies) =>
+            this.children = dependencies;
 
         /// <inheritdoc/>
         protected override bool IsAddValid(Dependency child) =>
