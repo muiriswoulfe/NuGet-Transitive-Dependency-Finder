@@ -65,12 +65,15 @@ jobs:
         /maxCpuCount
         ./src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
 
+    - name: Delete XML Documentation
+      run: rm ./src/NuGetTransitiveDependencyFinder/bin/NuGetTransitiveDependencyFinder.xml
+
     - name: Pack
       run: >-
         dotnet pack
         --configuration Release
         --no-build
-        /property:RepositoryCommit=${{ GITHUB_SHA }}
+        /property:RepositoryCommit=${{ github.sha }}
         ./src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
 
     - name: Upload – NuGet.org
