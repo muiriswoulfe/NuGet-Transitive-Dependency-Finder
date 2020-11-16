@@ -11,6 +11,7 @@ namespace NuGetTransitiveDependencyFinder
     using System.Linq;
     using Microsoft.Extensions.Logging;
     using NuGet.ProjectModel;
+    using NuGet.Versioning;
     using NuGetTransitiveDependencyFinder.Output;
     using NuGetTransitiveDependencyFinder.ProjectAnalysis;
     using static System.FormattableString;
@@ -27,9 +28,10 @@ namespace NuGetTransitiveDependencyFinder
 
         /// <summary>
         /// The collection of dependencies recorded and stored temporarily for the purposes of finding transitive NuGet
-        /// dependencies.
+        /// dependencies. The key is the library name and the value is the version.
         /// </summary>
-        private readonly ISet<string> dependencies = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private readonly IDictionary<string, NuGetVersion> dependencies =
+            new Dictionary<string, NuGetVersion>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TransitiveDependencyFinder"/> class.
@@ -141,14 +143,14 @@ namespace NuGetTransitiveDependencyFinder
             LockFileTargetLibrary library,
             IReadOnlyDictionary<string, LockFileTargetLibrary> libraries)
         {
-            if (this.dependencies.Contains(library.Name))
+            if (this.dependencies.ContainsKey(library.Name))
             {
                 return;
             }
 
             if (!isTopLevel)
             {
-                var result = this.dependencies.Add(library.Name);
+                var result = this.dependencies.TryAdd(library.Name, library.Version);
                 if (!result)
                 {
                     throw new InvalidOperationException(
@@ -170,13 +172,18 @@ namespace NuGetTransitiveDependencyFinder
         private Framework FindTransitiveDependencies(TargetFrameworkInformation framework)
         {
             var result = new Framework(framework.Dependencies.Count, framework.FrameworkName);
-            foreach (var dependency in framework
-                .Dependencies
-                .Where(dependency =>
-                    !string.Equals(dependency.Name, "NETStandard.Library", StringComparison.OrdinalIgnoreCase) &&
-                    this.dependencies.Contains(dependency.Name)))
+            //// foreach (var dependency in framework
+            ////     .Dependencies
+            ////     .Where(dependency =>
+            ////         !string.Equals(dependency.Name, "NETStandard.Library", StringComparison.OrdinalIgnoreCase) &&
+            ////         this.dependencies.ContainsKey(dependency.Name)))
+            //// {
+            ////     result.Add(new Library(dependency.Name, this.dependencies[dependency.Name]));
+            //// }
+
+            foreach (var dep in this.dependencies)
             {
-                result.Add(dependency.Name);
+                result.Add(new Library(dep.Key, dep.Value));
             }
 
             return result;
