@@ -13,7 +13,7 @@ namespace NuGetTransitiveDependencyFinder.Output
     /// </summary>
     /// <remarks>The child elements of this class are the transitive NuGet dependencies.</remarks>
     public sealed class Framework :
-        IdentifiedBase<NuGetFramework, Library>,
+        IdentifiedBase<NuGetFramework, string>,
         IComparable<Framework>,
         IEquatable<Framework>
     {
@@ -125,7 +125,7 @@ namespace NuGetTransitiveDependencyFinder.Output
             this.BaseHashCode;
 
         /// <inheritdoc/>
-        protected override bool IsAddValid(Library child) =>
+        protected override bool IsAddValid(string child) =>
             true;
     }
 }

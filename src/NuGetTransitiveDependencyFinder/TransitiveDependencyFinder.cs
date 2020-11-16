@@ -11,7 +11,6 @@ namespace NuGetTransitiveDependencyFinder
     using System.Linq;
     using Microsoft.Extensions.Logging;
     using NuGet.ProjectModel;
-    using NuGet.Versioning;
     using NuGetTransitiveDependencyFinder.Output;
     using NuGetTransitiveDependencyFinder.ProjectAnalysis;
     using static System.FormattableString;
@@ -28,10 +27,10 @@ namespace NuGetTransitiveDependencyFinder
 
         /// <summary>
         /// The collection of dependencies recorded and stored temporarily for the purposes of finding transitive NuGet
-        /// dependencies. The key is the library name and the value is the version.
+        /// dependencies.
         /// </summary>
-        private readonly IDictionary<string, NuGetVersion> dependencies =
-            new Dictionary<string, NuGetVersion>(StringComparer.OrdinalIgnoreCase);
+        private readonly IDictionary<string, Dependency> dependencies =
+            new Dictionary<string, Dependency>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TransitiveDependencyFinder"/> class.
@@ -150,7 +149,7 @@ namespace NuGetTransitiveDependencyFinder
 
             if (!isTopLevel)
             {
-                var result = this.dependencies.TryAdd(library.Name, library.Version);
+                var result = this.dependencies.TryAdd(library.Name, new Dependency(library.Name, library.Version));
                 if (!result)
                 {
                     throw new InvalidOperationException(
@@ -172,18 +171,21 @@ namespace NuGetTransitiveDependencyFinder
         private Framework FindTransitiveDependencies(TargetFrameworkInformation framework)
         {
             var result = new Framework(framework.Dependencies.Count, framework.FrameworkName);
-            //// foreach (var dependency in framework
-            ////     .Dependencies
-            ////     .Where(dependency =>
-            ////         !string.Equals(dependency.Name, "NETStandard.Library", StringComparison.OrdinalIgnoreCase) &&
-            ////         this.dependencies.ContainsKey(dependency.Name)))
-            //// {
-            ////     result.Add(new Library(dependency.Name, this.dependencies[dependency.Name]));
-            //// }
 
-            foreach (var dep in this.dependencies)
+            // CAN WE SIMPLIFY THIS LOOP?
+            foreach (var dependency in framework
+                .Dependencies
+                .Select(dependency =>
+                    !string.Equals(dependency.Name, "NETStandard.Library", StringComparison.OrdinalIgnoreCase) &&
+                    this.dependencies.TryGetValue(dependency.Name, out var value) ? value : null)
+                .Where(dependency => dependency != null))
             {
-                result.Add(new Library(dep.Key, dep.Value));
+                dependency!.IsTransitiveDependency = true;
+            }
+
+            foreach (var dependency in this.dependencies.Values)
+            {
+                result.Add(dependency.Identifier + dependency.Version.ToString() + dependency.IsTransitiveDependency);
             }
 
             return result;
