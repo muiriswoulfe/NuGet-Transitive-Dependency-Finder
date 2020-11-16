@@ -39,6 +39,54 @@ jobs:
           [issues]: ${{ github.server_url }}/${{ github.repository }}/issues?q=is%3Aissue+milestone%3A%22${{ steps.get_release.outputs.tag_name }}%22+is%3Aclosed
           [prs]: ${{ github.server_url }}/${{ github.repository }}/pulls?q=is%3Apr+milestone%3A%22${{ steps.get_release.outputs.tag_name }}%22+is%3Aclosed
 
+  create-nuget:
+    name: Create NuGet Package
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Install NuGet Dependencies
+      run: >-
+        dotnet restore
+        ./src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+
+    - name: Build
+      run: >-
+        dotnet build
+        --configuration Release
+        --no-restore
+        /maxCpuCount
+        ./src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+
+    - name: Pack
+      run: >-
+        dotnet pack
+        --configuration Release
+        --no-build
+        /property:RepositoryCommit=${{ GITHUB_SHA }}
+        ./src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+
+    - name: Upload – NuGet.org
+      run: >-
+        dotnet nuget push
+        ./src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
+        --api-key ${{ secrets.NUGET_API_KEY }}
+        --source https://api.nuget.org/v3/index.json
+
+    - name: Upload – GitHub
+      run: >-
+        dotnet nuget push
+        ./src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
+        --api-key ${{ secrets.GITHUB_TOKEN }}
+        --source https://nuget.pkg.github.com/muiriswoulfe/index.json
+
   create-asset:
     name: Create Asset
     runs-on: ubuntu-latest
@@ -63,7 +111,7 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '5.0.x'
+        dotnet-version: 5.0.x
 
     - name: Install NuGet Dependencies
       run: >-
