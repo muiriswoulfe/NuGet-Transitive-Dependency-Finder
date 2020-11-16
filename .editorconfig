@@ -409,7 +409,7 @@ max_line_length = 120
 [.editorconfig]
 max_line_length = unset
 
-[*.{json,md,sln,yml}]
+[*.{csproj,json,md,sln,yml}]
 max_line_length = unset
 
 [*.md]
