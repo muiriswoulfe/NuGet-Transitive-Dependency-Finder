@@ -56,7 +56,7 @@ namespace NuGetTransitiveDependencyFinder
                     continue;
                 }
 
-                var resultProject = new Project(project.TargetFrameworks.Count, project.Name);
+                var resultProject = new Project(project.Name, project.TargetFrameworks.Count);
                 foreach (var framework in project.TargetFrameworks)
                 {
                     this.dependencies.Clear();
@@ -170,7 +170,6 @@ namespace NuGetTransitiveDependencyFinder
         /// <returns>The transitive NuGet dependency information, which can be processed for display.</returns>
         private Framework FindTransitiveDependencies(TargetFrameworkInformation framework)
         {
-            var result = new Framework(framework.Dependencies.Count, framework.FrameworkName);
             foreach (var dependency in framework
                 .Dependencies
                 .Select(dependency =>
@@ -178,11 +177,10 @@ namespace NuGetTransitiveDependencyFinder
                     this.dependencies.TryGetValue(dependency.Name, out var value) ? value : null)
                 .Where(dependency => dependency != null))
             {
-                dependency!.IsTransitiveDependency = true;
+                dependency!.IsTransitive = true;
             }
 
-            result.SetChildren(this.dependencies.Values);
-            return result;
+            return new Framework(framework.FrameworkName, this.dependencies.Values.ToList());
         }
     }
 }

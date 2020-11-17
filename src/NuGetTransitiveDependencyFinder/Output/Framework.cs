@@ -21,11 +21,10 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <summary>
         /// Initializes a new instance of the <see cref="Framework"/> class.
         /// </summary>
-        /// <param name="capacity">The quantity of transitive NuGet dependencies for which the collection initially has
-        /// adequate capacity.</param>
         /// <param name="identifier">The .NET framework identifier.</param>
-        public Framework(int capacity, NuGetFramework identifier)
-            : base(capacity, identifier)
+        /// <param name="children">The child elements with which to initialize the collection.</param>
+        public Framework(NuGetFramework identifier, List<Dependency> children)
+            : base(identifier, children)
         {
         }
 
@@ -124,13 +123,6 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         public override int GetHashCode() =>
             this.BaseHashCode;
-
-        /// <summary>
-        /// Sets the collection of child elements to the current collection.
-        /// </summary>
-        /// <param name="dependencies">The collection of child elements to be added.</param>
-        public void SetChildren(IEnumerable<Dependency> dependencies) =>
-            this.children = dependencies;
 
         /// <inheritdoc/>
         protected override bool IsAddValid(Dependency child) =>

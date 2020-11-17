@@ -34,6 +34,13 @@ namespace NuGetTransitiveDependencyFinder.Output
             this.children = new List<TChild>(capacity);
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Base{TChild}"/> class.
+        /// </summary>
+        /// <param name="children">The child elements with which to initialize the collection.</param>
+        protected Base(List<TChild> children) =>
+            this.children = children;
+
+        /// <summary>
         /// Gets a value indicating whether the object has child elements.
         /// </summary>
         public bool HasChildren =>

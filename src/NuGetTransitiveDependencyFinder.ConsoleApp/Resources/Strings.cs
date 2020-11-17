@@ -61,11 +61,22 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Resources
                 GetInformationString(nameof(CommencingAnalysis));
 
             /// <summary>
-            /// Gets a localized string corresponding to the message displayed when no transitive NuGet dependencies are
-            /// found.
+            /// Gets a localized string corresponding to the message displayed when no NuGet dependencies are found.
             /// </summary>
-            public static string NoTransitiveNuGetDependencies =>
-                GetInformationString(nameof(NoTransitiveNuGetDependencies));
+            public static string NoNuGetDependencies =>
+                GetInformationString(nameof(NoNuGetDependencies));
+
+            /// <summary>
+            /// Gets a localized string corresponding to the message displayed for each non-transitive NuGet dependency.
+            /// </summary>
+            public static string NonTransitiveDependency =>
+                GetInformationString(nameof(NonTransitiveDependency));
+
+            /// <summary>
+            /// Gets a localized string corresponding to the message displayed for each transitive NuGet dependency.
+            /// </summary>
+            public static string TransitiveDependency =>
+                GetInformationString(nameof(TransitiveDependency));
 
             /// <summary>
             /// Gets the localized information string.

@@ -5,6 +5,7 @@
 
 namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
 {
+    using System.Globalization;
     using Microsoft.Extensions.Logging;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Resources;
     using NuGetTransitiveDependencyFinder.Output;
@@ -33,11 +34,11 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         public void Write(Projects projects)
         {
             const int FrameworkIndentationLevel = 1;
-            const int TransitiveDependencyIndentationLevel = 2;
+            const int DependencyIndentationLevel = 2;
 
             if (!projects.HasChildren)
             {
-                this.logger.LogInformation(Strings.Information.NoTransitiveNuGetDependencies);
+                this.logger.LogInformation(Strings.Information.NoNuGetDependencies);
                 return;
             }
 
@@ -52,10 +53,12 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
                         continue;
                     }
 
-                    foreach (var transitiveDependency in framework.SortedChildren)
+                    foreach (var dependency in framework.SortedChildren)
                     {
-                        this.logger.LogInformation(
-                            CreatePrefix(TransitiveDependencyIndentationLevel) + transitiveDependency);
+                        var message = dependency.IsTransitive
+                            ? PopulateLocalizedString(Strings.Information.TransitiveDependency, dependency)
+                            : PopulateLocalizedString(Strings.Information.NonTransitiveDependency, dependency);
+                        this.logger.LogInformation(CreatePrefix(DependencyIndentationLevel) + message);
                     }
                 }
 
@@ -74,5 +77,14 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
 
             return new string(' ', indentLevel * IndentationSize);
         }
+
+        /// <summary>
+        /// Populates a localized string by replacing the placeholders with the appropriate dependency information.
+        /// </summary>
+        /// <param name="localizedString">The localized string to be populated.</param>
+        /// <param name="dependency">The dependency information with which to populate the localized string.</param>
+        /// <returns>The localized string with all placeholders populated.</returns>
+        private static string PopulateLocalizedString(string localizedString, Dependency dependency) =>
+            string.Format(CultureInfo.CurrentCulture, localizedString, dependency.Identifier, dependency.Version);
     }
 }

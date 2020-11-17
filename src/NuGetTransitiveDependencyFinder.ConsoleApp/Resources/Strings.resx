@@ -32,9 +32,19 @@
     <value>Commencing analysis...</value>
     <comment>The message displayed when analysis is about to commence.</comment>
   </data>
-  <data name="Information_NoTransitiveNuGetDependencies" xml:space="preserve">
-    <value>No transitive NuGet dependencies found.</value>
-    <comment>The message displayed when no transitive NuGet dependencies are found.</comment>
+  <data name="Information_NoDependencies" xml:space="preserve">
+    <value>No NuGet dependencies found.</value>
+    <comment>The message displayed when no NuGet dependencies are found.</comment>
+  </data>
+  <data name="Information_NonTransitiveDependency" xml:space="preserve">
+    <value>{0} {1}</value>
+    <comment>The message displayed for each non-transitive NuGet dependency. {0} will be replaced by the dependency
+    identifier. {1} will be replaced by the dependency version.</comment>
+  </data>
+  <data name="Information_TransitiveDependency" xml:space="preserve">
+    <value>{0} {1} (Transitive)</value>
+    <comment>The message displayed for each transitive NuGet dependency. {0} will be replaced by the dependency
+    identifier. {1} will be replaced by the dependency version.</comment>
   </data>
 
 </root>

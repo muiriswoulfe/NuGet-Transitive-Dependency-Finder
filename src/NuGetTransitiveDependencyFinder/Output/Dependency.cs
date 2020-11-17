@@ -36,6 +36,6 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <summary>
         /// Gets or sets a value indicating whether the dependency is a transitive dependency.
         /// </summary>
-        public bool IsTransitiveDependency { get; set; }
+        public bool IsTransitive { get; set; }
     }
 }
