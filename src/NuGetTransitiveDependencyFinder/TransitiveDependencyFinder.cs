@@ -51,7 +51,7 @@ namespace NuGetTransitiveDependencyFinder
             foreach (var project in projects)
             {
                 var assetsFiles = this.CreateAssetsFiles(project);
-                if (assetsFiles == null)
+                if (assetsFiles is null)
                 {
                     continue;
                 }
@@ -123,7 +123,7 @@ namespace NuGetTransitiveDependencyFinder
             foreach (var library in framework
                 .Dependencies
                 .Select(dependency => libraries.TryGetValue(dependency.Name, out var library) ? library : null)
-                .Where(library => library != null))
+                .Where(library => library is not null))
             {
                 this.RecordDependency(true, library!, libraries);
             }
@@ -175,7 +175,7 @@ namespace NuGetTransitiveDependencyFinder
                 .Select(dependency =>
                     !string.Equals(dependency.Name, "NETStandard.Library", StringComparison.OrdinalIgnoreCase) &&
                     this.dependencies.TryGetValue(dependency.Name, out var value) ? value : null)
-                .Where(dependency => dependency != null))
+                .Where(dependency => dependency is not null))
             {
                 dependency!.IsTransitive = true;
             }

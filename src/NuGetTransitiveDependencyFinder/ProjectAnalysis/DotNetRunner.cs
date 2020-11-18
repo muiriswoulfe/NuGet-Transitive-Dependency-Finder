@@ -77,6 +77,6 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event parameters.</param>
         private void LogOutput(object sender, DataReceivedEventArgs e) =>
-            this.logger.LogDebug(e.Data ?? string.Empty);
+            this.logger.LogTrace(e.Data ?? string.Empty);
     }
 }

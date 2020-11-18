@@ -5,12 +5,14 @@
 
 namespace NuGetTransitiveDependencyFinder.Output
 {
+    using System;
     using NuGet.Versioning;
+    using static System.FormattableString;
 
     /// <summary>
     /// A class representing the outputted .NET dependency information for each project and framework combination.
     /// </summary>
-    public class Dependency
+    public sealed class Dependency : IComparable<Dependency>, IEquatable<Dependency>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Dependency"/> class.
@@ -37,5 +39,140 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// Gets or sets a value indicating whether the dependency is a transitive dependency.
         /// </summary>
         public bool IsTransitive { get; set; }
+
+        /// <summary>
+        /// Determines if <see paramref="left"/> is equal to <see paramref="right"/>.
+        /// </summary>
+        /// <param name="left">The left operand to compare.</param>
+        /// <param name="right">The right operand to compare.</param>
+        /// <returns><c>true</c> if <see paramref="left"/> is equal to <see paramref="right"/>; otherwise,
+        /// <c>false</c>.</returns>
+        public static bool operator ==(Dependency left, Dependency right) =>
+            left.CompareTo(right) == 0;
+
+        /// <summary>
+        /// Determines if <see paramref="left"/> is not equal to <see paramref="right"/>.
+        /// </summary>
+        /// <param name="left">The left operand to compare.</param>
+        /// <param name="right">The right operand to compare.</param>
+        /// <returns><c>true</c> if <see paramref="left"/> is not equal to <see paramref="right"/>; otherwise,
+        /// <c>false</c>.</returns>
+        public static bool operator !=(Dependency left, Dependency right) =>
+            left.CompareTo(right) != 0;
+
+        /// <summary>
+        /// Determines if <see paramref="left"/> is less than <see paramref="right"/>.
+        /// </summary>
+        /// <param name="left">The left operand to compare.</param>
+        /// <param name="right">The right operand to compare.</param>
+        /// <returns><c>true</c> if <see paramref="left"/> is less than <see paramref="right"/>; otherwise,
+        /// <c>false</c>.</returns>
+        public static bool operator <(Dependency left, Dependency right) =>
+            left.CompareTo(right) < 0;
+
+        /// <summary>
+        /// Determines if <see paramref="left"/> is less than or equal to <see paramref="right"/>.
+        /// </summary>
+        /// <param name="left">The left operand to compare.</param>
+        /// <param name="right">The right operand to compare.</param>
+        /// <returns><c>true</c> if <see paramref="left"/> is less than or equal to <see paramref="right"/>; otherwise,
+        /// <c>false</c>.</returns>
+        public static bool operator <=(Dependency left, Dependency right) =>
+            left.CompareTo(right) <= 0;
+
+        /// <summary>
+        /// Determines if <see paramref="left"/> is greater than <see paramref="right"/>.
+        /// </summary>
+        /// <param name="left">The left operand to compare.</param>
+        /// <param name="right">The right operand to compare.</param>
+        /// <returns><c>true</c> if <see paramref="left"/> is greater than <see paramref="right"/>; otherwise,
+        /// <c>false</c>.</returns>
+        public static bool operator >(Dependency left, Dependency right) =>
+            left.CompareTo(right) > 0;
+
+        /// <summary>
+        /// Determines if <see paramref="left"/> is greater than or equal to <see paramref="right"/>.
+        /// </summary>
+        /// <param name="left">The left operand to compare.</param>
+        /// <param name="right">The right operand to compare.</param>
+        /// <returns><c>true</c> if <see paramref="left"/> is greater than or equal to <see paramref="right"/>;
+        /// otherwise, <c>false</c>.</returns>
+        public static bool operator >=(Dependency left, Dependency right) =>
+            left.CompareTo(right) >= 0;
+
+        /// <summary>
+        /// Compares the current object to <see paramref="other"/>, returning an integer that indicates their
+        /// relationship.
+        /// </summary>
+        /// <param name="other">The object against which to compare the current object.</param>
+        /// <returns>A value less than zero if the current object is less than <see paramref="other"/>, zero if the
+        /// current object is equal to <see paramref="other"/>, or a value greater than zero if the current object is
+        /// greater than <see paramref="other"/>.</returns>
+        public int CompareTo(Dependency? other)
+        {
+            if (ReferenceEquals(this, other))
+            {
+                return 0;
+            }
+
+            if (other is null)
+            {
+                return 1;
+            }
+
+            var result = StringComparer.OrdinalIgnoreCase.Compare(this.Identifier, other.Identifier);
+            return result != 0
+                ? result
+                : StringComparer.Ordinal.Compare(this.Version.ToNormalizedString(), other.Version.ToNormalizedString());
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(Dependency? other) =>
+            this.CompareTo(other) == 0;
+
+        /// <inheritdoc/>
+        public override bool Equals(object? obj) =>
+            this.CompareTo(obj) == 0;
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            const int StartingPrime = 3049;
+            const int MultiplicativePrime = 5039;
+
+            var result = StartingPrime;
+            result += StringComparer.OrdinalIgnoreCase.GetHashCode(this.Identifier);
+            result *= MultiplicativePrime;
+            result += StringComparer.Ordinal.GetHashCode(this.Version.ToNormalizedString());
+
+            return result;
+        }
+
+        /// <inheritdoc/>
+        public override string ToString() =>
+            Invariant($"{this.Identifier} {this.Version}");
+
+        /// <summary>
+        /// Compares the current object to <see paramref="other"/>, returning an integer that indicates their
+        /// relationship.
+        /// </summary>
+        /// <param name="obj">The object against which to compare the current object.</param>
+        /// <returns>A value less than zero if the current object is less than <see paramref="other"/>, zero if the
+        /// current object is equal to <see paramref="other"/>, or a value greater than zero if the current object is
+        /// greater than <see paramref="other"/>.</returns>
+        private int CompareTo(object? obj)
+        {
+            if (ReferenceEquals(this, obj))
+            {
+                return 0;
+            }
+
+            if (obj is null)
+            {
+                return 1;
+            }
+
+            return this.CompareTo(obj as Dependency);
+        }
     }
 }

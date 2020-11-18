@@ -5,6 +5,7 @@
 
 namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
 {
+    using System.Collections.Generic;
     using System.Globalization;
     using Microsoft.Extensions.Logging;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Resources;
@@ -16,7 +17,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
     internal class Writer
     {
         /// <summary>
-        /// The logger object to which to send the output.
+        /// The logger object to which to write the output.
         /// </summary>
         private readonly ILogger logger;
 
@@ -34,7 +35,6 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         public void Write(Projects projects)
         {
             const int FrameworkIndentationLevel = 1;
-            const int DependencyIndentationLevel = 2;
 
             if (!projects.HasChildren)
             {
@@ -53,13 +53,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
                         continue;
                     }
 
-                    foreach (var dependency in framework.SortedChildren)
-                    {
-                        var message = dependency.IsTransitive
-                            ? PopulateLocalizedString(Strings.Information.TransitiveDependency, dependency)
-                            : PopulateLocalizedString(Strings.Information.NonTransitiveDependency, dependency);
-                        this.logger.LogInformation(CreatePrefix(DependencyIndentationLevel) + message);
-                    }
+                    this.WriteDependencies(framework.SortedChildren);
                 }
 
                 this.logger.LogInformation(string.Empty);
@@ -86,5 +80,30 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         /// <returns>The localized string with all placeholders populated.</returns>
         private static string PopulateLocalizedString(string localizedString, Dependency dependency) =>
             string.Format(CultureInfo.CurrentCulture, localizedString, dependency.Identifier, dependency.Version);
+
+        /// <summary>
+        /// Writes a collection of dependencies.
+        /// </summary>
+        /// <param name="dependencies">The collection of dependencies.</param>
+        private void WriteDependencies(IReadOnlyCollection<Dependency> dependencies)
+        {
+            const int DependencyIndentationLevel = 2;
+
+            foreach (var dependency in dependencies)
+            {
+                if (dependency.IsTransitive)
+                {
+                    this.logger.LogWarning(
+                        CreatePrefix(DependencyIndentationLevel) +
+                        PopulateLocalizedString(Strings.Information.TransitiveDependency, dependency));
+                }
+                else
+                {
+                    this.logger.LogDebug(
+                        CreatePrefix(DependencyIndentationLevel) +
+                        PopulateLocalizedString(Strings.Information.NonTransitiveDependency, dependency));
+                }
+            }
+        }
     }
 }

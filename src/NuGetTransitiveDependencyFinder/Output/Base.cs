@@ -23,22 +23,28 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <summary>
         /// A value indicating whether the collection of child elements is sorted.
         /// </summary>
-        private bool areChildrenSorted = true;
+        private bool areChildrenSorted;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Base{TChild}"/> class.
         /// </summary>
         /// <param name="capacity">The quantity of child elements for which the collection has adequate initial
         /// capacity.</param>
-        protected Base(int capacity) =>
+        protected Base(int capacity)
+        {
             this.children = new List<TChild>(capacity);
+            this.areChildrenSorted = true;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Base{TChild}"/> class.
         /// </summary>
         /// <param name="children">The child elements with which to initialize the collection.</param>
-        protected Base(List<TChild> children) =>
+        protected Base(List<TChild> children)
+        {
             this.children = children;
+            this.areChildrenSorted = false;
+        }
 
         /// <summary>
         /// Gets a value indicating whether the object has child elements.
