@@ -149,12 +149,7 @@ namespace NuGetTransitiveDependencyFinder
 
             if (!isTopLevel)
             {
-                var result = this.dependencies.TryAdd(library.Name, new Dependency(library.Name, library.Version));
-                if (!result)
-                {
-                    throw new InvalidOperationException(
-                        Invariant($"Failed to add '{library.Name}' to the collection."));
-                }
+                this.dependencies.Add(library.Name, new Dependency(library.Name, library.Version));
             }
 
             foreach (var libraryDependencies in library.Dependencies)
