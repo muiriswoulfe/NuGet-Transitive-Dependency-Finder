@@ -95,13 +95,14 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
                 {
                     this.logger.LogWarning(
                         CreatePrefix(DependencyIndentationLevel) +
-                        PopulateLocalizedString(Strings.Information.TransitiveDependency, dependency));
+                        string.Format(
+                            CultureInfo.CurrentCulture,
+                            Strings.Information.TransitiveDependency,
+                            dependency));
                 }
                 else
                 {
-                    this.logger.LogDebug(
-                        CreatePrefix(DependencyIndentationLevel) +
-                        PopulateLocalizedString(Strings.Information.NonTransitiveDependency, dependency));
+                    this.logger.LogDebug(CreatePrefix(DependencyIndentationLevel) + dependency);
                 }
             }
         }

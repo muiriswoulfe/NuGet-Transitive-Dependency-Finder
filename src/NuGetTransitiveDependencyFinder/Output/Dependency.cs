@@ -150,7 +150,7 @@ namespace NuGetTransitiveDependencyFinder.Output
 
         /// <inheritdoc/>
         public override string ToString() =>
-            Invariant($"{this.Identifier} {this.Version}");
+            $"{this.Identifier} v{this.Version}";
 
         /// <summary>
         /// Compares the current object to <see paramref="other"/>, returning an integer that indicates their

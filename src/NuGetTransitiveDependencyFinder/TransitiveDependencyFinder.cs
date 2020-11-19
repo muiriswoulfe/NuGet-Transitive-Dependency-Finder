@@ -26,6 +26,11 @@ namespace NuGetTransitiveDependencyFinder
         private readonly ILoggerFactory loggerFactory;
 
         /// <summary>
+        /// A value indicating whether all dependencies, or just those that are transitive, should be collected.
+        /// </summary>
+        private readonly bool collectAllDependencies;
+
+        /// <summary>
         /// The collection of dependencies recorded and stored temporarily for the purposes of finding transitive NuGet
         /// dependencies.
         /// </summary>
@@ -36,8 +41,13 @@ namespace NuGetTransitiveDependencyFinder
         /// Initializes a new instance of the <see cref="TransitiveDependencyFinder"/> class.
         /// </summary>
         /// <param name="loggerFactory">The logger factory from which a logger will be created.</param>
-        public TransitiveDependencyFinder(ILoggerFactory loggerFactory) =>
+        /// <param name="collectAllDependencies">A value indicating whether all dependencies, or just those that are
+        /// transitive, should be collected.</param>
+        public TransitiveDependencyFinder(ILoggerFactory loggerFactory, bool collectAllDependencies)
+        {
             this.loggerFactory = loggerFactory;
+            this.collectAllDependencies = collectAllDependencies;
+        }
 
         /// <summary>
         /// Runs the logic for finding transitive NuGet dependencies.
@@ -175,7 +185,11 @@ namespace NuGetTransitiveDependencyFinder
                 dependency!.IsTransitive = true;
             }
 
-            return new Framework(framework.FrameworkName, this.dependencies.Values.ToList());
+            var frameworkDependencies = this.collectAllDependencies
+                ? this.dependencies.Values
+                : this.dependencies.Values.Where(dependency => dependency.IsTransitive);
+
+            return new Framework(framework.FrameworkName, frameworkDependencies.ToList());
         }
     }
 }
