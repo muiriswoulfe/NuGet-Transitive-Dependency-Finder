@@ -24,9 +24,13 @@
     </xsd:element>
   </xsd:schema>
 
-  <data name="Error_MissingParameter" xml:space="preserve">
-    <value>Error: The .NET solution file to analyze must be provided as a parameter.</value>
-    <comment>The error message displayed when no command-line parameter is provided.</comment>
+  <data name="CommandLineHelp_All" xml:space="preserve">
+    <value>Indicates that all NuGet dependencies, including non-transitive dependencies, should be listed.</value>
+    <comment>The description of the "--all" parameter, which is displayed as part of the help message.</comment>
+  </data>
+  <data name="CommandLineHelp_Solution" xml:space="preserve">
+    <value>The file name of the .NET solution to analyze.</value>
+    <comment>The description of the solution parameter, which is displayed as part of the help message.</comment>
   </data>
   <data name="Information_CommencingAnalysis" xml:space="preserve">
     <value>Commencing analysis...</value>

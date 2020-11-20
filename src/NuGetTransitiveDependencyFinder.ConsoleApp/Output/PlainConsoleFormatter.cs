@@ -1,4 +1,4 @@
-// <copyright file="Formatter.cs" company="Muiris Woulfe">
+// <copyright file="PlainConsoleFormatter.cs" company="Muiris Woulfe">
 // © Muiris Woulfe
 // Licensed under the MIT License
 // </copyright>
@@ -14,22 +14,22 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
     using Microsoft.Extensions.Options;
 
     /// <summary>
-    /// A class for formatting logging messages for simple console display.
+    /// A class for formatting logging messages for plain console display.
     /// </summary>
     [SuppressMessage(
         "Microsoft.Performance",
         "CA1812",
         Justification = "This class is constructed via the LoggerFactory.")]
-    internal class Formatter : ConsoleFormatter
+    internal class PlainConsoleFormatter : ConsoleFormatter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Formatter"/> class.
+        /// Initializes a new instance of the <see cref="PlainConsoleFormatter"/> class.
         /// </summary>
         /// <param name="_">The unused set of formatting options.</param>
 #pragma warning disable SA1313 // ParameterNamesMustBeginWithLowerCaseLetter
-        public Formatter(IOptionsMonitor<ConsoleFormatterOptions> _)
+        public PlainConsoleFormatter(IOptionsMonitor<ConsoleFormatterOptions> _)
 #pragma warning restore SA1313 // ParameterNamesMustBeginWithLowerCaseLetter
-            : base(nameof(Formatter))
+            : base(nameof(PlainConsoleFormatter))
         {
         }
 

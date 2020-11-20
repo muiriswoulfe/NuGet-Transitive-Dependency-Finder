@@ -10,7 +10,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
     using Microsoft.Extensions.Logging.Console;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Input;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Output;
-    using NuGetTransitiveDependencyFinder.ConsoleApp.Resources;
+    using NuGetTransitiveDependencyFinder.ConsoleApp.Resources.Messages;
 
     /// <summary>
     /// The main class of the application, defining the entry point and all interaction.
@@ -22,24 +22,29 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
         /// </summary>
         /// <param name="parameters">A collection of command-line parameters.</param>
         /// <returns>A status code where 0 represents success and 1 indicates failure.</returns>
-        public static int Main(string[] parameters) =>
-            Parser.Default.ParseArguments<CommandLineOptions>(parameters)
+        public static int Main(string[] parameters)
+        {
+            const int Success = 0;
+            const int Error = 1;
+
+            return Parser.Default.ParseArguments<CommandLineOptions>(parameters)
                 .MapResult(
                     options =>
-                        {
-                            using var loggerFactory = CreateLoggerFactory();
-                            var logger = loggerFactory.CreateLogger(nameof(Program));
-                            logger.LogInformation(Strings.Information.CommencingAnalysis);
+                    {
+                        using var loggerFactory = CreateLoggerFactory();
+                        var logger = loggerFactory.CreateLogger(nameof(Program));
+                        logger.LogInformation(Information.CommencingAnalysis);
 
-                            var finder = new TransitiveDependencyFinder(loggerFactory, options.All);
-                            var projects = finder.Run(options.Solution!);
-                            var writer = new Writer(loggerFactory);
-                            writer.Write(projects);
+                        var finder = new TransitiveDependencyFinder(loggerFactory, options.All);
+                        var projects = finder.Run(options.Solution!);
+                        var writer = new DependencyWriter(loggerFactory);
+                        writer.Write(projects);
 
-                            return 0;
-                        },
+                        return Success;
+                    },
                     _ =>
-                        1);
+                        Error);
+        }
 
         /// <summary>
         /// Creates the logger factory from which a logger will be created.
@@ -48,8 +53,8 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
         private static ILoggerFactory CreateLoggerFactory() =>
             LoggerFactory.Create(builder =>
             {
-                builder.AddConsole(options => options.FormatterName = nameof(Formatter))
-                    .AddConsoleFormatter<Formatter, ConsoleFormatterOptions>()
+                builder.AddConsole(options => options.FormatterName = nameof(PlainConsoleFormatter))
+                    .AddConsoleFormatter<PlainConsoleFormatter, ConsoleFormatterOptions>()
                     .SetMinimumLevel(LogLevel.Trace);
             });
     }

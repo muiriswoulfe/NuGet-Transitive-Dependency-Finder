@@ -1,4 +1,4 @@
-// <copyright file="Writer.cs" company="Muiris Woulfe">
+// <copyright file="DependencyWriter.cs" company="Muiris Woulfe">
 // © Muiris Woulfe
 // Licensed under the MIT License
 // </copyright>
@@ -8,13 +8,13 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
     using System.Collections.Generic;
     using System.Globalization;
     using Microsoft.Extensions.Logging;
-    using NuGetTransitiveDependencyFinder.ConsoleApp.Resources;
+    using NuGetTransitiveDependencyFinder.ConsoleApp.Resources.Messages;
     using NuGetTransitiveDependencyFinder.Output;
 
     /// <summary>
     /// A class for writing transitive NuGet dependency information.
     /// </summary>
-    internal class Writer
+    internal class DependencyWriter
     {
         /// <summary>
         /// The logger object to which to write the output.
@@ -22,11 +22,11 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         private readonly ILogger logger;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Writer"/> class.
+        /// Initializes a new instance of the <see cref="DependencyWriter"/> class.
         /// </summary>
         /// <param name="loggerFactory">The logger factory from which a logger will be created.</param>
-        public Writer(ILoggerFactory loggerFactory) =>
-            this.logger = loggerFactory.CreateLogger(nameof(Writer));
+        public DependencyWriter(ILoggerFactory loggerFactory) =>
+            this.logger = loggerFactory.CreateLogger(nameof(DependencyWriter));
 
         /// <summary>
         /// Writes the transitive NuGet dependency information.
@@ -38,7 +38,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
 
             if (!projects.HasChildren)
             {
-                this.logger.LogInformation(Strings.Information.NoNuGetDependencies);
+                this.logger.LogInformation(Information.NoDependencies);
                 return;
             }
 
@@ -95,10 +95,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
                 {
                     this.logger.LogWarning(
                         CreatePrefix(DependencyIndentationLevel) +
-                        string.Format(
-                            CultureInfo.CurrentCulture,
-                            Strings.Information.TransitiveDependency,
-                            dependency));
+                        string.Format(CultureInfo.CurrentCulture, Information.TransitiveDependency, dependency));
                 }
                 else
                 {

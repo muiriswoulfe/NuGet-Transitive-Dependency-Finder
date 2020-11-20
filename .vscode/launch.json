@@ -11,7 +11,44 @@
       "preLaunchTask": "Build Debug",
       "program": "${workspaceFolder}/src/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net5.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
-          "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "externalTerminal"
+    },
+    {
+      "name": "Launch Debug – All",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Build Debug",
+      "program": "${workspaceFolder}/src/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net5.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "args": [
+        "--all",
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "externalTerminal"
+    },
+    {
+      "name": "Launch Debug – Help",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Build Debug",
+      "program": "${workspaceFolder}/src/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net5.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "args": [
+        "--help"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "externalTerminal"
+    },
+    {
+      "name": "Launch Debug – Version",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Build Debug",
+      "program": "${workspaceFolder}/src/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net5.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "args": [
+        "--version"
       ],
       "cwd": "${workspaceFolder}",
       "console": "externalTerminal"
@@ -23,7 +60,7 @@
       "preLaunchTask": "Build Release",
       "program": "${workspaceFolder}/src/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Release/net5.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
-          "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
       ],
       "cwd": "${workspaceFolder}",
       "console": "externalTerminal"

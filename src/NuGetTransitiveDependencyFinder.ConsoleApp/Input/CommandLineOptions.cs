@@ -7,9 +7,10 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Input
 {
     using System.Diagnostics.CodeAnalysis;
     using CommandLine;
+    using NuGetTransitiveDependencyFinder.ConsoleApp.Resources.Messages;
 
     /// <summary>
-    /// A class for formatting logging messages for simple console display.
+    /// A class specifying the application's command-line parameters.
     /// </summary>
     [SuppressMessage(
         "Microsoft.Performance",
@@ -18,15 +19,21 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Input
     internal class CommandLineOptions
     {
         /// <summary>
-        /// Gets or sets a value indicating whether stuff.
+        /// Gets or sets a value indicating whether all NuGet dependencies, including non-transitive dependencies,
+        /// should be listed.
         /// </summary>
-        [Option(HelpText = "Set output to verbose messages.")]
+        [Option('a', "all", HelpText = nameof(All), ResourceType = typeof(CommandLineHelp))]
         public bool All { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether stuff part 2.
+        /// Gets or sets the file name of the .NET solution to analyze.
         /// </summary>
-        [Value(0, MetaName="abc", Required = true, HelpText = "Set output to verbose messages.")]
+        [Value(
+            0,
+            MetaName = "solution",
+            Required = true,
+            HelpText = nameof(Solution),
+            ResourceType = typeof(CommandLineHelp))]
         public string? Solution { get; set; }
     }
 }
