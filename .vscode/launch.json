@@ -23,8 +23,8 @@
       "preLaunchTask": "Build Debug",
       "program": "${workspaceFolder}/src/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net5.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
-        "--all",
-        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln",
+        "--all"
       ],
       "cwd": "${workspaceFolder}",
       "console": "externalTerminal"
