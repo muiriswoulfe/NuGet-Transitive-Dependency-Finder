@@ -98,7 +98,7 @@ Most consumers should use the Release configuration.
 
 ## Using
 
-Once you have a built a version copy the solution, navigate to the folder
+Once you have a built a copy of the solution, navigate to the folder
 containing the build outputs and enter:
 
 ```Batchfile
@@ -107,6 +107,30 @@ dotnet NuGetTransitiveDependencyFinder.ConsoleApp.dll <SolutionToAnalyze>
 
 `<SolutionToAnalyze>` should be replaced by the relative or absolute path of
 the .NET solution you wish to analyze for transitive NuGet dependencies.
+
+If you wish to view the entire set of dependencies for each project, including
+both transitive and non-transitive dependencies, you can enter:
+
+```Batchfile
+dotnet NuGetTransitiveDependencyFinder.ConsoleApp.dll <SolutionToAnalyze> --all
+```
+
+This mode is particularly useful for running before and after the removal of
+transitive dependencies, as it can be used to detect if the removal of a
+dependency resulted in the change of a dependency version. This can occur
+because the removal of a transitive dependency results in the dependency being
+pulled in from another dependency, and the version specified in that dependency
+may differ from the one previously used. To avoid this and therefore mitigate
+risk when removing transitive dependency, you can run the NuGet Transitive
+Dependency Finder in `--all` mode prior to removal and after removal, to
+ascertain whether any dependencies have changed version. This comparison can be
+facilitated by a diffing tool.
+
+You can also request the full set of command-line options by entering:
+
+```Batchfile
+dotnet NuGetTransitiveDependencyFinder.ConsoleApp.dll --help
+```
 
 # SonarCloud Status
 
