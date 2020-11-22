@@ -9,7 +9,7 @@
   <PropertyGroup>
     <Authors>muiriswoulfe</Authors>
     <Copyright>© Muiris Woulfe</Copyright>
-    <Description>The NuGet Transitive Dependency Finder analyzes .NET solutions and projects to find superfluous dependencies that have been explicitly added to projects. The goal is to simplify dependency management.</Description>
+    <Description>The NuGet Transitive Dependency Finder analyzes .NET solutions and projects to find superfluous dependencies that have been explicitly added to projects. The goal is to simplify dependency management.</Description>=
     <IncludeSymbols>true</IncludeSymbols>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>dependency-analysis;developer-tools;dotnet;nuget</PackageTags>
