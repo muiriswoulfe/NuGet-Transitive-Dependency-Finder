@@ -5,9 +5,9 @@
 ![Build Status][buildbadge]
 [![SonarCloud Quality Gate Status][sonarcloudbadge]][sonarcloud]
 
-**The NuGet Transitive Dependency Finder analyzes .NET solutions to find
-superfluous dependencies that have been explicitly added to projects. The goal
-is to simplify dependency management.**
+**The NuGet Transitive Dependency Finder analyzes .NET solutions and projects to
+find superfluous dependencies that have been explicitly added to projects. The
+goal is to simplify dependency management.**
 
 .NET developers can use this application to find and remove these transitive
 dependencies. This serves to simplify NuGet package upgrades by avoiding
@@ -21,15 +21,15 @@ The solution comprises two projects for finding transitive dependencies:
   dependencies.
 - [`NuGetTransitiveDependencyFinder.ConsoleApp`][codeconsoleapp]. This project
   runs the NuGet transitive dependency finder logic against a specified .NET
-  solution. It is expected to be the standard mechanism through which consumers
-  use the NuGet Transitive Dependency Finder.
+  solution or project. It is expected to be the standard mechanism through which
+  consumers use the NuGet Transitive Dependency Finder.
 
 It is not always possible to remove all transitive dependencies. Some transitive
 dependencies are required to explicitly specify a dependency version different
 from that included as part of a package dependency chain, in order to avoid
 version conflicts. Therefore, removal of these transitive dependencies should be
 performed iteratively to ascertain which can be removed without introducing
-errors or warnings into your solution build process.
+errors or warnings into your build process.
 
 ## Building
 
@@ -38,7 +38,7 @@ errors or warnings into your solution build process.
 To build the NuGet Transitive Dependency Finder, you will need to install:
 
 - [Git][git]
-- [.NET Core SDK 3.1.403][netcoresdk] or later
+- [.NET Core SDK 5.0.100][netcoresdk] or later
 
 You can simplify the process by also installing one of the following:
 
@@ -98,21 +98,62 @@ Most consumers should use the Release configuration.
 
 ## Using
 
-Once you have a built a copy of the solution, navigate to the folder
-containing the build outputs and enter:
+After building a copy of the solution or downloading a [release][releases], the
+recommended procedure for running the NuGet Transitive Dependency Finder is to
+navigate to the folder containing the solution or project and enter the
+following sequence of commands, adapting the path to
+`NuGetTransitiveDependencyFinder.ConsoleApp` as necessary:
 
 ```Batchfile
-dotnet NuGetTransitiveDependencyFinder.ConsoleApp.dll <SolutionToAnalyze>
+NuGetTransitiveDependencyFinder.ConsoleApp --solution <SolutionOrProjectToAnalyze> --all > before.txt
+NuGetTransitiveDependencyFinder.ConsoleApp --solution <SolutionOrProjectToAnalyze>
 ```
 
-`<SolutionToAnalyze>` should be replaced by the relative or absolute path of
-the .NET solution you wish to analyze for transitive NuGet dependencies.
+`<SolutionOrProjectToAnalyze>` should be replaced by the relative or absolute
+path of the .NET solution or project you wish to analyze for transitive NuGet
+dependencies. If you are using a local build rather than a release, you will
+need to use `dotnet NuGetTransitiveDependencyFinder.ConsoleApp.dll` in place of
+`NuGetTransitiveDependencyFinder.ConsoleApp`.
 
-If you wish to view the entire set of dependencies for each project, including
-both transitive and non-transitive dependencies, you can enter:
+At this point you should remove all of the dependencies identified as transitive
+from your projects. Ensure the solution or project continues to build,
+reinstating any dependencies as appropriate.
+
+Afterwards, run the following sequence of commands:
 
 ```Batchfile
-dotnet NuGetTransitiveDependencyFinder.ConsoleApp.dll <SolutionToAnalyze> --all
+NuGetTransitiveDependencyFinder.ConsoleApp --solution <SolutionOrProjectToAnalyze> --all > after.txt
+code --diff before.txt after.txt
+```
+
+The last command will open a copy of [Visual Studio Code][vscode], if available,
+and list the differences between the full set of dependencies before and after
+transitive dependency removal. To minimize the risk of a regression, the only
+changes between the two files should be in the build process at the start of the
+file and in the removal of those dependencies marked as transitive. If there are
+additional differences, you can choose to reinstate some appropriate
+dependencies and re-run the last set of commands to ensure this has been
+remediated.
+
+Note that ensuring the dependencies are identical before and after this process
+is not strictly required. This step can be skipped depending on your risk
+appetite and the level of validation that can be undertaken for your solution or
+project.
+
+### Extended Details
+
+The basic mode of operation, which returns only the set of transitive
+dependencies:
+
+```Batchfile
+NuGetTransitiveDependencyFinder.ConsoleApp --solution <SolutionOrProjectToAnalyze>
+```
+
+To view the entire set of dependencies for each project, including both
+transitive and non-transitive dependencies:
+
+```Batchfile
+NuGetTransitiveDependencyFinder.ConsoleApp --solution <SolutionOrProjectToAnalyze> --all
 ```
 
 This mode is particularly useful for running before and after the removal of
@@ -122,14 +163,14 @@ because the removal of a transitive dependency results in the dependency being
 pulled in from another dependency, and the version specified in that dependency
 may differ from the one previously used. To avoid this and therefore mitigate
 risk when removing transitive dependency, you can run the NuGet Transitive
-Dependency Finder in `--all` mode prior to removal and after removal, to
-ascertain whether any dependencies have changed version. This comparison can be
-facilitated by a diffing tool.
+Dependency Finder in `--all` mode prior to removal and after removal as per
+the recommended procedure above, to ascertain whether any dependencies have
+changed version.
 
-You can also request the full set of command-line options by entering:
+You can also view the full set of command-line options:
 
 ```Batchfile
-dotnet NuGetTransitiveDependencyFinder.ConsoleApp.dll --help
+NuGetTransitiveDependencyFinder.ConsoleApp --help
 ```
 
 # SonarCloud Status
@@ -165,10 +206,11 @@ be located [here][sonarcloud].
 [codesolution]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/blob/main/NuGetTransitiveDependencyFinder.sln
 [git]: https://git-scm.com/
 [github]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder
-[netcoresdk]: https://dotnet.microsoft.com/download/dotnet-core/3.1
+[netcoresdk]: https://dotnet.microsoft.com/download/dotnet-core/5.0
 [vs]: https://visualstudio.microsoft.com/
 [vscode]: https://code.visualstudio.com/
 [vscodecsharp]: https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp
+[release]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/releases/
 [sonarcloudmaintainability]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=sqale_rating
 [sonarcloudreliability]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=reliability_rating
 [sonarcloudsecurity]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=security_rating

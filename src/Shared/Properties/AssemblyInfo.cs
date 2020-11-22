@@ -13,8 +13,8 @@ using NuGetTransitiveDependencyFinder.Properties;
 [assembly: AssemblyCompanyAttribute("Muiris Woulfe")]
 [assembly: AssemblyCopyrightAttribute("© Muiris Woulfe. Licensed under the MIT License.")]
 [assembly: AssemblyDescriptionAttribute(
-    "The NuGet Transitive Dependency Finder analyzes .NET solutions to find superfluous dependencies that have been " +
-    "explicitly added to projects. The goal is to simplify dependency management.")]
+    "The NuGet Transitive Dependency Finder analyzes .NET solutions and projects to find superfluous dependencies " +
+    "that have been explicitly added to projects. The goal is to simplify dependency management.")]
 [assembly: AssemblyFileVersionAttribute(AssemblyAttributes.Version)]
 [assembly: AssemblyInformationalVersionAttribute(AssemblyAttributes.Version)]
 [assembly: AssemblyMetadataAttribute(

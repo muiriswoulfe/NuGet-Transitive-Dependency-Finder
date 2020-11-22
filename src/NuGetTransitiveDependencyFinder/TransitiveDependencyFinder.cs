@@ -26,11 +26,6 @@ namespace NuGetTransitiveDependencyFinder
         private readonly ILoggerFactory loggerFactory;
 
         /// <summary>
-        /// A value indicating whether all dependencies, or just those that are transitive, should be collected.
-        /// </summary>
-        private readonly bool collectAllDependencies;
-
-        /// <summary>
         /// The collection of dependencies recorded and stored temporarily for the purposes of finding transitive NuGet
         /// dependencies.
         /// </summary>
@@ -41,20 +36,17 @@ namespace NuGetTransitiveDependencyFinder
         /// Initializes a new instance of the <see cref="TransitiveDependencyFinder"/> class.
         /// </summary>
         /// <param name="loggerFactory">The logger factory from which a logger will be created.</param>
-        /// <param name="collectAllDependencies">A value indicating whether all dependencies, or just those that are
-        /// transitive, should be collected.</param>
-        public TransitiveDependencyFinder(ILoggerFactory loggerFactory, bool collectAllDependencies)
-        {
+        public TransitiveDependencyFinder(ILoggerFactory loggerFactory) =>
             this.loggerFactory = loggerFactory;
-            this.collectAllDependencies = collectAllDependencies;
-        }
 
         /// <summary>
         /// Runs the logic for finding transitive NuGet dependencies.
         /// </summary>
-        /// <param name="solutionPath">The path of the .NET solution file, including the file name.</param>
+        /// <param name="solutionPath">The path of the .NET solution or project file, including the file name.</param>
+        /// <param name="collectAllDependencies">A value indicating whether all dependencies, or just those that are
+        /// transitive, should be collected.</param>
         /// <returns>The transitive NuGet dependency information, which can be processed for display.</returns>
-        public Projects Run(string solutionPath)
+        public Projects Run(string solutionPath, bool collectAllDependencies)
         {
             var projects = this.CreateProjects(solutionPath);
             var result = new Projects(projects.Count);
@@ -75,7 +67,7 @@ namespace NuGetTransitiveDependencyFinder
                         .Libraries
                         .ToImmutableDictionary(library => library.Name, StringComparer.OrdinalIgnoreCase);
                     this.PopulateDependencies(framework, libraries);
-                    var resultFramework = this.FindTransitiveDependencies(framework);
+                    var resultFramework = this.FindTransitiveDependencies(framework, collectAllDependencies);
 
                     resultProject.Add(resultFramework);
                 }
@@ -172,8 +164,10 @@ namespace NuGetTransitiveDependencyFinder
         /// Finds the transitive NuGet dependencies by traversing the collection of dependencies previously recorded.
         /// </summary>
         /// <param name="framework">The .NET project and framework combination to analyze.</param>
+        /// <param name="collectAllDependencies">A value indicating whether all dependencies, or just those that are
+        /// transitive, should be collected.</param>
         /// <returns>The transitive NuGet dependency information, which can be processed for display.</returns>
-        private Framework FindTransitiveDependencies(TargetFrameworkInformation framework)
+        private Framework FindTransitiveDependencies(TargetFrameworkInformation framework, bool collectAllDependencies)
         {
             foreach (var dependency in framework
                 .Dependencies
@@ -185,7 +179,7 @@ namespace NuGetTransitiveDependencyFinder
                 dependency!.IsTransitive = true;
             }
 
-            var frameworkDependencies = this.collectAllDependencies
+            var frameworkDependencies = collectAllDependencies
                 ? this.dependencies.Values
                 : this.dependencies.Values.Where(dependency => dependency.IsTransitive);
 

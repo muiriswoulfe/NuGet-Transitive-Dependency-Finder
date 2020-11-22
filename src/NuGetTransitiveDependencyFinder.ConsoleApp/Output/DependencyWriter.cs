@@ -73,15 +73,6 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         }
 
         /// <summary>
-        /// Populates a localized string by replacing the placeholders with the appropriate dependency information.
-        /// </summary>
-        /// <param name="localizedString">The localized string to be populated.</param>
-        /// <param name="dependency">The dependency information with which to populate the localized string.</param>
-        /// <returns>The localized string with all placeholders populated.</returns>
-        private static string PopulateLocalizedString(string localizedString, Dependency dependency) =>
-            string.Format(CultureInfo.CurrentCulture, localizedString, dependency.Identifier, dependency.Version);
-
-        /// <summary>
         /// Writes a collection of dependencies.
         /// </summary>
         /// <param name="dependencies">The collection of dependencies.</param>
