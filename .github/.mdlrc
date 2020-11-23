@@ -1,3 +1,2 @@
 style '.mdl.rb' pull_request_template.md
 style '.mdl.rb' ISSUE_TEMPLATE/*.md
-style '../.mdl.rb' *.md
