@@ -1,6 +1,6 @@
-<!-- © Muiris Woulfe. Licensed under the MIT License. -->
-
 # NuGet Transitive Dependency Finder
+
+<!-- © Muiris Woulfe. Licensed under the MIT License. -->
 
 ![Build Status][buildbadge]
 [![SonarCloud Quality Gate Status][sonarcloudbadge]][sonarcloud]

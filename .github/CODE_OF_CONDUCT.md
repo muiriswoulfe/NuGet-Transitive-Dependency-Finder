@@ -1,6 +1,6 @@
-<!-- © Muiris Woulfe. Licensed under the MIT License. -->
-
 # Contributor Covenant Code of Conduct
+
+<!-- © Muiris Woulfe. Licensed under the MIT License. -->
 
 ## Our Pledge
 

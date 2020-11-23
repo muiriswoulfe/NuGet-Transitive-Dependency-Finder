@@ -1,6 +1,6 @@
-<!-- © Muiris Woulfe. Licensed under the MIT License. -->
-
 # Contributing
+
+<!-- © Muiris Woulfe. Licensed under the MIT License. -->
 
 Contributions to this project are welcome and appreciated.
 

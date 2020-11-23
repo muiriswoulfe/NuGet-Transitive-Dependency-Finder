@@ -1,6 +1,6 @@
-<!-- © Muiris Woulfe. Licensed under the MIT License. -->
-
 # Support
+
+<!-- © Muiris Woulfe. Licensed under the MIT License. -->
 
 For help getting started or troubleshooting an issue, feel free to create a new
 [Support Request][supportrequest].
