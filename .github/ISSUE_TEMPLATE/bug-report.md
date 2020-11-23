@@ -14,9 +14,11 @@ assignees: muiriswoulfe
 
 ## Reproduction Steps
 
-## Actual Behavior
+## Behavior
 
-## Expected Behavior
+### Actual
+
+### Expected
 
 ## Console Output
 
