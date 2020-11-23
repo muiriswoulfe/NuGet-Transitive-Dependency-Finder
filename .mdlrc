@@ -1,2 +1,1 @@
-all
-rule 'MD013', :code_blocks => false
+style 'src/.mdl.rb'
