@@ -173,7 +173,7 @@ You can also view the full set of command-line options:
 NuGetTransitiveDependencyFinder.ConsoleApp --help
 ```
 
-# SonarCloud Status
+## SonarCloud Status
 
 The complete SonarCloud analysis for the NuGet Transitive Dependency Finder can
 be located [here][sonarcloud].
