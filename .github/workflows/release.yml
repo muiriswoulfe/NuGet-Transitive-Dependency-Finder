@@ -52,6 +52,11 @@ jobs:
       with:
         dotnet-version: 5.0.x
 
+    - name: Install MSBuild
+      uses: microsoft/setup-msbuild@v1
+      with:
+        vs-version: '[16.8]'
+
     - name: Install NuGet Dependencies
       run: >-
         dotnet restore

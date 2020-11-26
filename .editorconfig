@@ -433,9 +433,6 @@ insert_final_newline = unset
 trim_trailing_whitespace = unset
 max_line_length = unset
 
-[*.{cs,csx,cake,vb,vbx}]
-csharp_using_directive_placement = inside_namespace:warning
-
 ##########################################
 # License
 ##########################################

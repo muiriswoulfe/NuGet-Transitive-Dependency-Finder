@@ -1,2 +1,0 @@
-all
-rule 'MD013', :code_blocks => false

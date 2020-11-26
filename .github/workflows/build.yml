@@ -22,6 +22,11 @@ jobs:
       with:
         dotnet-version: 5.0.x
 
+    - name: Install MSBuild
+      uses: microsoft/setup-msbuild@v1
+      with:
+        vs-version: '[16.8]'
+
     - name: Install NuGet Dependencies
       run: dotnet restore
 
@@ -47,6 +52,11 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
+
+    - name: Install MSBuild
+      uses: microsoft/setup-msbuild@v1
+      with:
+        vs-version: '[16.8]'
 
     - name: Install NuGet Dependencies
       run: dotnet restore
@@ -114,12 +124,10 @@ jobs:
       run: ./bin/ec-linux-amd64
 
     - name: Markdown – Validate
-      uses: actionshub/markdownlint@1.2.2
-
-    - name: Markdown – Validate .github
-      uses: actionshub/markdownlint@1.2.2
+      uses: nosborn/github-action-markdown-cli@v1.1.1
       with:
-        path: ./.github
+        files: .
+        config_file: .markdownlint.json
 
     - name: Markdown – Validate Links
       uses: gaurav-nelson/github-action-markdown-link-check@1.0.8
