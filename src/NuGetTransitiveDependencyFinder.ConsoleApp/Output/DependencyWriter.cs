@@ -34,7 +34,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         /// <param name="projects">The details of the projects.</param>
         public void Write(Projects projects)
         {
-            const int FrameworkIndentationLevel = 1;
+            const int frameworkIndentationLevel = 1;
 
             if (!projects.HasChildren)
             {
@@ -47,7 +47,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
                 this.logger.LogInformation(project.ToString());
                 foreach (var framework in project.SortedChildren)
                 {
-                    this.logger.LogInformation(CreatePrefix(FrameworkIndentationLevel) + framework);
+                    this.logger.LogInformation(CreatePrefix(frameworkIndentationLevel) + framework);
                     if (!framework.HasChildren)
                     {
                         continue;
@@ -67,9 +67,9 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         /// <returns>A string comprising the appropriate level of indentation.</returns>
         private static string CreatePrefix(int indentLevel)
         {
-            const int IndentationSize = 4;
+            const int indentationSize = 4;
 
-            return new string(' ', indentLevel * IndentationSize);
+            return new string(' ', indentLevel * indentationSize);
         }
 
         /// <summary>
@@ -78,19 +78,19 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         /// <param name="dependencies">The collection of dependencies.</param>
         private void WriteDependencies(IReadOnlyCollection<Dependency> dependencies)
         {
-            const int DependencyIndentationLevel = 2;
+            const int dependencyIndentationLevel = 2;
 
             foreach (var dependency in dependencies)
             {
                 if (dependency.IsTransitive)
                 {
                     this.logger.LogWarning(
-                        CreatePrefix(DependencyIndentationLevel) +
+                        CreatePrefix(dependencyIndentationLevel) +
                         string.Format(CultureInfo.CurrentCulture, Information.TransitiveDependency, dependency));
                 }
                 else
                 {
-                    this.logger.LogDebug(CreatePrefix(DependencyIndentationLevel) + dependency);
+                    this.logger.LogDebug(CreatePrefix(dependencyIndentationLevel) + dependency);
                 }
             }
         }

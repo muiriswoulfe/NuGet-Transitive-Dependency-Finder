@@ -123,7 +123,9 @@ namespace NuGetTransitiveDependencyFinder.Output
             var result = StringComparer.OrdinalIgnoreCase.Compare(this.Identifier, other.Identifier);
             return result != 0
                 ? result
-                : StringComparer.Ordinal.Compare(this.Version.ToNormalizedString(), other.Version.ToNormalizedString());
+                : StringComparer.OrdinalIgnoreCase.Compare(
+                    this.Version.ToNormalizedString(),
+                    other.Version.ToNormalizedString());
         }
 
         /// <inheritdoc/>
@@ -137,13 +139,13 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            const int StartingPrime = 3049;
-            const int MultiplicativePrime = 5039;
+            const int startingPrime = 3049;
+            const int multiplicativePrime = 5039;
 
-            var result = StartingPrime;
+            var result = startingPrime;
             result += StringComparer.OrdinalIgnoreCase.GetHashCode(this.Identifier);
-            result *= MultiplicativePrime;
-            result += StringComparer.Ordinal.GetHashCode(this.Version.ToNormalizedString());
+            result *= multiplicativePrime;
+            result += StringComparer.OrdinalIgnoreCase.GetHashCode(this.Version.ToNormalizedString());
 
             return result;
         }

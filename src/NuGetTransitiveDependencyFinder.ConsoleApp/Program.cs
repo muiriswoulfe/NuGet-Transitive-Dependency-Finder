@@ -24,8 +24,8 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
         /// <returns>A status code where 0 represents success and 1 indicates failure.</returns>
         public static int Main(string[] parameters)
         {
-            const int Success = 0;
-            const int Error = 1;
+            const int success = 0;
+            const int error = 1;
 
             return Parser.Default.ParseArguments<CommandLineOptions>(parameters)
                 .MapResult(
@@ -40,10 +40,10 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
                         var writer = new DependencyWriter(loggerFactory);
                         writer.Write(projects);
 
-                        return Success;
+                        return success;
                     },
                     _ =>
-                        Error);
+                        error);
         }
 
         /// <summary>

@@ -82,7 +82,7 @@ file_header_template = <copyright file="{fileName}" company="Muiris Woulfe">\n©
 
 # Default Severity for .NET Code Style
 # https://docs.microsoft.com/dotnet/fundamentals/code-analysis/configuration-options#scope
-dotnet_analyzer_diagnostic.severity = warning
+dotnet_analyzer_diagnostic.severity = error
 
 # .NET Code Style Settings
 # https://docs.microsoft.com/visualstudio/ide/editorconfig-language-conventions#net-code-style-settings
@@ -432,6 +432,14 @@ indent_size = unset
 insert_final_newline = unset
 trim_trailing_whitespace = unset
 max_line_length = unset
+
+[*.cs]
+csharp_using_directive_placement = inside_namespace:warning
+csharp_style_expression_bodied_constructors = true:warning
+csharp_style_var_for_built_in_types = true:warning
+csharp_style_expression_bodied_methods = true:warning
+csharp_style_expression_bodied_operators = true:warning
+csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:warning
 
 ##########################################
 # License

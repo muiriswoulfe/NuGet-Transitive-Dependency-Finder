@@ -39,13 +39,13 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
             IExternalScopeProvider scopeProvider,
             TextWriter textWriter)
         {
-            const string ResetColorAndFormatting = "\x1B[39m\x1B[22m";
+            const string resetColorAndFormatting = "\x1B[39m\x1B[22m";
 
             textWriter.WriteLine(
                 "{0}{1}{2}",
                 GetColorAndFormatting(logEntry.LogLevel),
                 logEntry.Formatter(logEntry.State, logEntry.Exception),
-                ResetColorAndFormatting);
+                resetColorAndFormatting);
         }
 
         /// <summary>
@@ -53,6 +53,8 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         /// </summary>
         /// <param name="logLevel">The log level for which to get the color and formatting codes.</param>
         /// <returns>A string comprising the ASCII color and formatting codes.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="logLevel"/> is set to an unrecognized
+        /// value.</exception>
         private static string GetColorAndFormatting(LogLevel logLevel) =>
             logLevel switch
             {
@@ -68,6 +70,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
                     "\x1B[1m\x1B[31m", // Bold Red
                 LogLevel.Critical =>
                     "\x1B[1m\x1B[35m", // Bold Magenta
+                LogLevel.None =>
                 _ =>
                     throw new ArgumentOutOfRangeException(nameof(logLevel))
             };
