@@ -176,7 +176,7 @@ NuGetTransitiveDependencyFinder.ConsoleApp --help
 ## SonarCloud Status
 
 The complete SonarCloud analysis for the NuGet Transitive Dependency Finder can
-be located [here][sonarcloud].
+be located [here][sonarcloud]. TESTING MARKDOWNLINT TESTING MARKDOWNLINT TESTING MARKDOWNLINT
 
 ![SonarCloud Maintainability Rating][sonarcloudmaintainability]
 
