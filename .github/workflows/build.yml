@@ -119,6 +119,12 @@ jobs:
         files: .
         config_file: .markdownlint.json
 
+    - name: Markdown – Validate .github
+      uses: nosborn/github-action-markdown-cli@v1.1.1
+      with:
+        files: .github/
+        config_file: .markdownlint.json
+
     - name: Markdown – Validate Links
       uses: gaurav-nelson/github-action-markdown-link-check@1.0.8
 
