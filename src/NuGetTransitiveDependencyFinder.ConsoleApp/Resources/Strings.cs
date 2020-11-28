@@ -9,7 +9,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Resources
     using System.Resources;
 
     /// <summary>
-    /// A strongly typed resource class for accessing localized strings.
+    /// A resource class for accessing localized strings.
     /// </summary>
     internal static class Strings
     {
