@@ -2,7 +2,7 @@
 
 <!-- © Muiris Woulfe. Licensed under the MIT License. -->
 
-Contributions to this project are welcome and appreciated. Contributions to this project are welcome and appreciated.
+Contributions to this project are welcome and appreciated.
 
 ## Bug Reports
 
