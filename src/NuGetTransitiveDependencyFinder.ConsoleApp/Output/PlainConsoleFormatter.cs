@@ -1,4 +1,4 @@
-// <copyright file="Formatter.cs" company="Muiris Woulfe">
+// <copyright file="PlainConsoleFormatter.cs" company="Muiris Woulfe">
 // © Muiris Woulfe
 // Licensed under the MIT License
 // </copyright>
@@ -7,7 +7,6 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
     using System.IO;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
@@ -15,26 +14,24 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
     using Microsoft.Extensions.Options;
 
     /// <summary>
-    /// A class for formatting logging messages for simple console display.
+    /// A class for formatting logging messages for plain console display.
     /// </summary>
     [SuppressMessage(
         "Microsoft.Performance",
         "CA1812",
         Justification = "This class is constructed via the LoggerFactory.")]
-    internal class Formatter : ConsoleFormatter
+    internal class PlainConsoleFormatter : ConsoleFormatter
     {
         /// <summary>
-        /// The set of formatting options.
+        /// Initializes a new instance of the <see cref="PlainConsoleFormatter"/> class.
         /// </summary>
-        private readonly IOptionsMonitor<ConsoleFormatterOptions> options;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Formatter"/> class.
-        /// </summary>
-        /// <param name="options">The set of formatting options.</param>
-        public Formatter(IOptionsMonitor<ConsoleFormatterOptions> options)
-            : base(nameof(Formatter)) =>
-            this.options = options;
+        /// <param name="_">The unused set of formatting options.</param>
+#pragma warning disable SA1313 // ParameterNamesMustBeginWithLowerCaseLetter
+        public PlainConsoleFormatter(IOptionsMonitor<ConsoleFormatterOptions> _)
+#pragma warning restore SA1313 // ParameterNamesMustBeginWithLowerCaseLetter
+            : base(nameof(PlainConsoleFormatter))
+        {
+        }
 
         /// <inheritdoc/>
         public override void Write<TState>(
@@ -42,14 +39,13 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
             IExternalScopeProvider scopeProvider,
             TextWriter textWriter)
         {
-            const string ResetColorAndFormatting = "\x1B[39m\x1B[22m";
+            const string resetColorAndFormatting = "\x1B[39m\x1B[22m";
 
             textWriter.WriteLine(
-                "{0} {1}{2}{3}",
-                this.GetTimestamp(),
+                "{0}{1}{2}",
                 GetColorAndFormatting(logEntry.LogLevel),
                 logEntry.Formatter(logEntry.State, logEntry.Exception),
-                ResetColorAndFormatting);
+                resetColorAndFormatting);
         }
 
         /// <summary>
@@ -57,13 +53,15 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         /// </summary>
         /// <param name="logLevel">The log level for which to get the color and formatting codes.</param>
         /// <returns>A string comprising the ASCII color and formatting codes.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="logLevel"/> is set to an unrecognized
+        /// value.</exception>
         private static string GetColorAndFormatting(LogLevel logLevel) =>
             logLevel switch
             {
                 LogLevel.Trace =>
                     "\x1B[32m", // Green
                 LogLevel.Debug =>
-                    "\x1B[32m", // Green
+                    string.Empty,
                 LogLevel.Information =>
                     "\x1B[1m", // Bold
                 LogLevel.Warning =>
@@ -71,22 +69,11 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
                 LogLevel.Error =>
                     "\x1B[1m\x1B[31m", // Bold Red
                 LogLevel.Critical =>
-                    "\x1B[1m\x1B[31m", // Bold Red
+                    "\x1B[1m\x1B[35m", // Bold Magenta
                 LogLevel.None =>
-                    string.Empty,
+                    "\x1B[33m", // Yellow
                 _ =>
-                    throw new ArgumentOutOfRangeException(nameof(logLevel))
+                    throw new ArgumentOutOfRangeException(nameof(logLevel)),
             };
-
-        /// <summary>
-        /// Gets the timestamp written at the start of each log entry.
-        /// </summary>
-        /// <returns>The timestamp formatted as a string.</returns>
-        private string GetTimestamp()
-        {
-            var currentOptions = this.options.CurrentValue;
-            var timestamp = currentOptions.UseUtcTimestamp ? DateTime.UtcNow : DateTime.Now;
-            return timestamp.ToString(currentOptions.TimestampFormat ?? "s", CultureInfo.CurrentCulture);
-        }
     }
 }

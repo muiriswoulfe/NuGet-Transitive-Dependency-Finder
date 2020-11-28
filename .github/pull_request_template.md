@@ -1,13 +1,15 @@
+# Pull Request
+
 <!-- Please provide as much detail as possible. Sections may be left blank where
      information is not applicable. -->
 
-# Pull Request
-
 ## Summary
 
-## Previous Behavior
+## Behavior
 
-## New Behavior
+### Previous
+
+### New
 
 ## Breaking Changes
 

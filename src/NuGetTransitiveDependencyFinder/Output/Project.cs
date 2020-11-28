@@ -16,11 +16,11 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <summary>
         /// Initializes a new instance of the <see cref="Project"/> class.
         /// </summary>
+        /// <param name="identifier">The project identifier.</param>
         /// <param name="capacity">The quantity of .NET framework identifiers for which the collection initially has
         /// adequate capacity.</param>
-        /// <param name="identifier">The project identifier.</param>
-        public Project(int capacity, string identifier)
-            : base(capacity, identifier)
+        public Project(string identifier, int capacity)
+            : base(identifier, capacity)
         {
         }
 

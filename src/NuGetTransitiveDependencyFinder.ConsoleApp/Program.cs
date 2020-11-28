@@ -5,13 +5,15 @@
 
 namespace NuGetTransitiveDependencyFinder.ConsoleApp
 {
+    using CommandLine;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Console;
+    using NuGetTransitiveDependencyFinder.ConsoleApp.Input;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Output;
-    using NuGetTransitiveDependencyFinder.ConsoleApp.Resources;
+    using NuGetTransitiveDependencyFinder.ConsoleApp.Resources.Messages;
 
     /// <summary>
-    /// The main class of the application, defining the entry point and all interaction.
+    /// The main class of the application, defining the entry point and the basic operation of the application.
     /// </summary>
     internal static class Program
     {
@@ -19,26 +21,41 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
         /// The entry point of the application.
         /// </summary>
         /// <param name="parameters">A collection of command-line parameters.</param>
-        public static void Main(string[] parameters)
+        /// <returns>A status code where 0 represents success and 1 represents failure.</returns>
+        public static int Main(string[] parameters)
         {
-            using var loggerFactory = LoggerFactory.Create(builder =>
+            const int success = 0;
+            const int error = 1;
+
+            return Parser.Default.ParseArguments<CommandLineOptions>(parameters)
+                .MapResult(
+                    options =>
+                    {
+                        using var loggerFactory = CreateLoggerFactory();
+                        var logger = loggerFactory.CreateLogger(nameof(Program));
+                        logger.LogInformation(Information.CommencingAnalysis);
+
+                        var finder = new TransitiveDependencyFinder(loggerFactory);
+                        var projects = finder.Run(options.ProjectOrSolution!, options.All);
+                        var writer = new DependencyWriter(loggerFactory);
+                        writer.Write(projects);
+
+                        return success;
+                    },
+                    _ =>
+                        error);
+        }
+
+        /// <summary>
+        /// Creates the logger factory from which a logger will be constructed.
+        /// </summary>
+        /// <returns>The logger factory.</returns>
+        private static ILoggerFactory CreateLoggerFactory() =>
+            LoggerFactory.Create(builder =>
             {
-                builder.AddConsole(options => options.FormatterName = nameof(Formatter))
-                    .AddConsoleFormatter<Formatter, ConsoleFormatterOptions>()
+                builder.AddConsole(options => options.FormatterName = nameof(PlainConsoleFormatter))
+                    .AddConsoleFormatter<PlainConsoleFormatter, ConsoleFormatterOptions>()
                     .SetMinimumLevel(LogLevel.Trace);
             });
-
-            var logger = loggerFactory.CreateLogger(nameof(Program));
-            if (parameters.Length != 1)
-            {
-                logger.LogError(Strings.Error.MissingParameter);
-                return;
-            }
-
-            logger.LogInformation(Strings.Information.CommencingAnalysis);
-            var finder = new TransitiveDependencyFinder(loggerFactory);
-            var projects = finder.Run(parameters[0]);
-            new Writer(loggerFactory).Write(projects);
-        }
     }
 }

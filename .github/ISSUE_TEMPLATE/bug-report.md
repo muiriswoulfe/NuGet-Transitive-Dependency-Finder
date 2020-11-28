@@ -7,8 +7,6 @@ assignees: muiriswoulfe
 
 ---
 
-# Bug Report
-
 <!-- Please provide as much detail as possible. Inapplicable sections may be
      left blank where. -->
 
@@ -16,9 +14,11 @@ assignees: muiriswoulfe
 
 ## Reproduction Steps
 
-## Actual Behavior
+## Behavior
 
-## Expected Behavior
+### Actual
+
+### Expected
 
 ## Console Output
 

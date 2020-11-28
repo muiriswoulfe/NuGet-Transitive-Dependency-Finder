@@ -13,7 +13,6 @@ namespace NuGetTransitiveDependencyFinder
     using NuGet.ProjectModel;
     using NuGetTransitiveDependencyFinder.Output;
     using NuGetTransitiveDependencyFinder.ProjectAnalysis;
-    using static System.FormattableString;
 
     /// <summary>
     /// A class that manages the overall process of finding transitive NuGet dependencies.
@@ -21,7 +20,7 @@ namespace NuGetTransitiveDependencyFinder
     public class TransitiveDependencyFinder
     {
         /// <summary>
-        /// The logger factory from which a logger will be created.
+        /// The logger factory from which a logger will be constructed.
         /// </summary>
         private readonly ILoggerFactory loggerFactory;
 
@@ -29,33 +28,39 @@ namespace NuGetTransitiveDependencyFinder
         /// The collection of dependencies recorded and stored temporarily for the purposes of finding transitive NuGet
         /// dependencies.
         /// </summary>
-        private readonly ISet<string> dependencies = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        /// <remarks>The keys contain the dependency identifiers, while the values contain the complete dependency
+        /// information.</remarks>
+        private readonly IDictionary<string, Dependency> dependencies =
+            new Dictionary<string, Dependency>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TransitiveDependencyFinder"/> class.
         /// </summary>
-        /// <param name="loggerFactory">The logger factory from which a logger will be created.</param>
+        /// <param name="loggerFactory">The logger factory from which a logger will be constructed.</param>
         public TransitiveDependencyFinder(ILoggerFactory loggerFactory) =>
             this.loggerFactory = loggerFactory;
 
         /// <summary>
         /// Runs the logic for finding transitive NuGet dependencies.
         /// </summary>
-        /// <param name="solutionPath">The path of the .NET solution file, including the file name.</param>
+        /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
+        /// name.</param>
+        /// <param name="collateAllDependencies">A value indicating whether all dependencies, or merely those that are
+        /// transitive, should be collated.</param>
         /// <returns>The transitive NuGet dependency information, which can be processed for display.</returns>
-        public Projects Run(string solutionPath)
+        public Projects Run(string projectOrSolutionPath, bool collateAllDependencies)
         {
-            var projects = this.CreateProjects(solutionPath);
+            var projects = this.CreateProjects(projectOrSolutionPath);
             var result = new Projects(projects.Count);
             foreach (var project in projects)
             {
                 var assetsFiles = this.CreateAssetsFiles(project);
-                if (assetsFiles == null)
+                if (assetsFiles is null)
                 {
                     continue;
                 }
 
-                var resultProject = new Project(project.TargetFrameworks.Count, project.Name);
+                var resultProject = new Project(project.Name, project.TargetFrameworks.Count);
                 foreach (var framework in project.TargetFrameworks)
                 {
                     this.dependencies.Clear();
@@ -64,7 +69,7 @@ namespace NuGetTransitiveDependencyFinder
                         .Libraries
                         .ToImmutableDictionary(library => library.Name, StringComparer.OrdinalIgnoreCase);
                     this.PopulateDependencies(framework, libraries);
-                    var resultFramework = this.FindTransitiveDependencies(framework);
+                    var resultFramework = this.FindTransitiveDependencies(framework, collateAllDependencies);
 
                     resultProject.Add(resultFramework);
                 }
@@ -78,10 +83,11 @@ namespace NuGetTransitiveDependencyFinder
         /// <summary>
         /// Creates the collection of .NET projects to analyze.
         /// </summary>
-        /// <param name="solutionPath">The path of the .NET solution file, including the file name.</param>
+        /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
+        /// name.</param>
         /// <returns>The collection of .NET projects.</returns>
-        private IReadOnlyCollection<PackageSpec> CreateProjects(string solutionPath) =>
-            this.CreateProjectDependencyGraph(solutionPath)
+        private IReadOnlyCollection<PackageSpec> CreateProjects(string projectOrSolutionPath) =>
+            this.CreateProjectDependencyGraph(projectOrSolutionPath)
                 .Projects
                 .Where(project => project.RestoreMetadata.ProjectStyle == ProjectStyle.PackageReference)
                 .ToArray();
@@ -90,11 +96,12 @@ namespace NuGetTransitiveDependencyFinder
         /// Creates the project dependency graph, which is used for generating the collection of .NET projects to be
         /// analyzed.
         /// </summary>
-        /// <param name="solutionPath">The path of the .NET solution file, including the file name.</param>
+        /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
+        /// name.</param>
         /// <returns>The project dependency graph.</returns>
-        private DependencyGraphSpec CreateProjectDependencyGraph(string solutionPath)
+        private DependencyGraphSpec CreateProjectDependencyGraph(string projectOrSolutionPath)
         {
-            using var dependencyGraph = new DependencyGraph(this.loggerFactory, solutionPath);
+            using var dependencyGraph = new DependencyGraph(this.loggerFactory, projectOrSolutionPath);
             return dependencyGraph.Create();
         }
 
@@ -122,7 +129,7 @@ namespace NuGetTransitiveDependencyFinder
             foreach (var library in framework
                 .Dependencies
                 .Select(dependency => libraries.TryGetValue(dependency.Name, out var library) ? library : null)
-                .Where(library => library != null))
+                .Where(library => !(library is null)))
             {
                 this.RecordDependency(true, library!, libraries);
             }
@@ -141,19 +148,14 @@ namespace NuGetTransitiveDependencyFinder
             LockFileTargetLibrary library,
             IReadOnlyDictionary<string, LockFileTargetLibrary> libraries)
         {
-            if (this.dependencies.Contains(library.Name))
+            if (this.dependencies.ContainsKey(library.Name))
             {
                 return;
             }
 
             if (!isTopLevel)
             {
-                var result = this.dependencies.Add(library.Name);
-                if (!result)
-                {
-                    throw new InvalidOperationException(
-                        Invariant($"Failed to add '{library.Name}' to the collection."));
-                }
+                this.dependencies.Add(library.Name, new Dependency(library.Name, library.Version));
             }
 
             foreach (var libraryDependencies in library.Dependencies)
@@ -166,20 +168,26 @@ namespace NuGetTransitiveDependencyFinder
         /// Finds the transitive NuGet dependencies by traversing the collection of dependencies previously recorded.
         /// </summary>
         /// <param name="framework">The .NET project and framework combination to analyze.</param>
+        /// <param name="collateAllDependencies">A value indicating whether all dependencies, or merely those that are
+        /// transitive, should be collated.</param>
         /// <returns>The transitive NuGet dependency information, which can be processed for display.</returns>
-        private Framework FindTransitiveDependencies(TargetFrameworkInformation framework)
+        private Framework FindTransitiveDependencies(TargetFrameworkInformation framework, bool collateAllDependencies)
         {
-            var result = new Framework(framework.Dependencies.Count, framework.FrameworkName);
             foreach (var dependency in framework
                 .Dependencies
-                .Where(dependency =>
+                .Select(dependency =>
                     !string.Equals(dependency.Name, "NETStandard.Library", StringComparison.OrdinalIgnoreCase) &&
-                    this.dependencies.Contains(dependency.Name)))
+                    this.dependencies.TryGetValue(dependency.Name, out var value) ? value : null)
+                .Where(dependency => !(dependency is null)))
             {
-                result.Add(dependency.Name);
+                dependency!.IsTransitive = true;
             }
 
-            return result;
+            var frameworkDependencies = collateAllDependencies
+                ? this.dependencies.Values
+                : this.dependencies.Values.Where(dependency => dependency.IsTransitive);
+
+            return new Framework(framework.FrameworkName, frameworkDependencies.ToList());
         }
     }
 }

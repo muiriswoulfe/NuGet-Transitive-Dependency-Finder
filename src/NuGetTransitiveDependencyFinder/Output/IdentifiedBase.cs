@@ -6,6 +6,7 @@
 namespace NuGetTransitiveDependencyFinder.Output
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// A base class representing outputted information inclusive of an identifier.
@@ -20,11 +21,20 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <summary>
         /// Initializes a new instance of the <see cref="IdentifiedBase{TIdentifier, TChild}"/> class.
         /// </summary>
+        /// <param name="identifier">The identifier of the object.</param>
         /// <param name="capacity">The quantity of child elements for which the collection initially has adequate
         /// capacity.</param>
-        /// <param name="identifier">The identifier of the object.</param>
-        protected IdentifiedBase(int capacity, TIdentifier identifier)
+        protected IdentifiedBase(TIdentifier identifier, int capacity)
             : base(capacity) =>
+            this.Identifier = identifier;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IdentifiedBase{TIdentifier, TChild}"/> class.
+        /// </summary>
+        /// <param name="identifier">The identifier of the object.</param>
+        /// <param name="children">The child elements with which to initialize the collection.</param>
+        protected IdentifiedBase(TIdentifier identifier, List<TChild> children)
+            : base(children) =>
             this.Identifier = identifier;
 
         /// <summary>

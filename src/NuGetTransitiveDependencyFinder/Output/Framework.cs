@@ -6,6 +6,7 @@
 namespace NuGetTransitiveDependencyFinder.Output
 {
     using System;
+    using System.Collections.Generic;
     using NuGet.Frameworks;
 
     /// <summary>
@@ -13,18 +14,17 @@ namespace NuGetTransitiveDependencyFinder.Output
     /// </summary>
     /// <remarks>The child elements of this class are the transitive NuGet dependencies.</remarks>
     public sealed class Framework :
-        IdentifiedBase<NuGetFramework, string>,
+        IdentifiedBase<NuGetFramework, Dependency>,
         IComparable<Framework>,
         IEquatable<Framework>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Framework"/> class.
         /// </summary>
-        /// <param name="capacity">The quantity of transitive NuGet dependencies for which the collection initially has
-        /// adequate capacity.</param>
         /// <param name="identifier">The .NET framework identifier.</param>
-        public Framework(int capacity, NuGetFramework identifier)
-            : base(capacity, identifier)
+        /// <param name="children">The child elements with which to initialize the collection.</param>
+        public Framework(NuGetFramework identifier, List<Dependency> children)
+            : base(identifier, children)
         {
         }
 
@@ -125,7 +125,7 @@ namespace NuGetTransitiveDependencyFinder.Output
             this.BaseHashCode;
 
         /// <inheritdoc/>
-        protected override bool IsAddValid(string child) =>
+        protected override bool IsAddValid(Dependency child) =>
             true;
     }
 }

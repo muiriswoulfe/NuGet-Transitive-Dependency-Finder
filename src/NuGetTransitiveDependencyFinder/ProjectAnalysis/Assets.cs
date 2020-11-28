@@ -17,7 +17,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
     internal class Assets
     {
         /// <summary>
-        /// The logger factory from which a logger will be created.
+        /// The logger factory from which a logger will be constructed.
         /// </summary>
         private readonly ILoggerFactory loggerFactory;
 
@@ -39,7 +39,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// <summary>
         /// Initializes a new instance of the <see cref="Assets"/> class.
         /// </summary>
-        /// <param name="loggerFactory">The logger factory from which a logger will be created.</param>
+        /// <param name="loggerFactory">The logger factory from which a logger will be constructed.</param>
         /// <param name="projectPath">The path of the .NET project file, including the file name.</param>
         /// <param name="outputDirectory">The path of the directory in which to store the project restore
         /// outputs.</param>

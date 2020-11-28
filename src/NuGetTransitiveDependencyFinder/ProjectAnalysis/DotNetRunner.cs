@@ -26,7 +26,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// <summary>
         /// Initializes a new instance of the <see cref="DotNetRunner"/> class.
         /// </summary>
-        /// <param name="loggerFactory">The logger factory from which a logger will be created.</param>
+        /// <param name="loggerFactory">The logger factory from which a logger will be constructed.</param>
         /// <param name="parameters">The parameters to pass to the "dotnet" command, excluding the file name of the
         /// executable.</param>
         /// <param name="workingDirectory">The path of the directory in which to store the files created after running
@@ -77,6 +77,6 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event parameters.</param>
         private void LogOutput(object sender, DataReceivedEventArgs e) =>
-            this.logger.LogDebug(e.Data ?? string.Empty);
+            this.logger.LogTrace(e.Data ?? string.Empty);
     }
 }

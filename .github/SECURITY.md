@@ -1,6 +1,6 @@
-<!-- © Muiris Woulfe. Licensed under the MIT License. -->
-
 # Security Policy
+
+<!-- © Muiris Woulfe. Licensed under the MIT License. -->
 
 ## Supported Versions
 
