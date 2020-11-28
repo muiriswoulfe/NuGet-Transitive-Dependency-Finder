@@ -7,7 +7,6 @@ namespace NuGetTransitiveDependencyFinder.Output
 {
     using System;
     using NuGet.Versioning;
-    using static System.FormattableString;
 
     /// <summary>
     /// A class representing the outputted .NET dependency information for each project and framework combination.

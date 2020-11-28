@@ -5,7 +5,7 @@
 ![Build Status][buildbadge]
 [![SonarCloud Quality Gate Status][sonarcloudbadge]][sonarcloud]
 
-**The NuGet Transitive Dependency Finder analyzes .NET solutions and projects to
+**The NuGet Transitive Dependency Finder analyzes .NET projects and solutions to
 find superfluous dependencies that have been explicitly added to projects. The
 goal is to simplify dependency management.**
 

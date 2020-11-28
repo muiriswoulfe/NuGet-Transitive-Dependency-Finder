@@ -23,12 +23,12 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Input
         /// listed.
         /// </summary>
         [Option('a', "all", HelpText = nameof(All), ResourceType = typeof(CommandLineHelp))]
-        public bool All { get; init; }
+        public bool All { get; set; }
 
         /// <summary>
         /// Gets the file name of the .NET solution to analyze.
         /// </summary>
         [Option('s', "solution", Required = true, HelpText = nameof(Solution), ResourceType = typeof(CommandLineHelp))]
-        public string? Solution { get; init; }
+        public string? Solution { get; set; }
     }
 }
