@@ -71,7 +71,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
                 LogLevel.Critical =>
                     "\x1B[1m\x1B[35m", // Bold Magenta
                 LogLevel.None =>
-                    string.Empty,
+                    "\x1B[33m", // Yellow
                 _ =>
                     throw new ArgumentOutOfRangeException(nameof(logLevel)),
             };
