@@ -36,7 +36,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
                         logger.LogInformation(Information.CommencingAnalysis);
 
                         var finder = new TransitiveDependencyFinder(loggerFactory);
-                        var projects = finder.Run(options.Solution!, options.All);
+                        var projects = finder.Run(options.ProjectOrSolution!, options.All);
                         var writer = new DependencyWriter(loggerFactory);
                         writer.Write(projects);
 

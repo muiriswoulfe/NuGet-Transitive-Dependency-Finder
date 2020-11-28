@@ -11,7 +11,7 @@
       "preLaunchTask": "Build Debug",
       "program": "${workspaceFolder}/src/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net5.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
-        "--solution",
+        "--projectOrSolution",
         "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
       ],
       "cwd": "${workspaceFolder}",
@@ -24,7 +24,7 @@
       "preLaunchTask": "Build Debug",
       "program": "${workspaceFolder}/src/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net5.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
-        "--solution",
+        "--projectOrSolution",
         "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln",
         "--all"
       ],
@@ -62,7 +62,7 @@
       "preLaunchTask": "Build Release",
       "program": "${workspaceFolder}/src/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Release/net5.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
-        "--solution",
+        "--projectOrSolution",
         "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
       ],
       "cwd": "${workspaceFolder}",

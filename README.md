@@ -21,7 +21,7 @@ The solution comprises two projects for finding transitive dependencies:
   dependencies.
 - [`NuGetTransitiveDependencyFinder.ConsoleApp`][codeconsoleapp]. This project
   runs the NuGet transitive dependency finder logic against a specified .NET
-  solution or project. It is expected to be the standard mechanism through which
+  project or solution. It is expected to be the standard mechanism through which
   consumers use the NuGet Transitive Dependency Finder.
 
 It is not always possible to remove all transitive dependencies. Some transitive
@@ -100,29 +100,29 @@ Most consumers should use the Release configuration.
 
 After building a copy of the solution or downloading a [release][releases], the
 recommended procedure for running the NuGet Transitive Dependency Finder is to
-navigate to the folder containing the solution or project and enter the
+navigate to the folder containing the project or solution and enter the
 following sequence of commands, adapting the path to
 `NuGetTransitiveDependencyFinder.ConsoleApp` as necessary:
 
 ```Batchfile
-NuGetTransitiveDependencyFinder.ConsoleApp --solution <SolutionOrProjectToAnalyze> --all > before.txt
-NuGetTransitiveDependencyFinder.ConsoleApp --solution <SolutionOrProjectToAnalyze>
+NuGetTransitiveDependencyFinder.ConsoleApp --projectOrSolution <ProjectOrSolutionToAnalyze> --all > before.txt
+NuGetTransitiveDependencyFinder.ConsoleApp --projectOrSolution <ProjectOrSolutionToAnalyze>
 ```
 
-`<SolutionOrProjectToAnalyze>` should be replaced by the relative or absolute
-path of the .NET solution or project you wish to analyze for transitive NuGet
+`<ProjectOrSolutionToAnalyze>` should be replaced by the relative or absolute
+path of the .NET project or solution you wish to analyze for transitive NuGet
 dependencies. If you are using a local build rather than a release, you will
 need to use `dotnet NuGetTransitiveDependencyFinder.ConsoleApp.dll` in place of
 `NuGetTransitiveDependencyFinder.ConsoleApp`.
 
 At this point you should remove all of the dependencies identified as transitive
-from your projects. Ensure the solution or project continues to build,
+from your projects. Ensure the project or solution continues to build,
 reinstating any dependencies as appropriate.
 
 Afterwards, run the following sequence of commands:
 
 ```Batchfile
-NuGetTransitiveDependencyFinder.ConsoleApp --solution <SolutionOrProjectToAnalyze> --all > after.txt
+NuGetTransitiveDependencyFinder.ConsoleApp --projectOrSolution <ProjectOrSolutionToAnalyze> --all > after.txt
 code --diff before.txt after.txt
 ```
 
@@ -146,14 +146,14 @@ The basic mode of operation, which returns only the set of transitive
 dependencies:
 
 ```Batchfile
-NuGetTransitiveDependencyFinder.ConsoleApp --solution <SolutionOrProjectToAnalyze>
+NuGetTransitiveDependencyFinder.ConsoleApp --projectOrSolution <ProjectOrSolutionToAnalyze>
 ```
 
 To view the entire set of dependencies for each project, including both
 transitive and non-transitive dependencies:
 
 ```Batchfile
-NuGetTransitiveDependencyFinder.ConsoleApp --solution <SolutionOrProjectToAnalyze> --all
+NuGetTransitiveDependencyFinder.ConsoleApp --projectOrSolution <ProjectOrSolutionToAnalyze> --all
 ```
 
 This mode is particularly useful for running before and after the removal of

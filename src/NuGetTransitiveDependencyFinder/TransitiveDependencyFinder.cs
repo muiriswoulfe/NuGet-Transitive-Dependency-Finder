@@ -13,7 +13,6 @@ namespace NuGetTransitiveDependencyFinder
     using NuGet.ProjectModel;
     using NuGetTransitiveDependencyFinder.Output;
     using NuGetTransitiveDependencyFinder.ProjectAnalysis;
-    using static System.FormattableString;
 
     /// <summary>
     /// A class that manages the overall process of finding transitive NuGet dependencies.
@@ -42,13 +41,14 @@ namespace NuGetTransitiveDependencyFinder
         /// <summary>
         /// Runs the logic for finding transitive NuGet dependencies.
         /// </summary>
-        /// <param name="solutionPath">The path of the .NET solution or project file, including the file name.</param>
+        /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
+        /// name.</param>
         /// <param name="collectAllDependencies">A value indicating whether all dependencies, or just those that are
         /// transitive, should be collected.</param>
         /// <returns>The transitive NuGet dependency information, which can be processed for display.</returns>
-        public Projects Run(string solutionPath, bool collectAllDependencies)
+        public Projects Run(string projectOrSolutionPath, bool collectAllDependencies)
         {
-            var projects = this.CreateProjects(solutionPath);
+            var projects = this.CreateProjects(projectOrSolutionPath);
             var result = new Projects(projects.Count);
             foreach (var project in projects)
             {
@@ -81,10 +81,11 @@ namespace NuGetTransitiveDependencyFinder
         /// <summary>
         /// Creates the collection of .NET projects to analyze.
         /// </summary>
-        /// <param name="solutionPath">The path of the .NET solution file, including the file name.</param>
+        /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
+        /// name.</param>
         /// <returns>The collection of .NET projects.</returns>
-        private IReadOnlyCollection<PackageSpec> CreateProjects(string solutionPath) =>
-            this.CreateProjectDependencyGraph(solutionPath)
+        private IReadOnlyCollection<PackageSpec> CreateProjects(string projectOrSolutionPath) =>
+            this.CreateProjectDependencyGraph(projectOrSolutionPath)
                 .Projects
                 .Where(project => project.RestoreMetadata.ProjectStyle == ProjectStyle.PackageReference)
                 .ToArray();
@@ -93,11 +94,12 @@ namespace NuGetTransitiveDependencyFinder
         /// Creates the project dependency graph, which is used for generating the collection of .NET projects to be
         /// analyzed.
         /// </summary>
-        /// <param name="solutionPath">The path of the .NET solution file, including the file name.</param>
+        /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
+        /// name.</param>
         /// <returns>The project dependency graph.</returns>
-        private DependencyGraphSpec CreateProjectDependencyGraph(string solutionPath)
+        private DependencyGraphSpec CreateProjectDependencyGraph(string projectOrSolutionPath)
         {
-            using var dependencyGraph = new DependencyGraph(this.loggerFactory, solutionPath);
+            using var dependencyGraph = new DependencyGraph(this.loggerFactory, projectOrSolutionPath);
             return dependencyGraph.Create();
         }
 

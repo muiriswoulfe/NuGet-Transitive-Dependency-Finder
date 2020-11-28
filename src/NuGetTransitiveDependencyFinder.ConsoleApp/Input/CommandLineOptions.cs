@@ -26,9 +26,14 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Input
         public bool All { get; set; }
 
         /// <summary>
-        /// Gets or sets the file name of the .NET solution to analyze.
+        /// Gets or sets the file name of the .NET project or solution to analyze.
         /// </summary>
-        [Option('s', "solution", Required = true, HelpText = nameof(Solution), ResourceType = typeof(CommandLineHelp))]
-        public string? Solution { get; set; }
+        [Option(
+            'p',
+            "projectOrSolution",
+            Required = true,
+            HelpText = nameof(ProjectOrSolution),
+            ResourceType = typeof(CommandLineHelp))]
+        public string? ProjectOrSolution { get; set; }
     }
 }
