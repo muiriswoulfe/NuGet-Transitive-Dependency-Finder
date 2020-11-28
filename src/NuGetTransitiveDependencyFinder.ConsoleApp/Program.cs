@@ -13,7 +13,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
     using NuGetTransitiveDependencyFinder.ConsoleApp.Resources.Messages;
 
     /// <summary>
-    /// The main class of the application, defining the entry point and all interaction.
+    /// The main class of the application, defining the entry point and the basic operation of the application.
     /// </summary>
     internal static class Program
     {
@@ -21,7 +21,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
         /// The entry point of the application.
         /// </summary>
         /// <param name="parameters">A collection of command-line parameters.</param>
-        /// <returns>A status code where 0 represents success and 1 indicates failure.</returns>
+        /// <returns>A status code where 0 represents success and 1 represents failure.</returns>
         public static int Main(string[] parameters)
         {
             const int success = 0;
@@ -47,7 +47,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
         }
 
         /// <summary>
-        /// Creates the logger factory from which a logger will be created.
+        /// Creates the logger factory from which a logger will be constructed.
         /// </summary>
         /// <returns>The logger factory.</returns>
         private static ILoggerFactory CreateLoggerFactory() =>

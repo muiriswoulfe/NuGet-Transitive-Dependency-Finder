@@ -20,7 +20,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Resources.Messages
             GetString(nameof(All));
 
         /// <summary>
-        /// Gets a localized string corresponding to the description of the project or solution parameter, which is
+        /// Gets a localized string corresponding to the description of the  "--projectOrSolution" parameter, which is
         /// displayed as part of the help message.
         /// </summary>
         public static string ProjectOrSolution =>

@@ -13,7 +13,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>dependency-analysis;developer-tools;dotnet;nuget</PackageTags>
-    <PackageVersion>1.0.0</PackageVersion>
+    <PackageVersion>2.0.0</PackageVersion>
     <RepositoryBranch>main</RepositoryBranch>
     <RepositoryUrl>https://github.com/muiriswoulfe/Private-NuGet-Transitive-Dependency-Finder.git</RepositoryUrl>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>

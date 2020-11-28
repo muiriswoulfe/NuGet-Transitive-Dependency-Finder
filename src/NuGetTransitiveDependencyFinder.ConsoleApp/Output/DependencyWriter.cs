@@ -12,7 +12,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
     using NuGetTransitiveDependencyFinder.Output;
 
     /// <summary>
-    /// A class for writing transitive NuGet dependency information.
+    /// A class for writing NuGet dependency information.
     /// </summary>
     internal class DependencyWriter
     {
@@ -24,12 +24,12 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         /// <summary>
         /// Initializes a new instance of the <see cref="DependencyWriter"/> class.
         /// </summary>
-        /// <param name="loggerFactory">The logger factory from which a logger will be created.</param>
+        /// <param name="loggerFactory">The logger factory from which a logger will be constructed.</param>
         public DependencyWriter(ILoggerFactory loggerFactory) =>
             this.logger = loggerFactory.CreateLogger(nameof(DependencyWriter));
 
         /// <summary>
-        /// Writes the transitive NuGet dependency information.
+        /// Writes the NuGet dependency information.
         /// </summary>
         /// <param name="projects">The details of the projects.</param>
         public void Write(Projects projects)

@@ -30,7 +30,7 @@
   </data>
   <data name="CommandLineHelp_ProjectOrSolution" xml:space="preserve">
     <value>The file name of the .NET project or solution to analyze.</value>
-    <comment>The description of the project or solution parameter, which is displayed as part of the help
+    <comment>The description of the "--projectOrSolution" parameter, which is displayed as part of the help
     message.</comment>
   </data>
   <data name="Information_CommencingAnalysis" xml:space="preserve">
