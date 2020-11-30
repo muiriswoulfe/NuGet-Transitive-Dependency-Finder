@@ -31,7 +31,7 @@ version conflicts. Therefore, removal of these transitive dependencies should be
 performed iteratively to ascertain which can be removed without introducing
 errors or warnings into your build process.
 
-## Building SummarySummarySummarySummarySummarySummarySummarySummary SummarySummarySummarySummary
+## Building
 
 ### Installing Dependencies
 
@@ -50,7 +50,7 @@ You can simplify the process by also installing one of the following:
 The NuGet Transitive Dependency Finder is [hosted on GitHub][github]. You can
 clone it directly using:
 
-```
+```Batchfile
 git clone git@github.com:muiriswoulfe/NuGet-Transitive-Dependency-Finder.git
 ```
 
