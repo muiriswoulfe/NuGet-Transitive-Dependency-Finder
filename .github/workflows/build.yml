@@ -118,23 +118,23 @@ jobs:
       with:
         node-version: '14'
 
-    - run: npm install markdownlint-cli
+    # - run: npm install markdownlint-cli
 
-    - run: npx markdownlint ${{ github.workspace }}/**/*.md --ignore ${{ github.workspace }}/node_modules
+    # - run: npx markdownlint ${{ github.workspace }}/**/*.md --ignore ${{ github.workspace }}/node_modules
 
-    - run: npx markdownlint ${{ github.workspace }}/.github/**/*.md --ignore ${{ github.workspace }}/node_modules
+    # - run: npx markdownlint ${{ github.workspace }}/.github/**/*.md --ignore ${{ github.workspace }}/node_modules
 
-    # - name: Markdown – Validate
-    #   uses: nosborn/github-action-markdown-cli@v1.1.1
-    #   with:
-    #     files: '**/*.md'
-    #     config_file: .markdownlint.json
+    - name: Markdown – Validate
+      uses: nosborn/github-action-markdown-cli@v1.1.1
+      with:
+        files: '**/*.md'
+        config_file: .markdownlint.json
 
-    # - name: Markdown – Validate .github
-    #   uses: nosborn/github-action-markdown-cli@v1.1.1
-    #   with:
-    #     files: '.github/**/*.md'
-    #     config_file: .markdownlint.json
+    - name: Markdown – Validate .github
+      uses: nosborn/github-action-markdown-cli@v1.1.1
+      with:
+        files: '.github/**/*.md'
+        config_file: .markdownlint.json
 
     - name: Markdown – Validate Links
       uses: gaurav-nelson/github-action-markdown-link-check@1.0.8
