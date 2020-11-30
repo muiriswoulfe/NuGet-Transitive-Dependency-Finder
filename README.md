@@ -31,7 +31,7 @@ version conflicts. Therefore, removal of these transitive dependencies should be
 performed iteratively to ascertain which can be removed without introducing
 errors or warnings into your build process.
 
-## BuildingSummarySummarySummarySummarySummarySummarySummarySummarySummarySummarySummarySummary
+## Building SummarySummarySummarySummarySummarySummarySummarySummary SummarySummarySummarySummary
 
 ### Installing Dependencies
 
@@ -43,7 +43,7 @@ To build the NuGet Transitive Dependency Finder, you will need to install:
 You can simplify the process by also installing one of the following:
 
 - [Visual Studio Code][vscode] with the [C# Extension][vscodecsharp]
-- [Visual Studio][vs]
+- [Visual Studio][vs]s
 
 ### Downloading the Code
 
