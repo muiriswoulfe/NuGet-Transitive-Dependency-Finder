@@ -1,4 +1,4 @@
-# NuGet Transitive Dependency Finder NuGet Transitive Dependency Finder NuGet Transitive Dependency Finder
+# NuGet Transitive Dependency Finder
 
 <!-- © Muiris Woulfe. Licensed under the MIT License. -->
 
