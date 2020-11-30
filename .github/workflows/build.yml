@@ -113,7 +113,7 @@ jobs:
     - name: EditorConfig – Validate
       run: ./bin/ec-linux-amd64
 
-    - run: npm install -g markdownlint-cli
+    - run: npm install markdownlint-cli
 
     - run: markdownlint **/*.md
 
