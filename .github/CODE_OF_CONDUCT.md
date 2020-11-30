@@ -1,4 +1,4 @@
-# Contributor Covenant Code of Conduct
+# Contributor Covenant Code of ConductContributor Covenant Code of ConductContributor Covenant Code of Conduct
 
 ```
 git clone git@github.com:muiriswoulfe/NuGet-Transitive-Dependency-Finder.git

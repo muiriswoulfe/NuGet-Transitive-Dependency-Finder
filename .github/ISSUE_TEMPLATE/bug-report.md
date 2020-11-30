@@ -10,11 +10,7 @@ assignees: muiriswoulfe
 <!-- Please provide as much detail as possible. Inapplicable sections may be
      left blank where. -->
 
-## SummarySummarySummarySummarySummarySummarySummarySummarySummarySummarySummarySummarySummarySummary
-
-```
-git clone git@github.com:muiriswoulfe/NuGet-Transitive-Dependency-Finder.git
-```
+## Summary
 
 ## Reproduction Steps
 
