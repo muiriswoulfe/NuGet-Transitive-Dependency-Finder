@@ -1,4 +1,8 @@
-# Contributor Covenant Code of ConductSummarySummarySummarySummarySummarySummarySummarySummarySummarySummarySummarySummary
+# Contributor Covenant Code of Conduct
+
+```
+git clone git@github.com:muiriswoulfe/NuGet-Transitive-Dependency-Finder.git
+```
 
 <!-- © Muiris Woulfe. Licensed under the MIT License. -->
 
