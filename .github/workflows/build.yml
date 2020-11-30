@@ -113,11 +113,18 @@ jobs:
     - name: EditorConfig – Validate
       run: ./bin/ec-linux-amd64
 
+    - name: Set up Node
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: '14'
+
     - run: npm install markdownlint-cli
 
-    - run: markdownlint **/*.md
+    - working-directory: ${{ github.workspace }}
+      run: npx markdownlint **/*.md
 
-    - run: markdownlint .github/**/*.md
+    - working-directory: ${{ github.workspace }}
+      run: npx markdownlint .github/**/*.md
 
     - name: Markdown – Validate
       uses: nosborn/github-action-markdown-cli@v1.1.1
