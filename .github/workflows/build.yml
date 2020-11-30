@@ -113,6 +113,12 @@ jobs:
     - name: EditorConfig – Validate
       run: ./bin/ec-linux-amd64
 
+    - run: npm install -g markdownlint-cli
+
+    - run: markdownlint **/*.md
+
+    - run: markdownlint .github/**/*.md
+
     - name: Markdown – Validate
       uses: nosborn/github-action-markdown-cli@v1.1.1
       with:
