@@ -50,7 +50,7 @@ You can simplify the process by also installing one of the following:
 The NuGet Transitive Dependency Finder is [hosted on GitHub][github]. You can
 clone it directly using:
 
-```Batchfile
+```
 git clone git@github.com:muiriswoulfe/NuGet-Transitive-Dependency-Finder.git
 ```
 
