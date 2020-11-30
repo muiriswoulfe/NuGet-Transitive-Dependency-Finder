@@ -19,6 +19,8 @@ jobs:
 
     - name: Install .NET
       uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
 
     - name: Install NuGet Dependencies
       run: dotnet restore
@@ -114,13 +116,13 @@ jobs:
     - name: Markdown – Validate
       uses: nosborn/github-action-markdown-cli@v1.1.1
       with:
-        files: .
+        files: '**/*.md'
         config_file: .markdownlint.json
 
     - name: Markdown – Validate .github
       uses: nosborn/github-action-markdown-cli@v1.1.1
       with:
-        files: .github/
+        files: '.github/**/*.md'
         config_file: .markdownlint.json
 
     - name: Markdown – Validate Links
