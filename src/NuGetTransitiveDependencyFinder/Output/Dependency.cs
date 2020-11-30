@@ -11,7 +11,7 @@ namespace NuGetTransitiveDependencyFinder.Output
     /// <summary>
     /// A class representing the outputted .NET dependency information for each project and framework combination.
     /// </summary>
-    public sealed class Dependency : IComparable<Dependency>, IEquatable<Dependency>
+    public sealed class Dependency : IComparable, IComparable<Dependency>, IEquatable<Dependency>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Dependency"/> class.
@@ -128,6 +128,22 @@ namespace NuGetTransitiveDependencyFinder.Output
         }
 
         /// <inheritdoc/>
+        public int CompareTo(object? obj)
+        {
+            if (ReferenceEquals(this, obj))
+            {
+                return 0;
+            }
+
+            if (obj is null)
+            {
+                return 1;
+            }
+
+            return this.CompareTo(obj as Dependency);
+        }
+
+        /// <inheritdoc/>
         public bool Equals(Dependency? other) =>
             this.CompareTo(other) == 0;
 
@@ -152,28 +168,5 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <inheritdoc/>
         public override string ToString() =>
             $"{this.Identifier} v{this.Version}";
-
-        /// <summary>
-        /// Compares the current object to <see paramref="other"/>, returning an integer that indicates their
-        /// relationship.
-        /// </summary>
-        /// <param name="obj">The object against which to compare the current object.</param>
-        /// <returns>A value less than zero if the current object is less than <see paramref="other"/>, zero if the
-        /// current object is equal to <see paramref="other"/>, or a value greater than zero if the current object is
-        /// greater than <see paramref="other"/>.</returns>
-        private int CompareTo(object? obj)
-        {
-            if (ReferenceEquals(this, obj))
-            {
-                return 0;
-            }
-
-            if (obj is null)
-            {
-                return 1;
-            }
-
-            return this.CompareTo(obj as Dependency);
-        }
     }
 }

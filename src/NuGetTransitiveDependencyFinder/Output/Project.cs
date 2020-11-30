@@ -11,7 +11,11 @@ namespace NuGetTransitiveDependencyFinder.Output
     /// A class representing the outputted project information.
     /// </summary>
     /// <remarks>The child elements of this class are the <see cref="Framework"/> objects.</remarks>
-    public sealed class Project : IdentifiedBase<string, Framework>, IComparable<Project>, IEquatable<Project>
+    public sealed class Project :
+        IdentifiedBase<string, Framework>,
+        IComparable,
+        IComparable<Project>,
+        IEquatable<Project>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Project"/> class.
@@ -101,6 +105,12 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         public int CompareTo(Project? other) =>
             this.BaseCompareTo(other);
+
+        /// <inheritdoc/>
+        /// <remarks>The result of this method is solely dependent on
+        /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
+        public int CompareTo(object? obj) =>
+            this.BaseCompareTo(obj);
 
         /// <inheritdoc/>
         /// <remarks>The result of this method is solely dependent on

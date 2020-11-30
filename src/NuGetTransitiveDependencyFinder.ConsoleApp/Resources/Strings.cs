@@ -25,6 +25,6 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Resources
         /// <param name="name">The name of the localized string to be accessed.</param>
         /// <returns>The contents of the localized string.</returns>
         public static string GetString(string name) =>
-            ResourceManager.GetString(name, CultureInfo.CurrentCulture) !;
+            ResourceManager.GetString(name, CultureInfo.CurrentCulture)!;
     }
 }

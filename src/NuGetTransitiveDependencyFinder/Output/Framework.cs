@@ -15,6 +15,7 @@ namespace NuGetTransitiveDependencyFinder.Output
     /// <remarks>The child elements of this class are the transitive NuGet dependencies.</remarks>
     public sealed class Framework :
         IdentifiedBase<NuGetFramework, Dependency>,
+        IComparable,
         IComparable<Framework>,
         IEquatable<Framework>
     {
@@ -105,6 +106,12 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         public int CompareTo(Framework? other) =>
             this.BaseCompareTo(other);
+
+        /// <inheritdoc/>
+        /// <remarks>The result of this method is solely dependent on
+        /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
+        public int CompareTo(object? obj) =>
+            this.BaseCompareTo(obj);
 
         /// <inheritdoc/>
         /// <remarks>The result of this method is solely dependent on

@@ -46,7 +46,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         public Assets(ILoggerFactory loggerFactory, string projectPath, string outputDirectory)
         {
             this.loggerFactory = loggerFactory;
-            this.projectDirectory = Path.GetDirectoryName(projectPath) !;
+            this.projectDirectory = Path.GetDirectoryName(projectPath)!;
             this.outputDirectory = outputDirectory;
             this.parameters = Invariant($"restore \"{projectPath}\"");
         }
