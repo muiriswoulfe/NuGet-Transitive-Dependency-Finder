@@ -425,6 +425,8 @@ max_line_length = unset
 dotnet_analyzer_diagnostic.severity = error
 dotnet_diagnostic.CA1062.severity = none
 dotnet_diagnostic.RCS1142.severity = none
+dotnet_diagnostic.SA1313.severity = none
+dotnet_diagnostic.SA1009.severity = none
 
 [*.md]
 indent_size = unset
@@ -437,6 +439,8 @@ indent_size = unset
 insert_final_newline = unset
 trim_trailing_whitespace = unset
 max_line_length = unset
+
+# Overriding definitions for GitHub Actions build task.
 
 [*.{cs,csx,cake,vb,vbx}]
 # "this." and "Me." qualifiers
