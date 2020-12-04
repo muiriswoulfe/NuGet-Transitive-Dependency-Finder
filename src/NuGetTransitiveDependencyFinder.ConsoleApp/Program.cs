@@ -53,7 +53,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
         private static ILoggerFactory CreateLoggerFactory() =>
             LoggerFactory.Create(builder =>
             {
-                builder.AddConsole(options => options.FormatterName = nameof(PlainConsoleFormatter))
+                _ = builder.AddConsole(options => options.FormatterName = nameof(PlainConsoleFormatter))
                     .AddConsoleFormatter<PlainConsoleFormatter, ConsoleFormatterOptions>()
                     .SetMinimumLevel(LogLevel.Trace);
             });
