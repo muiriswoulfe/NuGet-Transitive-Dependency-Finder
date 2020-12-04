@@ -116,13 +116,19 @@ jobs:
     - name: Markdown – Validate
       uses: nosborn/github-action-markdown-cli@v1.1.1
       with:
-        files: .
+        files: '**/*.md'
         config_file: .markdownlint.json
 
     - name: Markdown – Validate .github
       uses: nosborn/github-action-markdown-cli@v1.1.1
       with:
-        files: .github/
+        files: .github/*.md
+        config_file: .markdownlint.json
+
+    - name: Markdown – Validate .github subdirectories
+      uses: nosborn/github-action-markdown-cli@v1.1.1
+      with:
+        files: .github/**/*.md
         config_file: .markdownlint.json
 
     - name: Markdown – Validate Links

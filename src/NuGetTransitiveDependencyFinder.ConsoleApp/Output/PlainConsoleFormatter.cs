@@ -26,9 +26,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         /// Initializes a new instance of the <see cref="PlainConsoleFormatter"/> class.
         /// </summary>
         /// <param name="_">The unused set of formatting options.</param>
-#pragma warning disable SA1313 // ParameterNamesMustBeginWithLowerCaseLetter
         public PlainConsoleFormatter(IOptionsMonitor<ConsoleFormatterOptions> _)
-#pragma warning restore SA1313 // ParameterNamesMustBeginWithLowerCaseLetter
             : base(nameof(PlainConsoleFormatter))
         {
         }

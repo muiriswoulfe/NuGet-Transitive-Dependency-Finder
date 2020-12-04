@@ -40,9 +40,9 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// Initializes a new instance of the <see cref="Base{TChild}"/> class.
         /// </summary>
         /// <param name="children">The child elements with which to initialize the collection.</param>
-        protected Base(List<TChild> children)
+        protected Base(IReadOnlyCollection<TChild> children)
         {
-            this.children = children;
+            this.children = new List<TChild>(children);
             this.areChildrenSorted = false;
         }
 

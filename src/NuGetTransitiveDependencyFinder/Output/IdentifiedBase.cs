@@ -33,7 +33,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// </summary>
         /// <param name="identifier">The identifier of the object.</param>
         /// <param name="children">The child elements with which to initialize the collection.</param>
-        protected IdentifiedBase(TIdentifier identifier, List<TChild> children)
+        protected IdentifiedBase(TIdentifier identifier, IReadOnlyCollection<TChild> children)
             : base(children) =>
             this.Identifier = identifier;
 
@@ -47,12 +47,12 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// </summary>
         /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
         protected int BaseHashCode =>
-            StringComparer.OrdinalIgnoreCase.GetHashCode(this.Identifier.ToString() !);
+            StringComparer.OrdinalIgnoreCase.GetHashCode(this.Identifier.ToString()!);
 
         /// <inheritdoc/>
         /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
         public override string ToString() =>
-            this.Identifier.ToString() !;
+            this.Identifier.ToString()!;
 
         /// <summary>
         /// Compares the current object to <see paramref="other"/>, returning an integer that indicates their
@@ -108,6 +108,6 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// </summary>
         /// <param name="child">The child element to check.</param>
         /// <returns>A value indicating whether the child element should be added the collection.</returns>
-        protected override abstract bool IsAddValid(TChild child);
+        protected abstract override bool IsAddValid(TChild child);
     }
 }

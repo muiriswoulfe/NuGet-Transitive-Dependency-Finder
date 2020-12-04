@@ -52,7 +52,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         {
             this.loggerFactory = loggerFactory;
             this.filePath = Path.GetTempFileName();
-            this.projectOrSolutionDirectory = Path.GetDirectoryName(projectOrSolutionPath) !;
+            this.projectOrSolutionDirectory = Path.GetDirectoryName(projectOrSolutionPath)!;
 
             this.arguments =
                 Invariant($"msbuild \"{projectOrSolutionPath}\" /maxCpuCount /target:GenerateRestoreGraphFile ") +
