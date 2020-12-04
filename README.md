@@ -43,7 +43,7 @@ To build the NuGet Transitive Dependency Finder, you will need to install:
 You can simplify the process by also installing one of the following:
 
 - [Visual Studio Code][vscode] with the [C# Extension][vscodecsharp]
-- [Visual Studio][vs]s
+- [Visual Studio][vs]
 
 ### Downloading the Code
 

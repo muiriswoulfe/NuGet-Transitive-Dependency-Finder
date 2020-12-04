@@ -19,14 +19,14 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Input
     internal class CommandLineOptions
     {
         /// <summary>
-        /// Gets a value indicating whether all NuGet dependencies, including non-transitive dependencies,
+        /// Gets or sets a value indicating whether all NuGet dependencies, including non-transitive dependencies,
         /// should be listed.
         /// </summary>
         [Option('a', "all", HelpText = nameof(All), ResourceType = typeof(CommandLineHelp))]
-        public bool All { get; init; }
+        public bool All { get; set; }
 
         /// <summary>
-        /// Gets the file name of the .NET project or solution to analyze.
+        /// Gets or sets the file name of the .NET project or solution to analyze.
         /// </summary>
         [Option(
             'p',
@@ -34,6 +34,6 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Input
             Required = true,
             HelpText = nameof(ProjectOrSolution),
             ResourceType = typeof(CommandLineHelp))]
-        public string? ProjectOrSolution { get; init; }
+        public string? ProjectOrSolution { get; set; }
     }
 }
