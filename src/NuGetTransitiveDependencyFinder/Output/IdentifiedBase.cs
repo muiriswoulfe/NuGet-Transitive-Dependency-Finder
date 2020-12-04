@@ -33,7 +33,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// </summary>
         /// <param name="identifier">The identifier of the object.</param>
         /// <param name="children">The child elements with which to initialize the collection.</param>
-        protected IdentifiedBase(TIdentifier identifier, List<TChild> children)
+        protected IdentifiedBase(TIdentifier identifier, IReadOnlyCollection<TChild> children)
             : base(children) =>
             this.Identifier = identifier;
 

@@ -1,0 +1,68 @@
+#nullable enable
+
+abstract NuGetTransitiveDependencyFinder.Output.Base<TChild>.IsAddValid(TChild child) -> bool
+NuGetTransitiveDependencyFinder.Output.Base<TChild>
+NuGetTransitiveDependencyFinder.Output.Base<TChild>.Add(TChild child) -> void
+NuGetTransitiveDependencyFinder.Output.Base<TChild>.Base(int capacity) -> void
+NuGetTransitiveDependencyFinder.Output.Base<TChild>.Base(System.Collections.Generic.IReadOnlyCollection<TChild>! children) -> void
+NuGetTransitiveDependencyFinder.Output.Base<TChild>.HasChildren.get -> bool
+NuGetTransitiveDependencyFinder.Output.Base<TChild>.SortedChildren.get -> System.Collections.Generic.IReadOnlyCollection<TChild>!
+NuGetTransitiveDependencyFinder.Output.Dependency
+NuGetTransitiveDependencyFinder.Output.Dependency.CompareTo(NuGetTransitiveDependencyFinder.Output.Dependency? other) -> int
+NuGetTransitiveDependencyFinder.Output.Dependency.CompareTo(object? obj) -> int
+NuGetTransitiveDependencyFinder.Output.Dependency.Dependency(string! identifier, NuGet.Versioning.NuGetVersion! version) -> void
+NuGetTransitiveDependencyFinder.Output.Dependency.Equals(NuGetTransitiveDependencyFinder.Output.Dependency? other) -> bool
+NuGetTransitiveDependencyFinder.Output.Dependency.Identifier.get -> string!
+NuGetTransitiveDependencyFinder.Output.Dependency.IsTransitive.get -> bool
+NuGetTransitiveDependencyFinder.Output.Dependency.IsTransitive.set -> void
+NuGetTransitiveDependencyFinder.Output.Dependency.Version.get -> NuGet.Versioning.NuGetVersion!
+NuGetTransitiveDependencyFinder.Output.Framework
+NuGetTransitiveDependencyFinder.Output.Framework.CompareTo(NuGetTransitiveDependencyFinder.Output.Framework? other) -> int
+NuGetTransitiveDependencyFinder.Output.Framework.CompareTo(object? obj) -> int
+NuGetTransitiveDependencyFinder.Output.Framework.Equals(NuGetTransitiveDependencyFinder.Output.Framework? other) -> bool
+NuGetTransitiveDependencyFinder.Output.Framework.Framework(NuGet.Frameworks.NuGetFramework! identifier, System.Collections.Generic.IReadOnlyCollection<NuGetTransitiveDependencyFinder.Output.Dependency!>! children) -> void
+NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>
+NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.BaseCompareTo(NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>? other) -> int
+NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.BaseCompareTo(object? obj) -> int
+NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.BaseHashCode.get -> int
+NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.IdentifiedBase(TIdentifier identifier, int capacity) -> void
+NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.IdentifiedBase(TIdentifier identifier, System.Collections.Generic.IReadOnlyCollection<TChild>! children) -> void
+NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.Identifier.get -> TIdentifier
+NuGetTransitiveDependencyFinder.Output.Project
+NuGetTransitiveDependencyFinder.Output.Project.CompareTo(NuGetTransitiveDependencyFinder.Output.Project? other) -> int
+NuGetTransitiveDependencyFinder.Output.Project.CompareTo(object? obj) -> int
+NuGetTransitiveDependencyFinder.Output.Project.Equals(NuGetTransitiveDependencyFinder.Output.Project? other) -> bool
+NuGetTransitiveDependencyFinder.Output.Project.Project(string! identifier, int capacity) -> void
+NuGetTransitiveDependencyFinder.Output.Projects
+NuGetTransitiveDependencyFinder.Output.Projects.Projects(int capacity) -> void
+NuGetTransitiveDependencyFinder.TransitiveDependencyFinder
+NuGetTransitiveDependencyFinder.TransitiveDependencyFinder.Run(string! projectOrSolutionPath, bool collateAllDependencies) -> NuGetTransitiveDependencyFinder.Output.Projects!
+NuGetTransitiveDependencyFinder.TransitiveDependencyFinder.TransitiveDependencyFinder(Microsoft.Extensions.Logging.ILoggerFactory! loggerFactory) -> void
+override abstract NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.IsAddValid(TChild child) -> bool
+override NuGetTransitiveDependencyFinder.Output.Dependency.Equals(object? obj) -> bool
+override NuGetTransitiveDependencyFinder.Output.Dependency.GetHashCode() -> int
+override NuGetTransitiveDependencyFinder.Output.Dependency.ToString() -> string!
+override NuGetTransitiveDependencyFinder.Output.Framework.Equals(object? obj) -> bool
+override NuGetTransitiveDependencyFinder.Output.Framework.GetHashCode() -> int
+override NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.ToString() -> string!
+override NuGetTransitiveDependencyFinder.Output.Project.Equals(object? obj) -> bool
+override NuGetTransitiveDependencyFinder.Output.Project.GetHashCode() -> int
+override NuGetTransitiveDependencyFinder.Output.Projects.IsAddValid(NuGetTransitiveDependencyFinder.Output.Project! child) -> bool
+static NuGetTransitiveDependencyFinder.Output.Dependency.operator !=(NuGetTransitiveDependencyFinder.Output.Dependency! left, NuGetTransitiveDependencyFinder.Output.Dependency! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Dependency.operator <(NuGetTransitiveDependencyFinder.Output.Dependency! left, NuGetTransitiveDependencyFinder.Output.Dependency! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Dependency.operator <=(NuGetTransitiveDependencyFinder.Output.Dependency! left, NuGetTransitiveDependencyFinder.Output.Dependency! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Dependency.operator ==(NuGetTransitiveDependencyFinder.Output.Dependency! left, NuGetTransitiveDependencyFinder.Output.Dependency! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Dependency.operator >(NuGetTransitiveDependencyFinder.Output.Dependency! left, NuGetTransitiveDependencyFinder.Output.Dependency! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Dependency.operator >=(NuGetTransitiveDependencyFinder.Output.Dependency! left, NuGetTransitiveDependencyFinder.Output.Dependency! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Framework.operator !=(NuGetTransitiveDependencyFinder.Output.Framework! left, NuGetTransitiveDependencyFinder.Output.Framework! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Framework.operator <(NuGetTransitiveDependencyFinder.Output.Framework! left, NuGetTransitiveDependencyFinder.Output.Framework! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Framework.operator <=(NuGetTransitiveDependencyFinder.Output.Framework! left, NuGetTransitiveDependencyFinder.Output.Framework! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Framework.operator ==(NuGetTransitiveDependencyFinder.Output.Framework! left, NuGetTransitiveDependencyFinder.Output.Framework! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Framework.operator >(NuGetTransitiveDependencyFinder.Output.Framework! left, NuGetTransitiveDependencyFinder.Output.Framework! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Framework.operator >=(NuGetTransitiveDependencyFinder.Output.Framework! left, NuGetTransitiveDependencyFinder.Output.Framework! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Project.operator !=(NuGetTransitiveDependencyFinder.Output.Project! left, NuGetTransitiveDependencyFinder.Output.Project! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Project.operator <(NuGetTransitiveDependencyFinder.Output.Project! left, NuGetTransitiveDependencyFinder.Output.Project! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Project.operator <=(NuGetTransitiveDependencyFinder.Output.Project! left, NuGetTransitiveDependencyFinder.Output.Project! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Project.operator ==(NuGetTransitiveDependencyFinder.Output.Project! left, NuGetTransitiveDependencyFinder.Output.Project! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Project.operator >(NuGetTransitiveDependencyFinder.Output.Project! left, NuGetTransitiveDependencyFinder.Output.Project! right) -> bool
+static NuGetTransitiveDependencyFinder.Output.Project.operator >=(NuGetTransitiveDependencyFinder.Output.Project! left, NuGetTransitiveDependencyFinder.Output.Project! right) -> bool

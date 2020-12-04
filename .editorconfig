@@ -418,6 +418,9 @@ max_line_length = 120
 [.editorconfig]
 max_line_length = unset
 
+[PublicAPI.*.txt]
+max_line_length = unset
+
 [*.{csproj,json,md,sln,yml}]
 max_line_length = unset
 
