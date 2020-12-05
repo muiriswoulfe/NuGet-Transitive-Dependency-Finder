@@ -82,13 +82,20 @@ jobs:
         ./src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
         --api-key ${{ secrets.NUGET_API_KEY }}
         --source https://api.nuget.org/v3/index.json
+        --skip-duplicate
+
+    - name: Upload – Add GitHub
+      run: >-
+        dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+        --name github
 
     - name: Upload – GitHub
       run: >-
         dotnet nuget push
         ./src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
         --api-key ${{ secrets.GITHUB_TOKEN }}
-        --source https://nuget.pkg.github.com/muiriswoulfe/index.json
+        --source github
+        --skip-duplicate
 
   create-asset:
     name: Create Asset
