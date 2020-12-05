@@ -1,44 +1,16 @@
 # © Muiris Woulfe
 # Licensed under the MIT License
 
-name: Release
+name: Release – Manual
 
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+    inputs:
+      release:
+        description: 'Release'
+        required: true
 
 jobs:
-  update-description:
-    name: Update Description
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Get Release
-      id: get_release
-      uses: bruceadams/get-release@v1.2.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Update Release
-      uses: tubone24/update_release@v1.1.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        release_name: Release ${{ steps.get_release.outputs.tag_name }}
-        body: |
-          ## Changes
-
-          This release resolves the issues listed [here][issues] via the pull requests listed [here][prs].
-
-          ## Notes
-
-          - No dependencies are required for any platform.
-          - Under Linux and macOS, you will need to run `chmod +x <filename>` from the console prior to starting the app.
-          - Under macOS, the first time you run the app, you will encounter a security error. Click *Cancel* and go to *Apple* > *System Preferences...* > *Security & Privacy* and click *Allow Anyway*. The app should run successfully on the subsequent run.
-
-          [issues]: ${{ github.server_url }}/${{ github.repository }}/issues?q=is%3Aissue+milestone%3A%22${{ steps.get_release.outputs.tag_name }}%22+is%3Aclosed
-          [prs]: ${{ github.server_url }}/${{ github.repository }}/pulls?q=is%3Apr+milestone%3A%22${{ steps.get_release.outputs.tag_name }}%22+is%3Aclosed
-
   create-nuget:
     name: Create NuGet Package
     runs-on: ubuntu-latest
@@ -76,18 +48,19 @@ jobs:
         /property:RepositoryCommit=${{ github.sha }}
         ./src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
 
-    - name: Upload – NuGet.org
-      run: >-
-        dotnet nuget push
-        ./src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
-        --api-key ${{ secrets.NUGET_API_KEY }}
-        --source https://api.nuget.org/v3/index.json
+    # - name: Upload – NuGet.org
+    #   run: >-
+    #     dotnet nuget push
+    #     ./src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
+    #     --api-key ${{ secrets.NUGET_API_KEY }}
+    #     --source https://api.nuget.org/v3/index.json
 
     - name: Upload – GitHub
       run: >-
         dotnet nuget push
         ./src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
-        --api-key ${{ secrets.GITHUB_TOKEN }}
+        --username muiriswoulfe
+        --password ${{ secrets.GITHUB_TOKEN }}
         --source https://nuget.pkg.github.com/muiriswoulfe/index.json
 
   create-asset:
@@ -127,12 +100,6 @@ jobs:
         /property:PublishTrimmed=true
         ./src/${{ env.project }}/${{ env.project }}.csproj
 
-    - name: Get Release
-      id: get_release
-      uses: bruceadams/get-release@v1.2.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     - name: Extract Platform from Runtime
       uses: jungwinter/split@v1
       id: split
@@ -144,12 +111,19 @@ jobs:
       id: setter
       run: echo '::set-output name=current_extension::${{ fromJson(env.extension)[steps.split.outputs._0] }}'
 
+    - name: Get Release URL
+      id: get-release-url
+      uses: pdamianik/release-tag-to-upload-url-action@v1.0.1
+      with:
+        tag: ${{ github.event.inputs.release }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.get_release.outputs.upload_url }}
+        upload_url: https://uploads.github.com/repos/muiriswoulfe/NuGet-Transitive-Dependency-Finder/releases/${{ steps.get-release-url.outputs.uploadUrl }}/assets
         asset_path: >-
           ${{ github.workspace }}/src/${{ env.project }}/bin/Release/net5.0/${{ matrix.runtime }}/publish/${{ env.project }}${{ steps.setter.outputs.current_extension }}
         asset_name: NuGetTransitiveDependencyFinder.${{ matrix.runtime }}${{ steps.setter.outputs.current_extension }}
