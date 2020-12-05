@@ -19,7 +19,7 @@ using NuGetTransitiveDependencyFinder.Properties;
 [assembly: AssemblyInformationalVersionAttribute(AssemblyAttributes.Version)]
 [assembly: AssemblyMetadataAttribute(
     "RepositoryUrl",
-    "https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder.git")]
+    "https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder")]
 [assembly: AssemblyVersionAttribute(AssemblyAttributes.Version)]
 [assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]
