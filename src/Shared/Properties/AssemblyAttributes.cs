@@ -13,6 +13,6 @@ namespace NuGetTransitiveDependencyFinder.Properties
         /// <summary>
         /// The version number of the assemblies.
         /// </summary>
-        public const string Version = "2.0.0";
+        public const string Version = "2.0.1";
     }
 }
