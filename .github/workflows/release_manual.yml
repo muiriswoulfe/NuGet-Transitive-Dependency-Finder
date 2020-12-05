@@ -129,7 +129,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: https://uploads.github.com/repos/muiriswoulfe/NuGet-Transitive-Dependency-Finder/releases/${{ steps.get-release-url.outputs.uploadUrl }}/assets
+        upload_url: ${{ steps.get-release-url.outputs.uploadUrl }}
         asset_path: >-
           ${{ github.workspace }}/src/${{ env.project }}/bin/Release/net5.0/${{ matrix.runtime }}/publish/${{ env.project }}${{ steps.setter.outputs.current_extension }}
         asset_name: NuGetTransitiveDependencyFinder.${{ matrix.runtime }}${{ steps.setter.outputs.current_extension }}
