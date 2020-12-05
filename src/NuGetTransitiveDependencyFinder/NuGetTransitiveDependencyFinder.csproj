@@ -15,7 +15,7 @@
     <PackageTags>dependency-analysis;developer-tools;dotnet;nuget</PackageTags>
     <PackageVersion>2.0.0</PackageVersion>
     <RepositoryBranch>main</RepositoryBranch>
-    <RepositoryUrl>https://github.com/muiriswoulfe/Private-NuGet-Transitive-Dependency-Finder</RepositoryUrl>
+    <RepositoryUrl>https://github.com/muiriswoulfe/Private-NuGet-Transitive-Dependency-Finder.git</RepositoryUrl>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Title>NuGet Transitive Dependency Finder</Title>
   </PropertyGroup>

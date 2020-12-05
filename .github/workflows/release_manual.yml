@@ -56,17 +56,12 @@ jobs:
     #     --source https://api.nuget.org/v3/index.json
     #     --skip-duplicate
 
-    - name: Upload – Add GitHub
-      run: >-
-        dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
-        --name github
-
     - name: Upload – GitHub
       run: >-
         dotnet nuget push
         ./src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
-        --api-key ${{ secrets.GITHUB_TOKEN }}
-        --source github
+        --api-key ${{ secrets.NUGET_GITHUB_API_KEY }}
+        --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
         --skip-duplicate
 
   create-asset:
@@ -75,7 +70,8 @@ jobs:
 
     strategy:
       matrix:
-        runtime: [linux-arm, linux-arm64, linux-musl-x64, linux-x64, osx-x64, win-arm, win-arm64, win-x64, win-x86]
+        #runtime: [linux-arm, linux-arm64, linux-musl-x64, linux-x64, osx-x64, win-arm, win-arm64, win-x64, win-x86]
+        runtime: [linux-arm, linux-arm64, win-x64]
 
     env:
       project: NuGetTransitiveDependencyFinder.ConsoleApp
