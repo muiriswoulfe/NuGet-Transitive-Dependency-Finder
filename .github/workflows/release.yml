@@ -6,6 +6,7 @@ name: Release
 on:
   release:
     types: [created]
+  workflow_dispatch:
 
 jobs:
   update-description:
@@ -116,28 +117,13 @@ jobs:
       with:
         dotnet-version: 5.0.x
 
-    - name: Install NuGet Dependencies
-      run: >-
-        dotnet restore
-        --runtime ${{ matrix.runtime }}
-        ./src/${{ env.project }}/${{ env.project }}.csproj
-
-    - name: Build
-      run: >-
-        dotnet build
-        --runtime ${{ matrix.runtime }}
-        --configuration Release
-        --no-restore
-        /maxCpuCount
-        ./src/${{ env.project }}/${{ env.project }}.csproj
-
     - name: Publish
       run: >-
         dotnet publish
         --runtime ${{ matrix.runtime }}
         --configuration Release
-        --no-build
         --self-contained true
+        /maxCpuCount
         /property:PublishSingleFile=true
         /property:PublishTrimmed=true
         ./src/${{ env.project }}/${{ env.project }}.csproj
