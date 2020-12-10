@@ -8,7 +8,7 @@ assignees: muiriswoulfe
 ---
 
 <!-- Please provide as much detail as possible. Inapplicable sections may be
-     left blank where. -->
+     left blank. -->
 
 ## Summary
 
