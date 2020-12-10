@@ -1,7 +1,7 @@
 # Pull Request
 
-<!-- Please provide as much detail as possible. Sections may be left blank where
-     information is not applicable. -->
+<!-- Please provide as much detail as possible. Inapplicable sections may be
+     left blank. -->
 
 ## Summary
 

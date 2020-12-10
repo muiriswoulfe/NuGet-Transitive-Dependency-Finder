@@ -4,6 +4,7 @@
 name: Build
 
 on:
+  pull_request:
   push:
   schedule:
   - cron: '0 0 * * 1'
@@ -20,7 +21,7 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 5.0.101
 
     - name: Install NuGet Dependencies
       run: dotnet restore
@@ -46,7 +47,7 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 5.0.101
 
     - name: Install NuGet Dependencies
       run: dotnet restore
@@ -132,7 +133,7 @@ jobs:
         config_file: .markdownlint.json
 
     - name: Markdown – Validate Links
-      uses: gaurav-nelson/github-action-markdown-link-check@1.0.8
+      uses: gaurav-nelson/github-action-markdown-link-check@1.0.9
 
     - name: Security Scan – Validate
       uses: ShiftLeftSecurity/scan-action@v1.3.0

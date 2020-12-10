@@ -50,7 +50,7 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 5.0.101
 
     - name: Install NuGet Dependencies
       run: >-
@@ -116,7 +116,7 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 5.0.101
 
     - name: Publish
       run: >-
