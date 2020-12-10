@@ -10,11 +10,9 @@ NuGetTransitiveDependencyFinder.Output.Base<TChild>.SortedChildren.get -> System
 NuGetTransitiveDependencyFinder.Output.Dependency
 NuGetTransitiveDependencyFinder.Output.Dependency.CompareTo(NuGetTransitiveDependencyFinder.Output.Dependency? other) -> int
 NuGetTransitiveDependencyFinder.Output.Dependency.CompareTo(object? obj) -> int
-NuGetTransitiveDependencyFinder.Output.Dependency.Dependency(string! identifier, NuGet.Versioning.NuGetVersion! version) -> void
 NuGetTransitiveDependencyFinder.Output.Dependency.Equals(NuGetTransitiveDependencyFinder.Output.Dependency? other) -> bool
 NuGetTransitiveDependencyFinder.Output.Dependency.Identifier.get -> string!
 NuGetTransitiveDependencyFinder.Output.Dependency.IsTransitive.get -> bool
-NuGetTransitiveDependencyFinder.Output.Dependency.IsTransitive.set -> void
 NuGetTransitiveDependencyFinder.Output.Dependency.Version.get -> NuGet.Versioning.NuGetVersion!
 NuGetTransitiveDependencyFinder.Output.Framework
 NuGetTransitiveDependencyFinder.Output.Framework.CompareTo(NuGetTransitiveDependencyFinder.Output.Framework? other) -> int

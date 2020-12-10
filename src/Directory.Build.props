@@ -28,8 +28,11 @@
 
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)\stylecop.json" />
-    <Compile Include="$(MSBuildThisFileDirectory)\Shared\Properties\AssemblyAttributes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)\Shared\Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="!$(MSBuildProjectName.Contains('Tests'))">
+    <Compile Include="$(MSBuildThisFileDirectory)\Shared\Properties\AssemblyAttributes.cs" />
   </ItemGroup>
 
   <ItemGroup>

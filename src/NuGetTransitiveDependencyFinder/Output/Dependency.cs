@@ -18,7 +18,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// </summary>
         /// <param name="identifier">The dependency identifier.</param>
         /// <param name="version">The dependency version.</param>
-        public Dependency(string identifier, NuGetVersion version)
+        internal Dependency(string identifier, NuGetVersion version)
         {
             this.Identifier = identifier;
             this.Version = version;
@@ -35,9 +35,9 @@ namespace NuGetTransitiveDependencyFinder.Output
         public NuGetVersion Version { get; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the dependency is a transitive dependency.
+        /// Gets a value indicating whether the dependency is a transitive dependency.
         /// </summary>
-        public bool IsTransitive { get; set; }
+        public bool IsTransitive { get; internal set; }
 
         /// <summary>
         /// Determines if <see paramref="left"/> is equal to <see paramref="right"/>.

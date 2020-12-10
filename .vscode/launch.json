@@ -67,6 +67,30 @@
       ],
       "cwd": "${workspaceFolder}",
       "console": "externalTerminal"
+    },
+    {
+      "name": "Test Debug",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "dotnet",
+      "args": [
+        "test",
+        "--configuration",
+        "Debug"
+      ],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Test Release",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "dotnet",
+      "args": [
+        "test",
+        "--configuration",
+        "Release"
+      ],
+      "cwd": "${workspaceFolder}"
     }
   ]
 }

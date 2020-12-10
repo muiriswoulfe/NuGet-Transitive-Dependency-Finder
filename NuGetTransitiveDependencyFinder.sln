@@ -3,12 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # © Muiris Woulfe
 # Licensed under the MIT License
 
-# Visual Studio Version 16
 VisualStudioVersion = 16.0.28701.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder", "src\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj", "{FAEC5437-7DF8-4DFB-872A-6BEBF216A3F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder.ConsoleApp", "src\NuGetTransitiveDependencyFinder.ConsoleApp\NuGetTransitiveDependencyFinder.ConsoleApp.csproj", "{B128460D-E702-45EA-B6B4-FAF8C53E1456}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder.UnitTests", "src\NuGetTransitiveDependencyFinder.UnitTests\NuGetTransitiveDependencyFinder.UnitTests.csproj", "{49D32528-1A50-4094-AA62-32A190438BBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +25,10 @@ Global
 		{B128460D-E702-45EA-B6B4-FAF8C53E1456}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B128460D-E702-45EA-B6B4-FAF8C53E1456}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B128460D-E702-45EA-B6B4-FAF8C53E1456}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49D32528-1A50-4094-AA62-32A190438BBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49D32528-1A50-4094-AA62-32A190438BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49D32528-1A50-4094-AA62-32A190438BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49D32528-1A50-4094-AA62-32A190438BBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
