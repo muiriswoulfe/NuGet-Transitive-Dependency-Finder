@@ -17,7 +17,7 @@ namespace NuGetTransitiveDependencyFinder
     /// <summary>
     /// A class that manages the overall process of finding transitive NuGet dependencies.
     /// </summary>
-    public class TransitiveDependencyFinder
+    public sealed class TransitiveDependencyFinder
     {
         /// <summary>
         /// The logger factory from which a logger will be constructed.

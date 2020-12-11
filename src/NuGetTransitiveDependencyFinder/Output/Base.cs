@@ -30,7 +30,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// </summary>
         /// <param name="capacity">The quantity of child elements for which the collection has adequate initial
         /// capacity.</param>
-        protected Base(int capacity)
+        internal Base(int capacity)
         {
             this.children = new List<TChild>(capacity);
             this.areChildrenSorted = true;
@@ -40,7 +40,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// Initializes a new instance of the <see cref="Base{TChild}"/> class.
         /// </summary>
         /// <param name="children">The child elements with which to initialize the collection.</param>
-        protected Base(IReadOnlyCollection<TChild> children)
+        internal Base(IReadOnlyCollection<TChild> children)
         {
             this.children = new List<TChild>(children);
             this.areChildrenSorted = false;
@@ -91,6 +91,6 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// </summary>
         /// <param name="child">The child element to check.</param>
         /// <returns>A value indicating whether the child element should be added the collection.</returns>
-        protected internal abstract bool IsAddValid(TChild child);
+        internal abstract bool IsAddValid(TChild child);
     }
 }

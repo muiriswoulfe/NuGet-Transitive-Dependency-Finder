@@ -24,7 +24,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="identifier">The identifier of the object.</param>
         /// <param name="capacity">The quantity of child elements for which the collection initially has adequate
         /// capacity.</param>
-        protected IdentifiedBase(TIdentifier identifier, int capacity)
+        internal IdentifiedBase(TIdentifier identifier, int capacity)
             : base(capacity) =>
             this.Identifier = identifier;
 
@@ -33,7 +33,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// </summary>
         /// <param name="identifier">The identifier of the object.</param>
         /// <param name="children">The child elements with which to initialize the collection.</param>
-        protected IdentifiedBase(TIdentifier identifier, IReadOnlyCollection<TChild> children)
+        internal IdentifiedBase(TIdentifier identifier, IReadOnlyCollection<TChild> children)
             : base(children) =>
             this.Identifier = identifier;
 
@@ -46,7 +46,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// Gets a hash code for the current object.
         /// </summary>
         /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
-        protected internal int BaseHashCode =>
+        internal int BaseHashCode =>
             StringComparer.OrdinalIgnoreCase.GetHashCode(this.Identifier.ToString()!);
 
         /// <inheritdoc/>
@@ -63,7 +63,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns>A value less than zero if the current object is less than <see paramref="other"/>, zero if the
         /// current object is equal to <see paramref="other"/>, or a value greater than zero if the current object is
         /// greater than <see paramref="other"/>.</returns>
-        protected internal int BaseCompareTo(IdentifiedBase<TIdentifier, TChild>? other)
+        internal int BaseCompareTo(IdentifiedBase<TIdentifier, TChild>? other)
         {
             if (ReferenceEquals(this, other))
             {
@@ -87,7 +87,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns>A value less than zero if the current object is less than <see paramref="other"/>, zero if the
         /// current object is equal to <see paramref="other"/>, or a value greater than zero if the current object is
         /// greater than <see paramref="other"/>.</returns>
-        protected internal int BaseCompareTo(object? obj)
+        internal int BaseCompareTo(object? obj)
         {
             if (ReferenceEquals(this, obj))
             {
@@ -108,6 +108,6 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// </summary>
         /// <param name="child">The child element to check.</param>
         /// <returns>A value indicating whether the child element should be added the collection.</returns>
-        protected internal abstract override bool IsAddValid(TChild child);
+        internal abstract override bool IsAddValid(TChild child);
     }
 }

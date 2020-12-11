@@ -18,7 +18,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that ABC.
         /// </summary>
         [Fact]
-        public void ConstructorWithNullVersionThrowsArgumentNullException()
+        public void Constructor_WithNullVersion_ThrowsArgumentNullException()
         {
             var exception = Assert.Throws<ArgumentNullException>(() => new Dependency("identifier", null));
             Assert.Equal("version", exception.ParamName);

@@ -1,10 +1,7 @@
 #nullable enable
 
-abstract NuGetTransitiveDependencyFinder.Output.Base<TChild>.IsAddValid(TChild child) -> bool
 NuGetTransitiveDependencyFinder.Output.Base<TChild>
 NuGetTransitiveDependencyFinder.Output.Base<TChild>.Add(TChild child) -> void
-NuGetTransitiveDependencyFinder.Output.Base<TChild>.Base(int capacity) -> void
-NuGetTransitiveDependencyFinder.Output.Base<TChild>.Base(System.Collections.Generic.IReadOnlyCollection<TChild>! children) -> void
 NuGetTransitiveDependencyFinder.Output.Base<TChild>.HasChildren.get -> bool
 NuGetTransitiveDependencyFinder.Output.Base<TChild>.SortedChildren.get -> System.Collections.Generic.IReadOnlyCollection<TChild>!
 NuGetTransitiveDependencyFinder.Output.Dependency
@@ -19,11 +16,6 @@ NuGetTransitiveDependencyFinder.Output.Framework.CompareTo(NuGetTransitiveDepend
 NuGetTransitiveDependencyFinder.Output.Framework.CompareTo(object? obj) -> int
 NuGetTransitiveDependencyFinder.Output.Framework.Equals(NuGetTransitiveDependencyFinder.Output.Framework? other) -> bool
 NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>
-NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.BaseCompareTo(NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>? other) -> int
-NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.BaseCompareTo(object? obj) -> int
-NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.BaseHashCode.get -> int
-NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.IdentifiedBase(TIdentifier identifier, int capacity) -> void
-NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.IdentifiedBase(TIdentifier identifier, System.Collections.Generic.IReadOnlyCollection<TChild>! children) -> void
 NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.Identifier.get -> TIdentifier
 NuGetTransitiveDependencyFinder.Output.Project
 NuGetTransitiveDependencyFinder.Output.Project.CompareTo(NuGetTransitiveDependencyFinder.Output.Project? other) -> int
@@ -33,7 +25,6 @@ NuGetTransitiveDependencyFinder.Output.Projects
 NuGetTransitiveDependencyFinder.TransitiveDependencyFinder
 NuGetTransitiveDependencyFinder.TransitiveDependencyFinder.Run(string! projectOrSolutionPath, bool collateAllDependencies) -> NuGetTransitiveDependencyFinder.Output.Projects!
 NuGetTransitiveDependencyFinder.TransitiveDependencyFinder.TransitiveDependencyFinder(Microsoft.Extensions.Logging.ILoggerFactory! loggerFactory) -> void
-override abstract NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.IsAddValid(TChild child) -> bool
 override NuGetTransitiveDependencyFinder.Output.Dependency.Equals(object? obj) -> bool
 override NuGetTransitiveDependencyFinder.Output.Dependency.GetHashCode() -> int
 override NuGetTransitiveDependencyFinder.Output.Dependency.ToString() -> string!
