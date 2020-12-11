@@ -16,13 +16,13 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// </summary>
         /// <param name="capacity">The quantity of projects for which the collection initially has adequate
         /// capacity.</param>
-        public Projects(int capacity)
+        internal Projects(int capacity)
             : base(capacity)
         {
         }
 
         /// <inheritdoc/>
-        protected override bool IsAddValid(Project child) =>
+        protected internal override bool IsAddValid(Project child) =>
             child.HasChildren;
     }
 }

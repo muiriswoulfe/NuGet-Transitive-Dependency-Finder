@@ -91,6 +91,6 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// </summary>
         /// <param name="child">The child element to check.</param>
         /// <returns>A value indicating whether the child element should be added the collection.</returns>
-        protected abstract bool IsAddValid(TChild child);
+        protected internal abstract bool IsAddValid(TChild child);
     }
 }

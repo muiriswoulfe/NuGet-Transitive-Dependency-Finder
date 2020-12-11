@@ -23,7 +23,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="identifier">The project identifier.</param>
         /// <param name="capacity">The quantity of .NET framework identifiers for which the collection initially has
         /// adequate capacity.</param>
-        public Project(string identifier, int capacity)
+        internal Project(string identifier, int capacity)
             : base(identifier, capacity)
         {
         }
@@ -131,7 +131,7 @@ namespace NuGetTransitiveDependencyFinder.Output
             this.BaseHashCode;
 
         /// <inheritdoc/>
-        protected override bool IsAddValid(Framework child) =>
+        protected internal override bool IsAddValid(Framework child) =>
             child.HasChildren;
     }
 }

@@ -46,7 +46,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// Gets a hash code for the current object.
         /// </summary>
         /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
-        protected int BaseHashCode =>
+        protected internal int BaseHashCode =>
             StringComparer.OrdinalIgnoreCase.GetHashCode(this.Identifier.ToString()!);
 
         /// <inheritdoc/>
@@ -63,7 +63,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns>A value less than zero if the current object is less than <see paramref="other"/>, zero if the
         /// current object is equal to <see paramref="other"/>, or a value greater than zero if the current object is
         /// greater than <see paramref="other"/>.</returns>
-        protected int BaseCompareTo(IdentifiedBase<TIdentifier, TChild>? other)
+        protected internal int BaseCompareTo(IdentifiedBase<TIdentifier, TChild>? other)
         {
             if (ReferenceEquals(this, other))
             {
@@ -87,7 +87,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns>A value less than zero if the current object is less than <see paramref="other"/>, zero if the
         /// current object is equal to <see paramref="other"/>, or a value greater than zero if the current object is
         /// greater than <see paramref="other"/>.</returns>
-        protected int BaseCompareTo(object? obj)
+        protected internal int BaseCompareTo(object? obj)
         {
             if (ReferenceEquals(this, obj))
             {
@@ -108,6 +108,6 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// </summary>
         /// <param name="child">The child element to check.</param>
         /// <returns>A value indicating whether the child element should be added the collection.</returns>
-        protected abstract override bool IsAddValid(TChild child);
+        protected internal abstract override bool IsAddValid(TChild child);
     }
 }

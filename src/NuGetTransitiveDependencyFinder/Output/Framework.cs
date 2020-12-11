@@ -24,7 +24,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// </summary>
         /// <param name="identifier">The .NET framework identifier.</param>
         /// <param name="children">The child elements with which to initialize the collection.</param>
-        public Framework(NuGetFramework identifier, IReadOnlyCollection<Dependency> children)
+        internal Framework(NuGetFramework identifier, IReadOnlyCollection<Dependency> children)
             : base(identifier, children)
         {
         }
@@ -132,7 +132,7 @@ namespace NuGetTransitiveDependencyFinder.Output
             this.BaseHashCode;
 
         /// <inheritdoc/>
-        protected override bool IsAddValid(Dependency child) =>
+        protected internal override bool IsAddValid(Dependency child) =>
             true;
     }
 }
