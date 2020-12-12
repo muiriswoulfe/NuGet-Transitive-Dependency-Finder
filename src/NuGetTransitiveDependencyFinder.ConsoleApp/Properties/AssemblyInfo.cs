@@ -3,7 +3,9 @@
 // Licensed under the MIT License
 // </copyright>
 
+using System;
 using System.Reflection;
 
 [assembly: AssemblyProductAttribute("NuGet Transitive Dependency Finder Console App")]
 [assembly: AssemblyTitleAttribute("NuGetTransitiveDependencyFinder.ConsoleApp")]
+[assembly: CLSCompliant(true)]

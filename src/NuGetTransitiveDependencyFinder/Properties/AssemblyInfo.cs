@@ -3,11 +3,13 @@
 // Licensed under the MIT License
 // </copyright>
 
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
 [assembly: AssemblyProductAttribute("NuGet Transitive Dependency Finder")]
 [assembly: AssemblyTitleAttribute("NuGetTransitiveDependencyFinder")]
+[assembly: CLSCompliant(true)]
 [assembly: InternalsVisibleTo(
     "NuGetTransitiveDependencyFinder.UnitTests, PublicKey=00240000048000009400000006020000002400005253413100040000010" +
     "00100e3fc9dc51a3e2753dec1ec054f5232e0ec0e79533dcf6bc669467f76c10e21160874f6f52f6b36de882b185708c9f62c8c029ddd199" +

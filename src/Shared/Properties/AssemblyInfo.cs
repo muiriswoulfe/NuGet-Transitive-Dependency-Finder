@@ -3,7 +3,6 @@
 // Licensed under the MIT License
 // </copyright>
 
-using System;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
@@ -21,7 +20,6 @@ using NuGetTransitiveDependencyFinder.Properties;
     "RepositoryUrl",
     "https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder")]
 [assembly: AssemblyVersionAttribute(AssemblyAttributes.Version)]
-[assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]
 [assembly: TargetFrameworkAttribute(".NETCoreApp,Version=v5.0", FrameworkDisplayName = "")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]

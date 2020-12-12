@@ -5,7 +5,7 @@
 
 namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 {
-    using System;
+    using NuGet.Versioning;
     using NuGetTransitiveDependencyFinder.Output;
     using Xunit;
 
@@ -15,13 +15,67 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
     public class DependencyUnitTests
     {
         /// <summary>
-        /// Tests that ABC.
+        /// The default identifier.
         /// </summary>
-        [Fact]
-        public void Constructor_WithNullVersion_ThrowsArgumentNullException()
+        private const string DefaultIdentifier = "identifier";
+
+        /// <summary>
+        /// The default version.
+        /// </summary>
+        private static readonly NuGetVersion DefaultVersion = new NuGetVersion("1.0.0");
+
+        /// <summary>
+        /// Tests that when <see cref="Dependency.Identifier"/> is called after construction, it returns the value
+        /// specified.
+        /// </summary>
+        /// <param name="value">The value of <see cref="Dependency.Identifier"/>.</param>
+        [Theory]
+        [InlineData("Identifier 1")]
+        [InlineData("Identifier 2")]
+        public void Identifer_CalledAfterConstruction_ReturnsValue(string value)
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new Dependency("identifier", null));
-            Assert.Equal("version", exception.ParamName);
+            // Arrange & Act
+            var dependency = new Dependency(value, DefaultVersion);
+
+            // Assert
+            Assert.Equal(value, dependency.Identifier);
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Dependency.Version"/> is called after construction, it returns the value
+        /// specified.
+        /// </summary>
+        /// <param name="value">The value of <see cref="Dependency.Version"/>.</param>
+        [Theory]
+        [InlineData("1.0.0")]
+        [InlineData("2.0.0")]
+        public void Version_CalledAfterConstruction_ReturnsValue(string value)
+        {
+            // Arrange & Act
+            var dependency = new Dependency(DefaultIdentifier, new NuGetVersion(value));
+
+            // Assert
+            Assert.Equal(value, dependency.Version.ToString());
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Dependency.IsTransitive"/> is called after being set, it returns the value
+        /// specified.
+        /// </summary>
+        /// <param name="value">The value of <see cref="Dependency.IsTransitive"/>.</param>
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void IsTransitive_CalledAfterSetting_ReturnsValue(bool value)
+        {
+            // Arrange & Act
+            var dependency = new Dependency(DefaultIdentifier, DefaultVersion)
+            {
+                IsTransitive = value,
+            };
+
+            // Assert
+            Assert.Equal(value, dependency.IsTransitive);
         }
     }
 }
