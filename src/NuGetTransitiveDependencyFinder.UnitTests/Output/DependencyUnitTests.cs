@@ -7,6 +7,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 {
     using System;
     using System.Collections.Generic;
+    using FluentAssertions;
     using NuGet.Versioning;
     using NuGetTransitiveDependencyFinder.Output;
     using Xunit;
@@ -111,7 +112,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var dependency = new Dependency(value, DefaultVersion);
 
             // Assert
-            Assert.Equal(value, dependency.Identifier);
+            value.Should().Be(dependency.Identifier);
         }
 
         /// <summary>
@@ -128,7 +129,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var dependency = new Dependency(DefaultIdentifier, new NuGetVersion(value));
 
             // Assert
-            Assert.Equal(value, dependency.Version.ToString());
+            value.Should().Be(dependency.Version.ToString());
         }
 
         /// <summary>
@@ -148,7 +149,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             };
 
             // Assert
-            Assert.Equal(value, dependency.IsTransitive);
+            value.Should().Be(dependency.IsTransitive);
         }
 
         /// <summary>
@@ -169,7 +170,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left == right;
 
             // Assert
-            Assert.Equal(expected, result);
+            result.Should().Be(expected);
         }
 
         /// <summary>
@@ -190,7 +191,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left != right;
 
             // Assert
-            Assert.Equal(expected, result);
+            result.Should().Be(expected);
         }
 
         /// <summary>
@@ -211,7 +212,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left < right;
 
             // Assert
-            Assert.Equal(expected, result);
+            result.Should().Be(expected);
         }
 
         /// <summary>
@@ -232,7 +233,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left <= right;
 
             // Assert
-            Assert.Equal(expected, result);
+            result.Should().Be(expected);
         }
 
         /// <summary>
@@ -253,7 +254,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left > right;
 
             // Assert
-            Assert.Equal(expected, result);
+            result.Should().Be(expected);
         }
 
         /// <summary>
@@ -274,7 +275,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left >= right;
 
             // Assert
-            Assert.Equal(expected, result);
+            result.Should().Be(expected);
         }
 
         /// <summary>

@@ -76,7 +76,11 @@
       "args": [
         "test",
         "--configuration",
-        "Debug"
+        "Debug",
+        "/property:CollectCoverage=true",
+        "/property:CoverletOutputFormat=lcov",
+        "/property:CoverletOutput=./lcov.info",
+        "./src/NuGetTransitiveDependencyFinder.UnitTests/NuGetTransitiveDependencyFinder.UnitTests.csproj"
       ],
       "cwd": "${workspaceFolder}"
     },
@@ -88,7 +92,11 @@
       "args": [
         "test",
         "--configuration",
-        "Release"
+        "Release",
+        "/property:CollectCoverage=true",
+        "/property:CoverletOutputFormat=lcov",
+        "/property:CoverletOutput=./lcov.info",
+        "./src/NuGetTransitiveDependencyFinder.UnitTests/NuGetTransitiveDependencyFinder.UnitTests.csproj"
       ],
       "cwd": "${workspaceFolder}"
     }

@@ -46,8 +46,15 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="right">The right operand to compare.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
-        public static bool operator ==(Dependency left, Dependency right) =>
-            left?.CompareTo(right) == 0;
+        public static bool operator ==(Dependency left, Dependency right)
+        {
+            if (left is null)
+            {
+                return right is null;
+            }
+
+            return left.CompareTo(right) == 0;
+        }
 
         /// <summary>
         /// Determines if <see paramref="left"/> is not equal to <see paramref="right"/>.
@@ -57,7 +64,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns><c>true</c> if <see paramref="left"/> is not equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
         public static bool operator !=(Dependency left, Dependency right) =>
-            left?.CompareTo(right) != 0;
+            !(left == right);
 
         /// <summary>
         /// Determines if <see paramref="left"/> is less than <see paramref="right"/>.
@@ -77,7 +84,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns><c>true</c> if <see paramref="left"/> is less than or equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
         public static bool operator <=(Dependency left, Dependency right) =>
-            left?.CompareTo(right) <= 0;
+            (left < right) || (left == right);
 
         /// <summary>
         /// Determines if <see paramref="left"/> is greater than <see paramref="right"/>.
@@ -97,7 +104,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns><c>true</c> if <see paramref="left"/> is greater than or equal to <see paramref="right"/>;
         /// otherwise, <c>false</c>.</returns>
         public static bool operator >=(Dependency left, Dependency right) =>
-            left?.CompareTo(right) >= 0;
+            (left > right) || (left == right);
 
         /// <summary>
         /// Compares the current object to <see paramref="other"/>, returning an integer that indicates their
@@ -122,9 +129,7 @@ namespace NuGetTransitiveDependencyFinder.Output
             var result = StringComparer.OrdinalIgnoreCase.Compare(this.Identifier, other.Identifier);
             return result != 0
                 ? result
-                : StringComparer.OrdinalIgnoreCase.Compare(
-                    this.Version.ToNormalizedString(),
-                    other.Version.ToNormalizedString());
+                : StringComparer.OrdinalIgnoreCase.Compare(this.Version.ToString(), other.Version.ToString());
         }
 
         /// <inheritdoc/>
@@ -160,7 +165,7 @@ namespace NuGetTransitiveDependencyFinder.Output
             var result = startingPrime;
             result += StringComparer.OrdinalIgnoreCase.GetHashCode(this.Identifier);
             result *= multiplicativePrime;
-            result += StringComparer.OrdinalIgnoreCase.GetHashCode(this.Version.ToNormalizedString());
+            result += StringComparer.OrdinalIgnoreCase.GetHashCode(this.Version.ToString());
 
             return result;
         }
