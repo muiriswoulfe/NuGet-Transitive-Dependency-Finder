@@ -84,7 +84,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns><c>true</c> if <see paramref="left"/> is less than or equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
         public static bool operator <=(Dependency left, Dependency right) =>
-            (left < right) || (left == right);
+            left?.CompareTo(right) <= 0;
 
         /// <summary>
         /// Determines if <see paramref="left"/> is greater than <see paramref="right"/>.
@@ -94,7 +94,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns><c>true</c> if <see paramref="left"/> is greater than <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
         public static bool operator >(Dependency left, Dependency right) =>
-            left?.CompareTo(right) > 0;
+            left?.CompareTo(right) >= 0;
 
         /// <summary>
         /// Determines if <see paramref="left"/> is greater than or equal to <see paramref="right"/>.
@@ -104,7 +104,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns><c>true</c> if <see paramref="left"/> is greater than or equal to <see paramref="right"/>;
         /// otherwise, <c>false</c>.</returns>
         public static bool operator >=(Dependency left, Dependency right) =>
-            (left > right) || (left == right);
+            left?.CompareTo(right) >= 0;
 
         /// <summary>
         /// Compares the current object to <see paramref="other"/>, returning an integer that indicates their

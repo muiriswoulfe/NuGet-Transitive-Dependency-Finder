@@ -151,6 +151,15 @@ jobs:
       with:
         sarif_file: reports
 
+    - name: Infer# – Run
+      id: run_infer_sharp
+      uses: microsoft/infersharpaction@v0.2
+      with:
+        binary-path: srcc
+
+    - name: Infer# – Analysis Results
+      run: echo "${{ steps.run_infer_sharp.outputs.results }}"
+
   validate-codeql:
     name: Validate – CodeQL
     runs-on: ubuntu-latest
