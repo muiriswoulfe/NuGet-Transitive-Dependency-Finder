@@ -129,7 +129,7 @@ namespace NuGetTransitiveDependencyFinder
             foreach (var library in framework
                 .Dependencies
                 .Select(dependency => libraries.TryGetValue(dependency.Name, out var library) ? library : null)
-                .Where(library => !(library is null)))
+                .Where(library => library is not null))
             {
                 this.RecordDependency(true, library!, libraries);
             }
@@ -178,7 +178,7 @@ namespace NuGetTransitiveDependencyFinder
                 .Select(dependency =>
                     !string.Equals(dependency.Name, "NETStandard.Library", StringComparison.OrdinalIgnoreCase) &&
                     this.dependencies.TryGetValue(dependency.Name, out var value) ? value : null)
-                .Where(dependency => !(dependency is null)))
+                .Where(dependency => dependency is not null))
             {
                 dependency!.IsTransitive = true;
             }

@@ -10,7 +10,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
     using FluentAssertions;
     using NuGet.Versioning;
     using NuGetTransitiveDependencyFinder.Output;
-    using NuGetTransitiveDependencyFinder.UnitTests.TestUtilities;
+    using NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTests;
     using Xunit;
 
     /// <summary>
@@ -26,200 +26,91 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <summary>
         /// The default version.
         /// </summary>
-        private static readonly NuGetVersion DefaultVersion = new NuGetVersion("1.0.0");
+        private static readonly NuGetVersion DefaultVersion = new NuGetVersion("1.0.0-alpha");
 
         /// <summary>
-        /// The default dependency.
+        /// The default test value.
         /// </summary>
-        private static readonly Dependency DefaultDependency = new Dependency(DefaultIdentifier, DefaultVersion);
+        private static readonly Dependency DefaultValue = new Dependency(DefaultIdentifier, DefaultVersion);
 
         /// <summary>
-        /// The data for testing the operators.
+        /// A clone of <see cref="DefaultValue"/>, where the object contents are identical but the object reference is
+        /// not.
         /// </summary>
-        private static readonly (Dependency left, Dependency right, Comparisons comparison)[] OperatorTestData = new[]
-            {
-                (
-                    null,
-                    null,
-                    Comparisons.Equal
-                ),
-                (
-                    DefaultDependency,
-                    null,
-                    Comparisons.NotEqual
-                ),
-                (
-                    null,
-                    DefaultDependency,
-                    Comparisons.NotEqual
-                ),
-                (
-                    DefaultDependency,
-                    DefaultDependency,
-                    Comparisons.Equal | Comparisons.LessThanOrEqual | Comparisons.GreaterThanOrEqual
-                ),
-                (
-                    DefaultDependency,
-                    new Dependency("Identifier", DefaultVersion),
-                    Comparisons.Equal | Comparisons.LessThanOrEqual | Comparisons.GreaterThanOrEqual
-                ),
-                (
-                    DefaultDependency,
-                    new Dependency(DefaultIdentifier, new NuGetVersion("1.0.0")),
-                    Comparisons.Equal | Comparisons.LessThanOrEqual | Comparisons.GreaterThanOrEqual
-                ),
-                (
-                    DefaultDependency,
-                    new Dependency("xyz", DefaultVersion),
-                    Comparisons.NotEqual | Comparisons.LessThan | Comparisons.LessThanOrEqual
-                ),
-                (
-                    DefaultDependency,
-                    new Dependency("XYZ", DefaultVersion),
-                    Comparisons.NotEqual | Comparisons.LessThan | Comparisons.LessThanOrEqual
-                ),
-                (
-                    DefaultDependency,
-                    new Dependency(DefaultIdentifier, new NuGetVersion("1.0.1")),
-                    Comparisons.NotEqual | Comparisons.LessThan | Comparisons.LessThanOrEqual
-                ),
-                (
-                    DefaultDependency,
-                    new Dependency("abc", DefaultVersion),
-                    Comparisons.NotEqual | Comparisons.GreaterThan | Comparisons.GreaterThanOrEqual
-                ),
-                (
-                    DefaultDependency,
-                    new Dependency("ABC", DefaultVersion),
-                    Comparisons.NotEqual | Comparisons.GreaterThan | Comparisons.GreaterThanOrEqual
-                ),
-                (
-                    DefaultDependency,
-                    new Dependency(DefaultIdentifier, new NuGetVersion("0.9.9")),
-                    Comparisons.NotEqual | Comparisons.GreaterThan | Comparisons.GreaterThanOrEqual
-                ),
-            };
+        private static readonly Dependency ClonedDefaultValue = new Dependency(DefaultIdentifier, DefaultVersion);
+
+        /// <summary>
+        /// The lesser test value, which occurs prior to <see cref="DefaultValue"/> according to an ordered sort.
+        /// </summary>
+        private static readonly Dependency LesserValue =
+            new Dependency(DefaultIdentifier, new NuGetVersion("0.9.9-alpha"));
 
         /// <summary>
         /// The data for testing the operators.
         /// </summary>
-        private static readonly (DateTime? left, DateTime? right, Comparisons comparison)[] OperatorTestData2 = new[]
-            {
-                (
-                    (DateTime?)null,
-                    (DateTime?)null,
-                    Comparisons.Equal
-                ),
-                (
-                    DateTime.UtcNow,
-                    (DateTime?)null,
-                    Comparisons.NotEqual
-                ),
-                (
-                    (DateTime?)null,
-                    DateTime.UtcNow,
-                    Comparisons.NotEqual
-                ),
-                (
-                    DateTime.UtcNow,
-                    DateTime.UtcNow,
-                    Comparisons.Equal | Comparisons.LessThanOrEqual | Comparisons.GreaterThanOrEqual
-                ),
-                (
-                    DateTime.UtcNow,
-                    DateTime.MaxValue,
-                    Comparisons.NotEqual | Comparisons.LessThan | Comparisons.LessThanOrEqual
-                ),
-                (
-                    DateTime.UtcNow,
-                    DateTime.MinValue,
-                    Comparisons.NotEqual | Comparisons.GreaterThan | Comparisons.GreaterThanOrEqual
-                ),
-            };
+        private static readonly IList<ComparisonTestData<Dependency>> OperatorTestData = GenerateOperatorTestData();
 
         /// <summary>
-        /// Generates the data for testing <see cref="Dependency.operator =="/>.
+        /// Gets the data for testing <see cref="Dependency.operator =="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorEqualTestData() =>
-            FilterData(Comparisons.Equal);
+        public static IEnumerable<object[]> OperatorEqualTestData =>
+            ComparisonDataGenerator.GenerateOperatorEqualTestData(OperatorTestData);
 
         /// <summary>
-        /// Generates the data for testing <see cref="Dependency.operator !="/>.
+        /// Gets the data for testing <see cref="Dependency.operator !="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorNotEqualTestData() =>
-            FilterData(Comparisons.NotEqual);
+        public static IEnumerable<object[]> OperatorNotEqualTestData =>
+            ComparisonDataGenerator.GenerateOperatorNotEqualTestData(OperatorTestData);
 
         /// <summary>
-        /// Generates the data for testing <see cref="Dependency.operator &lt;"/>.
+        /// Gets the data for testing <see cref="Dependency.operator &lt;"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorLessThanTestData() =>
-            FilterData(Comparisons.LessThan);
+        public static IEnumerable<object[]> OperatorLessThanTestData =>
+            ComparisonDataGenerator.GenerateOperatorLessThanTestData(OperatorTestData);
 
         /// <summary>
-        /// Generates the data for testing <see cref="Dependency.operator &lt;="/>.
+        /// Gets the data for testing <see cref="Dependency.operator &lt;="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorLessThanOrEqualTestData() =>
-            FilterData(Comparisons.LessThanOrEqual);
+        public static IEnumerable<object[]> OperatorLessThanOrEqualTestData =>
+            ComparisonDataGenerator.GenerateOperatorLessThanOrEqualTestData(OperatorTestData);
 
         /// <summary>
-        /// Generates the data for testing <see cref="Dependency.operator &gt;"/>.
+        /// Gets the data for testing <see cref="Dependency.operator &gt;"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorGreaterThanTestData() =>
-            FilterData(Comparisons.GreaterThan);
+        public static IEnumerable<object[]> OperatorGreaterThanTestData =>
+            ComparisonDataGenerator.GenerateOperatorGreaterThanTestData(OperatorTestData);
 
         /// <summary>
-        /// Generates the data for testing <see cref="Dependency.operator &gt;="/>.
+        /// Gets the data for testing <see cref="Dependency.operator &gt;="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorGreaterThanOrEqualTestData() =>
-            FilterData(Comparisons.GreaterThanOrEqual);
+        public static IEnumerable<object[]> OperatorGreaterThanOrEqualTestData =>
+            ComparisonDataGenerator.GenerateOperatorGreaterThanOrEqualTestData(OperatorTestData);
 
         /// <summary>
-        /// Generates the data for testing <see cref="Dependency.operator =="/>.
+        /// Gets the data for testing <see cref="IComparable{Dependency}.CompareTo"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorEqualTestData2() =>
-            FilterData2(Comparisons.Equal);
+        public static IEnumerable<object[]> CompareToTestData =>
+            ComparisonDataGenerator.GenerateCompareToTestData(OperatorTestData);
 
         /// <summary>
-        /// Generates the data for testing <see cref="Dependency.operator !="/>.
+        /// Gets the data for testing <see cref="IEquatable{Dependency}.Equals"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorNotEqualTestData2() =>
-            FilterData2(Comparisons.NotEqual);
+        public static IEnumerable<object[]> EqualsTestData =>
+            ComparisonDataGenerator.GenerateEqualsTestData(OperatorTestData);
 
         /// <summary>
-        /// Generates the data for testing <see cref="Dependency.operator &lt;"/>.
+        /// Gets the data for testing <see cref="Dependency.GetHashCode()"/>.
         /// </summary>
-        /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorLessThanTestData2() =>
-            FilterData2(Comparisons.LessThan);
-
-        /// <summary>
-        /// Generates the data for testing <see cref="Dependency.operator &lt;="/>.
-        /// </summary>
-        /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorLessThanOrEqualTestData2() =>
-            FilterData2(Comparisons.LessThanOrEqual);
-
-        /// <summary>
-        /// Generates the data for testing <see cref="Dependency.operator &gt;"/>.
-        /// </summary>
-        /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorGreaterThanTestData2() =>
-            FilterData2(Comparisons.GreaterThan);
-
-        /// <summary>
-        /// Generates the data for testing <see cref="Dependency.operator &gt;="/>.
-        /// </summary>
-        /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorGreaterThanOrEqualTestData2() =>
-            FilterData2(Comparisons.GreaterThanOrEqual);
+        public static IEnumerable<object[]> GetHashCodeTestData =>
+            GenerateGetHashCodeTestData();
 
         /// <summary>
         /// Tests that when <see cref="Dependency.Identifier"/> is called after construction, it returns the value
@@ -244,8 +135,9 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="value">The value of <see cref="Dependency.Version"/>.</param>
         [Theory]
-        [InlineData("1.0.0")]
-        [InlineData("2.0.0")]
+        [InlineData("0.9.9")]
+        [InlineData("1.0.0-alpha")]
+        [InlineData("2.0.0-beta")]
         public void Version_CalledAfterConstruction_ReturnsValue(string value)
         {
             // Arrange & Act
@@ -283,17 +175,14 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected response.</param>
         [Theory]
-        [MemberData(nameof(GenerateOperatorEqualTestData))]
-        public void OperatorEqual_CalledWithDifferentValues_ReturnsExpectedValues(
-            Dependency left,
-            Dependency right,
-            bool expected)
+        [MemberData(nameof(OperatorEqualTestData))]
+        public void OperatorEqual_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
         {
             // Act
             var result = left == right;
 
             // Assert
-            result.Should().Be(expected);
+            _ = result.Should().Be(expected);
         }
 
         /// <summary>
@@ -304,17 +193,14 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected response.</param>
         [Theory]
-        [MemberData(nameof(GenerateOperatorNotEqualTestData))]
-        public void OperatorNotEqual_CalledWithDifferentValues_ReturnsExpectedValues(
-            Dependency left,
-            Dependency right,
-            bool expected)
+        [MemberData(nameof(OperatorNotEqualTestData))]
+        public void OperatorNotEqual_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
         {
             // Act
             var result = left != right;
 
             // Assert
-            result.Should().Be(expected);
+            _ = result.Should().Be(expected);
         }
 
         /// <summary>
@@ -325,17 +211,14 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected response.</param>
         [Theory]
-        [MemberData(nameof(GenerateOperatorLessThanTestData))]
-        public void OperatorLessThan_CalledWithDifferentValues_ReturnsExpectedValues(
-            Dependency left,
-            Dependency right,
-            bool expected)
+        [MemberData(nameof(OperatorLessThanTestData))]
+        public void OperatorLessThan_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
         {
             // Act
             var result = left < right;
 
             // Assert
-            result.Should().Be(expected);
+            _ = result.Should().Be(expected);
         }
 
         /// <summary>
@@ -346,17 +229,14 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected response.</param>
         [Theory]
-        [MemberData(nameof(GenerateOperatorLessThanOrEqualTestData))]
-        public void OperatorLessThanOrEqual_CalledWithDifferentValues_ReturnsExpectedValues(
-            Dependency left,
-            Dependency right,
-            bool expected)
+        [MemberData(nameof(OperatorLessThanOrEqualTestData))]
+        public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
         {
             // Act
             var result = left <= right;
 
             // Assert
-            result.Should().Be(expected);
+            _ = result.Should().Be(expected);
         }
 
         /// <summary>
@@ -367,17 +247,14 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected response.</param>
         [Theory]
-        [MemberData(nameof(GenerateOperatorGreaterThanTestData))]
-        public void OperatorGreaterThan_CalledWithDifferentValues_ReturnsExpectedValues(
-            Dependency left,
-            Dependency right,
-            bool expected)
+        [MemberData(nameof(OperatorGreaterThanTestData))]
+        public void OperatorGreaterThan_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
         {
             // Act
             var result = left > right;
 
             // Assert
-            result.Should().Be(expected);
+            _ = result.Should().Be(expected);
         }
 
         /// <summary>
@@ -388,8 +265,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected response.</param>
         [Theory]
-        [MemberData(nameof(GenerateOperatorGreaterThanOrEqualTestData))]
-        public void OperatorGreaterThanOrEqual_CalledWithDifferentValues_ReturnsExpectedValues(
+        [MemberData(nameof(OperatorGreaterThanOrEqualTestData))]
+        public void OperatorGreaterThanOrEqual_WithAllCases_ReturnsValue(
             Dependency left,
             Dependency right,
             bool expected)
@@ -398,159 +275,234 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left >= right;
 
             // Assert
-            result.Should().Be(expected);
+            _ = result.Should().Be(expected);
         }
 
         /// <summary>
-        /// Tests that when <see cref="Dependency.operator =="/> is called with different values, it returns the
+        /// Tests that when <see cref="IComparable{Dependency}.CompareTo"/> is called with different values, it returns
+        /// the expected value in each case.
+        /// </summary>
+        /// <param name="left">The left operand to compare.</param>
+        /// <param name="right">The right operand to compare.</param>
+        /// <param name="expected">The expected response.</param>
+        [Theory]
+        [MemberData(nameof(CompareToTestData))]
+        public void CompareTo_WithAllCases_ReturnsValue(Dependency left, Dependency right, int expected)
+        {
+            // Act
+            var result = left.CompareTo(right);
+
+            // Assert
+            _ = result.Should().Be(expected);
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="IComparable.CompareTo"/> is called with different values against an
+        /// <c>object</c>, it returns the expected value in each case.
+        /// </summary>
+        /// <param name="left">The left operand to compare.</param>
+        /// <param name="right">The right operand to compare.</param>
+        /// <param name="expected">The expected response.</param>
+        [Theory]
+        [MemberData(nameof(CompareToTestData))]
+        public void CompareToObject_WithAllCases_ReturnsValue(Dependency left, object right, int expected)
+        {
+            // Act
+            var result = left.CompareTo(right);
+
+            // Assert
+            _ = result.Should().Be(expected);
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="IComparable.CompareTo"/> is called with different object types, it throws an
+        /// <see cref="ArgumentException"/>.
+        /// </summary>
+        [Fact]
+        public void CompareToObject_WithDifferentObjectTypes_ThrowsArgumentException()
+        {
+            // Act
+            Action action = () => DefaultValue.CompareTo("value");
+
+            // Assert
+            _ = action.Should().Throw<ArgumentException>()
+                .WithMessage("Object must be of type Dependency. (Parameter 'obj')")
+                .And.ParamName.Should().Be("obj");
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="IEquatable{Dependency}.Equals"/> is called with different values, it returns the
         /// expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected response.</param>
         [Theory]
-        [MemberData(nameof(GenerateOperatorEqualTestData2))]
-        public void OperatorEqual_CalledWithDifferentValues_ReturnsExpectedValues2(
-            DateTime? left,
-            DateTime? right,
-            bool expected)
+        [MemberData(nameof(EqualsTestData))]
+        public void Equals_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
         {
             // Act
-            var result = left == right;
+            var result = left.Equals(right);
 
             // Assert
-            result.Should().Be(expected);
+            _ = result.Should().Be(expected);
         }
 
         /// <summary>
-        /// Tests that when <see cref="Dependency.operator !="/> is called with different values, it returns the
-        /// expected value in each case.
+        /// Tests that when <see cref="IEquatable{Dependency}.Equals"/> is called with different values against an
+        /// <c>object</c>, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected response.</param>
         [Theory]
-        [MemberData(nameof(GenerateOperatorNotEqualTestData2))]
-        public void OperatorNotEqual_CalledWithDifferentValues_ReturnsExpectedValues2(
-            DateTime? left,
-            DateTime? right,
-            bool expected)
+        [MemberData(nameof(EqualsTestData))]
+        public void EqualsObject_WithAllCases_ReturnsValue(Dependency left, object right, bool expected)
         {
             // Act
-            var result = left != right;
+            var result = left.Equals(right);
 
             // Assert
-            result.Should().Be(expected);
+            _ = result.Should().Be(expected);
         }
 
         /// <summary>
-        /// Tests that when <see cref="Dependency.operator &lt;"/> is called with different values, it returns the
-        /// expected value in each case.
+        /// Tests that when <see cref="IEquatable{Dependency}.Equals"/> is called with different object types, it
+        /// returns <c>false</c>.
         /// </summary>
-        /// <param name="left">The left operand to compare.</param>
-        /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        [Fact]
+        public void EqualsObject_WithDifferentObjectTypes_ReturnsFalse()
+        {
+            // Act
+            var result = DefaultValue.Equals("value");
+
+            // Assert
+            _ = result.Should().Be(false);
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Dependency.GetHashCode()"/> is called with identical objects, it returns the same
+        /// value each time.
+        /// </summary>
+        /// <param name="value1">The first value for which to compute a hash code.</param>
+        /// <param name="value2">The second value for which to compute a hash code.</param>
         [Theory]
-        [MemberData(nameof(GenerateOperatorLessThanTestData2))]
-        public void OperatorLessThan_CalledWithDifferentValues_ReturnsExpectedValues2(
-            DateTime? left,
-            DateTime? right,
-            bool expected)
+        [MemberData(nameof(GetHashCodeTestData))]
+        public void GetHashCode_WithIdenticalObjects_ReturnsSameValue(Dependency value1, Dependency value2)
         {
             // Act
-            var result = left < right;
+            var result1 = value1.GetHashCode();
+            var result2 = value2.GetHashCode();
 
             // Assert
-            result.Should().Be(expected);
+            _ = result1.Should().Be(result2);
         }
 
         /// <summary>
-        /// Tests that when <see cref="Dependency.operator &lt;="/> is called with different values, it returns the
-        /// expected value in each case.
+        /// Tests that when <see cref="Dependency.GetHashCode()"/> is called with different objects, it returns
+        /// different values for each object.
         /// </summary>
-        /// <param name="left">The left operand to compare.</param>
-        /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
-        [Theory]
-        [MemberData(nameof(GenerateOperatorLessThanOrEqualTestData2))]
-        public void OperatorLessThanOrEqual_CalledWithDifferentValues_ReturnsExpectedValues2(
-            DateTime? left,
-            DateTime? right,
-            bool expected)
+        [Fact]
+        public void GetHashCode_WithDifferentObjects_ReturnsDifferentValues()
         {
             // Act
-            var result = left <= right;
+            var result1 = DefaultValue.GetHashCode();
+            var result2 = LesserValue.GetHashCode();
 
             // Assert
-            result.Should().Be(expected);
+            _ = result1.Should().NotBe(result2);
         }
 
         /// <summary>
-        /// Tests that when <see cref="Dependency.operator &gt;"/> is called with different values, it returns the
-        /// expected value in each case.
+        /// Generates the data for testing the operators, combining data from the base class with
+        /// <see cref="Dependency"/>-specific data.
         /// </summary>
-        /// <param name="left">The left operand to compare.</param>
-        /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
-        [Theory]
-        [MemberData(nameof(GenerateOperatorGreaterThanTestData2))]
-        public void OperatorGreaterThan_CalledWithDifferentValues_ReturnsExpectedValues2(
-            DateTime? left,
-            DateTime? right,
-            bool expected)
+        /// <returns>The generated data.</returns>
+        private static IList<ComparisonTestData<Dependency>> GenerateOperatorTestData()
         {
-            // Act
-            var result = left > right;
+            var result =
+                ComparisonDataGenerator.GenerateOperatorTestData(DefaultValue, ClonedDefaultValue, LesserValue, 8);
 
-            // Assert
-            result.Should().Be(expected);
+            result.Add(
+                new ComparisonTestData<Dependency>(
+                    DefaultValue,
+                    new Dependency("Identifier", DefaultVersion),
+                    Comparisons.Equal));
+            result.Add(
+                new ComparisonTestData<Dependency>(
+                    DefaultValue,
+                    new Dependency(DefaultIdentifier, new NuGetVersion("1.0.0-alpha")),
+                    Comparisons.Equal));
+            result.Add(
+                new ComparisonTestData<Dependency>(
+                    DefaultValue,
+                    new Dependency("IDENTIFIER", DefaultVersion),
+                    Comparisons.Equal));
+            result.Add(
+                new ComparisonTestData<Dependency>(
+                    DefaultValue,
+                    new Dependency(DefaultIdentifier, new NuGetVersion("1.0.0-ALPHA")),
+                    Comparisons.Equal));
+            result.Add(
+                new ComparisonTestData<Dependency>(
+                    new Dependency("ABC", DefaultVersion),
+                    DefaultValue,
+                    Comparisons.LessThan));
+            result.Add(
+                new ComparisonTestData<Dependency>(
+                    new Dependency(DefaultIdentifier, new NuGetVersion("0.9.9-alpha")),
+                    DefaultValue,
+                    Comparisons.LessThan));
+            result.Add(
+                new ComparisonTestData<Dependency>(
+                    DefaultValue,
+                    new Dependency("ABC", DefaultVersion),
+                    Comparisons.GreaterThan));
+            result.Add(
+                new ComparisonTestData<Dependency>(
+                    DefaultValue,
+                    new Dependency(DefaultIdentifier, new NuGetVersion("0.9.9-alpha")),
+                    Comparisons.GreaterThan));
+
+            return result;
         }
 
         /// <summary>
-        /// Tests that when <see cref="Dependency.operator &gt;="/> is called with different values, it returns the
-        /// expected value in each case.
+        /// Generates the data for testing <see cref="object.GetHashCode()"/>, combining data from the base class with
+        /// <see cref="Dependency"/>-specific data.
         /// </summary>
-        /// <param name="left">The left operand to compare.</param>
-        /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
-        [Theory]
-        [MemberData(nameof(GenerateOperatorGreaterThanOrEqualTestData2))]
-        public void OperatorGreaterThanOrEqual_CalledWithDifferentValues_ReturnsExpectedValues2(
-            DateTime? left,
-            DateTime? right,
-            bool expected)
+        /// <returns>The generated data.</returns>
+        private static IEnumerable<object[]> GenerateGetHashCodeTestData()
         {
-            // Act
-            var result = left >= right;
+            var result =
+                ComparisonDataGenerator.GenerateGetHashCodeTestData(DefaultValue, ClonedDefaultValue, LesserValue, 4);
 
-            // Assert
-            result.Should().Be(expected);
-        }
+            result.Add(
+                new object[]
+                {
+                    DefaultValue,
+                    new Dependency("Identifier", DefaultVersion),
+                });
+            result.Add(
+                new object[]
+                {
+                    DefaultValue,
+                    new Dependency(DefaultIdentifier, new NuGetVersion("1.0.0-alpha")),
+                });
+            result.Add(
+                new object[]
+                {
+                    DefaultValue,
+                    new Dependency("IDENTIFIER", DefaultVersion),
+                });
+            result.Add(
+                new object[]
+                {
+                    DefaultValue,
+                    new Dependency(DefaultIdentifier, new NuGetVersion("1.0.0-ALPHA")),
+                });
 
-        /// <summary>
-        /// Filters <see cref="OperatorTestData"/> using <paramref name="match"/>.
-        /// </summary>
-        /// <param name="match">The match to apply to <see cref="OperatorTestData"/> when filtering the data.</param>
-        /// <returns>The filtered data.</returns>
-        private static IEnumerable<object[]> FilterData(Comparisons match)
-        {
-            foreach ((var left, var right, var comparison) in OperatorTestData)
-            {
-                yield return new object[] { left, right, (comparison & match) != 0 };
-            }
-        }
-
-        /// <summary>
-        /// Filters <see cref="OperatorTestData2"/> using <paramref name="match"/>.
-        /// </summary>
-        /// <param name="match">The match to apply to <see cref="OperatorTestData2"/> when filtering the data.</param>
-        /// <returns>The filtered data.</returns>
-        private static IEnumerable<object[]> FilterData2(Comparisons match)
-        {
-            foreach ((var left, var right, var comparison) in OperatorTestData2)
-            {
-                yield return new object[] { left, right, (comparison & match) != 0 };
-            }
+            return result;
         }
     }
 }

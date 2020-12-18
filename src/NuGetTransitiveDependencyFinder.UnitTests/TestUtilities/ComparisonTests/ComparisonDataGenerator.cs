@@ -7,6 +7,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
 
     /// <summary>
@@ -19,20 +20,26 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
         /// </summary>
         /// <typeparam name="TValue">The type to use for the comparisons.</typeparam>
         /// <param name="defaultValue">The default test value.</param>
-        /// <param name="lesserValue">The lesser test value, which must occur prior to the default test value according
-        /// to an ordered sort.</param>
+        /// <param name="clonedDefaultValue">A clone of <see paramref="defaultValue"/>, where the object contents are
+        /// identical but the object reference is not.</param>
+        /// <param name="lesserValue">The lesser test value, which must occur prior to <see paramref="defaultValue"/>
+        /// according to an ordered sort.</param>
+        /// <param name="extraCapacity">The initial extra capacity to add to the list, to facilitate the efficient
+        /// addition of test class specific data.</param>
         /// <returns>The generated data.</returns>
         public static IList<ComparisonTestData<TValue>> GenerateOperatorTestData<TValue>(
             TValue defaultValue,
-            TValue lesserValue)
-            where TValue : class, ICloneable =>
-            new List<ComparisonTestData<TValue>>
+            TValue clonedDefaultValue,
+            TValue lesserValue,
+            int extraCapacity = 0)
+            where TValue : class =>
+            new List<ComparisonTestData<TValue>>(extraCapacity + 7)
             {
                 new ComparisonTestData<TValue>(null, null, Comparisons.Equal),
                 new ComparisonTestData<TValue>(defaultValue, null, Comparisons.GreaterThan),
                 new ComparisonTestData<TValue>(null, defaultValue, Comparisons.LessThan),
                 new ComparisonTestData<TValue>(defaultValue, defaultValue, Comparisons.Equal),
-                new ComparisonTestData<TValue>(defaultValue, defaultValue.Clone() as TValue, Comparisons.Equal),
+                new ComparisonTestData<TValue>(defaultValue, clonedDefaultValue, Comparisons.Equal),
                 new ComparisonTestData<TValue>(lesserValue, defaultValue, Comparisons.LessThan),
                 new ComparisonTestData<TValue>(defaultValue, lesserValue, Comparisons.GreaterThan),
             };
@@ -102,7 +109,6 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
         /// </summary>
         /// <typeparam name="TValue">The type to use for the comparisons.</typeparam>
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
-        /// <exception cref="NotSupportedException">Not supported.</exception>
         /// <returns>The generated data.</returns>
         public static IEnumerable<object[]> GenerateCompareToTestData<TValue>(
             IList<ComparisonTestData<TValue>> operatorTestData)
@@ -110,16 +116,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
             foreach (var operatorTestDatum in operatorTestData
                 .Where(operatorTestDatum => operatorTestDatum.Left is not null))
             {
-                var compareToResult = operatorTestDatum.Comparison switch
+                yield return new object[]
                 {
-                    Comparisons.None => throw new NotSupportedException(),
-                    Comparisons.Equal => 0,
-                    Comparisons.LessThan => -1,
-                    Comparisons.GreaterThan => 1,
-                    _ => throw new NotSupportedException(),
+                    operatorTestDatum.Left,
+                    operatorTestDatum.Right,
+                    ConvertComparisonsToCompareToValue(operatorTestDatum.Comparison),
                 };
-
-                yield return new object[] { operatorTestDatum.Left, operatorTestDatum.Right, compareToResult };
             }
         }
 
@@ -149,18 +151,23 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
         /// </summary>
         /// <typeparam name="TValue">The type to use for the comparisons.</typeparam>
         /// <param name="defaultValue">The default test value.</param>
-        /// <param name="lesserValue">The lesser test value, which must occur prior to the default test value according
-        /// to an ordered sort.</param>
+        /// <param name="clonedDefaultValue">A clone of <see paramref="defaultValue"/>, where the object contents are
+        /// identical but the object reference is not.</param>
+        /// <param name="lesserValue">The lesser test value, which must occur prior to <see paramref="defaultValue"/>
+        /// according to an ordered sort.</param>
+        /// <param name="extraCapacity">The initial extra capacity to add to the list, to facilitate the efficient
+        /// addition of test class specific data.</param>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateGetHashCodeTestData<TValue>(
+        public static IList<object[]> GenerateGetHashCodeTestData<TValue>(
             TValue defaultValue,
-            TValue lesserValue)
-            where TValue : ICloneable =>
-            new object[][]
+            TValue clonedDefaultValue,
+            TValue lesserValue,
+            int extraCapacity = 0) =>
+            new List<object[]>(extraCapacity + 3)
             {
                 new object[] { defaultValue, defaultValue },
                 new object[] { lesserValue, lesserValue },
-                new object[] { defaultValue, defaultValue.Clone() },
+                new object[] { defaultValue, clonedDefaultValue },
             };
 
         /// <summary>
@@ -188,5 +195,28 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
                 };
             }
         }
+
+        /// <summary>
+        /// Converts a <see cref="Comparisons"/> value to the equivalent result from a call to
+        /// <see cref="IComparable{TValue}.CompareTo"/>.
+        /// </summary>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> is set to an unacceptable
+        /// value.</exception>
+        /// <param name="value">The value to convert.</param>
+        /// <returns>The converted value.</returns>
+        private static int ConvertComparisonsToCompareToValue(Comparisons value) =>
+            value switch
+            {
+                Comparisons.None =>
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Comparisons)),
+                Comparisons.Equal =>
+                    0,
+                Comparisons.LessThan =>
+                    -1,
+                Comparisons.GreaterThan =>
+                    1,
+                _ =>
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Comparisons)),
+            };
     }
 }

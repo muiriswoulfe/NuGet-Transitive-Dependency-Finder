@@ -51,7 +51,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         /// </summary>
         /// <param name="logLevel">The log level for which to get the color and formatting codes.</param>
         /// <returns>A string comprising the ASCII color and formatting codes.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="logLevel"/> is set to an unrecognized
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="logLevel"/> is set to an unacceptable
         /// value.</exception>
         private static string GetColorAndFormatting(LogLevel logLevel) =>
             logLevel switch
@@ -71,7 +71,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
                 LogLevel.None =>
                     "\x1B[33m", // Yellow
                 _ =>
-                    throw new ArgumentOutOfRangeException(nameof(logLevel)),
+                    throw new InvalidEnumArgumentException(nameof(logLevel), logLevel, typeof(LogLevel)),
             };
     }
 }
