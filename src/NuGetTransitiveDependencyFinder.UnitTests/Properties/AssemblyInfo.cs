@@ -6,6 +6,6 @@
 using System;
 using System.Reflection;
 
-[assembly: AssemblyProductAttribute("NuGet Transitive Dependency Finder Unit Tests")]
-[assembly: AssemblyTitleAttribute("NuGetTransitiveDependencyFinder.UnitTests")]
+[assembly: AssemblyProduct("NuGet Transitive Dependency Finder Unit Tests")]
+[assembly: AssemblyTitle("NuGetTransitiveDependencyFinder.UnitTests")]
 [assembly: CLSCompliant(false)]

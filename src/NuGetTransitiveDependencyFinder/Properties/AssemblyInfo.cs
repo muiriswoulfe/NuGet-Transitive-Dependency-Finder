@@ -7,8 +7,8 @@ using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: AssemblyProductAttribute("NuGet Transitive Dependency Finder")]
-[assembly: AssemblyTitleAttribute("NuGetTransitiveDependencyFinder")]
+[assembly: AssemblyProduct("NuGet Transitive Dependency Finder")]
+[assembly: AssemblyTitle("NuGetTransitiveDependencyFinder")]
 [assembly: CLSCompliant(true)]
 [assembly: InternalsVisibleTo(
     "NuGetTransitiveDependencyFinder.UnitTests, PublicKey=00240000048000009400000006020000002400005253413100040000010" +

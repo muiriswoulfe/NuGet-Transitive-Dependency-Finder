@@ -9,17 +9,15 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using NuGetTransitiveDependencyFinder.Properties;
 
-[assembly: AssemblyCompanyAttribute("Muiris Woulfe")]
-[assembly: AssemblyCopyrightAttribute("© Muiris Woulfe. Licensed under the MIT License.")]
-[assembly: AssemblyDescriptionAttribute(
+[assembly: AssemblyCompany("Muiris Woulfe")]
+[assembly: AssemblyCopyright("© Muiris Woulfe. Licensed under the MIT License.")]
+[assembly: AssemblyDescription(
     "The NuGet Transitive Dependency Finder analyzes .NET projects and solutions to find superfluous dependencies " +
     "that have been explicitly added to projects. The goal is to simplify dependency management.")]
-[assembly: AssemblyFileVersionAttribute(AssemblyAttributes.Version)]
-[assembly: AssemblyInformationalVersionAttribute(AssemblyAttributes.Version)]
-[assembly: AssemblyMetadataAttribute(
-    "RepositoryUrl",
-    "https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder")]
-[assembly: AssemblyVersionAttribute(AssemblyAttributes.Version)]
+[assembly: AssemblyFileVersion(AssemblyAttributes.Version)]
+[assembly: AssemblyInformationalVersion(AssemblyAttributes.Version)]
+[assembly: AssemblyMetadata("RepositoryUrl", "https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder")]
+[assembly: AssemblyVersion(AssemblyAttributes.Version)]
 [assembly: ComVisible(false)]
-[assembly: TargetFrameworkAttribute(".NETCoreApp,Version=v5.0", FrameworkDisplayName = "")]
-[assembly: NeutralResourcesLanguageAttribute("en-US")]
+[assembly: TargetFramework(".NETCoreApp,Version=v5.0", FrameworkDisplayName = "")]
+[assembly: NeutralResourcesLanguage("en-US")]

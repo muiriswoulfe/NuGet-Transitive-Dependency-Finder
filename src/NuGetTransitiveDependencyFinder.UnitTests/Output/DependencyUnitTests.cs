@@ -136,7 +136,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var dependency = new Dependency(value, DefaultVersion);
 
             // Assert
-            value.Should().Be(dependency.Identifier);
+            _ = value.Should().Be(dependency.Identifier);
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var dependency = new Dependency(DefaultIdentifier, new NuGetVersion(value));
 
             // Assert
-            value.Should().Be(dependency.Version.ToString());
+            _ = value.Should().Be(dependency.Version.ToString());
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             };
 
             // Assert
-            value.Should().Be(dependency.IsTransitive);
+            _ = value.Should().Be(dependency.IsTransitive);
         }
 
         /// <summary>
