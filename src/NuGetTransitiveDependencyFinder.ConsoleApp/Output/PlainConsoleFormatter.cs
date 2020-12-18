@@ -5,7 +5,7 @@
 
 namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
 {
-    using System;
+    using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using Microsoft.Extensions.Logging;
@@ -71,7 +71,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
                 LogLevel.None =>
                     "\x1B[33m", // Yellow
                 _ =>
-                    throw new InvalidEnumArgumentException(nameof(logLevel), logLevel, typeof(LogLevel)),
+                    throw new InvalidEnumArgumentException(nameof(logLevel), (int)logLevel, typeof(LogLevel)),
             };
     }
 }

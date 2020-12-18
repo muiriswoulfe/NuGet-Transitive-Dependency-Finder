@@ -134,10 +134,11 @@ namespace NuGetTransitiveDependencyFinder.Output
                 return 1;
             }
 
-            var result = StringComparer.OrdinalIgnoreCase.Compare(this.Identifier, other.Identifier);
+            var result = MapCompareTo(StringComparer.OrdinalIgnoreCase.Compare(this.Identifier, other.Identifier));
             return result != 0
                 ? result
-                : StringComparer.OrdinalIgnoreCase.Compare(this.Version.ToString(), other.Version.ToString());
+                : MapCompareTo(
+                    StringComparer.OrdinalIgnoreCase.Compare(this.Version.ToString(), other.Version.ToString()));
         }
 
         /// <inheritdoc/>
@@ -192,5 +193,26 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <inheritdoc/>
         public override string ToString() =>
             $"{this.Identifier} v{this.Version}";
+
+        /// <summary>
+        /// Maps a value returned from <see cref="StringComparer.Compare(string?, string?)"/>, which can span a
+        /// considerable range, to the range [-1, 1] expected from <see cref="IComparable{Dependency}.CompareTo"/>.
+        /// </summary>
+        /// <param name="value">The value to map.</param>
+        /// <returns>The mapped value, which will be in the range [-1, 1].</returns>
+        private static int MapCompareTo(int value)
+        {
+            if (value > 0)
+            {
+                return 1;
+            }
+
+            if (value < 0)
+            {
+                return -1;
+            }
+
+            return value;
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <summary>
         /// The default identifier.
         /// </summary>
-        private const string DefaultIdentifier = "identifier";
+        private const string DefaultIdentifier = "Identifier";
 
         /// <summary>
         /// The default version.
@@ -113,6 +113,16 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             GenerateGetHashCodeTestData();
 
         /// <summary>
+        /// Gets the data for testing <see cref="object.ToString()"/>.
+        /// </summary>
+        public static IEnumerable<object[]> ToStringTestData =>
+            new object[][]
+            {
+                new object[] { DefaultValue, "Identifier v1.0.0-alpha" },
+                new object[] { LesserValue, "Identifier v0.9.9-alpha" },
+            };
+
+        /// <summary>
         /// Tests that when <see cref="Dependency.Identifier"/> is called after construction, it returns the value
         /// specified.
         /// </summary>
@@ -173,7 +183,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(OperatorEqualTestData))]
         public void OperatorEqual_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
@@ -191,7 +201,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(OperatorNotEqualTestData))]
         public void OperatorNotEqual_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
@@ -209,7 +219,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(OperatorLessThanTestData))]
         public void OperatorLessThan_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
@@ -227,7 +237,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(OperatorLessThanOrEqualTestData))]
         public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
@@ -245,7 +255,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(OperatorGreaterThanTestData))]
         public void OperatorGreaterThan_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
@@ -263,7 +273,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(OperatorGreaterThanOrEqualTestData))]
         public void OperatorGreaterThanOrEqual_WithAllCases_ReturnsValue(
@@ -284,7 +294,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(CompareToTestData))]
         public void CompareTo_WithAllCases_ReturnsValue(Dependency left, Dependency right, int expected)
@@ -302,7 +312,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(CompareToTestData))]
         public void CompareToObject_WithAllCases_ReturnsValue(Dependency left, object right, int expected)
@@ -336,7 +346,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(EqualsTestData))]
         public void Equals_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
@@ -354,7 +364,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(EqualsTestData))]
         public void EqualsObject_WithAllCases_ReturnsValue(Dependency left, object right, bool expected)
@@ -411,6 +421,23 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
             // Assert
             _ = result1.Should().NotBe(result2);
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="object.ToString()"/> is called with different objects, it returns different
+        /// strings for each object.
+        /// </summary>
+        /// <param name="value">The value to be converted to a string.</param>
+        /// <param name="expected">The expected result.</param>
+        [Theory]
+        [MemberData(nameof(ToStringTestData))]
+        public void ToString_WithDifferentObjects_ReturnsString(Dependency value, string expected)
+        {
+            // Act
+            var result = value.ToString();
+
+            // Assert
+            _ = result.Should().Be(expected);
         }
 
         /// <summary>

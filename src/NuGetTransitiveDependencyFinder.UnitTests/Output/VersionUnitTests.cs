@@ -108,7 +108,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(OperatorEqualTestData))]
         public void OperatorEqual_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
@@ -126,7 +126,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(OperatorNotEqualTestData))]
         public void OperatorNotEqual_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
@@ -144,7 +144,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(OperatorLessThanTestData))]
         public void OperatorLessThan_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
@@ -162,7 +162,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(OperatorLessThanOrEqualTestData))]
         public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
@@ -180,7 +180,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(OperatorGreaterThanTestData))]
         public void OperatorGreaterThan_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
@@ -198,7 +198,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(OperatorGreaterThanOrEqualTestData))]
         public void OperatorGreaterThanOrEqual_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
@@ -216,7 +216,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(CompareToTestData))]
         public void CompareTo_WithAllCases_ReturnsValue(Version left, Version right, int expected)
@@ -234,7 +234,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(CompareToTestData))]
         public void CompareToObject_WithAllCases_ReturnsValue(Version left, object right, int expected)
@@ -267,7 +267,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(EqualsTestData))]
         public void Equals_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
@@ -285,7 +285,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="expected">The expected response.</param>
+        /// <param name="expected">The expected result.</param>
         [Theory]
         [MemberData(nameof(EqualsTestData))]
         public void EqualsObject_WithAllCases_ReturnsValue(Version left, object right, bool expected)
