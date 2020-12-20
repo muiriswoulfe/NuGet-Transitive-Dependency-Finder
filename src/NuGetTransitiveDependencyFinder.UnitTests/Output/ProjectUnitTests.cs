@@ -262,7 +262,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
             // Assert
             _ = action.Should().Throw<ArgumentException>()
-                .WithMessage("Object must be of type Project.");
+                .WithMessage("Object must be of type Project. (Parameter 'obj')")
+                .And.ParamName.Should().Be("obj");
         }
 
         /// <summary>

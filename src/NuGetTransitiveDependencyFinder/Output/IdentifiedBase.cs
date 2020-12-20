@@ -7,6 +7,7 @@ namespace NuGetTransitiveDependencyFinder.Output
 {
     using System;
     using System.Collections.Generic;
+    using static System.FormattableString;
 
     /// <summary>
     /// A base class representing outputted information inclusive of an identifier.
@@ -75,7 +76,8 @@ namespace NuGetTransitiveDependencyFinder.Output
                 return 1;
             }
 
-            return StringComparer.OrdinalIgnoreCase.Compare(this.Identifier.ToString(), other.Identifier.ToString());
+            return MapCompareTo(
+                StringComparer.OrdinalIgnoreCase.Compare(this.Identifier.ToString(), other.Identifier.ToString()));
         }
 
         /// <summary>
@@ -83,20 +85,29 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// relationship.
         /// </summary>
         /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
+        /// <exception cref="ArgumentException"><paramref name="obj"/> is not of type
+        /// <see cref="IdentifiedBase{TIdentifier, TChild}"/>.</exception>
         /// <param name="obj">The object against which to compare the current object.</param>
+        /// <param name="className">The name of the calling class, which will be used within the exception
+        /// message.</param>
         /// <returns>A value less than zero if the current object is less than <see paramref="other"/>, zero if the
         /// current object is equal to <see paramref="other"/>, or a value greater than zero if the current object is
         /// greater than <see paramref="other"/>.</returns>
-        internal int BaseCompareTo(object? obj)
+        internal int BaseCompareTo(object? obj, string className)
         {
-            if (ReferenceEquals(this, obj))
-            {
-                return 0;
-            }
-
             if (obj is null)
             {
                 return 1;
+            }
+
+            if (obj is not IdentifiedBase<TIdentifier, TChild>)
+            {
+                throw new ArgumentException(Invariant($"Object must be of type {className}."), nameof(obj));
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return 0;
             }
 
             return this.BaseCompareTo(obj as IdentifiedBase<TIdentifier, TChild>);
@@ -109,5 +120,26 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="child">The child element to check.</param>
         /// <returns>A value indicating whether the child element should be added the collection.</returns>
         internal abstract override bool IsAddValid(TChild child);
+
+        /// <summary>
+        /// Maps a value returned from <see cref="StringComparer.Compare(string?, string?)"/>, which can span a
+        /// considerable range, to the range [-1, 1] expected from <see cref="IComparable{Dependency}.CompareTo"/>.
+        /// </summary>
+        /// <param name="value">The value to map.</param>
+        /// <returns>The mapped value, which will be in the range [-1, 1].</returns>
+        private static int MapCompareTo(int value)
+        {
+            if (value > 0)
+            {
+                return 1;
+            }
+
+            if (value < 0)
+            {
+                return -1;
+            }
+
+            return value;
+        }
     }
 }

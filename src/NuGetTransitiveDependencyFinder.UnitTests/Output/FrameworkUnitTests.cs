@@ -26,18 +26,20 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <summary>
         /// The default test value.
         /// </summary>
-        private static readonly Framework DefaultValue = new Framework(DefaultIdentifier, null);
+        private static readonly Framework DefaultValue = new Framework(DefaultIdentifier, new List<Dependency>(0));
 
         /// <summary>
         /// A clone of <see cref="DefaultValue"/>, where the object contents are identical but the object reference is
         /// not.
         /// </summary>
-        private static readonly Framework ClonedDefaultValue = new Framework(DefaultIdentifier, null);
+        private static readonly Framework ClonedDefaultValue =
+            new Framework(DefaultIdentifier, new List<Dependency>(0));
 
         /// <summary>
         /// The lesser test value, which occurs prior to <see cref="DefaultValue"/> according to an ordered sort.
         /// </summary>
-        private static readonly Framework LesserValue = new Framework(new NuGetFramework("ABC"), null);
+        private static readonly Framework LesserValue =
+            new Framework(new NuGetFramework("ABC"), new List<Dependency>(0));
 
         /// <summary>
         /// The data for testing the operators.
@@ -263,7 +265,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
             // Assert
             _ = action.Should().Throw<ArgumentException>()
-                .WithMessage("Object must be of type Framework.");
+                .WithMessage("Object must be of type Framework. (Parameter 'obj')")
+                .And.ParamName.Should().Be("obj");
         }
 
         /// <summary>
