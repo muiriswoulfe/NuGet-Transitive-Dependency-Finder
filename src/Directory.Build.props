@@ -16,6 +16,10 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
+  <PropertyGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DebugType>Full</DebugType>
@@ -66,8 +70,15 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="!$(MSBuildProjectName.Contains('Tests'))">
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+  <ItemGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
+    <PackageReference Include="coverlet.msbuild" Version="2.9.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
