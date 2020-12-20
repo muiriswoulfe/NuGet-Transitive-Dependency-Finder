@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\NuGetTransitiveDependencyFinder.ConsoleApp\NuGetTransitiveDependencyFinder.ConsoleApp.csproj" />
+  </ItemGroup>
+
+</Project>

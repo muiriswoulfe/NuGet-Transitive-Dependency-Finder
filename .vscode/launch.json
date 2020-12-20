@@ -80,7 +80,7 @@
         "/property:CollectCoverage=true",
         "/property:CoverletOutputFormat=lcov",
         "/property:CoverletOutput=./lcov.info",
-        "./src/NuGetTransitiveDependencyFinder.UnitTests/NuGetTransitiveDependencyFinder.UnitTests.csproj"
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
       ],
       "cwd": "${workspaceFolder}"
     },
@@ -96,7 +96,7 @@
         "/property:CollectCoverage=true",
         "/property:CoverletOutputFormat=lcov",
         "/property:CoverletOutput=./lcov.info",
-        "./src/NuGetTransitiveDependencyFinder.UnitTests/NuGetTransitiveDependencyFinder.UnitTests.csproj"
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
       ],
       "cwd": "${workspaceFolder}"
     }
