@@ -7,6 +7,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using FluentAssertions;
     using NuGet.Versioning;
     using NuGetTransitiveDependencyFinder.Output;
@@ -130,7 +131,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         [Theory]
         [InlineData("Identifier 1")]
         [InlineData("Identifier 2")]
-        public void Identifer_CalledAfterConstruction_ReturnsValue(string value)
+        public void Identifer_AfterConstruction_ReturnsValue(string value)
         {
             // Arrange & Act
             var dependency = new Dependency(value, DefaultVersion);
@@ -148,7 +149,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         [InlineData("0.9.9")]
         [InlineData("1.0.0-alpha")]
         [InlineData("2.0.0-beta")]
-        public void Version_CalledAfterConstruction_ReturnsValue(string value)
+        public void Version_AfterConstruction_ReturnsValue(string value)
         {
             // Arrange & Act
             var dependency = new Dependency(DefaultIdentifier, new NuGetVersion(value));
@@ -165,7 +166,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void IsTransitive_CalledAfterSetting_ReturnsValue(bool value)
+        public void IsTransitive_AfterSetting_ReturnsValue(bool value)
         {
             // Arrange & Act
             var dependency = new Dependency(DefaultIdentifier, DefaultVersion)
@@ -433,6 +434,9 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         [MemberData(nameof(ToStringTestData))]
         public void ToString_WithDifferentObjects_ReturnsString(Dependency value, string expected)
         {
+            // Arrange
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+
             // Act
             var result = value.ToString();
 

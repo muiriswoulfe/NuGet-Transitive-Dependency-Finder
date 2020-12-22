@@ -8,4 +8,4 @@ using System.Reflection;
 
 [assembly: AssemblyProduct("NuGet Transitive Dependency Finder Console App Unit Tests")]
 [assembly: AssemblyTitle("NuGetTransitiveDependencyFinder.ConsoleApp.UnitTests")]
-[assembly: CLSCompliant(true)]
+[assembly: CLSCompliant(false)]
