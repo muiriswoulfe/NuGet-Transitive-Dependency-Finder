@@ -47,7 +47,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="right">The right operand to compare.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
-        public static bool operator ==(Dependency left, Dependency right)
+        public static bool operator ==(Dependency? left, Dependency? right)
         {
             if (left is null)
             {
@@ -64,7 +64,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="right">The right operand to compare.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is not equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
-        public static bool operator !=(Dependency left, Dependency right) =>
+        public static bool operator !=(Dependency? left, Dependency? right) =>
             !(left == right);
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="right">The right operand to compare.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is less than <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
-        public static bool operator <(Dependency left, Dependency right)
+        public static bool operator <(Dependency? left, Dependency? right)
         {
             if (left is null)
             {
@@ -91,7 +91,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="right">The right operand to compare.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is less than or equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
-        public static bool operator <=(Dependency left, Dependency right) =>
+        public static bool operator <=(Dependency? left, Dependency? right) =>
             (left == right) || (left < right);
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="right">The right operand to compare.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is greater than <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
-        public static bool operator >(Dependency left, Dependency right) =>
+        public static bool operator >(Dependency? left, Dependency? right) =>
             left?.CompareTo(right) > 0;
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="right">The right operand to compare.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is greater than or equal to <see paramref="right"/>;
         /// otherwise, <c>false</c>.</returns>
-        public static bool operator >=(Dependency left, Dependency right) =>
+        public static bool operator >=(Dependency? left, Dependency? right) =>
             (left == right) || (left > right);
 
         /// <summary>

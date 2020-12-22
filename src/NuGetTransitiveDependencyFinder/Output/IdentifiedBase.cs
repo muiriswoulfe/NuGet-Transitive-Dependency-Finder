@@ -56,6 +56,98 @@ namespace NuGetTransitiveDependencyFinder.Output
             this.Identifier.ToString()!;
 
         /// <summary>
+        /// Determines if <see paramref="left"/> is equal to <see paramref="right"/>.
+        /// </summary>
+        /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
+        /// <param name="left">The left operand to compare.</param>
+        /// <param name="right">The right operand to compare.</param>
+        /// <returns><c>true</c> if <see paramref="left"/> is equal to <see paramref="right"/>; otherwise,
+        /// <c>false</c>.</returns>
+        internal static bool IsEqual(
+            IdentifiedBase<TIdentifier, TChild>? left,
+            IdentifiedBase<TIdentifier, TChild>? right)
+        {
+            if (left is null)
+            {
+                return right is null;
+            }
+
+            return left.BaseCompareTo(right) == 0;
+        }
+
+        /// <summary>
+        /// Determines if <see paramref="left"/> is not equal to <see paramref="right"/>.
+        /// </summary>
+        /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
+        /// <param name="left">The left operand to compare.</param>
+        /// <param name="right">The right operand to compare.</param>
+        /// <returns><c>true</c> if <see paramref="left"/> is not equal to <see paramref="right"/>; otherwise,
+        /// <c>false</c>.</returns>
+        internal static bool IsNotEqual(
+            IdentifiedBase<TIdentifier, TChild>? left,
+            IdentifiedBase<TIdentifier, TChild>? right) =>
+            !IsEqual(left, right);
+
+        /// <summary>
+        /// Determines if <see paramref="left"/> is less than <see paramref="right"/>.
+        /// </summary>
+        /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
+        /// <param name="left">The left operand to compare.</param>
+        /// <param name="right">The right operand to compare.</param>
+        /// <returns><c>true</c> if <see paramref="left"/> is less than <see paramref="right"/>; otherwise,
+        /// <c>false</c>.</returns>
+        internal static bool IsLess(
+            IdentifiedBase<TIdentifier, TChild>? left,
+            IdentifiedBase<TIdentifier, TChild>? right)
+        {
+            if (left is null)
+            {
+                return right is not null;
+            }
+
+            return left.BaseCompareTo(right) < 0;
+        }
+
+        /// <summary>
+        /// Determines if <see paramref="left"/> is less than or equal to <see paramref="right"/>.
+        /// </summary>
+        /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
+        /// <param name="left">The left operand to compare.</param>
+        /// <param name="right">The right operand to compare.</param>
+        /// <returns><c>true</c> if <see paramref="left"/> is less than or equal to <see paramref="right"/>; otherwise,
+        /// <c>false</c>.</returns>
+        internal static bool IsLessOrEqual(
+            IdentifiedBase<TIdentifier, TChild>? left,
+            IdentifiedBase<TIdentifier, TChild>? right) =>
+            IsEqual(left, right) || IsLess(left, right);
+
+        /// <summary>
+        /// Determines if <see paramref="left"/> is greater than <see paramref="right"/>.
+        /// </summary>
+        /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
+        /// <param name="left">The left operand to compare.</param>
+        /// <param name="right">The right operand to compare.</param>
+        /// <returns><c>true</c> if <see paramref="left"/> is greater than <see paramref="right"/>; otherwise,
+        /// <c>false</c>.</returns>
+        internal static bool IsGreater(
+            IdentifiedBase<TIdentifier, TChild>? left,
+            IdentifiedBase<TIdentifier, TChild>? right) =>
+            left?.BaseCompareTo(right) > 0;
+
+        /// <summary>
+        /// Determines if <see paramref="left"/> is greater than or equal to <see paramref="right"/>.
+        /// </summary>
+        /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
+        /// <param name="left">The left operand to compare.</param>
+        /// <param name="right">The right operand to compare.</param>
+        /// <returns><c>true</c> if <see paramref="left"/> is greater than or equal to <see paramref="right"/>;
+        /// otherwise, <c>false</c>.</returns>
+        internal static bool IsGreaterOrEqual(
+            IdentifiedBase<TIdentifier, TChild>? left,
+            IdentifiedBase<TIdentifier, TChild>? right) =>
+            IsEqual(left, right) || IsGreater(left, right);
+
+        /// <summary>
         /// Compares the current object to <see paramref="other"/>, returning an integer that indicates their
         /// relationship.
         /// </summary>
@@ -112,6 +204,17 @@ namespace NuGetTransitiveDependencyFinder.Output
 
             return this.BaseCompareTo(obj as IdentifiedBase<TIdentifier, TChild>);
         }
+
+        /// <summary>
+        /// Determines if the current object is equal to <see paramref="obj"/>.
+        /// </summary>
+        /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
+        /// <param name="obj">The operand against which to compare the current object.</param>
+        /// <returns><c>true</c> if the current object is equal to <see paramref="obj"/>; otherwise,
+        /// <c>false</c>.</returns>
+        internal bool BaseEquals(object? obj) =>
+            obj is IdentifiedBase<TIdentifier, TChild> &&
+            this.BaseCompareTo(obj as IdentifiedBase<TIdentifier, TChild>) == 0;
 
         /// <summary>
         /// Determines whether performing an <see cref="Base{TChild}.Add(TChild)"/> operation on the specified child

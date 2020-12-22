@@ -13,6 +13,10 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "nuget"
+    directory: "/src/NuGetTransitiveDependencyFinder.ConsoleApp.UnitTests/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "nuget"
     directory: "/src/NuGetTransitiveDependencyFinder.UnitTests/"
     schedule:
       interval: "daily"
