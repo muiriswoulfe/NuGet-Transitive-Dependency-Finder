@@ -30,6 +30,7 @@ override NuGetTransitiveDependencyFinder.Output.Dependency.GetHashCode() -> int
 override NuGetTransitiveDependencyFinder.Output.Dependency.ToString() -> string!
 override NuGetTransitiveDependencyFinder.Output.Framework.Equals(object? obj) -> bool
 override NuGetTransitiveDependencyFinder.Output.Framework.GetHashCode() -> int
+override NuGetTransitiveDependencyFinder.Output.Framework.ToString() -> string!
 override NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.ToString() -> string!
 override NuGetTransitiveDependencyFinder.Output.Project.Equals(object? obj) -> bool
 override NuGetTransitiveDependencyFinder.Output.Project.GetHashCode() -> int

@@ -32,7 +32,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// capacity.</param>
         internal Base(int capacity)
         {
-            this.children = new List<TChild>(capacity);
+            this.children = new(capacity);
             this.areChildrenSorted = true;
         }
 
@@ -42,7 +42,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="children">The child elements with which to initialize the collection.</param>
         internal Base(IReadOnlyCollection<TChild> children)
         {
-            this.children = new List<TChild>(children);
+            this.children = new(children);
             this.areChildrenSorted = false;
         }
 

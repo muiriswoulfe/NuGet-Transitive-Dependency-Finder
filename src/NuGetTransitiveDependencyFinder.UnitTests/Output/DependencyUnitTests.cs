@@ -27,24 +27,23 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <summary>
         /// The default version.
         /// </summary>
-        private static readonly NuGetVersion DefaultVersion = new NuGetVersion("1.0.0-alpha");
+        private static readonly NuGetVersion DefaultVersion = new("1.0.0-alpha");
 
         /// <summary>
         /// The default test value.
         /// </summary>
-        private static readonly Dependency DefaultValue = new Dependency(DefaultIdentifier, DefaultVersion);
+        private static readonly Dependency DefaultValue = new(DefaultIdentifier, DefaultVersion);
 
         /// <summary>
         /// A clone of <see cref="DefaultValue"/>, where the object contents are identical but the object reference is
         /// not.
         /// </summary>
-        private static readonly Dependency ClonedDefaultValue = new Dependency(DefaultIdentifier, DefaultVersion);
+        private static readonly Dependency ClonedDefaultValue = new(DefaultIdentifier, DefaultVersion);
 
         /// <summary>
         /// The lesser test value, which occurs prior to <see cref="DefaultValue"/> according to an ordered sort.
         /// </summary>
-        private static readonly Dependency LesserValue =
-            new Dependency(DefaultIdentifier, new NuGetVersion("0.9.9-alpha"));
+        private static readonly Dependency LesserValue = new(DefaultIdentifier, new("0.9.9-alpha"));
 
         /// <summary>
         /// The data for testing the operators.
@@ -55,56 +54,56 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Gets the data for testing <see cref="Dependency.operator =="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorEqualTestData =>
+        public static IEnumerable<object?[]> OperatorEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Dependency.operator !="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorNotEqualTestData =>
+        public static IEnumerable<object?[]> OperatorNotEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorNotEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Dependency.operator &lt;"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorLessThanTestData =>
+        public static IEnumerable<object?[]> OperatorLessThanTestData =>
             ComparisonDataGenerator.GenerateOperatorLessThanTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Dependency.operator &lt;="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorLessThanOrEqualTestData =>
+        public static IEnumerable<object?[]> OperatorLessThanOrEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorLessThanOrEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Dependency.operator &gt;"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorGreaterThanTestData =>
+        public static IEnumerable<object?[]> OperatorGreaterThanTestData =>
             ComparisonDataGenerator.GenerateOperatorGreaterThanTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Dependency.operator &gt;="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorGreaterThanOrEqualTestData =>
+        public static IEnumerable<object?[]> OperatorGreaterThanOrEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorGreaterThanOrEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="IComparable{Dependency}.CompareTo"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> CompareToTestData =>
+        public static IEnumerable<object?[]> CompareToTestData =>
             ComparisonDataGenerator.GenerateCompareToTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="IEquatable{Dependency}.Equals"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> EqualsTestData =>
+        public static IEnumerable<object?[]> EqualsTestData =>
             ComparisonDataGenerator.GenerateEqualsTestData(OperatorTestData);
 
         /// <summary>
@@ -152,7 +151,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         public void Version_AfterConstruction_ReturnsValue(string value)
         {
             // Arrange & Act
-            var dependency = new Dependency(DefaultIdentifier, new NuGetVersion(value));
+            var dependency = new Dependency(DefaultIdentifier, new(value));
 
             // Assert
             _ = value.Should().Be(dependency.Version.ToString());
@@ -457,42 +456,42 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             result.Add(
                 new ComparisonTestData<Dependency>(
                     DefaultValue,
-                    new Dependency("Identifier", DefaultVersion),
+                    new("Identifier", DefaultVersion),
                     Comparisons.Equal));
             result.Add(
                 new ComparisonTestData<Dependency>(
                     DefaultValue,
-                    new Dependency(DefaultIdentifier, new NuGetVersion("1.0.0-alpha")),
+                    new(DefaultIdentifier, new("1.0.0-alpha")),
                     Comparisons.Equal));
             result.Add(
                 new ComparisonTestData<Dependency>(
                     DefaultValue,
-                    new Dependency("IDENTIFIER", DefaultVersion),
+                    new("IDENTIFIER", DefaultVersion),
                     Comparisons.Equal));
             result.Add(
                 new ComparisonTestData<Dependency>(
                     DefaultValue,
-                    new Dependency(DefaultIdentifier, new NuGetVersion("1.0.0-ALPHA")),
+                    new(DefaultIdentifier, new("1.0.0-ALPHA")),
                     Comparisons.Equal));
             result.Add(
                 new ComparisonTestData<Dependency>(
-                    new Dependency("ABC", DefaultVersion),
+                    new("ABC", DefaultVersion),
                     DefaultValue,
                     Comparisons.LessThan));
             result.Add(
                 new ComparisonTestData<Dependency>(
-                    new Dependency(DefaultIdentifier, new NuGetVersion("0.9.9-alpha")),
+                    new(DefaultIdentifier, new("0.9.9-alpha")),
                     DefaultValue,
                     Comparisons.LessThan));
             result.Add(
                 new ComparisonTestData<Dependency>(
                     DefaultValue,
-                    new Dependency("ABC", DefaultVersion),
+                    new("ABC", DefaultVersion),
                     Comparisons.GreaterThan));
             result.Add(
                 new ComparisonTestData<Dependency>(
                     DefaultValue,
-                    new Dependency(DefaultIdentifier, new NuGetVersion("0.9.9-alpha")),
+                    new(DefaultIdentifier, new("0.9.9-alpha")),
                     Comparisons.GreaterThan));
 
             return result;
@@ -518,7 +517,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
                 new object[]
                 {
                     DefaultValue,
-                    new Dependency(DefaultIdentifier, new NuGetVersion("1.0.0-alpha")),
+                    new Dependency(DefaultIdentifier, new("1.0.0-alpha")),
                 });
             result.Add(
                 new object[]
@@ -530,7 +529,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
                 new object[]
                 {
                     DefaultValue,
-                    new Dependency(DefaultIdentifier, new NuGetVersion("1.0.0-ALPHA")),
+                    new Dependency(DefaultIdentifier, new("1.0.0-ALPHA")),
                 });
 
             return result;

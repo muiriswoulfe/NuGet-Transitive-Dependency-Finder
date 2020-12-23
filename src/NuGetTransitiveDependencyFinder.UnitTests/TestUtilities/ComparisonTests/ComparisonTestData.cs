@@ -8,5 +8,5 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
     /// <summary>
     /// A class encapsulating data for unit testing comparison methods.
     /// </summary>
-    internal record ComparisonTestData<TValue>(TValue Left, TValue Right, Comparisons Comparison);
+    internal record ComparisonTestData<TValue>(TValue? Left, TValue? Right, Comparisons Comparison);
 }

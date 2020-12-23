@@ -21,18 +21,18 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <summary>
         /// The default test value.
         /// </summary>
-        private static readonly Version DefaultValue = new Version(1, 0, 0, 0);
+        private static readonly Version DefaultValue = new(1, 0, 0, 0);
 
         /// <summary>
         /// A clone of <see cref="DefaultValue"/>, where the object contents are identical but the object reference is
         /// not.
         /// </summary>
-        private static readonly Version ClonedDefaultValue = DefaultValue.Clone() as Version;
+        private static readonly Version ClonedDefaultValue = (DefaultValue.Clone() as Version)!;
 
         /// <summary>
         /// The lesser test value, which occurs prior to <see cref="DefaultValue"/> according to an ordered sort.
         /// </summary>
-        private static readonly Version LesserValue = new Version(0, 9, 9, 9);
+        private static readonly Version LesserValue = new(0, 9, 9, 9);
 
         /// <summary>
         /// The data for testing the operators.
@@ -44,56 +44,56 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Gets the data for testing <see cref="Version.operator =="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorEqualTestData =>
+        public static IEnumerable<object?[]> OperatorEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Version.operator !="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorNotEqualTestData =>
+        public static IEnumerable<object?[]> OperatorNotEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorNotEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Version.operator &lt;"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorLessThanTestData =>
+        public static IEnumerable<object?[]> OperatorLessThanTestData =>
             ComparisonDataGenerator.GenerateOperatorLessThanTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Version.operator &lt;="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorLessThanOrEqualTestData =>
+        public static IEnumerable<object?[]> OperatorLessThanOrEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorLessThanOrEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Version.operator &gt;"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorGreaterThanTestData =>
+        public static IEnumerable<object?[]> OperatorGreaterThanTestData =>
             ComparisonDataGenerator.GenerateOperatorGreaterThanTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Version.operator &gt;="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorGreaterThanOrEqualTestData =>
+        public static IEnumerable<object?[]> OperatorGreaterThanOrEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorGreaterThanOrEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="IComparable{Version}.CompareTo"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> CompareToTestData =>
+        public static IEnumerable<object?[]> CompareToTestData =>
             ComparisonDataGenerator.GenerateCompareToTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="IEquatable{Version}.Equals"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> EqualsTestData =>
+        public static IEnumerable<object?[]> EqualsTestData =>
             ComparisonDataGenerator.GenerateEqualsTestData(OperatorTestData);
 
         /// <summary>

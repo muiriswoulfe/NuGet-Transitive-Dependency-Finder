@@ -27,14 +27,12 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.UnitTests.Output
         /// <summary>
         /// A mock value for the unused set of formatting options.
         /// </summary>
-        private static readonly Mock<IOptionsMonitor<ConsoleFormatterOptions>> OptionsMonitorMock =
-            new Mock<IOptionsMonitor<ConsoleFormatterOptions>>();
+        private static readonly Mock<IOptionsMonitor<ConsoleFormatterOptions>> OptionsMonitorMock = new();
 
         /// <summary>
         /// A mock value for the unused external scope provider.
         /// </summary>
-        private static readonly Mock<IExternalScopeProvider> ExternalScopeProviderMock =
-            new Mock<IExternalScopeProvider>();
+        private static readonly Mock<IExternalScopeProvider> ExternalScopeProviderMock = new();
 
         /// <summary>
         /// Tests that when
@@ -63,7 +61,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.UnitTests.Output
                 new LogEntry<string>(
                     logLevel,
                     "Category",
-                    new EventId(0),
+                    new(0),
                     "State",
                     new NotSupportedException(),
                     (string state, Exception exception) => Invariant($"{state} {exception}")),
@@ -94,7 +92,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.UnitTests.Output
                 new LogEntry<string>(
                     (LogLevel)7,
                     "Category",
-                    new EventId(0),
+                    new(0),
                     "State",
                     new NotSupportedException(),
                     (string state, Exception exception) => Invariant($"{state} {exception}")),

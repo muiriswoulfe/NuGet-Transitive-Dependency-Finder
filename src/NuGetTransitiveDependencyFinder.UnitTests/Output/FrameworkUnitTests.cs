@@ -7,6 +7,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using FluentAssertions;
     using NuGet.Frameworks;
     using NuGetTransitiveDependencyFinder.Output;
@@ -19,95 +20,120 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
     public class FrameworkUnitTests
     {
         /// <summary>
+        /// The default framework.
+        /// </summary>
+        private const string DefaultFramework = "Identifier";
+
+        /// <summary>
+        /// The default version.
+        /// </summary>
+        private static readonly Version DefaultVersion = new(1, 0);
+
+        /// <summary>
+        /// The default collection of children.
+        /// </summary>
+        private static readonly IReadOnlyCollection<Dependency> DefaultChildren = new List<Dependency>(0);
+
+        /// <summary>
         /// The default identifier.
         /// </summary>
-        private static readonly NuGetFramework DefaultIdentifier = new NuGetFramework("Identifier");
+        private static readonly NuGetFramework DefaultIdentifier = new(DefaultFramework, DefaultVersion);
 
         /// <summary>
         /// The default test value.
         /// </summary>
-        private static readonly Framework DefaultValue = new Framework(DefaultIdentifier, new List<Dependency>(0));
+        private static readonly Framework DefaultValue = new(DefaultIdentifier, DefaultChildren);
 
         /// <summary>
         /// A clone of <see cref="DefaultValue"/>, where the object contents are identical but the object reference is
         /// not.
         /// </summary>
-        private static readonly Framework ClonedDefaultValue =
-            new Framework(DefaultIdentifier, new List<Dependency>(0));
+        private static readonly Framework ClonedDefaultValue = new(DefaultIdentifier, DefaultChildren);
 
         /// <summary>
         /// The lesser test value, which occurs prior to <see cref="DefaultValue"/> according to an ordered sort.
         /// </summary>
-        private static readonly Framework LesserValue =
-            new Framework(new NuGetFramework("ABC"), new List<Dependency>(0));
+        private static readonly Framework LesserValue = new(new("ABC", DefaultVersion), DefaultChildren);
 
         /// <summary>
         /// The data for testing the operators.
         /// </summary>
-        private static readonly IList<ComparisonTestData<Framework>> OperatorTestData =
-            ComparisonDataGenerator.GenerateOperatorTestData(DefaultValue, ClonedDefaultValue, LesserValue);
+        private static readonly IList<ComparisonTestData<Framework>> OperatorTestData = GenerateOperatorTestData();
 
         /// <summary>
         /// Gets the data for testing <see cref="Framework.operator =="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorEqualTestData =>
+        public static IEnumerable<object?[]> OperatorEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Framework.operator !="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorNotEqualTestData =>
+        public static IEnumerable<object?[]> OperatorNotEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorNotEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Framework.operator &lt;"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorLessThanTestData =>
+        public static IEnumerable<object?[]> OperatorLessThanTestData =>
             ComparisonDataGenerator.GenerateOperatorLessThanTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Framework.operator &lt;="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorLessThanOrEqualTestData =>
+        public static IEnumerable<object?[]> OperatorLessThanOrEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorLessThanOrEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Framework.operator &gt;"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorGreaterThanTestData =>
+        public static IEnumerable<object?[]> OperatorGreaterThanTestData =>
             ComparisonDataGenerator.GenerateOperatorGreaterThanTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Framework.operator &gt;="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> OperatorGreaterThanOrEqualTestData =>
+        public static IEnumerable<object?[]> OperatorGreaterThanOrEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorGreaterThanOrEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="IComparable{Framework}.CompareTo"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> CompareToTestData =>
+        public static IEnumerable<object?[]> CompareToTestData =>
             ComparisonDataGenerator.GenerateCompareToTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="IEquatable{Framework}.Equals"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> EqualsTestData =>
+        public static IEnumerable<object?[]> EqualsTestData =>
             ComparisonDataGenerator.GenerateEqualsTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Framework.GetHashCode()"/>.
         /// </summary>
         public static IEnumerable<object[]> GetHashCodeTestData =>
-            ComparisonDataGenerator.GenerateGetHashCodeTestData(DefaultValue, ClonedDefaultValue, LesserValue);
+            GenerateGetHashCodeTestData();
+
+        /// <summary>
+        /// Gets the data for testing <see cref="object.ToString()"/>.
+        /// </summary>
+        public static IEnumerable<object[]> ToStringTestData =>
+            new object[][]
+            {
+                new object[] { DefaultValue, "Identifier v1.0" },
+                new object[] { LesserValue, "ABC v1.0" },
+                new object[] { new Framework(new(DefaultFramework, new(1, 0, 1)), DefaultChildren), "Identifier v1.0.1" },
+                new object[] { new Framework(new(DefaultFramework, new(1, 0, 1, 1)), DefaultChildren), "Identifier v1.0.1.1" },
+                new object[] { new Framework(new(DefaultFramework, new(1, 0, 0, 1)), DefaultChildren), "Identifier v1.0.0.1" },
+            };
 
         /// <summary>
         /// Tests that when <see cref="Framework.operator =="/> is called with different values, it returns the
@@ -350,6 +376,133 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
             // Assert
             _ = result1.Should().NotBe(result2);
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="object.ToString()"/> is called with different objects, it returns different
+        /// strings for each object.
+        /// </summary>
+        /// <param name="value">The value to be converted to a string.</param>
+        /// <param name="expected">The expected result.</param>
+        [Theory]
+        [MemberData(nameof(ToStringTestData))]
+        public void ToString_WithDifferentObjects_ReturnsString(Framework value, string expected)
+        {
+            // Arrange
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+
+            // Act
+            var result = value.ToString();
+
+            // Assert
+            _ = result.Should().Be(expected);
+        }
+
+        /// <summary>
+        /// Generates the data for testing the operators, combining data from the base class with
+        /// <see cref="Framework"/>-specific data.
+        /// </summary>
+        /// <returns>The generated data.</returns>
+        private static IList<ComparisonTestData<Framework>> GenerateOperatorTestData()
+        {
+            var result =
+                ComparisonDataGenerator.GenerateOperatorTestData(DefaultValue, ClonedDefaultValue, LesserValue, 9);
+
+            result.Add(
+                new ComparisonTestData<Framework>(
+                    DefaultValue,
+                    new(new(DefaultFramework, DefaultVersion), DefaultChildren),
+                    Comparisons.Equal));
+            result.Add(
+                new ComparisonTestData<Framework>(
+                    DefaultValue,
+                    new(new("Identifier", DefaultVersion), DefaultChildren),
+                    Comparisons.Equal));
+            result.Add(
+                new ComparisonTestData<Framework>(
+                    DefaultValue,
+                    new(new(DefaultFramework, new(1, 0)), DefaultChildren),
+                    Comparisons.Equal));
+            result.Add(
+                new ComparisonTestData<Framework>(
+                    DefaultValue,
+                    new(new("IDENTIFIER", DefaultVersion), DefaultChildren),
+                    Comparisons.Equal));
+            result.Add(
+                new ComparisonTestData<Framework>(
+                    DefaultValue,
+                    new(
+                        DefaultIdentifier,
+                        new List<Dependency> { new(DefaultFramework, new("1.0.0")) }),
+                    Comparisons.Equal));
+            result.Add(
+                new ComparisonTestData<Framework>(
+                    new(new NuGetFramework("ABC", DefaultVersion), DefaultChildren),
+                    DefaultValue,
+                    Comparisons.LessThan));
+            result.Add(
+                new ComparisonTestData<Framework>(
+                    new(new NuGetFramework(DefaultFramework, new(0, 9)), DefaultChildren),
+                    DefaultValue,
+                    Comparisons.LessThan));
+            result.Add(
+                new ComparisonTestData<Framework>(
+                    DefaultValue,
+                    new(new("ABC", DefaultVersion), DefaultChildren),
+                    Comparisons.GreaterThan));
+            result.Add(
+                new ComparisonTestData<Framework>(
+                    DefaultValue,
+                    new(new(DefaultFramework, new(0, 9)), DefaultChildren),
+                    Comparisons.GreaterThan));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Generates the data for testing <see cref="object.GetHashCode()"/>, combining data from the base class with
+        /// <see cref="Framework"/>-specific data.
+        /// </summary>
+        /// <returns>The generated data.</returns>
+        private static IEnumerable<object[]> GenerateGetHashCodeTestData()
+        {
+            var result =
+                ComparisonDataGenerator.GenerateGetHashCodeTestData(DefaultValue, ClonedDefaultValue, LesserValue, 5);
+
+            result.Add(
+                new object[]
+                {
+                    DefaultValue,
+                    new Framework(new(DefaultFramework, DefaultVersion), DefaultChildren),
+                });
+            result.Add(
+                new object[]
+                {
+                    DefaultValue,
+                    new Framework(new("Identifier", DefaultVersion), DefaultChildren),
+                });
+            result.Add(
+                new object[]
+                {
+                    DefaultValue,
+                    new Framework(new(DefaultFramework, new(1, 0)), DefaultChildren),
+                });
+            result.Add(
+                new object[]
+                {
+                    DefaultValue,
+                    new Framework(new("IDENTIFIER", DefaultVersion), DefaultChildren),
+                });
+            result.Add(
+                new object[]
+                {
+                    DefaultValue,
+                    new Framework(
+                        DefaultIdentifier,
+                        new List<Dependency> { new(DefaultFramework, new("1.0.0")) }),
+                });
+
+            return result;
         }
     }
 }

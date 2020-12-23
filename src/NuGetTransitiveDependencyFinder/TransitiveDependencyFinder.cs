@@ -155,7 +155,7 @@ namespace NuGetTransitiveDependencyFinder
 
             if (!isTopLevel)
             {
-                this.dependencies.Add(library.Name, new Dependency(library.Name, library.Version));
+                this.dependencies.Add(library.Name, new(library.Name, library.Version));
             }
 
             foreach (var libraryDependencies in library.Dependencies)
@@ -187,7 +187,7 @@ namespace NuGetTransitiveDependencyFinder
                 ? this.dependencies.Values
                 : this.dependencies.Values.Where(dependency => dependency.IsTransitive);
 
-            return new Framework(framework.FrameworkName, frameworkDependencies.ToList());
+            return new(framework.FrameworkName, frameworkDependencies.ToList());
         }
     }
 }

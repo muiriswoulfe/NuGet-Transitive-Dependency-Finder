@@ -50,7 +50,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
         /// <typeparam name="TValue">The type to use for the comparisons.</typeparam>
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorEqualTestData<TValue>(
+        public static IEnumerable<object?[]> GenerateOperatorEqualTestData<TValue>(
             IList<ComparisonTestData<TValue>> operatorTestData) =>
             FilterData(operatorTestData, Comparisons.Equal, true);
 
@@ -60,7 +60,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
         /// <typeparam name="TValue">The type to use for the comparisons.</typeparam>
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorNotEqualTestData<TValue>(
+        public static IEnumerable<object?[]> GenerateOperatorNotEqualTestData<TValue>(
             IList<ComparisonTestData<TValue>> operatorTestData) =>
             FilterData(operatorTestData, Comparisons.Equal, false);
 
@@ -70,7 +70,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
         /// <typeparam name="TValue">The type to use for the comparisons.</typeparam>
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorLessThanTestData<TValue>(
+        public static IEnumerable<object?[]> GenerateOperatorLessThanTestData<TValue>(
             IList<ComparisonTestData<TValue>> operatorTestData) =>
             FilterData(operatorTestData, Comparisons.LessThan, true);
 
@@ -80,7 +80,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
         /// <typeparam name="TValue">The type to use for the comparisons.</typeparam>
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorLessThanOrEqualTestData<TValue>(
+        public static IEnumerable<object?[]> GenerateOperatorLessThanOrEqualTestData<TValue>(
             IList<ComparisonTestData<TValue>> operatorTestData) =>
             FilterData(operatorTestData, Comparisons.LessThan | Comparisons.Equal, true);
 
@@ -90,7 +90,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
         /// <typeparam name="TValue">The type to use for the comparisons.</typeparam>
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorGreaterThanTestData<TValue>(
+        public static IEnumerable<object?[]> GenerateOperatorGreaterThanTestData<TValue>(
             IList<ComparisonTestData<TValue>> operatorTestData) =>
             FilterData(operatorTestData, Comparisons.GreaterThan, true);
 
@@ -100,7 +100,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
         /// <typeparam name="TValue">The type to use for the comparisons.</typeparam>
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateOperatorGreaterThanOrEqualTestData<TValue>(
+        public static IEnumerable<object?[]> GenerateOperatorGreaterThanOrEqualTestData<TValue>(
             IList<ComparisonTestData<TValue>> operatorTestData) =>
             FilterData(operatorTestData, Comparisons.GreaterThan | Comparisons.Equal, true);
 
@@ -110,13 +110,13 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
         /// <typeparam name="TValue">The type to use for the comparisons.</typeparam>
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateCompareToTestData<TValue>(
+        public static IEnumerable<object?[]> GenerateCompareToTestData<TValue>(
             IList<ComparisonTestData<TValue>> operatorTestData)
         {
             foreach (var operatorTestDatum in operatorTestData
                 .Where(operatorTestDatum => operatorTestDatum.Left is not null))
             {
-                yield return new object[]
+                yield return new object?[]
                 {
                     operatorTestDatum.Left,
                     operatorTestDatum.Right,
@@ -131,13 +131,13 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
         /// <typeparam name="TValue">The type to use for the comparisons.</typeparam>
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object[]> GenerateEqualsTestData<TValue>(
+        public static IEnumerable<object?[]> GenerateEqualsTestData<TValue>(
             IList<ComparisonTestData<TValue>> operatorTestData)
         {
             foreach (var operatorTestDatum in operatorTestData
                 .Where(operatorTestDatum => operatorTestDatum.Left is not null))
             {
-                yield return new object[]
+                yield return new object?[]
                 {
                     operatorTestDatum.Left,
                     operatorTestDatum.Right,
@@ -165,9 +165,9 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
             int extraCapacity = 0) =>
             new List<object[]>(extraCapacity + 3)
             {
-                new object[] { defaultValue, defaultValue },
-                new object[] { lesserValue, lesserValue },
-                new object[] { defaultValue, clonedDefaultValue },
+                new object[] { defaultValue!, defaultValue! },
+                new object[] { lesserValue!, lesserValue! },
+                new object[] { defaultValue!, clonedDefaultValue! },
             };
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
         /// data.</param>
         /// <param name="expectedMatchResult">The result expected from applying <paramref name="match"/>.</param>
         /// <returns>The filtered data.</returns>
-        private static IEnumerable<object[]> FilterData<TValue>(
+        private static IEnumerable<object?[]> FilterData<TValue>(
             IList<ComparisonTestData<TValue>> operatorTestData,
             Comparisons match,
             bool expectedMatchResult)
@@ -187,7 +187,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTest
             foreach (var operatorTestDatum in operatorTestData)
             {
                 var matchResult = (operatorTestDatum.Comparison & match) != 0;
-                yield return new object[]
+                yield return new object?[]
                 {
                     operatorTestDatum.Left,
                     operatorTestDatum.Right,
