@@ -167,17 +167,20 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
         /// identical but the object reference is not.</param>
         /// <param name="lesserValue">The lesser test value, which must occur prior to <see paramref="defaultValue"/>
         /// according to an ordered sort.</param>
+        /// <param name="supplementalTestData">The supplemental class-specific test data to be added to the generic
+        /// test data.</param>
         /// <returns>The generated data.</returns>
         public static TheoryData<TValue, TValue> GenerateGetHashCodeTestData<TValue>(
             TValue defaultValue,
             TValue clonedDefaultValue,
-            TValue lesserValue) =>
-            new TheoryData<TValue, TValue>
-            {
-                { defaultValue!, defaultValue! },
-                { lesserValue!, lesserValue! },
-                { defaultValue!, clonedDefaultValue! },
-            };
+            TValue lesserValue,
+            TheoryData<TValue, TValue> supplementalTestData)
+        {
+            supplementalTestData.Add(defaultValue!, defaultValue!);
+            supplementalTestData.Add(lesserValue!, lesserValue!);
+            supplementalTestData.Add(defaultValue!, clonedDefaultValue!);
+            return supplementalTestData;
+        }
 
         /// <summary>
         /// Filters the <paramref name="operatorTestData"/> using <paramref name="match"/>.

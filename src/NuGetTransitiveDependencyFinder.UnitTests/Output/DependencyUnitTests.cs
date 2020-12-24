@@ -125,7 +125,17 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Gets the data for testing <see cref="Dependency.GetHashCode()"/>.
         /// </summary>
         public static TheoryData<Dependency, Dependency> GetHashCodeTestData =>
-            GenerateGetHashCodeTestData();
+            ComparisonDataGenerator.GenerateGetHashCodeTestData(
+                DefaultValue,
+                ClonedDefaultValue,
+                LesserValue,
+                new TheoryData<Dependency, Dependency>
+                {
+                    { DefaultValue, new("Identifier", DefaultVersion) },
+                    { DefaultValue, new(DefaultIdentifier, new("1.0.0-alpha")) },
+                    { DefaultValue, new("IDENTIFIER", DefaultVersion) },
+                    { DefaultValue, new(DefaultIdentifier, new("1.0.0-ALPHA")) },
+                });
 
         /// <summary>
         /// Gets the data for testing <see cref="object.ToString()"/>.
@@ -456,24 +466,6 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
             // Assert
             _ = result.Should().Be(expected);
-        }
-
-        /// <summary>
-        /// Generates the data for testing <see cref="object.GetHashCode()"/>, combining data from the base class with
-        /// <see cref="Dependency"/>-specific data.
-        /// </summary>
-        /// <returns>The generated data.</returns>
-        private static TheoryData<Dependency, Dependency> GenerateGetHashCodeTestData()
-        {
-            var result =
-                ComparisonDataGenerator.GenerateGetHashCodeTestData(DefaultValue, ClonedDefaultValue, LesserValue);
-
-            result.Add(DefaultValue, new("Identifier", DefaultVersion));
-            result.Add(DefaultValue, new(DefaultIdentifier, new("1.0.0-alpha")));
-            result.Add(DefaultValue, new("IDENTIFIER", DefaultVersion));
-            result.Add(DefaultValue, new(DefaultIdentifier, new("1.0.0-ALPHA")));
-
-            return result;
         }
     }
 }

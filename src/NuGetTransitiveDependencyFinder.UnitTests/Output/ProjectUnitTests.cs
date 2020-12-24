@@ -116,7 +116,16 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Gets the data for testing <see cref="Project.GetHashCode()"/>.
         /// </summary>
         public static TheoryData<Project, Project> GetHashCodeTestData =>
-            GenerateGetHashCodeTestData();
+            ComparisonDataGenerator.GenerateGetHashCodeTestData(
+                DefaultValue,
+                ClonedDefaultValue,
+                LesserValue,
+                new TheoryData<Project, Project>
+                {
+                    { DefaultValue, new("Identifier", 0) },
+                    { DefaultValue, new("IDENTIFIER", 0) },
+                    { DefaultValue, new(DefaultIdentifier, 1) },
+                });
 
         /// <summary>
         /// Gets the data for testing <see cref="object.ToString()"/>.
@@ -389,23 +398,6 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
             // Assert
             _ = result.Should().Be(expected);
-        }
-
-        /// <summary>
-        /// Generates the data for testing <see cref="object.GetHashCode()"/>, combining data from the base class with
-        /// <see cref="Project"/>-specific data.
-        /// </summary>
-        /// <returns>The generated data.</returns>
-        private static TheoryData<Project, Project> GenerateGetHashCodeTestData()
-        {
-            var result =
-                ComparisonDataGenerator.GenerateGetHashCodeTestData(DefaultValue, ClonedDefaultValue, LesserValue);
-
-            result.Add(DefaultValue, new("Identifier", 0));
-            result.Add(DefaultValue, new("IDENTIFIER", 0));
-            result.Add(DefaultValue, new(DefaultIdentifier, 1));
-
-            return result;
         }
     }
 }

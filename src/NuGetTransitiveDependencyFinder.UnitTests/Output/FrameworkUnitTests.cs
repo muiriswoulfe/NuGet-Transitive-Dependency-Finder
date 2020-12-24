@@ -22,17 +22,18 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <summary>
         /// The default test identifier framework.
         /// </summary>
-        private const string DefaultFramework = "Identifier";
+        private const string DefaultIdentifierFramework = "Identifier";
 
         /// <summary>
         /// The default test identifier version.
         /// </summary>
-        private static readonly Version DefaultVersion = new(1, 0);
+        private static readonly Version DefaultIdentifierVersion = new(1, 0);
 
         /// <summary>
         /// The default test identifier.
         /// </summary>
-        private static readonly NuGetFramework DefaultIdentifier = new(DefaultFramework, DefaultVersion);
+        private static readonly NuGetFramework DefaultIdentifier =
+            new(DefaultIdentifierFramework, DefaultIdentifierVersion);
 
         /// <summary>
         /// The default collection of children.
@@ -53,7 +54,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <summary>
         /// The lesser test value, which occurs prior to <see cref="DefaultValue"/> according to an ordered sort.
         /// </summary>
-        private static readonly Framework LesserValue = new(new("ABC", DefaultVersion), DefaultChildren);
+        private static readonly Framework LesserValue = new(new("ABC", DefaultIdentifierVersion), DefaultChildren);
 
         /// <summary>
         /// The data for testing the operators.
@@ -67,39 +68,39 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
                 {
                     new(
                         DefaultValue,
-                        new(new(DefaultFramework, DefaultVersion), DefaultChildren),
+                        new(new(DefaultIdentifierFramework, DefaultIdentifierVersion), DefaultChildren),
                         Comparisons.Equal),
                     new(
                         DefaultValue,
-                        new(new("Identifier", DefaultVersion), DefaultChildren),
+                        new(new("Identifier", DefaultIdentifierVersion), DefaultChildren),
                         Comparisons.Equal),
                     new(
                         DefaultValue,
-                        new(new(DefaultFramework, new(1, 0)), DefaultChildren),
+                        new(new(DefaultIdentifierFramework, new(1, 0)), DefaultChildren),
                         Comparisons.Equal),
                     new(
                         DefaultValue,
-                        new(new("IDENTIFIER", DefaultVersion), DefaultChildren),
+                        new(new("IDENTIFIER", DefaultIdentifierVersion), DefaultChildren),
                         Comparisons.Equal),
                     new(
                         DefaultValue,
-                        new(DefaultIdentifier, new Dependency[] { new(DefaultFramework, new("1.0.0")) }),
+                        new(DefaultIdentifier, new Dependency[] { new(DefaultIdentifierFramework, new("1.0.0")) }),
                         Comparisons.Equal),
                     new(
-                        new(new NuGetFramework("ABC", DefaultVersion), DefaultChildren),
+                        new(new NuGetFramework("ABC", DefaultIdentifierVersion), DefaultChildren),
                         DefaultValue,
                         Comparisons.LessThan),
                     new(
-                        new(new NuGetFramework(DefaultFramework, new(0, 9)), DefaultChildren),
+                        new(new NuGetFramework(DefaultIdentifierFramework, new(0, 9)), DefaultChildren),
                         DefaultValue,
                         Comparisons.LessThan),
                     new(
                         DefaultValue,
-                        new(new("ABC", DefaultVersion), DefaultChildren),
+                        new(new("ABC", DefaultIdentifierVersion), DefaultChildren),
                         Comparisons.GreaterThan),
                     new(
                         DefaultValue,
-                        new(new(DefaultFramework, new(0, 9)), DefaultChildren),
+                        new(new(DefaultIdentifierFramework, new(0, 9)), DefaultChildren),
                         Comparisons.GreaterThan),
                 });
 
@@ -163,7 +164,33 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Gets the data for testing <see cref="Framework.GetHashCode()"/>.
         /// </summary>
         public static TheoryData<Framework, Framework> GetHashCodeTestData =>
-            GenerateGetHashCodeTestData();
+            ComparisonDataGenerator.GenerateGetHashCodeTestData(
+                DefaultValue,
+                ClonedDefaultValue,
+                LesserValue,
+                new TheoryData<Framework, Framework>
+                {
+                    {
+                        DefaultValue,
+                        new(new(DefaultIdentifierFramework, DefaultIdentifierVersion), DefaultChildren)
+                    },
+                    {
+                        DefaultValue,
+                        new(new("Identifier", DefaultIdentifierVersion), DefaultChildren)
+                    },
+                    {
+                        DefaultValue,
+                        new(new(DefaultIdentifierFramework, new(1, 0)), DefaultChildren)
+                    },
+                    {
+                        DefaultValue,
+                        new(new("IDENTIFIER", DefaultIdentifierVersion), DefaultChildren)
+                    },
+                    {
+                        DefaultValue,
+                        new(DefaultIdentifier, new Dependency[] { new(DefaultIdentifierFramework, new("1.0.0")) })
+                    },
+                });
 
         /// <summary>
         /// Gets the data for testing <see cref="object.ToString()"/>.
@@ -173,9 +200,9 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             {
                 { DefaultValue, "Identifier v1.0" },
                 { LesserValue, "ABC v1.0" },
-                { new(new(DefaultFramework, new(1, 0, 1)), DefaultChildren), "Identifier v1.0.1" },
-                { new(new(DefaultFramework, new(1, 0, 1, 1)), DefaultChildren), "Identifier v1.0.1.1" },
-                { new(new(DefaultFramework, new(1, 0, 0, 1)), DefaultChildren), "Identifier v1.0.0.1" },
+                { new(new(DefaultIdentifierFramework, new(1, 0, 1)), DefaultChildren), "Identifier v1.0.1" },
+                { new(new(DefaultIdentifierFramework, new(1, 0, 1, 1)), DefaultChildren), "Identifier v1.0.1.1" },
+                { new(new(DefaultIdentifierFramework, new(1, 0, 0, 1)), DefaultChildren), "Identifier v1.0.0.1" },
             };
 
         /// <summary>
@@ -439,25 +466,6 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
             // Assert
             _ = result.Should().Be(expected);
-        }
-
-        /// <summary>
-        /// Generates the data for testing <see cref="object.GetHashCode()"/>, combining data from the base class with
-        /// <see cref="Framework"/>-specific data.
-        /// </summary>
-        /// <returns>The generated data.</returns>
-        private static TheoryData<Framework, Framework> GenerateGetHashCodeTestData()
-        {
-            var result =
-                ComparisonDataGenerator.GenerateGetHashCodeTestData(DefaultValue, ClonedDefaultValue, LesserValue);
-
-            result.Add(DefaultValue, new(new(DefaultFramework, DefaultVersion), DefaultChildren));
-            result.Add(DefaultValue, new(new("Identifier", DefaultVersion), DefaultChildren));
-            result.Add(DefaultValue, new(new(DefaultFramework, new(1, 0)), DefaultChildren));
-            result.Add(DefaultValue, new(new("IDENTIFIER", DefaultVersion), DefaultChildren));
-            result.Add(DefaultValue, new(DefaultIdentifier, new Dependency[] { new(DefaultFramework, new("1.0.0")) }));
-
-            return result;
         }
     }
 }

@@ -104,7 +104,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Gets the data for testing <see cref="Version.GetHashCode()"/>.
         /// </summary>
         public static TheoryData<Version, Version> GetHashCodeTestData =>
-            ComparisonDataGenerator.GenerateGetHashCodeTestData(DefaultValue, ClonedDefaultValue, LesserValue);
+            ComparisonDataGenerator.GenerateGetHashCodeTestData(DefaultValue, ClonedDefaultValue, LesserValue, new());
 
         /// <summary>
         /// Tests that when <see cref="Version.operator =="/> is called with different values, it returns the
