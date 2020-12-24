@@ -11,7 +11,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
     using FluentAssertions;
     using NuGet.Versioning;
     using NuGetTransitiveDependencyFinder.Output;
-    using NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTests;
+    using NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities;
     using Xunit;
 
     /// <summary>
@@ -20,12 +20,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
     public class DependencyUnitTests
     {
         /// <summary>
-        /// The default identifier.
+        /// The default test identifier.
         /// </summary>
         private const string DefaultIdentifier = "Identifier";
 
         /// <summary>
-        /// The default version.
+        /// The default test version.
         /// </summary>
         private static readonly NuGetVersion DefaultVersion = new("1.0.0-alpha");
 
@@ -48,78 +48,93 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <summary>
         /// The data for testing the operators.
         /// </summary>
-        private static readonly IList<ComparisonTestData<Dependency>> OperatorTestData = GenerateOperatorTestData();
+        private static readonly IEnumerable<ComparisonTestData<Dependency>> OperatorTestData =
+            ComparisonDataGenerator.GenerateOperatorTestData(
+                DefaultValue,
+                ClonedDefaultValue,
+                LesserValue,
+                new ComparisonTestData<Dependency>[]
+                {
+                    new(DefaultValue, new("Identifier", DefaultVersion), Comparisons.Equal),
+                    new(DefaultValue, new(DefaultIdentifier, new("1.0.0-alpha")), Comparisons.Equal),
+                    new(DefaultValue, new("IDENTIFIER", DefaultVersion), Comparisons.Equal),
+                    new(DefaultValue, new(DefaultIdentifier, new("1.0.0-ALPHA")), Comparisons.Equal),
+                    new(new("ABC", DefaultVersion), DefaultValue, Comparisons.LessThan),
+                    new(new(DefaultIdentifier, new("0.9.9-alpha")), DefaultValue, Comparisons.LessThan),
+                    new(DefaultValue, new("ABC", DefaultVersion), Comparisons.GreaterThan),
+                    new(DefaultValue, new(DefaultIdentifier, new("0.9.9-alpha")), Comparisons.GreaterThan),
+                });
 
         /// <summary>
         /// Gets the data for testing <see cref="Dependency.operator =="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object?[]> OperatorEqualTestData =>
+        public static TheoryData<Dependency?, Dependency?, bool> OperatorEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Dependency.operator !="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object?[]> OperatorNotEqualTestData =>
+        public static TheoryData<Dependency?, Dependency?, bool> OperatorNotEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorNotEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Dependency.operator &lt;"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object?[]> OperatorLessThanTestData =>
+        public static TheoryData<Dependency?, Dependency?, bool> OperatorLessThanTestData =>
             ComparisonDataGenerator.GenerateOperatorLessThanTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Dependency.operator &lt;="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object?[]> OperatorLessThanOrEqualTestData =>
+        public static TheoryData<Dependency?, Dependency?, bool> OperatorLessThanOrEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorLessThanOrEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Dependency.operator &gt;"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object?[]> OperatorGreaterThanTestData =>
+        public static TheoryData<Dependency?, Dependency?, bool> OperatorGreaterThanTestData =>
             ComparisonDataGenerator.GenerateOperatorGreaterThanTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Dependency.operator &gt;="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object?[]> OperatorGreaterThanOrEqualTestData =>
+        public static TheoryData<Dependency?, Dependency?, bool> OperatorGreaterThanOrEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorGreaterThanOrEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="IComparable{Dependency}.CompareTo"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object?[]> CompareToTestData =>
+        public static TheoryData<Dependency, Dependency?, int> CompareToTestData =>
             ComparisonDataGenerator.GenerateCompareToTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="IEquatable{Dependency}.Equals"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object?[]> EqualsTestData =>
+        public static TheoryData<Dependency, Dependency?, bool> EqualsTestData =>
             ComparisonDataGenerator.GenerateEqualsTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Dependency.GetHashCode()"/>.
         /// </summary>
-        public static IEnumerable<object[]> GetHashCodeTestData =>
+        public static TheoryData<Dependency, Dependency> GetHashCodeTestData =>
             GenerateGetHashCodeTestData();
 
         /// <summary>
         /// Gets the data for testing <see cref="object.ToString()"/>.
         /// </summary>
-        public static IEnumerable<object[]> ToStringTestData =>
-            new object[][]
+        public static TheoryData<Dependency, string> ToStringTestData =>
+            new TheoryData<Dependency, string>
             {
-                new object[] { DefaultValue, "Identifier v1.0.0-alpha" },
-                new object[] { LesserValue, "Identifier v0.9.9-alpha" },
+                { DefaultValue, "Identifier v1.0.0-alpha" },
+                { LesserValue, "Identifier v0.9.9-alpha" },
             };
 
         /// <summary>
@@ -444,93 +459,19 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Generates the data for testing the operators, combining data from the base class with
-        /// <see cref="Dependency"/>-specific data.
-        /// </summary>
-        /// <returns>The generated data.</returns>
-        private static IList<ComparisonTestData<Dependency>> GenerateOperatorTestData()
-        {
-            var result =
-                ComparisonDataGenerator.GenerateOperatorTestData(DefaultValue, ClonedDefaultValue, LesserValue, 8);
-
-            result.Add(
-                new ComparisonTestData<Dependency>(
-                    DefaultValue,
-                    new("Identifier", DefaultVersion),
-                    Comparisons.Equal));
-            result.Add(
-                new ComparisonTestData<Dependency>(
-                    DefaultValue,
-                    new(DefaultIdentifier, new("1.0.0-alpha")),
-                    Comparisons.Equal));
-            result.Add(
-                new ComparisonTestData<Dependency>(
-                    DefaultValue,
-                    new("IDENTIFIER", DefaultVersion),
-                    Comparisons.Equal));
-            result.Add(
-                new ComparisonTestData<Dependency>(
-                    DefaultValue,
-                    new(DefaultIdentifier, new("1.0.0-ALPHA")),
-                    Comparisons.Equal));
-            result.Add(
-                new ComparisonTestData<Dependency>(
-                    new("ABC", DefaultVersion),
-                    DefaultValue,
-                    Comparisons.LessThan));
-            result.Add(
-                new ComparisonTestData<Dependency>(
-                    new(DefaultIdentifier, new("0.9.9-alpha")),
-                    DefaultValue,
-                    Comparisons.LessThan));
-            result.Add(
-                new ComparisonTestData<Dependency>(
-                    DefaultValue,
-                    new("ABC", DefaultVersion),
-                    Comparisons.GreaterThan));
-            result.Add(
-                new ComparisonTestData<Dependency>(
-                    DefaultValue,
-                    new(DefaultIdentifier, new("0.9.9-alpha")),
-                    Comparisons.GreaterThan));
-
-            return result;
-        }
-
-        /// <summary>
         /// Generates the data for testing <see cref="object.GetHashCode()"/>, combining data from the base class with
         /// <see cref="Dependency"/>-specific data.
         /// </summary>
         /// <returns>The generated data.</returns>
-        private static IEnumerable<object[]> GenerateGetHashCodeTestData()
+        private static TheoryData<Dependency, Dependency> GenerateGetHashCodeTestData()
         {
             var result =
-                ComparisonDataGenerator.GenerateGetHashCodeTestData(DefaultValue, ClonedDefaultValue, LesserValue, 4);
+                ComparisonDataGenerator.GenerateGetHashCodeTestData(DefaultValue, ClonedDefaultValue, LesserValue);
 
-            result.Add(
-                new object[]
-                {
-                    DefaultValue,
-                    new Dependency("Identifier", DefaultVersion),
-                });
-            result.Add(
-                new object[]
-                {
-                    DefaultValue,
-                    new Dependency(DefaultIdentifier, new("1.0.0-alpha")),
-                });
-            result.Add(
-                new object[]
-                {
-                    DefaultValue,
-                    new Dependency("IDENTIFIER", DefaultVersion),
-                });
-            result.Add(
-                new object[]
-                {
-                    DefaultValue,
-                    new Dependency(DefaultIdentifier, new("1.0.0-ALPHA")),
-                });
+            result.Add(DefaultValue, new("Identifier", DefaultVersion));
+            result.Add(DefaultValue, new(DefaultIdentifier, new("1.0.0-alpha")));
+            result.Add(DefaultValue, new("IDENTIFIER", DefaultVersion));
+            result.Add(DefaultValue, new(DefaultIdentifier, new("1.0.0-ALPHA")));
 
             return result;
         }

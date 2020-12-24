@@ -10,7 +10,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
     using System.Globalization;
     using FluentAssertions;
     using NuGetTransitiveDependencyFinder.Output;
-    using NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTests;
+    using NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities;
     using Xunit;
 
     /// <summary>
@@ -19,7 +19,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
     public class ProjectUnitTests
     {
         /// <summary>
-        /// The default identifier.
+        /// The default test identifier.
         /// </summary>
         private const string DefaultIdentifier = "Identifier";
 
@@ -42,78 +42,90 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <summary>
         /// The data for testing the operators.
         /// </summary>
-        private static readonly IList<ComparisonTestData<Project>> OperatorTestData = GenerateOperatorTestData();
+        private static readonly IEnumerable<ComparisonTestData<Project>> OperatorTestData =
+            ComparisonDataGenerator.GenerateOperatorTestData(
+                DefaultValue,
+                ClonedDefaultValue,
+                LesserValue,
+                new ComparisonTestData<Project>[]
+                {
+                    new(DefaultValue, new("Identifier", 0), Comparisons.Equal),
+                    new(DefaultValue, new("IDENTIFIER", 0), Comparisons.Equal),
+                    new(DefaultValue, new(DefaultIdentifier, 1), Comparisons.Equal),
+                    new(new("ABC", 0), DefaultValue, Comparisons.LessThan),
+                    new(DefaultValue, new("ABC", 0), Comparisons.GreaterThan),
+                });
 
         /// <summary>
         /// Gets the data for testing <see cref="Project.operator =="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object?[]> OperatorEqualTestData =>
+        public static TheoryData<Project?, Project?, bool> OperatorEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Project.operator !="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object?[]> OperatorNotEqualTestData =>
+        public static TheoryData<Project?, Project?, bool> OperatorNotEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorNotEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Project.operator &lt;"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object?[]> OperatorLessThanTestData =>
+        public static TheoryData<Project?, Project?, bool> OperatorLessThanTestData =>
             ComparisonDataGenerator.GenerateOperatorLessThanTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Project.operator &lt;="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object?[]> OperatorLessThanOrEqualTestData =>
+        public static TheoryData<Project?, Project?, bool> OperatorLessThanOrEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorLessThanOrEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Project.operator &gt;"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object?[]> OperatorGreaterThanTestData =>
+        public static TheoryData<Project?, Project?, bool> OperatorGreaterThanTestData =>
             ComparisonDataGenerator.GenerateOperatorGreaterThanTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Project.operator &gt;="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object?[]> OperatorGreaterThanOrEqualTestData =>
+        public static TheoryData<Project?, Project?, bool> OperatorGreaterThanOrEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorGreaterThanOrEqualTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="IComparable{Project}.CompareTo"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object?[]> CompareToTestData =>
+        public static TheoryData<Project, Project?, int> CompareToTestData =>
             ComparisonDataGenerator.GenerateCompareToTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="IEquatable{Project}.Equals"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<object?[]> EqualsTestData =>
+        public static TheoryData<Project, Project?, bool> EqualsTestData =>
             ComparisonDataGenerator.GenerateEqualsTestData(OperatorTestData);
 
         /// <summary>
         /// Gets the data for testing <see cref="Project.GetHashCode()"/>.
         /// </summary>
-        public static IEnumerable<object[]> GetHashCodeTestData =>
+        public static TheoryData<Project, Project> GetHashCodeTestData =>
             GenerateGetHashCodeTestData();
 
         /// <summary>
         /// Gets the data for testing <see cref="object.ToString()"/>.
         /// </summary>
-        public static IEnumerable<object[]> ToStringTestData =>
-            new object[][]
+        public static TheoryData<Project, string> ToStringTestData =>
+            new TheoryData<Project, string>
             {
-                new object[] { DefaultValue, "Identifier" },
-                new object[] { LesserValue, "ABC" },
+                { DefaultValue, "Identifier" },
+                { LesserValue, "ABC" },
             };
 
         /// <summary>
@@ -380,71 +392,18 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Generates the data for testing the operators, combining data from the base class with
-        /// <see cref="Project"/>-specific data.
-        /// </summary>
-        /// <returns>The generated data.</returns>
-        private static IList<ComparisonTestData<Project>> GenerateOperatorTestData()
-        {
-            var result =
-                ComparisonDataGenerator.GenerateOperatorTestData(DefaultValue, ClonedDefaultValue, LesserValue, 5);
-
-            result.Add(
-                new ComparisonTestData<Project>(
-                    DefaultValue,
-                    new("Identifier", 0),
-                    Comparisons.Equal));
-            result.Add(
-                new ComparisonTestData<Project>(
-                    DefaultValue,
-                    new("IDENTIFIER", 0),
-                    Comparisons.Equal));
-            result.Add(
-                new ComparisonTestData<Project>(
-                    DefaultValue,
-                    new(DefaultIdentifier, 1),
-                    Comparisons.Equal));
-            result.Add(
-                new ComparisonTestData<Project>(
-                    new("ABC", 0),
-                    DefaultValue,
-                    Comparisons.LessThan));
-            result.Add(
-                new ComparisonTestData<Project>(
-                    DefaultValue,
-                    new("ABC", 0),
-                    Comparisons.GreaterThan));
-            return result;
-        }
-
-        /// <summary>
         /// Generates the data for testing <see cref="object.GetHashCode()"/>, combining data from the base class with
         /// <see cref="Project"/>-specific data.
         /// </summary>
         /// <returns>The generated data.</returns>
-        private static IEnumerable<object[]> GenerateGetHashCodeTestData()
+        private static TheoryData<Project, Project> GenerateGetHashCodeTestData()
         {
             var result =
-                ComparisonDataGenerator.GenerateGetHashCodeTestData(DefaultValue, ClonedDefaultValue, LesserValue, 3);
+                ComparisonDataGenerator.GenerateGetHashCodeTestData(DefaultValue, ClonedDefaultValue, LesserValue);
 
-            result.Add(
-                new object[]
-                {
-                    DefaultValue,
-                    new Project("Identifier", 0),
-                });
-            result.Add(
-                new object[]
-                {
-                    DefaultValue,
-                    new Project("IDENTIFIER", 0),
-                });
-            result.Add(
-                new object[]
-                {
-                    DefaultValue,
-                    new Project(DefaultIdentifier, 1),
-                });
+            result.Add(DefaultValue, new("Identifier", 0));
+            result.Add(DefaultValue, new("IDENTIFIER", 0));
+            result.Add(DefaultValue, new(DefaultIdentifier, 1));
 
             return result;
         }

@@ -3,7 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities.ComparisonTests
+namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
 {
     /// <summary>
     /// A class encapsulating data for unit testing comparison methods.
