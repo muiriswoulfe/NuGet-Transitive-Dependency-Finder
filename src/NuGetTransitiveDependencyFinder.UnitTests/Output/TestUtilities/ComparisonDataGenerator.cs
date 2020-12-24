@@ -28,7 +28,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
         /// <param name="supplementalTestData">The supplemental class-specific test data to be added to the generic
         /// test data.</param>
         /// <returns>The generated data.</returns>
-        public static IEnumerable<ComparisonTestData<TValue>> GenerateOperatorTestData<TValue>(
+        public static IReadOnlyCollection<ComparisonTestData<TValue>> GenerateOperatorTestData<TValue>(
             TValue defaultValue,
             TValue clonedDefaultValue,
             TValue lesserValue,
@@ -59,7 +59,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
         /// <returns>The generated data.</returns>
         public static TheoryData<TValue?, TValue?, bool> GenerateOperatorEqualTestData<TValue>(
-            IEnumerable<ComparisonTestData<TValue>> operatorTestData) =>
+            IReadOnlyCollection<ComparisonTestData<TValue>> operatorTestData) =>
             FilterData(operatorTestData, Comparisons.Equal, true);
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
         /// <returns>The generated data.</returns>
         public static TheoryData<TValue?, TValue?, bool> GenerateOperatorNotEqualTestData<TValue>(
-            IEnumerable<ComparisonTestData<TValue>> operatorTestData) =>
+            IReadOnlyCollection<ComparisonTestData<TValue>> operatorTestData) =>
             FilterData(operatorTestData, Comparisons.Equal, false);
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
         /// <returns>The generated data.</returns>
         public static TheoryData<TValue?, TValue?, bool> GenerateOperatorLessThanTestData<TValue>(
-            IEnumerable<ComparisonTestData<TValue>> operatorTestData) =>
+            IReadOnlyCollection<ComparisonTestData<TValue>> operatorTestData) =>
             FilterData(operatorTestData, Comparisons.LessThan, true);
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
         /// <returns>The generated data.</returns>
         public static TheoryData<TValue?, TValue?, bool> GenerateOperatorLessThanOrEqualTestData<TValue>(
-            IEnumerable<ComparisonTestData<TValue>> operatorTestData) =>
+            IReadOnlyCollection<ComparisonTestData<TValue>> operatorTestData) =>
             FilterData(operatorTestData, Comparisons.LessThan | Comparisons.Equal, true);
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
         /// <returns>The generated data.</returns>
         public static TheoryData<TValue?, TValue?, bool> GenerateOperatorGreaterThanTestData<TValue>(
-            IEnumerable<ComparisonTestData<TValue>> operatorTestData) =>
+            IReadOnlyCollection<ComparisonTestData<TValue>> operatorTestData) =>
             FilterData(operatorTestData, Comparisons.GreaterThan, true);
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
         /// <returns>The generated data.</returns>
         public static TheoryData<TValue?, TValue?, bool> GenerateOperatorGreaterThanOrEqualTestData<TValue>(
-            IEnumerable<ComparisonTestData<TValue>> operatorTestData) =>
+            IReadOnlyCollection<ComparisonTestData<TValue>> operatorTestData) =>
             FilterData(operatorTestData, Comparisons.GreaterThan | Comparisons.Equal, true);
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
         /// <returns>The generated data.</returns>
         public static TheoryData<TValue, TValue?, int> GenerateCompareToTestData<TValue>(
-            IEnumerable<ComparisonTestData<TValue>> operatorTestData)
+            IReadOnlyCollection<ComparisonTestData<TValue>> operatorTestData)
         {
             var result = new TheoryData<TValue, TValue?, int>();
 
@@ -142,7 +142,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
         /// <returns>The generated data.</returns>
         public static TheoryData<TValue, TValue?, bool> GenerateEqualsTestData<TValue>(
-            IEnumerable<ComparisonTestData<TValue>> operatorTestData)
+            IReadOnlyCollection<ComparisonTestData<TValue>> operatorTestData)
         {
             var result = new TheoryData<TValue, TValue?, bool>();
 
@@ -192,7 +192,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
         /// <param name="expectedMatchResult">The result expected from applying <paramref name="match"/>.</param>
         /// <returns>The filtered data.</returns>
         private static TheoryData<TValue?, TValue?, bool> FilterData<TValue>(
-            IEnumerable<ComparisonTestData<TValue>> operatorTestData,
+            IReadOnlyCollection<ComparisonTestData<TValue>> operatorTestData,
             Comparisons match,
             bool expectedMatchResult)
         {

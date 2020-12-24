@@ -42,7 +42,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <summary>
         /// The data for testing the operators.
         /// </summary>
-        private static readonly IEnumerable<ComparisonTestData<Project>> OperatorTestData =
+        private static readonly IReadOnlyCollection<ComparisonTestData<Project>> OperatorTestData =
             ComparisonDataGenerator.GenerateOperatorTestData(
                 DefaultValue,
                 ClonedDefaultValue,
@@ -398,6 +398,35 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
             // Assert
             _ = result.Should().Be(expected);
+        }
+
+        /// <summary>
+        /// Tests than when <see cref="Project.IsAddValid(Framework?)"/> is called with a <see cref="Framework"/>
+        /// with children, it returns <c>true</c>.
+        /// </summary>
+        [Fact]
+        public void IsAddValid_WithFrameworkWithChildren_ReturnsTrue()
+        {
+            // Act
+            var result = DefaultValue.IsAddValid(
+                new(new(DefaultIdentifier, new(1, 0)), new Dependency[] { new(DefaultIdentifier, new("1.0")) }));
+
+            // Assert
+            _ = result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Tests than when <see cref="Project.IsAddValid(Framework?)"/> is called with a <see cref="Framework"/>
+        /// without children, it returns <c>false</c>.
+        /// </summary>
+        [Fact]
+        public void IsAddValid_WithFrameworkWithoutChildren_ReturnsFalse()
+        {
+            // Act
+            var result = DefaultValue.IsAddValid(new(new(DefaultIdentifier, new(1, 0)), Array.Empty<Dependency>()));
+
+            // Assert
+            _ = result.Should().BeFalse();
         }
     }
 }

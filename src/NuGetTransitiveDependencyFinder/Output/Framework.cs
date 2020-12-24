@@ -7,9 +7,8 @@ namespace NuGetTransitiveDependencyFinder.Output
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
-    using System.Text;
     using NuGet.Frameworks;
+    using NuGetTransitiveDependencyFinder.Extensions;
 
     /// <summary>
     /// A class representing the outputted .NET framework information for each project.
@@ -136,29 +135,8 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <inheritdoc/>
         /// <remarks>The result of this method is solely dependent on
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
-        public override string ToString()
-        {
-            var result = new StringBuilder();
-
-            result.AppendFormat(
-                CultureInfo.CurrentCulture,
-                "{0} v{1}.{2}",
-                this.Identifier.Framework,
-                this.Identifier.Version.Major,
-                this.Identifier.Version.Minor);
-
-            if (this.Identifier.Version.Build > 0 || this.Identifier.Version.Revision > 0)
-            {
-                result.AppendFormat(CultureInfo.CurrentCulture, ".{0}", this.Identifier.Version.Build);
-            }
-
-            if (this.Identifier.Version.Revision > 0)
-            {
-                result.AppendFormat(CultureInfo.CurrentCulture, ".{0}", this.Identifier.Version.Revision);
-            }
-
-            return result.ToString();
-        }
+        public override string ToString() =>
+            $"{this.Identifier.Framework} v{this.Identifier.Version.ToShortenedString()}";
 
         /// <inheritdoc/>
         internal override bool IsAddValid(Dependency child) =>

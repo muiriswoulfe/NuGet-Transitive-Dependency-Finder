@@ -48,7 +48,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <summary>
         /// The data for testing the operators.
         /// </summary>
-        private static readonly IEnumerable<ComparisonTestData<Dependency>> OperatorTestData =
+        private static readonly IReadOnlyCollection<ComparisonTestData<Dependency>> OperatorTestData =
             ComparisonDataGenerator.GenerateOperatorTestData(
                 DefaultValue,
                 ClonedDefaultValue,

@@ -59,7 +59,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <summary>
         /// The data for testing the operators.
         /// </summary>
-        private static readonly IEnumerable<ComparisonTestData<Framework>> OperatorTestData =
+        private static readonly IReadOnlyCollection<ComparisonTestData<Framework>> OperatorTestData =
             ComparisonDataGenerator.GenerateOperatorTestData(
                 DefaultValue,
                 ClonedDefaultValue,
@@ -466,6 +466,20 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
             // Assert
             _ = result.Should().Be(expected);
+        }
+
+        /// <summary>
+        /// Tests than when <see cref="Framework.IsAddValid(Dependency?)"/> is called with any value, it returns
+        /// <c>true</c>.
+        /// </summary>
+        [Fact]
+        public void IsAddValid_WithAnyValue_ReturnsTrue()
+        {
+            // Act
+            var result = DefaultValue.IsAddValid(new(DefaultIdentifierFramework, new("1.0.0")));
+
+            // Assert
+            _ = result.Should().BeTrue();
         }
     }
 }
