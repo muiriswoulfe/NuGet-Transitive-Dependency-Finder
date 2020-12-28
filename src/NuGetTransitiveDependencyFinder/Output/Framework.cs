@@ -40,7 +40,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns><c>true</c> if <see paramref="left"/> is equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
         public static bool operator ==(Framework? left, Framework? right) =>
-            IdentifiedBase<NuGetFramework, Dependency>.IsEqual(left, right);
+            Comparer.IsEqual(left, right, ComparisonFunction);
 
         /// <summary>
         /// Determines if <see paramref="left"/> is not equal to <see paramref="right"/>.
@@ -52,7 +52,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns><c>true</c> if <see paramref="left"/> is not equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
         public static bool operator !=(Framework? left, Framework? right) =>
-            IdentifiedBase<NuGetFramework, Dependency>.IsNotEqual(left, right);
+            Comparer.IsNotEqual(left, right, ComparisonFunction);
 
         /// <summary>
         /// Determines if <see paramref="left"/> is less than <see paramref="right"/>.
@@ -64,7 +64,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns><c>true</c> if <see paramref="left"/> is less than <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
         public static bool operator <(Framework? left, Framework? right) =>
-            IdentifiedBase<NuGetFramework, Dependency>.IsLess(left, right);
+            Comparer.IsLess(left, right, ComparisonFunction);
 
         /// <summary>
         /// Determines if <see paramref="left"/> is less than or equal to <see paramref="right"/>.
@@ -76,7 +76,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns><c>true</c> if <see paramref="left"/> is less than or equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
         public static bool operator <=(Framework? left, Framework? right) =>
-            IdentifiedBase<NuGetFramework, Dependency>.IsLessOrEqual(left, right);
+            Comparer.IsLessOrEqual(left, right, ComparisonFunction);
 
         /// <summary>
         /// Determines if <see paramref="left"/> is greater than <see paramref="right"/>.
@@ -88,7 +88,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns><c>true</c> if <see paramref="left"/> is greater than <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
         public static bool operator >(Framework? left, Framework? right) =>
-            IdentifiedBase<NuGetFramework, Dependency>.IsGreater(left, right);
+            Comparer.IsGreater(left, right, ComparisonFunction);
 
         /// <summary>
         /// Determines if <see paramref="left"/> is greater than or equal to <see paramref="right"/>.
@@ -100,31 +100,31 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns><c>true</c> if <see paramref="left"/> is greater than or equal to <see paramref="right"/>;
         /// otherwise, <c>false</c>.</returns>
         public static bool operator >=(Framework? left, Framework? right) =>
-            IdentifiedBase<NuGetFramework, Dependency>.IsGreaterOrEqual(left, right);
+            Comparer.IsGreaterOrEqual(left, right, ComparisonFunction);
 
         /// <inheritdoc/>
         /// <remarks>The result of this method is solely dependent on
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         public int CompareTo(Framework? other) =>
-            this.BaseCompareTo(other);
+            Comparer.CompareTo(this, other, ComparisonFunction);
 
         /// <inheritdoc/>
         /// <remarks>The result of this method is solely dependent on
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         public int CompareTo(object? obj) =>
-            this.BaseCompareTo(obj, nameof(Framework));
+            Comparer.CompareTo(this, obj, ComparisonFunction, nameof(Framework));
 
         /// <inheritdoc/>
         /// <remarks>The result of this method is solely dependent on
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         public bool Equals(Framework? other) =>
-            this.BaseCompareTo(other) == 0;
+            Comparer.Equals(this, other, ComparisonFunction);
 
         /// <inheritdoc/>
         /// <remarks>The result of this method is solely dependent on
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         public override bool Equals(object? obj) =>
-            this.BaseEquals(obj);
+            Comparer.Equals(this, obj, ComparisonFunction);
 
         /// <inheritdoc/>
         /// <remarks>The result of this method is solely dependent on
