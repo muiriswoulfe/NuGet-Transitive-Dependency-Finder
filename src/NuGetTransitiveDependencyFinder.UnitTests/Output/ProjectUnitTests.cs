@@ -40,6 +40,20 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         private static readonly Project LesserValue = new("ABC", 0);
 
         /// <summary>
+        /// The test value for the collection of <see cref="Dependency"/> objects where no dependencies exist.
+        /// </summary>
+        private static readonly IReadOnlyCollection<Dependency> NoDependencies = Array.Empty<Dependency>();
+
+        /// <summary>
+        /// The default test value for the collection of <see cref="Dependency"/> objects.
+        /// </summary>
+        private static readonly IReadOnlyCollection<Dependency> DefaultDependencies =
+            new Dependency[]
+            {
+                new("Dependency", new("1.0.0")),
+            };
+
+        /// <summary>
         /// The data for testing the operators.
         /// </summary>
         private static readonly IReadOnlyCollection<ComparisonTestData<Project>> OperatorTestData =
@@ -55,6 +69,20 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
                     new(new("ABC", 0), DefaultValue, Comparisons.LessThan),
                     new(DefaultValue, new("ABC", 0), Comparisons.GreaterThan),
                 });
+
+        /// <summary>
+        /// The data for testing <see cref="Base{Framework}.SortedChildren"/>.
+        /// </summary>
+        private static readonly IReadOnlyList<Framework> SortedChildrenTestData =
+            new Framework[]
+            {
+                new(new("A", new(0, 9)), DefaultDependencies),
+                new(new("A", new(1, 0)), DefaultDependencies),
+                new(new("B", new(1, 0)), DefaultDependencies),
+                new(new("C", new(1, 0)), DefaultDependencies),
+                new(new("Y", new(1, 0)), DefaultDependencies),
+                new(new("Z", new(1, 0)), DefaultDependencies),
+            };
 
         /// <summary>
         /// Gets the data for testing <see cref="Project.operator =="/>.
@@ -408,8 +436,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         public void IsAddValid_WithFrameworkWithChildren_ReturnsTrue()
         {
             // Act
-            var result = DefaultValue.IsAddValid(
-                new(new(DefaultIdentifier, new(1, 0)), new Dependency[] { new(DefaultIdentifier, new("1.0")) }));
+            var result = DefaultValue.IsAddValid(new(new(DefaultIdentifier, new(1, 0)), DefaultDependencies));
 
             // Assert
             _ = result.Should().BeTrue();
@@ -417,16 +444,171 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests than when <see cref="Project.IsAddValid(Framework?)"/> is called with a <see cref="Framework"/>
-        /// without children, it returns <c>false</c>.
+        /// with no children, it returns <c>false</c>.
         /// </summary>
         [Fact]
-        public void IsAddValid_WithFrameworkWithoutChildren_ReturnsFalse()
+        public void IsAddValid_WithFrameworkWithNoChildren_ReturnsFalse()
         {
             // Act
-            var result = DefaultValue.IsAddValid(new(new(DefaultIdentifier, new(1, 0)), Array.Empty<Dependency>()));
+            var result = DefaultValue.IsAddValid(new(new(DefaultIdentifier, new(1, 0)), NoDependencies));
 
             // Assert
             _ = result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Framework}.HasChildren"/> is called for a <see cref="Project"/> with no
+        /// children, it returns <c>false</c>.
+        /// </summary>
+        [Fact]
+        public void HasChildren_WithNoChildren_ReturnsFalse()
+        {
+            // Act
+            var result = DefaultValue.HasChildren;
+
+            // Assert
+            _ = result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Framework}.HasChildren"/> is called for a <see cref="Project"/> with
+        /// children containing no children, it returns <c>false</c>.
+        /// </summary>
+        [Fact]
+        public void HasChildren_WithChildrenContainingNoChildren_ReturnsFalse()
+        {
+            // Arrange
+            var project = new Project(DefaultIdentifier, 1);
+            project.Add(new(new(DefaultIdentifier, new(1, 0)), NoDependencies));
+
+            // Act
+            var result = project.HasChildren;
+
+            // Assert
+            _ = result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Framework}.HasChildren"/> is called for a <see cref="Project"/> with
+        /// children containing children, it returns <c>true</c>.
+        /// </summary>
+        [Fact]
+        public void HasChildren_WithChildrenContainingChildren_ReturnsTrue()
+        {
+            // Arrange
+            var project = new Project(DefaultIdentifier, 1);
+            project.Add(new(new(DefaultIdentifier, new(1, 0)), DefaultDependencies));
+
+            // Act
+            var result = project.HasChildren;
+
+            // Assert
+            _ = result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Framework}.HasChildren"/> is called for a <see cref="Project"/> with
+        /// some children containing children, it returns <c>true</c>.
+        /// </summary>
+        [Fact]
+        public void HasChildren_WithSomeChildrenContainingChildren_ReturnsTrue()
+        {
+            // Arrange
+            var project = new Project(DefaultIdentifier, 2);
+            project.Add(new(new(DefaultIdentifier, new(1, 0)), NoDependencies));
+            project.Add(new(new(DefaultIdentifier, new(1, 0)), DefaultDependencies));
+
+            // Act
+            var result = project.HasChildren;
+
+            // Assert
+            _ = result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Framework}.SortedChildren"/> is called for a <see cref="Project"/> with
+        /// no children, it returns the empty collection.
+        /// </summary>
+        [Fact]
+        public void SortedChildren_WithNoChildren_ReturnsEmptyCollection()
+        {
+            // Act
+            var result = DefaultValue.SortedChildren;
+
+            // Assert
+            _ = result.Should().BeEmpty();
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Framework}.SortedChildren"/> is called for a <see cref="Project"/> with
+        /// children containing no children, it returns the empty collection.
+        /// </summary>
+        [Fact]
+        public void SortedChildren_WithChildrenContainingNoChildren_ReturnsEmptyCollection()
+        {
+            // Arrange
+            var project = new Project(DefaultIdentifier, 6);
+            project.Add(new(SortedChildrenTestData[5].Identifier, NoDependencies));
+            project.Add(new(SortedChildrenTestData[4].Identifier, NoDependencies));
+            project.Add(new(SortedChildrenTestData[1].Identifier, NoDependencies));
+            project.Add(new(SortedChildrenTestData[3].Identifier, NoDependencies));
+            project.Add(new(SortedChildrenTestData[2].Identifier, NoDependencies));
+            project.Add(new(SortedChildrenTestData[0].Identifier, NoDependencies));
+
+            // Act
+            var result = project.SortedChildren;
+
+            // Assert
+            _ = result.Should().BeEmpty();
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Framework}.SortedChildren"/> is called for a <see cref="Project"/> with
+        /// children containing children, it returns the sorted collection of children.
+        /// </summary>
+        [Fact]
+        public void SortedChildren_WithChildrenContainingChildren_ReturnsSortedChildren()
+        {
+            // Arrange
+            var project = new Project(DefaultIdentifier, 6);
+            project.Add(SortedChildrenTestData[5]);
+            project.Add(SortedChildrenTestData[4]);
+            project.Add(SortedChildrenTestData[1]);
+            project.Add(SortedChildrenTestData[3]);
+            project.Add(SortedChildrenTestData[2]);
+            project.Add(SortedChildrenTestData[0]);
+
+            // Act
+            var result = project.SortedChildren;
+
+            // Assert
+            _ = result.Should().Equal(SortedChildrenTestData);
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Framework}.SortedChildren"/> is called for a <see cref="Project"/> with
+        /// some children containing children, it returns the sorted collection of children of those children.
+        /// </summary>
+        [Fact]
+        public void SortedChildren_WithSomeChildrenContainingChildren_ReturnsSortedCollection()
+        {
+            // Arrange
+            var project = new Project(DefaultIdentifier, 6);
+            project.Add(SortedChildrenTestData[5]);
+            project.Add(new(SortedChildrenTestData[4].Identifier, NoDependencies));
+            project.Add(new(SortedChildrenTestData[1].Identifier, NoDependencies));
+            project.Add(SortedChildrenTestData[3]);
+            project.Add(new(SortedChildrenTestData[2].Identifier, NoDependencies));
+            project.Add(SortedChildrenTestData[0]);
+
+            // Act
+            var result = project.SortedChildren;
+
+            // Assert
+            _ = result.Should().Equal(
+                SortedChildrenTestData[0],
+                SortedChildrenTestData[3],
+                SortedChildrenTestData[5]);
         }
     }
 }

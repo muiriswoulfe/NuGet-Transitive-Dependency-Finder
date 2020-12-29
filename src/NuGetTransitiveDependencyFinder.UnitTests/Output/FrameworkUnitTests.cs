@@ -105,6 +105,20 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
                 });
 
         /// <summary>
+        /// The data for testing <see cref="Base{Dependency}.SortedChildren"/>.
+        /// </summary>
+        private static readonly IReadOnlyList<Dependency> SortedChildrenTestData =
+            new Dependency[]
+            {
+                new("A", new("0.9.9")),
+                new("A", new("1.0.0")),
+                new("B", new("1.0.0")),
+                new("C", new("1.0.0")),
+                new("Y", new("1.0.0")),
+                new("Z", new("1.0.0")),
+            };
+
+        /// <summary>
         /// Gets the data for testing <see cref="Framework.operator =="/>.
         /// </summary>
         /// <returns>The generated data.</returns>
@@ -480,6 +494,148 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
             // Assert
             _ = result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> with no
+        /// children, it returns <c>false</c>.
+        /// </summary>
+        [Fact]
+        public void HasChildren_WithNoChildren_ReturnsFalse()
+        {
+            // Act
+            var result = DefaultValue.HasChildren;
+
+            // Assert
+            _ = result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> with
+        /// children added during construction, it returns <c>true</c>.
+        /// </summary>
+        [Fact]
+        public void HasChildren_WithChildrenAddedDuringConstruction_ReturnsTrue()
+        {
+            // Arrange
+            var framework = new Framework(
+                DefaultIdentifier,
+                new Dependency[] { new(DefaultIdentifierFramework, new("1.0.0")) });
+
+            // Act
+            var result = framework.HasChildren;
+
+            // Assert
+            _ = result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> with
+        /// children added after construction, it returns <c>true</c>.
+        /// </summary>
+        [Fact]
+        public void HasChildren_WithChildrenAddedAfterConstruction_ReturnsTrue()
+        {
+            // Arrange
+            var framework = new Framework(DefaultIdentifier, DefaultChildren);
+            framework.Add(new(DefaultIdentifierFramework, new("1.0.0")));
+
+            // Act
+            var result = framework.HasChildren;
+
+            // Assert
+            _ = result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/> with
+        /// no children, it returns the empty collection.
+        /// </summary>
+        [Fact]
+        public void SortedChildren_WithNoChildren_ReturnsEmptyCollection()
+        {
+            // Act
+            var result = DefaultValue.SortedChildren;
+
+            // Assert
+            _ = result.Should().BeEmpty();
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/> with
+        /// children added after construction, it returns the sorted collection of children.
+        /// </summary>
+        [Fact]
+        public void SortedChildren_WithChildrenAddedDuringConstruction_ReturnsSortedChildren()
+        {
+            // Arrange
+            var framework = new Framework(
+                DefaultIdentifier,
+                new Dependency[]
+                {
+                    SortedChildrenTestData[5],
+                    SortedChildrenTestData[4],
+                    SortedChildrenTestData[1],
+                    SortedChildrenTestData[3],
+                    SortedChildrenTestData[2],
+                    SortedChildrenTestData[0],
+                });
+
+            // Act
+            var result = framework.SortedChildren;
+
+            // Assert
+            _ = result.Should().Equal(SortedChildrenTestData);
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/> with
+        /// children added after construction, it returns the sorted collection of children.
+        /// </summary>
+        [Fact]
+        public void SortedChildren_WithChildrenAddedAfterConstruction_ReturnsSortedChildren()
+        {
+            // Arrange
+            var framework = new Framework(DefaultIdentifier, DefaultChildren);
+            framework.Add(SortedChildrenTestData[5]);
+            framework.Add(SortedChildrenTestData[4]);
+            framework.Add(SortedChildrenTestData[1]);
+            framework.Add(SortedChildrenTestData[3]);
+            framework.Add(SortedChildrenTestData[2]);
+            framework.Add(SortedChildrenTestData[0]);
+
+            // Act
+            var result = framework.SortedChildren;
+
+            // Assert
+            _ = result.Should().Equal(SortedChildrenTestData);
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/> with
+        /// children added both during and after construction, it returns the sorted collection of children.
+        /// </summary>
+        [Fact]
+        public void SortedChildren_WithChildrenAddedDuringAndAfterConstruction_ReturnsSortedChildren()
+        {
+            // Arrange
+            var framework = new Framework(
+                DefaultIdentifier,
+                new Dependency[]
+                {
+                    SortedChildrenTestData[5],
+                    SortedChildrenTestData[4],
+                    SortedChildrenTestData[1],
+                });
+            framework.Add(SortedChildrenTestData[3]);
+            framework.Add(SortedChildrenTestData[2]);
+            framework.Add(SortedChildrenTestData[0]);
+
+            // Act
+            var result = framework.SortedChildren;
+
+            // Assert
+            _ = result.Should().Equal(SortedChildrenTestData);
         }
     }
 }
