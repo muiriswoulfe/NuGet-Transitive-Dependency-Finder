@@ -22,13 +22,11 @@ namespace NuGetTransitiveDependencyFinder.Output
             {
                 var result = Comparer.MapCompareTo(
                     StringComparer.OrdinalIgnoreCase.Compare(current.Identifier, other.Identifier));
-                if (result != 0)
-                {
-                    return result;
-                }
 
-                return Comparer.MapCompareTo(
-                    StringComparer.OrdinalIgnoreCase.Compare(current.Version.ToString(), other.Version.ToString()));
+                return result != 0
+                    ? result
+                    : Comparer.MapCompareTo(
+                        StringComparer.OrdinalIgnoreCase.Compare(current.Version.ToString(), other.Version.ToString()));
             };
 
         /// <summary>

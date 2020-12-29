@@ -23,15 +23,14 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
-        public static bool IsEqual<TValue>(TValue? left, TValue? right, Func<TValue, TValue, int> function)
-        {
-            if (left is null)
+        public static bool IsEqual<TValue>(TValue? left, TValue? right, Func<TValue, TValue, int> function) =>
+            left switch
             {
-                return right is null;
-            }
-
-            return CompareTo(left, right, function) == 0;
-        }
+                null =>
+                    right is null,
+                _ =>
+                    CompareTo(left, right, function) == 0
+            };
 
         /// <summary>
         /// Determines if <see paramref="left"/> is not equal to <see paramref="right"/>.
@@ -56,15 +55,14 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is less than <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
-        public static bool IsLess<TValue>(TValue? left, TValue? right, Func<TValue, TValue, int> function)
-        {
-            if (left is null)
+        public static bool IsLess<TValue>(TValue? left, TValue? right, Func<TValue, TValue, int> function) =>
+            left switch
             {
-                return right is not null;
-            }
-
-            return CompareTo(left, right, function) < 0;
-        }
+                null =>
+                    right is not null,
+                _ =>
+                    CompareTo(left, right, function) < 0
+            };
 
         /// <summary>
         /// Determines if <see paramref="left"/> is less than or equal to <see paramref="right"/>.
@@ -89,15 +87,14 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is greater than <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
-        public static bool IsGreater<TValue>(TValue? left, TValue? right, Func<TValue, TValue, int> function)
-        {
-            if (left is null)
+        public static bool IsGreater<TValue>(TValue? left, TValue? right, Func<TValue, TValue, int> function) =>
+            left switch
             {
-                return false;
-            }
-
-            return CompareTo(left, right, function) > 0;
-        }
+                null =>
+                    false,
+                _ =>
+                    CompareTo(left, right, function) > 0
+            };
 
         /// <summary>
         /// Determines if <see paramref="left"/> is greater than or equal to <see paramref="right"/>.
@@ -124,20 +121,16 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns>A value less than zero if <see paramref="current"/> is less than <see paramref="other"/>, zero if
         /// <see paramref="current"/> is equal to <see paramref="other"/>, or a value greater than zero if
         /// <see paramref="current"/> is greater than <see paramref="other"/>.</returns>
-        public static int CompareTo<TValue>(TValue current, TValue? other, Func<TValue, TValue, int> function)
-        {
-            if (ReferenceEquals(current, other))
-            {
-                return 0;
-            }
-
-            if (other is null)
-            {
-                return 1;
-            }
-
-            return function(current, other);
-        }
+        public static int CompareTo<TValue>(TValue current, TValue? other, Func<TValue, TValue, int> function) =>
+            ReferenceEquals(current, other)
+                ? 0
+                : other switch
+                {
+                    null =>
+                        1,
+                    _ =>
+                        function(current, other)
+                };
 
         /// <summary>
         /// Compares the current object to <see paramref="other"/>, returning an integer that indicates their
@@ -159,25 +152,18 @@ namespace NuGetTransitiveDependencyFinder.Output
             object? obj,
             Func<TValue, TValue, int> function,
             string className)
-            where TValue : class
-        {
-            if (obj is null)
+            where TValue : class =>
+            obj switch
             {
-                return 1;
-            }
-
-            if (obj is not TValue)
-            {
-                throw new ArgumentException(Invariant($"Object must be of type {className}."), nameof(obj));
-            }
-
-            if (ReferenceEquals(current, obj))
-            {
-                return 0;
-            }
-
-            return CompareTo(current, obj as TValue, function);
-        }
+                null =>
+                    1,
+                not TValue =>
+                    throw new ArgumentException(Invariant($"Object must be of type {className}."), nameof(obj)),
+                _ =>
+                    ReferenceEquals(current, obj)
+                        ? 0
+                        : CompareTo(current, obj as TValue, function),
+            };
 
         /// <summary>
         /// Determines if the current object is equal to <see paramref="other"/>.
@@ -212,19 +198,15 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// </summary>
         /// <param name="value">The value to map.</param>
         /// <returns>The mapped value, which will be in the range [-1, 1].</returns>
-        public static int MapCompareTo(int value)
-        {
-            if (value > 0)
+        public static int MapCompareTo(int value) =>
+            value switch
             {
-                return 1;
-            }
-
-            if (value < 0)
-            {
-                return -1;
-            }
-
-            return value;
-        }
+                > 0 =>
+                    1,
+                < 0 =>
+                    -1,
+                _ =>
+                    value
+            };
     }
 }
