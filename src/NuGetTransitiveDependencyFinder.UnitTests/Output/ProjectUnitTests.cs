@@ -40,6 +40,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         private static readonly Project LesserValue = new("ABC", 0);
 
         /// <summary>
+        /// The default test version.
+        /// </summary>
+        private static readonly Version DefaultVersion = new(1, 0);
+
+        /// <summary>
         /// The test value for the collection of <see cref="Dependency"/> objects where no dependencies exist.
         /// </summary>
         private static readonly IReadOnlyCollection<Dependency> NoDependencies = Array.Empty<Dependency>();
@@ -63,7 +68,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
                 LesserValue,
                 new ComparisonTestData<Project>[]
                 {
-                    new(DefaultValue, new("Identifier", 0), Comparisons.Equal),
+                    new(DefaultValue, new(DefaultIdentifier, 0), Comparisons.Equal),
                     new(DefaultValue, new("IDENTIFIER", 0), Comparisons.Equal),
                     new(DefaultValue, new(DefaultIdentifier, 1), Comparisons.Equal),
                     new(new("ABC", 0), DefaultValue, Comparisons.LessThan),
@@ -77,11 +82,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             new Framework[]
             {
                 new(new("A", new(0, 9)), DefaultDependencies),
-                new(new("A", new(1, 0)), DefaultDependencies),
-                new(new("B", new(1, 0)), DefaultDependencies),
-                new(new("C", new(1, 0)), DefaultDependencies),
-                new(new("Y", new(1, 0)), DefaultDependencies),
-                new(new("Z", new(1, 0)), DefaultDependencies),
+                new(new("A", DefaultVersion), DefaultDependencies),
+                new(new("B", DefaultVersion), DefaultDependencies),
+                new(new("C", DefaultVersion), DefaultDependencies),
+                new(new("Y", DefaultVersion), DefaultDependencies),
+                new(new("Z", DefaultVersion), DefaultDependencies),
             };
 
         /// <summary>
@@ -150,7 +155,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
                 LesserValue,
                 new TheoryData<Project, Project>
                 {
-                    { DefaultValue, new("Identifier", 0) },
+                    { DefaultValue, new(DefaultIdentifier, 0) },
                     { DefaultValue, new("IDENTIFIER", 0) },
                     { DefaultValue, new(DefaultIdentifier, 1) },
                 });
@@ -161,7 +166,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         public static TheoryData<Project, string> ToStringTestData =>
             new TheoryData<Project, string>
             {
-                { DefaultValue, "Identifier" },
+                { DefaultValue, DefaultIdentifier },
                 { LesserValue, "ABC" },
             };
 
@@ -436,7 +441,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         public void IsAddValid_WithFrameworkWithChildren_ReturnsTrue()
         {
             // Act
-            var result = DefaultValue.IsAddValid(new(new(DefaultIdentifier, new(1, 0)), DefaultDependencies));
+            var result = DefaultValue.IsAddValid(new(new(DefaultIdentifier, DefaultVersion), DefaultDependencies));
 
             // Assert
             _ = result.Should().BeTrue();
@@ -444,24 +449,24 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests than when <see cref="Project.IsAddValid(Framework?)"/> is called with a <see cref="Framework"/>
-        /// with no children, it returns <c>false</c>.
+        /// without children, it returns <c>false</c>.
         /// </summary>
         [Fact]
-        public void IsAddValid_WithFrameworkWithNoChildren_ReturnsFalse()
+        public void IsAddValid_WithFrameworkWithoutChildren_ReturnsFalse()
         {
             // Act
-            var result = DefaultValue.IsAddValid(new(new(DefaultIdentifier, new(1, 0)), NoDependencies));
+            var result = DefaultValue.IsAddValid(new(new(DefaultIdentifier, DefaultVersion), NoDependencies));
 
             // Assert
             _ = result.Should().BeFalse();
         }
 
         /// <summary>
-        /// Tests that when <see cref="Base{Framework}.HasChildren"/> is called for a <see cref="Project"/> with no
+        /// Tests that when <see cref="Base{Framework}.HasChildren"/> is called for a <see cref="Project"/> without
         /// children, it returns <c>false</c>.
         /// </summary>
         [Fact]
-        public void HasChildren_WithNoChildren_ReturnsFalse()
+        public void HasChildren_WithoutChildren_ReturnsFalse()
         {
             // Act
             var result = DefaultValue.HasChildren;
@@ -479,7 +484,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         {
             // Arrange
             var project = new Project(DefaultIdentifier, 1);
-            project.Add(new(new(DefaultIdentifier, new(1, 0)), NoDependencies));
+            project.Add(new(new(DefaultIdentifier, DefaultVersion), NoDependencies));
 
             // Act
             var result = project.HasChildren;
@@ -497,7 +502,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         {
             // Arrange
             var project = new Project(DefaultIdentifier, 1);
-            project.Add(new(new(DefaultIdentifier, new(1, 0)), DefaultDependencies));
+            project.Add(new(new(DefaultIdentifier, DefaultVersion), DefaultDependencies));
 
             // Act
             var result = project.HasChildren;
@@ -515,8 +520,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         {
             // Arrange
             var project = new Project(DefaultIdentifier, 2);
-            project.Add(new(new(DefaultIdentifier, new(1, 0)), NoDependencies));
-            project.Add(new(new(DefaultIdentifier, new(1, 0)), DefaultDependencies));
+            project.Add(new(new(DefaultIdentifier, DefaultVersion), NoDependencies));
+            project.Add(new(new(DefaultIdentifier, DefaultVersion), DefaultDependencies));
 
             // Act
             var result = project.HasChildren;
@@ -526,11 +531,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Base{Framework}.SortedChildren"/> is called for a <see cref="Project"/> with
-        /// no children, it returns the empty collection.
+        /// Tests that when <see cref="Base{Framework}.SortedChildren"/> is called for a <see cref="Project"/> without
+        /// children, it returns the empty collection.
         /// </summary>
         [Fact]
-        public void SortedChildren_WithNoChildren_ReturnsEmptyCollection()
+        public void SortedChildren_WithoutChildren_ReturnsEmptyCollection()
         {
             // Act
             var result = DefaultValue.SortedChildren;

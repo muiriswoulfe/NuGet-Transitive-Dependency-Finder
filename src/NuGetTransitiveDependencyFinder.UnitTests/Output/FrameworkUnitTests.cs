@@ -497,11 +497,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> with no
+        /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> without
         /// children, it returns <c>false</c>.
         /// </summary>
         [Fact]
-        public void HasChildren_WithNoChildren_ReturnsFalse()
+        public void HasChildren_WithoutChildren_ReturnsFalse()
         {
             // Act
             var result = DefaultValue.HasChildren;
@@ -548,11 +548,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/> with
-        /// no children, it returns the empty collection.
+        /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/>
+        /// without children, it returns the empty collection.
         /// </summary>
         [Fact]
-        public void SortedChildren_WithNoChildren_ReturnsEmptyCollection()
+        public void SortedChildren_WithoutChildren_ReturnsEmptyCollection()
         {
             // Act
             var result = DefaultValue.SortedChildren;
