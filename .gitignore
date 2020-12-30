@@ -350,4 +350,5 @@ MigrationBackup/
 .ionide/
 
 # Project-Specific
+coverage.opencover.xml
 lcov.info
