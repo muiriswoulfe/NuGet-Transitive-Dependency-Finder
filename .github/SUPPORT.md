@@ -3,7 +3,7 @@
 <!-- © Muiris Woulfe. Licensed under the MIT License. -->
 
 For help getting started or troubleshooting an issue, feel free to create a new
-[Support Request][supportrequest].
+[Discussion][discussion].
 
 If there is an unanswered question that you believe you can answer, your
 contribution toward providing an answer would be much appreciated.
@@ -24,13 +24,12 @@ When asking a question, try to define precisely what you need assistance with:
 
 You should also consider:
 
-- [Searching][search] to see if a similar question has already been asked.
+- Searching to see if a similar question has already been asked.
 - Learning about the [rubber duck debugging method][rubberduckdebugging].
 - Learning about the [XY problem][xyproblem].
 - If applicable, providing sample code and the output of any invocations of the
   application.
 
-[supportrequest]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/issues/new?assignees=muiriswoulfe&labels=support&template=support-request.md
-[search]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/issues?q=is%3Aissue+is%3Aopen+label%3Asupport
+[discussion]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/discussions
 [rubberduckdebugging]: https://wikipedia.org/wiki/Rubber_duck_debugging
 [xyproblem]: https://wikipedia.org/wiki/XY_problem
