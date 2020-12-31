@@ -176,6 +176,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Configure Pagefile
+      uses: al-cheb/configure-pagefile-action@v1.2
+      with:
+        maximum-size: 32
+
     - name: Checkout
       uses: actions/checkout@v2
 
