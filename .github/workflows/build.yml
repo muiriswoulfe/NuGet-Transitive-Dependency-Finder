@@ -179,7 +179,7 @@ jobs:
     - name: Configure Pagefile
       uses: al-cheb/configure-pagefile-action@v1.2
       with:
-        maximum-size: 32
+        maximum-size: 32GB
 
     - name: Checkout
       uses: actions/checkout@v2
