@@ -46,7 +46,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         private static readonly Framework DefaultValue = new(DefaultIdentifier, DefaultChildren);
 
         /// <summary>
-        /// A clone of <see cref="DefaultValue"/>, where the object contents are identical but the object reference is
+        /// A clone of <see cref="DefaultValue"/>, where the object contents are identical, but the object reference is
         /// not.
         /// </summary>
         private static readonly Framework ClonedDefaultValue = new(DefaultIdentifier, DefaultChildren);

@@ -30,7 +30,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         private static readonly Version DefaultValue = new(1, 0, 0, 0);
 
         /// <summary>
-        /// A clone of <see cref="DefaultValue"/>, where the object contents are identical but the object reference is
+        /// A clone of <see cref="DefaultValue"/>, where the object contents are identical, but the object reference is
         /// not.
         /// </summary>
         private static readonly Version ClonedDefaultValue = (DefaultValue.Clone() as Version)!;
@@ -267,7 +267,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
                 .And.ParamName.Should().Be("obj");
         }
 
-        /// <summary>]
+        /// <summary>
         /// Tests that when <see cref="Comparer.Equals{TValue}(TValue, TValue, Func{TValue, TValue, int})"/> is called
         /// with different values, it returns the expected value in each case.
         /// </summary>
