@@ -172,11 +172,11 @@ jobs:
           json-schema: stylecop.schema.json
           json-file: src/stylecop.json
 
-      - run: npm i html-validator-cli
+      - run: npm install html-validator-cli
 
-      - run: html-validator --file=src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
+      - run: ./node_modules/.bin/html-validator --file=src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
 
-      - run: html-validator --file=src/NuGetTransitiveDependencyFinder.ConsoleApp/Resources/Strings.resx
+      - run: ./node_modules/.bin/html-validator --file=src/NuGetTransitiveDependencyFinder.ConsoleApp/Resources/Strings.resx
 
       - name: Security Scan – Validate
         uses: ShiftLeftSecurity/scan-action@master
