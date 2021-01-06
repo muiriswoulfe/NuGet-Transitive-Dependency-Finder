@@ -145,10 +145,19 @@ jobs:
           json-schema: https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
           json-file: .markdownlint.json
 
+      - name: JSON – Download stylecop.schema.json
+        run: >-
+          curl -L
+          https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json
+          > stylecop.schema.json
+
+      - name: JSON – Remove BOM from stylecop.schema.json
+        run: sed -i '1s/^\xEF\xBB\xBF//' stylecop.schema.json
+
       - name: JSON – Validate src/stylecop.json
         uses: Zingabopp/JsonValidate-Action@master
         with:
-          json-schema: https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json
+          json-schema: stylecop.schema.json
           json-file: src/stylecop.json
 
       - name: Security Scan – Validate
