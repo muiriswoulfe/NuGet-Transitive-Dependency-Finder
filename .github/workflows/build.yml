@@ -139,18 +139,6 @@ jobs:
           format: standard
           strict: true
 
-      - name: JSON – Validate mlc_config.json
-        uses: Zingabopp/JsonValidate-Action@master
-        with:
-          json-schema: http://json-schema.org/draft-07/schema
-          json-file: mlc_config.json
-
-      - name: JSON – Validate src/global.json
-        uses: Zingabopp/JsonValidate-Action@master
-        with:
-          json-schema: http://json-schema.org/draft-07/schema
-          json-file: src/global.json
-
       - name: JSON – Validate .markdownlint.json
         uses: Zingabopp/JsonValidate-Action@master
         with:
@@ -183,6 +171,15 @@ jobs:
         with:
           json-schema: stylecop.schema.json
           json-file: src/stylecop.json
+
+      - name: SVG
+        run: mstksg/setup-stack@master
+
+      - run: stack install html-validator-cli
+
+      - run: validatehtml src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
+
+      - run: validatehtml src/NuGetTransitiveDependencyFinder.ConsoleApp/Resources/Strings.resx
 
       - name: Security Scan – Validate
         uses: ShiftLeftSecurity/scan-action@master
