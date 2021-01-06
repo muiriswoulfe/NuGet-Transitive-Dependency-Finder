@@ -172,14 +172,11 @@ jobs:
           json-schema: stylecop.schema.json
           json-file: src/stylecop.json
 
-      - name: SVG
-        uses: actions/setup-haskell@main
+      - run: npm i html-validator-cli -g
 
-      - run: cabal install html-validator-cli
+      - run: html-validator --file=src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
 
-      - run: ./validatehtml src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
-
-      - run: ./validatehtml src/NuGetTransitiveDependencyFinder.ConsoleApp/Resources/Strings.resx
+      - run: html-validator --file=src/NuGetTransitiveDependencyFinder.ConsoleApp/Resources/Strings.resx
 
       - name: Security Scan – Validate
         uses: ShiftLeftSecurity/scan-action@master
