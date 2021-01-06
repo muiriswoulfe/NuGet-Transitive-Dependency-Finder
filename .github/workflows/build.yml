@@ -16,10 +16,10 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout
+      uses: actions/checkout@main
 
     - name: Install .NET
-      uses: actions/setup-dotnet
+      uses: actions/setup-dotnet@main
 
     - name: Install NuGet Dependencies
       run: dotnet restore
@@ -33,21 +33,21 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout
+      uses: actions/checkout@main
       with:
         fetch-depth: 0
 
     - name: Install Java
-      uses: actions/setup-java
+      uses: actions/setup-java@main
 
     - name: Install .NET
-      uses: actions/setup-dotnet
+      uses: actions/setup-dotnet@main
 
     - name: Install NuGet Dependencies
       run: dotnet restore
 
     - name: SonarCloud – Cache Packages
-      uses: actions/cache
+      uses: actions/cache@main
       with:
         path: ~\sonar\cache
         key: ${{ runner.os }}-sonar
@@ -55,7 +55,7 @@ jobs:
 
     - name: SonarCloud – Cache Scanner
       id: cache-sonar-scanner
-      uses: actions/cache
+      uses: actions/cache@main
       with:
         path: .\.sonar\scanner
         key: ${{ runner.os }}-sonar-scanner
@@ -69,7 +69,6 @@ jobs:
         dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
     - name: SonarCloud – Initialize
-      shell: pwsh
       run: >-
         .\.sonar\scanner\dotnet-sonarscanner
         begin
@@ -85,7 +84,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      shell: pwsh
       run: .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
   validate:
@@ -94,7 +92,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout
+      uses: actions/checkout@main
 
     - name: EditorConfig – Download
       run: >-
@@ -109,60 +107,60 @@ jobs:
       run: ./bin/ec-linux-amd64
 
     - name: Markdown – Validate
-      uses: nosborn/github-action-markdown-cli
+      uses: nosborn/github-action-markdown-cli@master
       with:
         files: '**/*.md'
         config_file: .markdownlint.json
 
     - name: Markdown – Validate .github
-      uses: nosborn/github-action-markdown-cli
+      uses: nosborn/github-action-markdown-cli@master
       with:
         files: .github/*.md
         config_file: .markdownlint.json
 
     - name: Markdown – Validate .github subdirectories
-      uses: nosborn/github-action-markdown-cli
+      uses: nosborn/github-action-markdown-cli@master
       with:
         files: .github/**/*.md
         config_file: .markdownlint.json
 
     - name: Markdown – Validate Links
-      uses: gaurav-nelson/github-action-markdown-link-check
+      uses: gaurav-nelson/github-action-markdown-link-check@master
 
     - name: YAML – Validate
-      uses: leon-th/yaml-checker
+      uses: leon-th/yaml-checker@master
 
     - name: JSON – Validate .markdownlint.json
-      uses: Zingabopp/JsonValidate-Action
+      uses: Zingabopp/JsonValidate-Action@master
       with:
         json-schema: https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
         json-file: .markdownlint.json
 
     - name: JSON – Validate mlc_config.json
-      uses: Zingabopp/JsonValidate-Action
+      uses: Zingabopp/JsonValidate-Action@master
       with:
         json-schema: https://json-schema.org/draft/2019-09/meta/core
         json-file: mlc_config.json
 
     - name: JSON – Validate src/global.json
-      uses: Zingabopp/JsonValidate-Action
+      uses: Zingabopp/JsonValidate-Action@master
       with:
         json-schema: https://json-schema.org/draft/2019-09/meta/core
         json-file: src/global.json
 
     - name: JSON – Validate src/stylecop.json
-      uses: Zingabopp/JsonValidate-Action
+      uses: Zingabopp/JsonValidate-Action@master
       with:
         json-schema: https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json
         json-file: src/stylecop.json
 
     - name: Security Scan – Validate
-      uses: ShiftLeftSecurity/scan-action
+      uses: ShiftLeftSecurity/scan-action@master
       with:
         type: credscan,depscan
 
     - name: Security Scan – Upload Report
-      uses: github/codeql-action/upload-sarif
+      uses: github/codeql-action/upload-sarif@main
       with:
         sarif_file: reports
 
@@ -172,15 +170,15 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout
+      uses: actions/checkout@main
 
     - name: CodeQL – Initialize
-      uses: github/codeql-action/init
+      uses: github/codeql-action/init@main
       with:
         queries: security-and-quality
 
     - name: CodeQL – Build
-      uses: github/codeql-action/autobuild
+      uses: github/codeql-action/autobuild@main
 
     - name: CodeQL – Analyze
-      uses: github/codeql-action/analyze
+      uses: github/codeql-action/analyze@main

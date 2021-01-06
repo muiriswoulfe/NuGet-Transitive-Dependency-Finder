@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Create Release
-        uses: actions/create-release@v1
+        uses: actions/create-release@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -52,10 +52,10 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout
+      uses: actions/checkout@main
 
     - name: Replace Version
-      uses: datamonsters/replace-action
+      uses: datamonsters/replace-action@master
       with:
         files: src/Shared/Properties/AssemblyInfo.cs
         replacements: 0.0.1=${{ github.event.inputs.version }}
@@ -107,7 +107,7 @@ jobs:
       run: ./amd64/pngout ./src/NuGetTransitiveDependencyFinder/Assets/Logo.png 8192
 
     - name: Install .NET
-      uses: actions/setup-dotnet
+      uses: actions/setup-dotnet@main
 
     - name: Install NuGet Dependencies
       run: >-
@@ -135,13 +135,13 @@ jobs:
         ./src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
 
     - name: Upload – NuGet Package
-      uses: actions/upload-artifact
+      uses: actions/upload-artifact@main
       with:
         name: NuGet Package
         path: '**/*.nupkg'
 
     - name: Upload – NuGet Symbols Package
-      uses: actions/upload-artifact
+      uses: actions/upload-artifact@main
       with:
         name: NuGet Symbols Package
         path: '**/*.snupkg'
@@ -182,16 +182,16 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout
+      uses: actions/checkout@main
 
     - name: Replace Version
-      uses: datamonsters/replace-action
+      uses: datamonsters/replace-action@master
       with:
         files: src/Shared/Properties/AssemblyInfo.cs
         replacements: 0.0.1=${{ github.event.inputs.version }}
 
     - name: Install .NET
-      uses: actions/setup-dotnet
+      uses: actions/setup-dotnet@main
 
     - name: Publish
       run: >-
@@ -206,12 +206,12 @@ jobs:
 
     - name: Get Release
       id: get_release
-      uses: bruceadams/get-release
+      uses: bruceadams/get-release@main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Extract Platform from Runtime
-      uses: jungwinter/split
+      uses: jungwinter/split@master
       id: split
       with:
         msg: ${{ matrix.runtime }}
@@ -222,7 +222,7 @@ jobs:
       run: echo '::set-output name=current_extension::${{ fromJson(env.extension)[steps.split.outputs._0] }}'
 
     - name: Upload Release Asset
-      uses: actions/upload-release-asset
+      uses: actions/upload-release-asset@main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
