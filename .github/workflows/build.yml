@@ -1,13 +1,15 @@
 # © Muiris Woulfe
 # Licensed under the MIT License
 
+---
+
 name: Build
 
 on:
   pull_request:
   push:
   schedule:
-  - cron: '0 0 * * 1'
+    - cron: '0 0 * * 1'
 
 jobs:
   build-debug:
@@ -15,175 +17,178 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@main
+      - name: Checkout
+        uses: actions/checkout@main
 
-    - name: Install .NET
-      uses: actions/setup-dotnet@main
+      - name: Install .NET
+        uses: actions/setup-dotnet@main
 
-    - name: Install NuGet Dependencies
-      run: dotnet restore
+      - name: Install NuGet Dependencies
+        run: dotnet restore
 
-    - name: Build
-      run: dotnet build --configuration Debug --no-restore /maxCpuCount
+      - name: Build
+        run: dotnet build --configuration Debug --no-restore /maxCpuCount
 
   build-release:
     name: Build – Release
     runs-on: windows-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@main
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@main
+        with:
+          fetch-depth: 0
 
-    - name: Install Java
-      uses: actions/setup-java@main
-      with:
-        java-version: 15
+      - name: Install Java
+        uses: actions/setup-java@main
+        with:
+          java-version: 15
 
-    - name: Install .NET
-      uses: actions/setup-dotnet@main
+      - name: Install .NET
+        uses: actions/setup-dotnet@main
 
-    - name: Install NuGet Dependencies
-      run: dotnet restore
+      - name: Install NuGet Dependencies
+        run: dotnet restore
 
-    - name: SonarCloud – Cache Packages
-      uses: actions/cache@main
-      with:
-        path: ~\sonar\cache
-        key: ${{ runner.os }}-sonar
-        restore-keys: ${{ runner.os }}-sonar
+      - name: SonarCloud – Cache Packages
+        uses: actions/cache@main
+        with:
+          path: ~\sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
 
-    - name: SonarCloud – Cache Scanner
-      id: cache-sonar-scanner
-      uses: actions/cache@main
-      with:
-        path: .\.sonar\scanner
-        key: ${{ runner.os }}-sonar-scanner
-        restore-keys: ${{ runner.os }}-sonar-scanner
+      - name: SonarCloud – Cache Scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@main
+        with:
+          path: .\.sonar\scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
 
-    - name: SonarCloud – Install Scanner
-      if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-      shell: pwsh
-      run: |
-        New-Item -Path .\.sonar\scanner -ItemType Directory
-        dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      - name: SonarCloud – Install Scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
-    - name: SonarCloud – Initialize
-      run: >-
-        .\.sonar\scanner\dotnet-sonarscanner
-        begin
-        /k:"${{ github.repository_owner }}_${{ github.event.repository.name }}"
-        /o:"${{ github.repository_owner }}"
-        /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-        /d:sonar.host.url="https://sonarcloud.io"
+      - name: SonarCloud – Initialize
+        run: >-
+          .\.sonar\scanner\dotnet-sonarscanner
+          begin
+          /k:"${{ github.repository_owner }}_${{ github.event.repository.name }}"
+          /o:"${{ github.repository_owner }}"
+          /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          /d:sonar.host.url="https://sonarcloud.io"
 
-    - name: Build
-      run: dotnet build --configuration Release --no-restore /maxCpuCount
+      - name: Build
+        run: dotnet build --configuration Release --no-restore /maxCpuCount
 
-    - name: SonarCloud – Analyze
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+      - name: SonarCloud – Analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: >-
+          .\.sonar\scanner\dotnet-sonarscanner
+          end
+          /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
   validate:
     name: Validate
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@main
+      - name: Checkout
+        uses: actions/checkout@main
 
-    - name: EditorConfig – Download
-      run: >-
-        curl -L
-        ${{ github.server_url }}/editorconfig-checker/editorconfig-checker/releases/download/2.2.0/ec-linux-amd64.tar.gz
-        > editorconfig.tar.gz
+      - name: EditorConfig – Download
+        run: >-
+          curl -L
+          ${{ github.server_url }}/editorconfig-checker/editorconfig-checker/releases/download/2.2.0/ec-linux-amd64.tar.gz
+          > editorconfig.tar.gz
 
-    - name: EditorConfig – Extract
-      run: tar zxvf editorconfig.tar.gz
+      - name: EditorConfig – Extract
+        run: tar zxvf editorconfig.tar.gz
 
-    - name: EditorConfig – Validate
-      run: ./bin/ec-linux-amd64
+      - name: EditorConfig – Validate
+        run: ./bin/ec-linux-amd64
 
-    - name: Markdown – Validate
-      uses: nosborn/github-action-markdown-cli@master
-      with:
-        files: '**/*.md'
-        config_file: .markdownlint.json
+      - name: Markdown – Validate
+        uses: nosborn/github-action-markdown-cli@master
+        with:
+          files: '**/*.md'
+          config_file: .markdownlint.json
 
-    - name: Markdown – Validate .github
-      uses: nosborn/github-action-markdown-cli@master
-      with:
-        files: .github/*.md
-        config_file: .markdownlint.json
+      - name: Markdown – Validate .github
+        uses: nosborn/github-action-markdown-cli@master
+        with:
+          files: .github/*.md
+          config_file: .markdownlint.json
 
-    - name: Markdown – Validate .github subdirectories
-      uses: nosborn/github-action-markdown-cli@master
-      with:
-        files: .github/**/*.md
-        config_file: .markdownlint.json
+      - name: Markdown – Validate .github subdirectories
+        uses: nosborn/github-action-markdown-cli@master
+        with:
+          files: .github/**/*.md
+          config_file: .markdownlint.json
 
-    - name: Markdown – Validate Links
-      uses: gaurav-nelson/github-action-markdown-link-check@master
+      - name: Markdown – Validate Links
+        uses: gaurav-nelson/github-action-markdown-link-check@master
 
-    - name: YAML – Validate
-      uses: ibiqlik/action-yamllint@master
-      with:
-        config_file: .yamllint.yml
-        strict: true
+      - name: YAML – Validate
+        uses: ibiqlik/action-yamllint@master
+        with:
+          config_file: .yamllint.yml
+          strict: true
 
-    - name: JSON – Validate .markdownlint.json
-      uses: Zingabopp/JsonValidate-Action@master
-      with:
-        json-schema: https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
-        json-file: .markdownlint.json
+      - name: JSON – Validate .markdownlint.json
+        uses: Zingabopp/JsonValidate-Action@master
+        with:
+          json-schema: https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
+          json-file: .markdownlint.json
 
-    - name: JSON – Validate mlc_config.json
-      uses: Zingabopp/JsonValidate-Action@master
-      with:
-        json-schema: https://json-schema.org/draft-07/schema
-        json-file: mlc_config.json
+      - name: JSON – Validate mlc_config.json
+        uses: Zingabopp/JsonValidate-Action@master
+        with:
+          json-schema: https://json-schema.org/draft-07/schema
+          json-file: mlc_config.json
 
-    - name: JSON – Validate src/global.json
-      uses: Zingabopp/JsonValidate-Action@master
-      with:
-        json-schema: https://json-schema.org/draft-07/schema
-        json-file: src/global.json
+      - name: JSON – Validate src/global.json
+        uses: Zingabopp/JsonValidate-Action@master
+        with:
+          json-schema: https://json-schema.org/draft-07/schema
+          json-file: src/global.json
 
-    - name: JSON – Validate src/stylecop.json
-      uses: Zingabopp/JsonValidate-Action@master
-      with:
-        json-schema: https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json
-        json-file: src/stylecop.json
+      - name: JSON – Validate src/stylecop.json
+        uses: Zingabopp/JsonValidate-Action@master
+        with:
+          json-schema: https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json
+          json-file: src/stylecop.json
 
-    - name: Security Scan – Validate
-      uses: ShiftLeftSecurity/scan-action@master
-      with:
-        type: credscan,depscan
+      - name: Security Scan – Validate
+        uses: ShiftLeftSecurity/scan-action@master
+        with:
+          type: credscan,depscan
 
-    - name: Security Scan – Upload Report
-      uses: github/codeql-action/upload-sarif@main
-      with:
-        sarif_file: reports
+      - name: Security Scan – Upload Report
+        uses: github/codeql-action/upload-sarif@main
+        with:
+          sarif_file: reports
 
   validate-codeql:
     name: Validate – CodeQL
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@main
+      - name: Checkout
+        uses: actions/checkout@main
 
-    - name: CodeQL – Initialize
-      uses: github/codeql-action/init@main
-      with:
-        queries: security-and-quality
+      - name: CodeQL – Initialize
+        uses: github/codeql-action/init@main
+        with:
+          queries: security-and-quality
 
-    - name: CodeQL – Build
-      uses: github/codeql-action/autobuild@main
+      - name: CodeQL – Build
+        uses: github/codeql-action/autobuild@main
 
-    - name: CodeQL – Analyze
-      uses: github/codeql-action/analyze@main
+      - name: CodeQL – Analyze
+        uses: github/codeql-action/analyze@main
