@@ -1,14 +1,16 @@
 # © Muiris Woulfe
 # Licensed under the MIT License
 
+---
+
 version: 2
 
 updates:
-  - package-ecosystem: "nuget"
-    directory: "/src/NuGetTransitiveDependencyFinder.ConsoleApp/"
+  - package-ecosystem: nuget
+    directory: /src/NuGetTransitiveDependencyFinder.ConsoleApp/
     schedule:
-      interval: "daily"
-  - package-ecosystem: "nuget"
-    directory: "/src/NuGetTransitiveDependencyFinder/"
+      interval: daily
+  - package-ecosystem: nuget
+    directory: /src/NuGetTransitiveDependencyFinder/
     schedule:
-      interval: "daily"
+      interval: daily

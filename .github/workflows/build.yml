@@ -1,11 +1,11 @@
----
-
 # © Muiris Woulfe
 # Licensed under the MIT License
 
+---
+
 name: Build
 
-on:
+on:  # yamllint disable-line rule:truthy
   pull_request:
   push:
   schedule:
@@ -136,6 +136,7 @@ jobs:
         uses: ibiqlik/action-yamllint@master
         with:
           config_file: .yamllint.yml
+          format: standard
           strict: true
 
       - name: JSON – Validate .markdownlint.json

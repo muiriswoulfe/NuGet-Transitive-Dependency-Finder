@@ -1,11 +1,11 @@
----
-
 # © Muiris Woulfe
 # Licensed under the MIT License
 
+---
+
 name: Release
 
-on:
+on:  # yamllint disable-line rule:truthy
   workflow_dispatch:
     inputs:
       version:
@@ -148,21 +148,21 @@ jobs:
           name: NuGet Symbols Package
           path: '**/*.snupkg'
 
-      # - name: Upload – NuGet.org
-      #   run: >-
-      #     dotnet nuget push
-      #     src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
-      #     --api-key ${{ secrets.NUGET_API_KEY }}
-      #     --source https://api.nuget.org/v3/index.json
-      #     --skip-duplicate
+  # - name: Upload – NuGet.org
+  #   run: >-
+  #     dotnet nuget push
+  #     src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
+  #     --api-key ${{ secrets.NUGET_API_KEY }}
+  #     --source https://api.nuget.org/v3/index.json
+  #     --skip-duplicate
 
-      # - name: Upload – GitHub
-      #   run: >-
-      #     dotnet nuget push
-      #     src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
-      #     --api-key ${{ secrets.GITHUB_TOKEN }}
-      #     --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
-      #     --skip-duplicate
+  # - name: Upload – GitHub
+  #   run: >-
+  #     dotnet nuget push
+  #     src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
+  #     --api-key ${{ secrets.GITHUB_TOKEN }}
+  #     --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+  #     --skip-duplicate
 
   create-asset:
     name: Create Asset
@@ -179,7 +179,7 @@ jobs:
         {
           linux: '',
           osx: '',
-          win: '.exe'
+          win: .exe
         }
 
     steps:
