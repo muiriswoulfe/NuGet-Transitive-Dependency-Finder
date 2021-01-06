@@ -1,3 +1,5 @@
+---
+
 # © Muiris Woulfe
 # Licensed under the MIT License
 
@@ -51,116 +53,116 @@ jobs:
     needs: create-release
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@main
+      - name: Checkout
+        uses: actions/checkout@main
 
-    - name: Replace Version
-      uses: datamonsters/replace-action@master
-      with:
-        files: src/Shared/Properties/AssemblyInfo.cs
-        replacements: 0.0.1=${{ github.event.inputs.version }}
+      - name: Replace Version
+        uses: datamonsters/replace-action@master
+        with:
+          files: src/Shared/Properties/AssemblyInfo.cs
+          replacements: 0.0.1=${{ github.event.inputs.version }}
 
-    - name: Logo – Convert to PNG
-      run: >-
-        rsvg-convert
-        -h 128
-        ./src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
-        > ./src/NuGetTransitiveDependencyFinder/Assets/Logo.png
+      - name: Logo – Convert to PNG
+        run: >-
+          rsvg-convert
+          -h 128
+          src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
+          > src/NuGetTransitiveDependencyFinder/Assets/Logo.png
 
-    - name: Logo – Delete SVC
-      run: rm ./src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
+      - name: Logo – Delete SVC
+        run: rm src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
 
-    - name: Logo – Download PNGOUT
-      run: >-
-        curl -L
-        https://www.jonof.id.au/files/kenutils/pngout-20200115-linux.tar.gz
-        > pngout.tar.gz
+      - name: Logo – Download PNGOUT
+        run: >-
+          curl -L
+          https://www.jonof.id.au/files/kenutils/pngout-20200115-linux.tar.gz
+          > pngout.tar.gz
 
-    - name: Logo – Extract PNGOUT
-      run: tar zxvf pngout.tar.gz
+      - name: Logo – Extract PNGOUT
+        run: tar zxvf pngout.tar.gz
 
-    - name: Logo – PNGOUT with Blocksize 0
-      run: ./amd64/pngout ./src/NuGetTransitiveDependencyFinder/Assets/Logo.png 0
+      - name: Logo – PNGOUT with Blocksize 0
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 0
 
-    - name: Logo – PNGOUT with Blocksize 128
-      run: ./amd64/pngout ./src/NuGetTransitiveDependencyFinder/Assets/Logo.png 128
+      - name: Logo – PNGOUT with Blocksize 128
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 128
 
-    - name: Logo – PNGOUT with Blocksize 192
-      run: ./amd64/pngout ./src/NuGetTransitiveDependencyFinder/Assets/Logo.png 192
+      - name: Logo – PNGOUT with Blocksize 192
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 192
 
-    - name: Logo – PNGOUT with Blocksize 256
-      run: ./amd64/pngout ./src/NuGetTransitiveDependencyFinder/Assets/Logo.png 256
+      - name: Logo – PNGOUT with Blocksize 256
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 256
 
-    - name: Logo – PNGOUT with Blocksize 512
-      run: ./amd64/pngout ./src/NuGetTransitiveDependencyFinder/Assets/Logo.png 512
+      - name: Logo – PNGOUT with Blocksize 512
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 512
 
-    - name: Logo – PNGOUT with Blocksize 1024
-      run: ./amd64/pngout ./src/NuGetTransitiveDependencyFinder/Assets/Logo.png 1024
+      - name: Logo – PNGOUT with Blocksize 1024
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 1024
 
-    - name: Logo – PNGOUT with Blocksize 2048
-      run: ./amd64/pngout ./src/NuGetTransitiveDependencyFinder/Assets/Logo.png 2048
+      - name: Logo – PNGOUT with Blocksize 2048
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 2048
 
-    - name: Logo – PNGOUT with Blocksize 4096
-      run: ./amd64/pngout ./src/NuGetTransitiveDependencyFinder/Assets/Logo.png 4096
+      - name: Logo – PNGOUT with Blocksize 4096
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 4096
 
-    - name: Logo – PNGOUT with Blocksize 8192
-      run: ./amd64/pngout ./src/NuGetTransitiveDependencyFinder/Assets/Logo.png 8192
+      - name: Logo – PNGOUT with Blocksize 8192
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 8192
 
-    - name: Install .NET
-      uses: actions/setup-dotnet@main
+      - name: Install .NET
+        uses: actions/setup-dotnet@main
 
-    - name: Install NuGet Dependencies
-      run: >-
-        dotnet restore
-        ./src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+      - name: Install NuGet Dependencies
+        run: >-
+          dotnet restore
+          src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
 
-    - name: Build
-      run: >-
-        dotnet build
-        --configuration Release
-        --no-restore
-        /maxCpuCount
-        ./src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+      - name: Build
+        run: >-
+          dotnet build
+          --configuration Release
+          --no-restore
+          /maxCpuCount
+          src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
 
-    - name: Delete XML Documentation
-      run: rm ./src/NuGetTransitiveDependencyFinder/bin/NuGetTransitiveDependencyFinder.xml
+      - name: Delete XML Documentation
+        run: rm src/NuGetTransitiveDependencyFinder/bin/NuGetTransitiveDependencyFinder.xml
 
-    - name: Pack
-      run: >-
-        dotnet pack
-        --configuration Release
-        --no-build
-        /property:RepositoryCommit=${{ github.sha }}
-        /property:PackageReleaseNotes=${{ github.event.inputs.release-notes }}
-        ./src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+      - name: Pack
+        run: >-
+          dotnet pack
+          --configuration Release
+          --no-build
+          /property:RepositoryCommit=${{ github.sha }}
+          /property:PackageReleaseNotes=${{ github.event.inputs.release-notes }}
+          src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
 
-    - name: Upload – NuGet Package
-      uses: actions/upload-artifact@main
-      with:
-        name: NuGet Package
-        path: '**/*.nupkg'
+      - name: Upload – NuGet Package
+        uses: actions/upload-artifact@main
+        with:
+          name: NuGet Package
+          path: '**/*.nupkg'
 
-    - name: Upload – NuGet Symbols Package
-      uses: actions/upload-artifact@main
-      with:
-        name: NuGet Symbols Package
-        path: '**/*.snupkg'
+      - name: Upload – NuGet Symbols Package
+        uses: actions/upload-artifact@main
+        with:
+          name: NuGet Symbols Package
+          path: '**/*.snupkg'
 
-    # - name: Upload – NuGet.org
-    #   run: >-
-    #     dotnet nuget push
-    #     ./src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
-    #     --api-key ${{ secrets.NUGET_API_KEY }}
-    #     --source https://api.nuget.org/v3/index.json
-    #     --skip-duplicate
+      # - name: Upload – NuGet.org
+      #   run: >-
+      #     dotnet nuget push
+      #     src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
+      #     --api-key ${{ secrets.NUGET_API_KEY }}
+      #     --source https://api.nuget.org/v3/index.json
+      #     --skip-duplicate
 
-    # - name: Upload – GitHub
-    #   run: >-
-    #     dotnet nuget push
-    #     ./src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
-    #     --api-key ${{ secrets.GITHUB_TOKEN }}
-    #     --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
-    #     --skip-duplicate
+      # - name: Upload – GitHub
+      #   run: >-
+      #     dotnet nuget push
+      #     src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
+      #     --api-key ${{ secrets.GITHUB_TOKEN }}
+      #     --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+      #     --skip-duplicate
 
   create-asset:
     name: Create Asset
@@ -181,53 +183,53 @@ jobs:
         }
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@main
+      - name: Checkout
+        uses: actions/checkout@main
 
-    - name: Replace Version
-      uses: datamonsters/replace-action@master
-      with:
-        files: src/Shared/Properties/AssemblyInfo.cs
-        replacements: 0.0.1=${{ github.event.inputs.version }}
+      - name: Replace Version
+        uses: datamonsters/replace-action@master
+        with:
+          files: src/Shared/Properties/AssemblyInfo.cs
+          replacements: 0.0.1=${{ github.event.inputs.version }}
 
-    - name: Install .NET
-      uses: actions/setup-dotnet@main
+      - name: Install .NET
+        uses: actions/setup-dotnet@main
 
-    - name: Publish
-      run: >-
-        dotnet publish
-        --runtime ${{ matrix.runtime }}
-        --configuration Release
-        --self-contained true
-        /maxCpuCount
-        /property:PublishSingleFile=true
-        /property:PublishTrimmed=true
-        ./src/${{ env.project }}/${{ env.project }}.csproj
+      - name: Publish
+        run: >-
+          dotnet publish
+          --runtime ${{ matrix.runtime }}
+          --configuration Release
+          --self-contained true
+          /maxCpuCount
+          /property:PublishSingleFile=true
+          /property:PublishTrimmed=true
+          src/${{ env.project }}/${{ env.project }}.csproj
 
-    - name: Get Release
-      id: get_release
-      uses: bruceadams/get-release@main
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get Release
+        id: get_release
+        uses: bruceadams/get-release@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Extract Platform from Runtime
-      uses: jungwinter/split@master
-      id: split
-      with:
-        msg: ${{ matrix.runtime }}
-        seperator: '-'
+      - name: Extract Platform from Runtime
+        uses: jungwinter/split@master
+        id: split
+        with:
+          msg: ${{ matrix.runtime }}
+          seperator: '-'
 
-    - name: Set Current Extension
-      id: setter
-      run: echo '::set-output name=current_extension::${{ fromJson(env.extension)[steps.split.outputs._0] }}'
+      - name: Set Current Extension
+        id: setter
+        run: echo '::set-output name=current_extension::${{ fromJson(env.extension)[steps.split.outputs._0] }}'
 
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@main
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.get_release.outputs.upload_url }}
-        asset_path: >-
-          ${{ github.workspace }}/src/${{ env.project }}/bin/Release/net5.0/${{ matrix.runtime }}/publish/${{ env.project }}${{ steps.setter.outputs.current_extension }}
-        asset_name: NuGetTransitiveDependencyFinder.${{ matrix.runtime }}${{ steps.setter.outputs.current_extension }}
-        asset_content_type: application/octet-stream
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: >-
+            ${{ github.workspace }}/src/${{ env.project }}/bin/Release/net5.0/${{ matrix.runtime }}/publish/${{ env.project }}${{ steps.setter.outputs.current_extension }}
+          asset_name: NuGetTransitiveDependencyFinder.${{ matrix.runtime }}${{ steps.setter.outputs.current_extension }}
+          asset_content_type: application/octet-stream

@@ -1,7 +1,7 @@
+---
+
 # © Muiris Woulfe
 # Licensed under the MIT License
-
----
 
 name: Build
 
@@ -61,20 +61,21 @@ jobs:
         id: cache-sonar-scanner
         uses: actions/cache@main
         with:
-          path: .\.sonar\scanner
+          path: .sonar\scanner
           key: ${{ runner.os }}-sonar-scanner
           restore-keys: ${{ runner.os }}-sonar-scanner
 
+      - name: SonarCloud – Create Directory
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        run: mkdir .sonar\scanner
+
       - name: SonarCloud – Install Scanner
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        shell: pwsh
-        run: |
-          New-Item -Path .\.sonar\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+        run: dotnet tool update dotnet-sonarscanner --tool-path .sonar\scanner
 
       - name: SonarCloud – Initialize
         run: >-
-          .\.sonar\scanner\dotnet-sonarscanner
+          .sonar\scanner\dotnet-sonarscanner
           begin
           /k:"${{ github.repository_owner }}_${{ github.event.repository.name }}"
           /o:"${{ github.repository_owner }}"
@@ -88,10 +89,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: >-
-          .\.sonar\scanner\dotnet-sonarscanner
-          end
-          /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        run: .sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
   validate:
     name: Validate
