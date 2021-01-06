@@ -154,6 +154,12 @@ jobs:
       - name: JSON – Remove BOM from stylecop.schema.json
         run: sed -i '1s/^\xEF\xBB\xBF//' stylecop.schema.json
 
+      - name: JSON – Correct schema for stylecop.schema.json
+        run: >-
+          sed -i
+          's/http:\/\/json-schema\.org\/draft-04\/schema#/https:\/\/json-schema\.org\/draft-04\/schema/'
+          stylecop.schema.json
+
       - name: JSON – Validate src/stylecop.json
         uses: Zingabopp/JsonValidate-Action@master
         with:
