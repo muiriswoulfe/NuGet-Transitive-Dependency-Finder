@@ -1,5 +1,5 @@
 {
-  "$schema":"https://json-schema.org/draft/2019-09/meta/core",
+  "$schema":"https://json-schema.org/draft-07/schema",
   "sdk": {
     "version": "5.0.101",
     "allowPrerelease": false,

@@ -129,8 +129,11 @@ jobs:
     - name: Markdown – Validate Links
       uses: gaurav-nelson/github-action-markdown-link-check@master
 
-    # - name: YAML – Validate
-    #   uses: ibiqlik/action-yamllint@master
+    - name: YAML – Validate
+      uses: ibiqlik/action-yamllint@master
+      with:
+        config_file: .yamllint.yml
+        strict: true
 
     - name: JSON – Validate .markdownlint.json
       uses: Zingabopp/JsonValidate-Action@master
@@ -141,13 +144,13 @@ jobs:
     - name: JSON – Validate mlc_config.json
       uses: Zingabopp/JsonValidate-Action@master
       with:
-        json-schema: https://json-schema.org/draft/2019-09/meta/core
+        json-schema: https://json-schema.org/draft-07/schema
         json-file: mlc_config.json
 
     - name: JSON – Validate src/global.json
       uses: Zingabopp/JsonValidate-Action@master
       with:
-        json-schema: https://json-schema.org/draft/2019-09/meta/core
+        json-schema: https://json-schema.org/draft-07/schema
         json-file: src/global.json
 
     - name: JSON – Validate src/stylecop.json

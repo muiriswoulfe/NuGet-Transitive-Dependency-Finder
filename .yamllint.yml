@@ -1,0 +1,11 @@
+# © Muiris Woulfe
+# Licensed under the MIT License
+
+---
+
+extends: default
+
+rules:
+  line-length:
+    level: error
+    allow-non-breakable-inline-mappings: true
