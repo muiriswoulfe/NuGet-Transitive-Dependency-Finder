@@ -129,8 +129,8 @@ jobs:
     - name: Markdown – Validate Links
       uses: gaurav-nelson/github-action-markdown-link-check@master
 
-    - name: YAML – Validate
-      uses: ibiqlik/action-yamllint@master
+    # - name: YAML – Validate
+    #   uses: ibiqlik/action-yamllint@master
 
     - name: JSON – Validate .markdownlint.json
       uses: Zingabopp/JsonValidate-Action@master
