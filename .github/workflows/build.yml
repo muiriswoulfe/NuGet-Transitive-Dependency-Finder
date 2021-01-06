@@ -177,9 +177,9 @@ jobs:
 
       - run: cabal install html-validator-cli
 
-      - run: validatehtml src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
+      - run: ./validatehtml src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
 
-      - run: validatehtml src/NuGetTransitiveDependencyFinder.ConsoleApp/Resources/Strings.resx
+      - run: ./validatehtml src/NuGetTransitiveDependencyFinder.ConsoleApp/Resources/Strings.resx
 
       - name: Security Scan – Validate
         uses: ShiftLeftSecurity/scan-action@master
