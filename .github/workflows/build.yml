@@ -145,18 +145,6 @@ jobs:
           json-schema: https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
           json-file: .markdownlint.json
 
-      - name: JSON – Validate mlc_config.json
-        uses: Zingabopp/JsonValidate-Action@master
-        with:
-          json-schema: https://json-schema.org/draft-07/schema
-          json-file: mlc_config.json
-
-      - name: JSON – Validate src/global.json
-        uses: Zingabopp/JsonValidate-Action@master
-        with:
-          json-schema: https://json-schema.org/draft-07/schema
-          json-file: src/global.json
-
       - name: JSON – Validate src/stylecop.json
         uses: Zingabopp/JsonValidate-Action@master
         with:
