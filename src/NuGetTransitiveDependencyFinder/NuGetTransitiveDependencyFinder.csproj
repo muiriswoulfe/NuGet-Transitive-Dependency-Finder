@@ -13,9 +13,8 @@
     <IncludeSymbols>true</IncludeSymbols>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder</PackageProjectUrl>
-    <PackageReleaseNotes>This release updates the NuGetTransitiveDependencyFinder with metadata and build corrections, simplifying consumption of the NuGet packages.</PackageReleaseNotes>
     <PackageTags>.NET;Dependency Analysis;Developer Tools;NuGet</PackageTags>
-    <PackageIcon>icon.png</PackageIcon>
+    <PackageIcon>Logo.png</PackageIcon>
     <RepositoryBranch>main</RepositoryBranch>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder</RepositoryUrl>
@@ -24,7 +23,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\icon.png">
+    <None Include="Assets\Logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

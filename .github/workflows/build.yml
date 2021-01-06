@@ -16,12 +16,10 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout
 
     - name: Install .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.101
+      uses: actions/setup-dotnet
 
     - name: Install NuGet Dependencies
       run: dotnet restore
@@ -35,25 +33,21 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout
       with:
         fetch-depth: 0
 
     - name: Install Java
-      uses: actions/setup-java@v1
-      with:
-        java-version: 15
+      uses: actions/setup-java
 
     - name: Install .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.101
+      uses: actions/setup-dotnet
 
     - name: Install NuGet Dependencies
       run: dotnet restore
 
     - name: SonarCloud – Cache Packages
-      uses: actions/cache@v2
+      uses: actions/cache
       with:
         path: ~\sonar\cache
         key: ${{ runner.os }}-sonar
@@ -61,7 +55,7 @@ jobs:
 
     - name: SonarCloud – Cache Scanner
       id: cache-sonar-scanner
-      uses: actions/cache@v2
+      uses: actions/cache
       with:
         path: .\.sonar\scanner
         key: ${{ runner.os }}-sonar-scanner
@@ -100,48 +94,75 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout
 
     - name: EditorConfig – Download
       run: >-
         curl -L
         ${{ github.server_url }}/editorconfig-checker/editorconfig-checker/releases/download/2.2.0/ec-linux-amd64.tar.gz
-        > ec-linux-amd64.tar.gz
+        > editorconfig.tar.gz
 
     - name: EditorConfig – Extract
-      run: tar zxvf ec-linux-amd64.tar.gz
+      run: tar zxvf editorconfig.tar.gz
 
     - name: EditorConfig – Validate
       run: ./bin/ec-linux-amd64
 
     - name: Markdown – Validate
-      uses: nosborn/github-action-markdown-cli@v1.1.1
+      uses: nosborn/github-action-markdown-cli
       with:
         files: '**/*.md'
         config_file: .markdownlint.json
 
     - name: Markdown – Validate .github
-      uses: nosborn/github-action-markdown-cli@v1.1.1
+      uses: nosborn/github-action-markdown-cli
       with:
         files: .github/*.md
         config_file: .markdownlint.json
 
     - name: Markdown – Validate .github subdirectories
-      uses: nosborn/github-action-markdown-cli@v1.1.1
+      uses: nosborn/github-action-markdown-cli
       with:
         files: .github/**/*.md
         config_file: .markdownlint.json
 
     - name: Markdown – Validate Links
-      uses: gaurav-nelson/github-action-markdown-link-check@1.0.11
+      uses: gaurav-nelson/github-action-markdown-link-check
+
+    - name: YAML – Validate
+      uses: leon-th/yaml-checker
+
+    - name: JSON – Validate .markdownlint.json
+      uses: Zingabopp/JsonValidate-Action
+      with:
+        json-schema: https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
+        json-file: .markdownlint.json
+
+    - name: JSON – Validate mlc_config.json
+      uses: Zingabopp/JsonValidate-Action
+      with:
+        json-schema: https://json-schema.org/draft/2019-09/meta/core
+        json-file: mlc_config.json
+
+    - name: JSON – Validate src/global.json
+      uses: Zingabopp/JsonValidate-Action
+      with:
+        json-schema: https://json-schema.org/draft/2019-09/meta/core
+        json-file: src/global.json
+
+    - name: JSON – Validate src/stylecop.json
+      uses: Zingabopp/JsonValidate-Action
+      with:
+        json-schema: https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json
+        json-file: src/stylecop.json
 
     - name: Security Scan – Validate
-      uses: ShiftLeftSecurity/scan-action@v1.3.0
+      uses: ShiftLeftSecurity/scan-action
       with:
         type: credscan,depscan
 
     - name: Security Scan – Upload Report
-      uses: github/codeql-action/upload-sarif@v1
+      uses: github/codeql-action/upload-sarif
       with:
         sarif_file: reports
 
@@ -151,15 +172,15 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout
 
     - name: CodeQL – Initialize
-      uses: github/codeql-action/init@v1
+      uses: github/codeql-action/init
       with:
         queries: security-and-quality
 
     - name: CodeQL – Build
-      uses: github/codeql-action/autobuild@v1
+      uses: github/codeql-action/autobuild
 
     - name: CodeQL – Analyze
-      uses: github/codeql-action/analyze@v1
+      uses: github/codeql-action/analyze
