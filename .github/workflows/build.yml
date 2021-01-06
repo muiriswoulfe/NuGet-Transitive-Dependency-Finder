@@ -39,6 +39,8 @@ jobs:
 
     - name: Install Java
       uses: actions/setup-java@main
+      with:
+        java-version: 15
 
     - name: Install .NET
       uses: actions/setup-dotnet@main
@@ -128,7 +130,7 @@ jobs:
       uses: gaurav-nelson/github-action-markdown-link-check@master
 
     - name: YAML – Validate
-      uses: leon-th/yaml-checker@master
+      uses: ibiqlik/action-yamllint@master
 
     - name: JSON – Validate .markdownlint.json
       uses: Zingabopp/JsonValidate-Action@master
