@@ -173,7 +173,7 @@ jobs:
           json-file: src/stylecop.json
 
       - name: SVG
-        run: mstksg/setup-stack@master
+        uses: mstksg/setup-stack@master
 
       - run: stack install html-validator-cli
 
