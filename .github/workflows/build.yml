@@ -172,7 +172,7 @@ jobs:
           json-schema: stylecop.schema.json
           json-file: src/stylecop.json
 
-      - run: npm i html-validator-cli -g
+      - run: npm i html-validator-cli
 
       - run: html-validator --file=src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
 
