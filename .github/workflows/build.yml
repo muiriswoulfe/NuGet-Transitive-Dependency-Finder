@@ -99,6 +99,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
+      - name: Lint Code Base
+        uses: github/super-linter@master
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: EditorConfig – Download
         run: >-
           curl -L
@@ -131,12 +137,6 @@ jobs:
 
       - name: Markdown – Validate Links
         uses: gaurav-nelson/github-action-markdown-link-check@master
-
-      - name: Lint Code Base
-        uses: github/super-linter@master
-        env:
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: YAML – Validate
         uses: ibiqlik/action-yamllint@master
