@@ -277,7 +277,6 @@ jobs:
   create-asset:
     name: Create Asset
     runs-on: ubuntu-latest
-    needs: create-release
 
     strategy:
       matrix:
