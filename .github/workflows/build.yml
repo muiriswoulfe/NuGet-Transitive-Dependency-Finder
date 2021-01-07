@@ -103,53 +103,20 @@ jobs:
         uses: github/super-linter@master
         env:
           DEFAULT_BRANCH: main
+          EDITORCONFIG_FILE_NAME: .editorconfig
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: EditorConfig – Download
-        run: >-
-          curl -L
-          ${{ github.server_url }}/editorconfig-checker/editorconfig-checker/releases/download/2.2.0/ec-linux-amd64.tar.gz
-          > editorconfig.tar.gz
-
-      - name: EditorConfig – Extract
-        run: tar zxvf editorconfig.tar.gz
-
-      - name: EditorConfig – Validate
-        run: ./bin/ec-linux-amd64
-
-      - name: Markdown – Validate
-        uses: nosborn/github-action-markdown-cli@master
-        with:
-          files: '**/*.md'
-          config_file: .markdownlint.json
-
-      - name: Markdown – Validate .github
-        uses: nosborn/github-action-markdown-cli@master
-        with:
-          files: .github/*.md
-          config_file: .markdownlint.json
-
-      - name: Markdown – Validate .github subdirectories
-        uses: nosborn/github-action-markdown-cli@master
-        with:
-          files: .github/**/*.md
-          config_file: .markdownlint.json
+          MARKDOWN_CONFIG_FILE: .markdownlint.json
+          VALIDATE_CSHARP: true
+          VALIDATE_EDITORCONFIG: true
+          VALIDATE_JSON: true
+          VALIDATE_MARKDOWN: true
+          VALIDATE_XML: true
+          VALIDATE_YAML: true
 
       - name: Markdown – Validate Links
         uses: gaurav-nelson/github-action-markdown-link-check@master
-
-      - name: YAML – Validate
-        uses: ibiqlik/action-yamllint@master
         with:
-          config_file: .yamllint.yml
-          format: standard
-          strict: true
-
-      - name: JSON – Validate .markdownlint.json
-        uses: Zingabopp/JsonValidate-Action@master
-        with:
-          json-schema: https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
-          json-file: .markdownlint.json
+          config_file: .github/linters/markdown-link-check.json
 
       - name: JSON – Validate .markdownlint.json
         uses: Zingabopp/JsonValidate-Action@master
@@ -206,3 +173,169 @@ jobs:
 
       - name: CodeQL – Analyze
         uses: github/codeql-action/analyze@main
+
+  create-nuget:
+    name: Create NuGet Package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Replace Version
+        uses: datamonsters/replace-action@master
+        with:
+          files: src/Shared/Properties/AssemblyInfo.cs
+          replacements: 0.0.1=${{ github.event.inputs.version }}
+
+      - name: Logo – Convert to PNG
+        run: >-
+          rsvg-convert
+          -h 128
+          src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
+          > src/NuGetTransitiveDependencyFinder/Assets/Logo.png
+
+      - name: Logo – Delete SVC
+        run: rm src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
+
+      - name: Logo – Download PNGOUT
+        run: >-
+          curl -L
+          https://www.jonof.id.au/files/kenutils/pngout-20200115-linux.tar.gz
+          > pngout.tar.gz
+
+      - name: Logo – Extract PNGOUT
+        run: tar zxvf pngout.tar.gz
+
+      - name: Logo – PNGOUT with Blocksize 0
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 0
+
+      - name: Logo – PNGOUT with Blocksize 128
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 128
+
+      - name: Logo – PNGOUT with Blocksize 192
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 192
+
+      - name: Logo – PNGOUT with Blocksize 256
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 256
+
+      - name: Logo – PNGOUT with Blocksize 512
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 512
+
+      - name: Logo – PNGOUT with Blocksize 1024
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 1024
+
+      - name: Logo – PNGOUT with Blocksize 2048
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 2048
+
+      - name: Logo – PNGOUT with Blocksize 4096
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 4096
+
+      - name: Logo – PNGOUT with Blocksize 8192
+        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 8192
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@main
+
+      - name: Install NuGet Dependencies
+        run: >-
+          dotnet restore
+          src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+
+      - name: Build
+        run: >-
+          dotnet build
+          --configuration Release
+          --no-restore
+          /maxCpuCount
+          src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+
+      - name: Delete XML Documentation
+        run: rm src/NuGetTransitiveDependencyFinder/bin/NuGetTransitiveDependencyFinder.xml
+
+      - name: Pack
+        run: >-
+          dotnet pack
+          --configuration Release
+          --no-build
+          /property:RepositoryCommit=${{ github.sha }}
+          /property:PackageReleaseNotes=${{ github.event.inputs.release-notes }}
+          src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+
+      - name: Upload – NuGet Package
+        uses: actions/upload-artifact@main
+        with:
+          name: NuGet Package
+          path: '**/*.nupkg'
+
+      - name: Upload – NuGet Symbols Package
+        uses: actions/upload-artifact@main
+        with:
+          name: NuGet Symbols Package
+          path: '**/*.snupkg'
+
+  create-asset:
+    name: Create Asset
+    runs-on: ubuntu-latest
+    needs: create-release
+
+    strategy:
+      matrix:
+        runtime: [linux-arm, linux-arm64, linux-musl-x64, linux-x64, osx-x64, win-arm, win-arm64, win-x64, win-x86]
+
+    env:
+      project: NuGetTransitiveDependencyFinder.ConsoleApp
+      extension: >-
+        {
+          linux: '',
+          osx: '',
+          win: .exe
+        }
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Replace Version
+        uses: datamonsters/replace-action@master
+        with:
+          files: src/Shared/Properties/AssemblyInfo.cs
+          replacements: 0.0.1=${{ github.event.inputs.version }}
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@main
+
+      - name: Publish
+        run: >-
+          dotnet publish
+          --runtime ${{ matrix.runtime }}
+          --configuration Release
+          --self-contained true
+          /maxCpuCount
+          /property:PublishSingleFile=true
+          /property:PublishTrimmed=true
+          src/${{ env.project }}/${{ env.project }}.csproj
+
+      - name: Get Release
+        id: get_release
+        uses: bruceadams/get-release@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Platform from Runtime
+        uses: jungwinter/split@master
+        id: split
+        with:
+          msg: ${{ matrix.runtime }}
+          seperator: '-'
+
+      - name: Set Current Extension
+        id: setter
+        run: echo '::set-output name=current_extension::${{ fromJson(env.extension)[steps.split.outputs._0] }}'
+
+      - name: Upload – Release Asset
+        uses: actions/upload-artifact@main
+        with:
+          name: NuGetTransitiveDependencyFinder.${{ matrix.runtime }}${{ steps.setter.outputs.current_extension }}
+          path: >-
+            ${{ github.workspace }}/src/${{ env.project }}/bin/Release/net5.0/${{ matrix.runtime }}/publish/${{ env.project }}${{ steps.setter.outputs.current_extension }}
