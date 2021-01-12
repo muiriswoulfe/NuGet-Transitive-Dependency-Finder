@@ -5,336 +5,445 @@
 
 name: Build
 
-on:  # yamllint disable-line rule:truthy
-  pull_request:
-  push:
+on:
+  pull_request: null
+  push: null
   schedule:
-    - cron: '0 0 * * 1'
+    - cron: 0 0 * * 1
+
+defaults:
+  run:
+    shell: pwsh
 
 jobs:
   build-debug:
-    name: Build – Debug
+    name: Build
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration: [Debug, Release]
     steps:
-      - name: Checkout
+      # Initialization
+      - name: INITIALIZATION – Checkout
         uses: actions/checkout@main
 
-      - name: Install .NET
+      - name: INITIALIZATION – Get Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: tag
+        uses: jossef/action-latest-release-info@master
+
+      - name: INITIALIZATION – Version Extract
+        id: version
+        run: |-
+          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
+          Write-Output -InputObject "::set-output name=version::$Version"
+
+      - name: INITIALIZATION – Version Replace
+        run: |-
+          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
+          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
+
+      - name: INITIALIZATION – .NET Install
         uses: actions/setup-dotnet@main
 
-      - name: Install NuGet Dependencies
-        run: dotnet restore
+      # SonarCloud Initialization
+      # - if: ${{ matrix.configuration == 'Release' }}
+      #   name: SONARCLOUD INITIALIZATION – Java Install
+      #   uses: actions/setup-java@main
+      #   with:
+      #     java-version: 15.0.1
 
-      - name: Build
-        run: dotnet build --configuration Debug --no-restore /maxCpuCount
+      - if: ${{ matrix.configuration == 'Release' }}
+        name: SONARCLOUD INITIALIZATION – SonarCloud Install
+        run: dotnet tool install dotnet-sonarscanner --tool-path .sonarcloud
 
-  build-release:
-    name: Build – Release
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-        with:
-          fetch-depth: 0
-
-      - name: Install Java
-        uses: actions/setup-java@main
-        with:
-          java-version: 15
-
-      - name: Install .NET
-        uses: actions/setup-dotnet@main
-
-      - name: Install NuGet Dependencies
-        run: dotnet restore
-
-      - name: SonarCloud – Cache Packages
-        uses: actions/cache@main
-        with:
-          path: ~\sonar\cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-
-      - name: SonarCloud – Cache Scanner
-        id: cache-sonar-scanner
-        uses: actions/cache@main
-        with:
-          path: .sonar\scanner
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
-
-      - name: SonarCloud – Create Directory
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        run: mkdir .sonar\scanner
-
-      - name: SonarCloud – Install Scanner
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        run: dotnet tool update dotnet-sonarscanner --tool-path .sonar\scanner
-
-      - name: SonarCloud – Initialize
+      - if: ${{ matrix.configuration == 'Release' }}
+        name: SONARCLOUD INITIALIZATION – SonarCloud Initialize
         run: >-
-          .sonar\scanner\dotnet-sonarscanner
-          begin
+          .sonarcloud/dotnet-sonarscanner begin
           /k:"${{ github.repository_owner }}_${{ github.event.repository.name }}"
           /o:"${{ github.repository_owner }}"
           /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           /d:sonar.host.url="https://sonarcloud.io"
 
-      - name: Build
-        run: dotnet build --configuration Release --no-restore /maxCpuCount
+      # Build
+      - name: BUILD – Project Restore
+        run: dotnet restore
 
-      - name: SonarCloud – Analyze
+      - name: BUILD – Project Build
+        run: dotnet build --configuration ${{ matrix.configuration }} --no-restore /maxCpuCount
+
+      # SonarCloud Finalization
+      - if: ${{ matrix.configuration == 'Release' }}
+        name: SONARCLOUD FINALIZATION – SonarCloud Analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: .sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-
-  validate:
-    name: Validate
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-
-      - name: Lint Code Base
-        uses: github/super-linter@master
-        env:
-          DEFAULT_BRANCH: main
-          EDITORCONFIG_FILE_NAME: .editorconfig
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MARKDOWN_CONFIG_FILE: .markdownlint.json
-          VALIDATE_CSHARP: true
-          VALIDATE_EDITORCONFIG: true
-          VALIDATE_JSON: true
-          VALIDATE_MARKDOWN: true
-          VALIDATE_XML: true
-          VALIDATE_YAML: true
-
-      - name: Markdown – Validate Links
-        uses: gaurav-nelson/github-action-markdown-link-check@master
-        with:
-          config_file: .github/linters/markdown-link-check.json
-
-      - name: JSON – Validate .markdownlint.json
-        uses: Zingabopp/JsonValidate-Action@master
-        with:
-          json-schema: https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
-          json-file: .markdownlint.json
-
-      - name: JSON – Download stylecop.schema.json
-        run: >-
-          curl -L
-          https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json
-          > stylecop.schema.json
-
-      - name: JSON – Remove BOM from stylecop.schema.json
-        run: sed -i '1s/^\xEF\xBB\xBF//' stylecop.schema.json
-
-      - name: JSON – Correct schema for stylecop.schema.json
-        run: >-
-          sed -i
-          's/http:\/\/json-schema\.org\/draft-04\/schema#/https:\/\/json-schema\.org\/draft-04\/schema/'
-          stylecop.schema.json
-
-      - name: JSON – Validate src/stylecop.json
-        uses: Zingabopp/JsonValidate-Action@master
-        with:
-          json-schema: stylecop.schema.json
-          json-file: src/stylecop.json
-
-      - name: Security Scan – Validate
-        uses: ShiftLeftSecurity/scan-action@master
-        with:
-          type: credscan,depscan
-
-      - name: Security Scan – Upload Report
-        uses: github/codeql-action/upload-sarif@main
-        with:
-          sarif_file: reports
-
-  validate-codeql:
-    name: Validate – CodeQL
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-
-      - name: CodeQL – Initialize
-        uses: github/codeql-action/init@main
-        with:
-          queries: security-and-quality
-
-      - name: CodeQL – Build
-        uses: github/codeql-action/autobuild@main
-
-      - name: CodeQL – Analyze
-        uses: github/codeql-action/analyze@main
-
-  create-nuget:
-    name: Create NuGet Package
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-
-      - name: Replace Version
-        uses: datamonsters/replace-action@master
-        with:
-          files: src/Shared/Properties/AssemblyInfo.cs
-          replacements: 0.0.1=${{ github.event.inputs.version }}
-
-      - name: Logo – Convert to PNG
-        run: >-
-          rsvg-convert
-          -h 128
-          src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
-          > src/NuGetTransitiveDependencyFinder/Assets/Logo.png
-
-      - name: Logo – Delete SVC
-        run: rm src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
-
-      - name: Logo – Download PNGOUT
-        run: >-
-          curl -L
-          https://www.jonof.id.au/files/kenutils/pngout-20200115-linux.tar.gz
-          > pngout.tar.gz
-
-      - name: Logo – Extract PNGOUT
-        run: tar zxvf pngout.tar.gz
-
-      - name: Logo – PNGOUT with Blocksize 0
-        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 0
-
-      - name: Logo – PNGOUT with Blocksize 128
-        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 128
-
-      - name: Logo – PNGOUT with Blocksize 192
-        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 192
-
-      - name: Logo – PNGOUT with Blocksize 256
-        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 256
-
-      - name: Logo – PNGOUT with Blocksize 512
-        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 512
-
-      - name: Logo – PNGOUT with Blocksize 1024
-        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 1024
-
-      - name: Logo – PNGOUT with Blocksize 2048
-        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 2048
-
-      - name: Logo – PNGOUT with Blocksize 4096
-        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 4096
-
-      - name: Logo – PNGOUT with Blocksize 8192
-        run: ./amd64/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png 8192
-
-      - name: Install .NET
-        uses: actions/setup-dotnet@main
-
-      - name: Install NuGet Dependencies
-        run: >-
-          dotnet restore
-          src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
-
-      - name: Build
-        run: >-
-          dotnet build
-          --configuration Release
-          --no-restore
-          /maxCpuCount
-          src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
-
-      - name: Delete XML Documentation
-        run: rm src/NuGetTransitiveDependencyFinder/bin/NuGetTransitiveDependencyFinder.xml
-
-      - name: Pack
-        run: >-
-          dotnet pack
-          --configuration Release
-          --no-build
-          /property:RepositoryCommit=${{ github.sha }}
-          /property:PackageReleaseNotes=${{ github.event.inputs.release-notes }}
-          src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
-
-      - name: Upload – NuGet Package
-        uses: actions/upload-artifact@main
-        with:
-          name: NuGet Package
-          path: '**/*.nupkg'
-
-      - name: Upload – NuGet Symbols Package
-        uses: actions/upload-artifact@main
-        with:
-          name: NuGet Symbols Package
-          path: '**/*.snupkg'
+        run: .sonarcloud/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
   create-asset:
     name: Create Asset
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        runtime: [linux-arm, linux-arm64, linux-musl-x64, linux-x64, osx-x64, win-arm, win-arm64, win-x64, win-x86]
-
     env:
       project: NuGetTransitiveDependencyFinder.ConsoleApp
-      extension: >-
-        {
-          linux: '',
-          osx: '',
-          win: .exe
-        }
-
+    strategy:
+      fail-fast: false
+      matrix:
+        runtime:
+          [
+            linux-arm,
+            linux-arm64,
+            linux-musl-x64,
+            linux-x64,
+            osx-x64,
+            win-arm,
+            win-arm64,
+            win-x64,
+            win-x86
+          ]
     steps:
-      - name: Checkout
+      # Initialization
+      - name: INITIALIZATION – Checkout
         uses: actions/checkout@main
 
-      - name: Replace Version
-        uses: datamonsters/replace-action@master
-        with:
-          files: src/Shared/Properties/AssemblyInfo.cs
-          replacements: 0.0.1=${{ github.event.inputs.version }}
-
-      - name: Install .NET
-        uses: actions/setup-dotnet@main
-
-      - name: Publish
-        run: >-
-          dotnet publish
-          --runtime ${{ matrix.runtime }}
-          --configuration Release
-          --self-contained true
-          /maxCpuCount
-          /property:PublishSingleFile=true
-          /property:PublishTrimmed=true
-          src/${{ env.project }}/${{ env.project }}.csproj
-
-      - name: Get Release
-        id: get_release
-        uses: bruceadams/get-release@main
+      - name: INITIALIZATION – Get Tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: tag
+        uses: jossef/action-latest-release-info@master
 
-      - name: Extract Platform from Runtime
-        uses: jungwinter/split@master
-        id: split
+      - name: INITIALIZATION – Version Extract
+        id: version
+        run: |-
+          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
+          Write-Output -InputObject "::set-output name=version::$Version"
+
+      - name: INITIALIZATION – Version Replace
+        run: |-
+          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
+          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
+
+      - name: INITIALIZATION – .NET Install
+        uses: actions/setup-dotnet@main
+
+      # Build
+      - name: BUILD – Project Restore
+        run: dotnet restore src/${{ env.project }}/${{ env.project }}.csproj --runtime ${{ matrix.runtime }}
+
+      - name: BUILD – Project Build
+        run: >-
+          dotnet build src/${{ env.project }}/${{ env.project }}.csproj
+          --configuration Release
+          --no-restore
+          --runtime ${{ matrix.runtime }}
+          /property:PublishSingleFile=true
+          /maxCpuCount
+
+      # Publish
+      - name: PUBLISH – Project Publish
+        run: >-
+          dotnet publish src/${{ env.project }}/${{ env.project }}.csproj
+          --configuration Release
+          --no-build
+          --runtime ${{ matrix.runtime }}
+          --self-contained true
+          /property:PublishSingleFile=true
+          /property:PublishTrimmed=true
+
+      # Upload
+      - name: UPLOAD – Get Platform
+        id: platform
+        run: |-
+          $Platform = '${{ matrix.runtime }}'.Split('-')[0]
+          Write-Output -InputObject "::set-output name=platform::$Platform"
+
+      - name: UPLOAD – Get File Names
+        env:
+          extension: >-
+            {
+              "linux": "",
+              "osx": "",
+              "win": ".exe"
+            }
+        id: file-names
+        run: |-
+          $Extension = '${{ fromJson(env.extension)[steps.platform.outputs.platform] }}'
+          $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
+          $AssetPath = '${{ github.workspace }}/src/${{ env.project }}/bin/Release/net5.0/'
+          $AssetPath += "${{ matrix.runtime }}/publish/${{ env.project }}$Extension"
+          Write-Output -InputObject "::set-output name=asset_path::$AssetPath"
+          Write-Output -InputObject "::set-output name=asset_name::$AssetName"
+
+      - name: UPLOAD – Print Details
+        run: |-
+          $AssetPathFileSize = (Get-Content -LiteralPath '${{ steps.file-names.outputs.asset_path }}').Length
+          $AssetPathFileSize = "$AssetPathFileSize bytes"
+          Write-Output -InputObject 'Asset Name: ${{ steps.file-names.outputs.asset_name }}'
+          Write-Output -InputObject "Asset Path: ${{ steps.file-names.outputs.asset_path }} ($AssetPathFileSize)"
+
+  create-nuget:
+    name: Create NuGet Package
+    runs-on: ubuntu-latest
+    env:
+      nuget-package-prefix: src/NuGetTransitiveDependencyFinder/bin/Release/NuGetTransitiveDependencyFinder
+    steps:
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@main
+
+      - name: INITIALIZATION – Get Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: tag
+        uses: jossef/action-latest-release-info@master
+
+      - name: INITIALIZATION – Version Extract
+        id: version
+        run: |-
+          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
+          Write-Output -InputObject "::set-output name=version::$Version"
+
+      - name: INITIALIZATION – Version Replace
+        run: |-
+          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
+          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
+
+      - name: INITIALIZATION – .NET Install
+        uses: actions/setup-dotnet@main
+
+      # Create Logo
+      - name: CREATE LOGO – Install svgexport
+        run: npm install svgexport
+
+      - name: CREATE LOGO – Install pngout
+        run: npm install pngout-bin
+
+      - name: CREATE LOGO – Convert SVG
+        run: >-
+          node_modules/.bin/svgexport
+          src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
+          src/NuGetTransitiveDependencyFinder/Assets/Logo.png
+
+      - name: CREATE LOGO – Compress with block split threshold 0
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b0 -q
+
+      - name: CREATE LOGO – Compress with block split threshold 128
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b128 -q
+
+      - name: CREATE LOGO – Compress with block split threshold 192
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b192 -q
+
+      - name: CREATE LOGO – Compress with block split threshold 256
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b256 -q
+
+      - name: CREATE LOGO – Compress with block split threshold 512
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b512 -q
+
+      - name: CREATE LOGO – Compress with block split threshold 1024
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b1024 -q
+
+      - name: CREATE LOGO – Compress with block split threshold 2048
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b2048 -q
+
+      - name: CREATE LOGO – Compress with block split threshold 4096
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b4096 -q
+
+      - name: CREATE LOGO – Compress with block split threshold 8192
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b8192 -q
+
+      - name: CREATE LOGO – Delete SVG
+        run: Remove-Item -Path 'src/NuGetTransitiveDependencyFinder/Assets/Logo.svg'
+
+      # Build
+      - name: BUILD – Project Restore
+        run: dotnet restore src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+
+      - name: BUILD – Project Build
+        run: >-
+          dotnet build src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+          --configuration Release
+          --no-restore
+          /maxCpuCount
+
+      # Upload
+      - name: UPLOAD – Delete Documentation
+        run: Remove-Item -Path 'src/NuGetTransitiveDependencyFinder/bin/NuGetTransitiveDependencyFinder.xml'
+
+      - name: UPLOAD – Pack
+        run: >-
+          dotnet pack src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+          --configuration Release
+          --no-build
+          /property:PackageReleaseNotes="Release Notes"
+          /property:PackageVersion=${{ steps.version.outputs.version }}
+          /property:RepositoryCommit=${{ github.sha }}
+
+      - name: UPLOAD – Print Details
+        run: |-
+          $NuGetPackage = '${{ env.nuget-package-prefix }}.${{ steps.version.outputs.version }}.nupkg'
+          $NuGetSymbolsPackage = '${{ env.nuget-package-prefix }}.${{ steps.version.outputs.version }}.snupkg'
+          $NuGetPackageSize = (Get-Content -LiteralPath $NuGetPackage).Length
+          $NuGetPackageSize = "$NuGetPackageSize bytes"
+          $NuGetSymbolsPackageSize = (Get-Content -LiteralPath $NuGetSymbolsPackage).Length
+          $NuGetSymbolsPackageSize = "$NuGetSymbolsPackageSize bytes"
+          Write-Output -InputObject "NuGet Package: $NuGetPackageSize"
+          Write-Output -InputObject "NuGet Symbols Package: $NuGetSymbolsPackageSize"
+
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    steps:
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@main
+
+      - name: INITIALIZATION – Get Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: tag
+        uses: jossef/action-latest-release-info@master
+
+      - name: INITIALIZATION – Version Extract
+        id: version
+        run: |-
+          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
+          Write-Output -InputObject "::set-output name=version::$Version"
+
+      - name: INITIALIZATION – Version Replace
+        run: |-
+          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
+          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
+
+      # Markdown Validation
+      - name: MARKDOWN VALIDATION – Validate Links
+        uses: gaurav-nelson/github-action-markdown-link-check@master
         with:
-          msg: ${{ matrix.runtime }}
-          seperator: '-'
+          config-file: .github/linters/markdown-link-check.json
 
-      - name: Set Current Extension
-        id: setter
-        run: echo '::set-output name=current_extension::${{ fromJson(env.extension)[steps.split.outputs._0] }}'
-
-      - name: Upload – Release Asset
-        uses: actions/upload-artifact@main
+      # JSON Validation
+      - name: JSON VALIDATION – Validate .markdownlint.json
+        uses: Zingabopp/JsonValidate-Action@master
         with:
-          name: NuGetTransitiveDependencyFinder.${{ matrix.runtime }}${{ steps.setter.outputs.current_extension }}
-          path: >-
-            ${{ github.workspace }}/src/${{ env.project }}/bin/Release/net5.0/${{ matrix.runtime }}/publish/${{ env.project }}${{ steps.setter.outputs.current_extension }}
+          json-file: .markdownlint.json
+          json-schema: >-
+            https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
+
+      - name: JSON VALIDATION – Validate src/stylecop.json – Download stylecop.schema.json
+        env:
+          project_url: https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master
+        run: >-
+          Invoke-WebRequest
+          -Uri '${{ env.project_url }}/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json'
+          -OutFile 'stylecop.schema.json'
+
+      - name: JSON VALIDATION – Validate src/stylecop.json – Update stylecop.schema.json
+        run: |-
+          $FileContent = Get-Content -Path 'stylecop.schema.json' -Raw
+          $FileContent = $FileContent -replace 'draft-04/schema#', 'draft-07/schema'
+          Set-Content -NoNewline -Path 'stylecop.schema.json' -Value $FileContent
+
+      - name: JSON VALIDATION – Validate src/stylecop.json
+        uses: Zingabopp/JsonValidate-Action@master
+        with:
+          json-file: src/stylecop.json
+          json-schema: stylecop.schema.json
+
+      # Security Scan
+      - name: SECURITY SCAN – Validate
+        uses: ShiftLeftSecurity/scan-action@master
+        with:
+          type: credscan,depscan
+
+      - name: SECURITY SCAN – Upload Report
+        uses: github/codeql-action/upload-sarif@main
+        with:
+          sarif_file: reports
+
+  validate-lint:
+    name: Validate – Lint
+    runs-on: ubuntu-latest
+    steps:
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@main
+
+      - name: INITIALIZATION – Get Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: tag
+        uses: jossef/action-latest-release-info@master
+
+      - name: INITIALIZATION – Version Extract
+        id: version
+        run: |-
+          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
+          Write-Output -InputObject "::set-output name=version::$Version"
+
+      - name: INITIALIZATION – Version Replace
+        run: |-
+          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
+          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
+
+      # Validation
+      - name: VALIDATION – Super Linter
+        uses: github/super-linter@master
+        env:
+          EDITORCONFIG_FILE_NAME: ../../.editorconfig
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MARKDOWN_CONFIG_FILE: ../../.markdownlint.json
+
+  validate-codeql:
+    name: Validate – CodeQL
+    runs-on: ubuntu-latest
+    steps:
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@main
+
+      - name: INITIALIZATION – Get Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: tag
+        uses: jossef/action-latest-release-info@master
+
+      - name: INITIALIZATION – Version Extract
+        id: version
+        run: |-
+          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
+          Write-Output -InputObject "::set-output name=version::$Version"
+
+      - name: INITIALIZATION – Version Replace
+        run: |-
+          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
+          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
+
+      # Validation
+      - name: VALIDATION – CodeQL Initialize
+        uses: github/codeql-action/init@main
+        with:
+          queries: security-and-quality
+
+      - name: VALIDATION – CodeQL Build
+        uses: github/codeql-action/autobuild@main
+
+      - name: VALIDATION – CodeQL Analyze
+        uses: github/codeql-action/analyze@main
+
+...

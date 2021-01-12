@@ -6,4 +6,17 @@
 extends: default
 
 rules:
-  line-length: disable
+  comments-indentation: enable
+  comments: enable
+  document-end: enable
+  document-start: enable
+  empty-values: enable
+  line-length:
+    max: 120
+  octal-values: enable
+  quoted-strings:
+    required: only-when-needed
+  truthy:
+    check-keys: false
+
+...

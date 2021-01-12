@@ -30,6 +30,11 @@ You should also consider:
 - If applicable, providing sample code and the output of any invocations of the
   application.
 
-[discussion]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/discussions
-[rubberduckdebugging]: https://wikipedia.org/wiki/Rubber_duck_debugging
-[xyproblem]: https://wikipedia.org/wiki/XY_problem
+<!-- References -->
+
+[discussion]:
+  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/discussions
+[rubberduckdebugging]:
+  https://wikipedia.org/wiki/Rubber_duck_debugging
+[xyproblem]:
+  https://wikipedia.org/wiki/XY_problem

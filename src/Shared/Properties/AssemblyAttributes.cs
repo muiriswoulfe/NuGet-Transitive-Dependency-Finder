@@ -13,8 +13,8 @@ namespace NuGetTransitiveDependencyFinder.Properties
         /// <summary>
         /// The version number of the assemblies.
         /// </summary>
-        /// <remarks>This version number should be kept at 0.0.1. It will be automatically updated as part of the
-        /// release process.</remarks>
-        public const string Version = "0.0.1";
+        /// <remarks>This version number should be kept as is. It will be automatically updated as part of the release
+        /// process.</remarks>
+        public const string Version = "0.0.0";
     }
 }

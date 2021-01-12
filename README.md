@@ -197,26 +197,51 @@ be located [here][sonarcloud].
 
 ![SonarCloud Lines of Code][sonarcloudlinesofcode]
 
-[buildbadge]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/workflows/Build/badge.svg
-[sonarcloudbadge]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=alert_status
-[sonarcloud]: https://sonarcloud.io/dashboard?id=muiriswoulfe_NuGet-Transitive-Dependency-Finder
-[codelibrary]:  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/NuGetTransitiveDependencyFinder
-[codeconsoleapp]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/NuGetTransitiveDependencyFinder.ConsoleApp
-[codesolution]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/blob/main/NuGetTransitiveDependencyFinder.sln
-[git]: https://git-scm.com/
-[github]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder
-[netcoresdk]: https://dotnet.microsoft.com/download/dotnet-core/5.0
-[vs]: https://visualstudio.microsoft.com/
-[vscode]: https://code.visualstudio.com/
-[vscodecsharp]: https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp
-[releases]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/releases/
-[sonarcloudmaintainability]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=sqale_rating
-[sonarcloudreliability]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=reliability_rating
-[sonarcloudsecurity]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=security_rating
-[sonarcloudbugs]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=bugs
-[sonarcloudcodesmells]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=code_smells
-[sonarcloudtechnicaldebt]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=sqale_index
-[sonarcloudvulnerabilities]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=vulnerabilities
-[sonarcloudduplicatedlines]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=duplicated_lines_density
-[sonarcloudtestcoverage]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=coverage
-[sonarcloudlinesofcode]: https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=ncloc
+<!-- References -->
+
+[buildbadge]:
+  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/workflows/Build/badge.svg
+[sonarcloudbadge]:
+  https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=alert_status
+[sonarcloud]:
+  https://sonarcloud.io/dashboard?id=muiriswoulfe_NuGet-Transitive-Dependency-Finder
+[codelibrary]:
+  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/NuGetTransitiveDependencyFinder
+[codeconsoleapp]:
+  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/NuGetTransitiveDependencyFinder.ConsoleApp
+[codesolution]:
+  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/blob/main/NuGetTransitiveDependencyFinder.sln
+[git]:
+  https://git-scm.com/
+[github]:
+  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder
+[netcoresdk]:
+  https://dotnet.microsoft.com/download/dotnet-core/5.0
+[vs]:
+  https://visualstudio.microsoft.com/
+[vscode]:
+  https://code.visualstudio.com/
+[vscodecsharp]:
+  https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp
+[releases]:
+  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/releases/
+[sonarcloudmaintainability]:
+  https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=sqale_rating
+[sonarcloudreliability]:
+  https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=reliability_rating
+[sonarcloudsecurity]:
+  https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=security_rating
+[sonarcloudbugs]:
+  https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=bugs
+[sonarcloudcodesmells]:
+  https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=code_smells
+[sonarcloudtechnicaldebt]:
+  https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=sqale_index
+[sonarcloudvulnerabilities]:
+  https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=vulnerabilities
+[sonarcloudduplicatedlines]:
+  https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=duplicated_lines_density
+[sonarcloudtestcoverage]:
+  https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=coverage
+[sonarcloudlinesofcode]:
+  https://sonarcloud.io/api/project_badges/measure?project=muiriswoulfe_NuGet-Transitive-Dependency-Finder&metric=ncloc
