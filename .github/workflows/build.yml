@@ -50,11 +50,11 @@ jobs:
         uses: actions/setup-dotnet@main
 
       # SonarCloud Initialization
-      # - if: ${{ matrix.configuration == 'Release' }}
-      #   name: SONARCLOUD INITIALIZATION – Java Install
-      #   uses: actions/setup-java@main
-      #   with:
-      #     java-version: 15.0.1
+      - if: ${{ matrix.configuration == 'Release' }}
+        name: SONARCLOUD INITIALIZATION – Java Install
+        uses: actions/setup-java@main
+        with:
+          java-version: 15.0.1
 
       - if: ${{ matrix.configuration == 'Release' }}
         name: SONARCLOUD INITIALIZATION – SonarCloud Install
