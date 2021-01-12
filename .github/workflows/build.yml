@@ -18,7 +18,7 @@ defaults:
 jobs:
   build-debug:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
@@ -86,7 +86,7 @@ jobs:
 
   create-asset:
     name: Create Asset
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env:
       project: NuGetTransitiveDependencyFinder.ConsoleApp
     strategy:
@@ -187,7 +187,7 @@ jobs:
 
   create-nuget:
     name: Create NuGet Package
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env:
       nuget-package-prefix: src/NuGetTransitiveDependencyFinder/bin/Release/NuGetTransitiveDependencyFinder
     steps:
@@ -305,7 +305,7 @@ jobs:
 
   validate:
     name: Validate
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
@@ -376,7 +376,7 @@ jobs:
 
   validate-lint:
     name: Validate – Lint
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
@@ -410,7 +410,7 @@ jobs:
 
   validate-codeql:
     name: Validate – CodeQL
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
