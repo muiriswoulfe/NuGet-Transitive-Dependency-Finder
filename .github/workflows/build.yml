@@ -230,40 +230,67 @@ jobs:
           src/NuGetTransitiveDependencyFinder/Assets/Logo.png
 
       - name: CREATE LOGO – Compress with block split threshold 0
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b0 -q
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b0','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 128
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b128 -q
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b128','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 192
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b192 -q
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b192','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 256
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b256 -q
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b256','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 512
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b512 -q
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b512','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 1024
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b1024 -q
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b1024','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 2048
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b2048 -q
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b2048','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 4096
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b4096 -q
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b4096','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 8192
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b8192 -q
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b8192','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Delete SVG
         run: Remove-Item -Path 'src/NuGetTransitiveDependencyFinder/Assets/Logo.svg'
@@ -342,6 +369,7 @@ jobs:
           json-file: .markdownlint.json
           json-schema: >-
             https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
+          use-draft: draft-07
 
       - name: JSON VALIDATION – Validate src/stylecop.json – Download stylecop.schema.json
         env:
