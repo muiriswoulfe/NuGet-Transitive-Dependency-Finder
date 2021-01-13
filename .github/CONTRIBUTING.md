@@ -90,10 +90,19 @@ Before creating a new PR, please consult the following list.
 By contributing to the project, you agree to license your contribution under the
 [MIT License][license].
 
-[security]: SECURITY.md
-[bugreport]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/issues/new?assignees=muiriswoulfe&labels=bug&template=bug-report.md
-[bugtracker]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/labels/bug
-[featurerequest]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/issues/new?assignees=muiriswoulfe&labels=enhancement&template=feature-request.md
-[featuretracker]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/labels/enhancement
-[goodfirstissue]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/labels/good%20first%20issue
-[license]: ../LICENSE.md
+<!-- References -->
+
+[security]:
+  SECURITY.md
+[bugreport]:
+  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/issues/new?assignees=muiriswoulfe&labels=bug&template=bug-report.md
+[bugtracker]:
+  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/labels/bug
+[featurerequest]:
+  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/issues/new?assignees=muiriswoulfe&labels=enhancement&template=feature-request.md
+[featuretracker]:
+  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/labels/enhancement
+[goodfirstissue]:
+  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/labels/good%20first%20issue
+[license]:
+  ../LICENSE.md

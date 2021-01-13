@@ -17,4 +17,7 @@ To report a security issue, email the project owner, [Muiris Woulfe][email], and
 include the word "SECURITY" at the beginning of the subject line. Every effort
 will be made to respond promptly and keep you informed throughout the process.
 
-[email]: mailto:mw.github@outlook.com?subject=SECURITY:%20NuGet%20Transitive%20Dependency%20Finder
+<!-- References -->
+
+[email]:
+  mailto:mw.github@outlook.com?subject=SECURITY:%20NuGet%20Transitive%20Dependency%20Finder

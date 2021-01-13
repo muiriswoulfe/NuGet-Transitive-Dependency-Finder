@@ -1,158 +1,280 @@
 # © Muiris Woulfe
 # Licensed under the MIT License
 
+---
+
 name: Release
 
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version
+        required: true
+        default: 1.0.0
+      release-notes:
+        description: Release Notes
+        required: true
+
+defaults:
+  run:
+    shell: pwsh
 
 jobs:
-  update-description:
-    name: Update Description
+  create-release:
+    name: Create Release
     runs-on: ubuntu-latest
-
     steps:
-    - name: Get Release
-      id: get_release
-      uses: bruceadams/get-release@v1.2.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Create
+      - name: RELEASE – Create URLs
+        id: urls
+        run: |-
+          $UrlPrefix = '${{ github.server_url }}/${{ github.repository }}'
+          $UrlSuffix = '+milestone%3A%22${{ steps.get_release.outputs.tag_name }}%22+is%3Aclosed'
+          Write-Output -InputObject "::set-output name=url-prefix::$UrlPrefix"
+          Write-Output -InputObject "::set-output name=url-suffix::$UrlSuffix"
 
-    - name: Update Release
-      uses: tubone24/update_release@v1.1.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        release_name: Release ${{ steps.get_release.outputs.tag_name }}
-        body: |
-          ## Changes
+      - name: RELEASE – Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/create-release@main
+        with:
+          body: |-
+            ## Release Notes
 
-          This release resolves the issues listed [here][issues] via the pull requests listed [here][prs].
+            ${{ github.event.inputs.release-notes }}
 
-          ## Notes
+            ## Changes
 
-          - No dependencies are required for any platform.
-          - Under Linux and macOS, you will need to run `chmod +x <filename>` from the console prior to starting the app.
-          - Under macOS, the first time you run the app, you will encounter a security error. Click *Cancel* and go to *Apple* > *System Preferences...* > *Security & Privacy* and click *Allow Anyway*. The app should run successfully on the subsequent run.
+            This release resolves the issues listed [here][issues] via the pull requests listed [here][prs].
 
-          [issues]: ${{ github.server_url }}/${{ github.repository }}/issues?q=is%3Aissue+milestone%3A%22${{ steps.get_release.outputs.tag_name }}%22+is%3Aclosed
-          [prs]: ${{ github.server_url }}/${{ github.repository }}/pulls?q=is%3Apr+milestone%3A%22${{ steps.get_release.outputs.tag_name }}%22+is%3Aclosed
+            ## Notes
 
-  create-nuget:
-    name: Create NuGet Package
-    runs-on: ubuntu-latest
+            - No dependencies are required for any platform.
+            - Under Linux and macOS, you will need to run `chmod +x <filename>` from the console prior to starting the
+              app.
+            - Under macOS, the first time you run the app, you will encounter a security error. Click *Cancel* and go to
+              *Apple* > *System Preferences...* > *Security & Privacy* and click *Allow Anyway*. The app should run
+              successfully on the subsequent invocation.
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+            <!-- References -->
 
-    - name: Install .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.101
-
-    - name: Install NuGet Dependencies
-      run: >-
-        dotnet restore
-        ./src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
-
-    - name: Build
-      run: >-
-        dotnet build
-        --configuration Release
-        --no-restore
-        /maxCpuCount
-        ./src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
-
-    - name: Delete XML Documentation
-      run: rm ./src/NuGetTransitiveDependencyFinder/bin/NuGetTransitiveDependencyFinder.xml
-
-    - name: Pack
-      run: >-
-        dotnet pack
-        --configuration Release
-        --no-build
-        /property:RepositoryCommit=${{ github.sha }}
-        ./src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
-
-    - name: Upload – NuGet.org
-      run: >-
-        dotnet nuget push
-        ./src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
-        --api-key ${{ secrets.NUGET_API_KEY }}
-        --source https://api.nuget.org/v3/index.json
-        --skip-duplicate
-
-    - name: Upload – GitHub
-      run: >-
-        dotnet nuget push
-        ./src/NuGetTransitiveDependencyFinder/bin/Release/*.nupkg
-        --api-key ${{ secrets.GITHUB_TOKEN }}
-        --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
-        --skip-duplicate
+            [issues]:
+              ${{ steps.urls.outputs.url-prefix }}/issues?q=is%3Aissue${{ steps.urls.outputs.url-suffix }}
+            [prs]:
+              ${{ steps.urls.outputs.asset_name }}/pulls?q=is%3Apr${{ steps.urls.outputs.url-suffix }}
+          release_name: Release v${{ github.event.inputs.version }}
+          tag_name: v${{ github.event.inputs.version }}
 
   create-asset:
     name: Create Asset
+    needs: create-release
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        runtime: [linux-arm, linux-arm64, linux-musl-x64, linux-x64, osx-x64, win-arm, win-arm64, win-x64, win-x86]
-
     env:
       project: NuGetTransitiveDependencyFinder.ConsoleApp
-      extension: >-
-        {
-          linux: '',
-          osx: '',
-          win: '.exe'
-        }
-
+    strategy:
+      fail-fast: false
+      matrix:
+        runtime:
+          [
+            linux-arm,
+            linux-arm64,
+            linux-musl-x64,
+            linux-x64,
+            osx-x64,
+            win-arm,
+            win-arm64,
+            win-x64,
+            win-x86
+          ]
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@main
 
-    - name: Install .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.101
+      - name: INITIALIZATION – Get Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: tag
+        uses: jossef/action-latest-release-info@master
 
-    - name: Publish
-      run: >-
-        dotnet publish
-        --runtime ${{ matrix.runtime }}
-        --configuration Release
-        --self-contained true
-        /maxCpuCount
-        /property:PublishSingleFile=true
-        /property:PublishTrimmed=true
-        ./src/${{ env.project }}/${{ env.project }}.csproj
+      - name: INITIALIZATION – Version Replace
+        run: |-
+          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
+          $FileContent = $FileContent -replace '0.0.0', '${{ github.event.inputs.version }}'
+          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
-    - name: Get Release
-      id: get_release
-      uses: bruceadams/get-release@v1.2.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: INITIALIZATION – .NET Install
+        uses: actions/setup-dotnet@main
 
-    - name: Extract Platform from Runtime
-      uses: jungwinter/split@v1
-      id: split
-      with:
-        msg: ${{ matrix.runtime }}
-        seperator: '-'
+      # Build
+      - name: BUILD – Project Restore
+        run: dotnet restore src/${{ env.project }}/${{ env.project }}.csproj --runtime ${{ matrix.runtime }}
 
-    - name: Set Current Extension
-      id: setter
-      run: echo '::set-output name=current_extension::${{ fromJson(env.extension)[steps.split.outputs._0] }}'
+      - name: BUILD – Project Build
+        run: >-
+          dotnet build src/${{ env.project }}/${{ env.project }}.csproj
+          --configuration Release
+          --no-restore
+          --runtime ${{ matrix.runtime }}
+          /property:PublishSingleFile=true
+          /maxCpuCount
 
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.get_release.outputs.upload_url }}
-        asset_path: >-
-          ${{ github.workspace }}/src/${{ env.project }}/bin/Release/net5.0/${{ matrix.runtime }}/publish/${{ env.project }}${{ steps.setter.outputs.current_extension }}
-        asset_name: NuGetTransitiveDependencyFinder.${{ matrix.runtime }}${{ steps.setter.outputs.current_extension }}
-        asset_content_type: application/octet-stream
+      # Publish
+      - name: PUBLISH – Project Publish
+        run: >-
+          dotnet publish src/${{ env.project }}/${{ env.project }}.csproj
+          --configuration Release
+          --no-build
+          --runtime ${{ matrix.runtime }}
+          --self-contained true
+          /property:PublishSingleFile=true
+          /property:PublishTrimmed=true
+
+      # Upload
+      - name: UPLOAD – Get Platform
+        id: platform
+        run: |-
+          $Platform = '${{ matrix.runtime }}'.Split('-')[0]
+          Write-Output -InputObject "::set-output name=platform::$Platform"
+
+      - name: UPLOAD – Get File Names
+        env:
+          extension: >-
+            {
+              "linux": "",
+              "osx": "",
+              "win": ".exe"
+            }
+        id: file-names
+        run: |-
+          $Extension = '${{ fromJson(env.extension)[steps.platform.outputs.platform] }}'
+          $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
+          $AssetPath = '${{ github.workspace }}/src/${{ env.project }}/bin/Release/net5.0/'
+          $AssetPath += "${{ matrix.runtime }}/publish/${{ env.project }}$Extension"
+          Write-Output -InputObject "::set-output name=asset_name::$AssetName"
+          Write-Output -InputObject "::set-output name=asset_path::$AssetPath"
+
+      - name: UPLOAD – Upload Release Asset
+        uses: actions/upload-release-asset@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          asset_content_type: application/octet-stream
+          asset_name: ${{ steps.file-names.outputs.asset_name }}
+          asset_path: ${{ steps.file-names.outputs.asset_path }}
+          upload_url: ${{ steps.tag.outputs.upload_url }}
+
+  create-nuget:
+    name: Create NuGet Package
+    needs: create-release
+    runs-on: ubuntu-latest
+    env:
+      nuget-package-prefix: src/NuGetTransitiveDependencyFinder/bin/Release/NuGetTransitiveDependencyFinder
+    steps:
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@main
+
+      - name: INITIALIZATION – Version Replace
+        run: |-
+          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
+          $FileContent = $FileContent -replace '0.0.0', '${{ github.event.inputs.version }}'
+          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
+
+      - name: INITIALIZATION – .NET Install
+        uses: actions/setup-dotnet@main
+
+      # Create Logo
+      - name: CREATE LOGO – Install svgexport
+        run: npm install svgexport
+
+      - name: CREATE LOGO – Install pngout
+        run: npm install pngout-bin
+
+      - name: CREATE LOGO – Convert SVG
+        run: >-
+          node_modules/.bin/svgexport
+          src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
+          src/NuGetTransitiveDependencyFinder/Assets/Logo.png
+
+      - name: CREATE LOGO – Compress with block split threshold 0
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b0 -q
+
+      - name: CREATE LOGO – Compress with block split threshold 128
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b128 -q
+
+      - name: CREATE LOGO – Compress with block split threshold 192
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b192 -q
+
+      - name: CREATE LOGO – Compress with block split threshold 256
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b256 -q
+
+      - name: CREATE LOGO – Compress with block split threshold 512
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b512 -q
+
+      - name: CREATE LOGO – Compress with block split threshold 1024
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b1024 -q
+
+      - name: CREATE LOGO – Compress with block split threshold 2048
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b2048 -q
+
+      - name: CREATE LOGO – Compress with block split threshold 4096
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b4096 -q
+
+      - name: CREATE LOGO – Compress with block split threshold 8192
+        continue-on-error: true
+        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b8192 -q
+
+      - name: CREATE LOGO – Delete SVG
+        run: Remove-Item -Path 'src/NuGetTransitiveDependencyFinder/Assets/Logo.svg'
+
+      # Build
+      - name: BUILD – Project Restore
+        run: dotnet restore src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+
+      - name: BUILD – Project Build
+        run: >-
+          dotnet build src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+          --configuration Release
+          --no-restore
+          /maxCpuCount
+
+      # Upload
+      - name: UPLOAD – Delete Documentation
+        run: Remove-Item -Path 'src/NuGetTransitiveDependencyFinder/bin/NuGetTransitiveDependencyFinder.xml'
+
+      - name: UPLOAD – Pack
+        run: >-
+          dotnet pack src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+          --configuration Release
+          --no-build
+          /property:PackageReleaseNotes="${{ github.event.inputs.release-notes }}"
+          /property:PackageVersion=${{ github.event.inputs.version }}
+          /property:RepositoryCommit=${{ github.sha }}
+
+      - name: UPLOAD – Upload Packages to NuGet.org
+        run: >-
+          dotnet nuget push
+          ${{ env.nuget-package-prefix }}.${{ github.event.inputs.version }}.nupkg
+          --api-key ${{ secrets.NUGET_API_KEY }}
+          --skip-duplicate
+          --source https://api.nuget.org/v3/index.json
+
+      - name: UPLOAD – Upload Packages to GitHub
+        run: >-
+          dotnet nuget push
+          ${{ env.nuget-package-prefix }}.${{ github.event.inputs.version }}.nupkg
+          --api-key ${{ secrets.GITHUB_TOKEN }}
+          --skip-duplicate
+          --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+
+...
