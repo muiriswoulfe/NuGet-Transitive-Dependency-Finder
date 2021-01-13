@@ -400,6 +400,9 @@ jobs:
           $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
+      - name: INITIALIZATION – .NET Install
+        uses: actions/setup-dotnet@main
+
       # Validation
       - name: VALIDATION – Super Linter
         uses: github/super-linter@master
