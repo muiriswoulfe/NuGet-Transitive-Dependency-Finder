@@ -53,11 +53,9 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
         private static ILoggerFactory CreateLoggerFactory() =>
             LoggerFactory.Create(builder =>
             {
-#pragma warning disable S4792 // Configuring loggers is security-sensitive
                 _ = builder.AddConsole(options => options.FormatterName = nameof(PlainConsoleFormatter))
                     .AddConsoleFormatter<PlainConsoleFormatter, ConsoleFormatterOptions>()
                     .SetMinimumLevel(LogLevel.Trace);
-#pragma warning restore S4792 // Configuring loggers is security-sensitive
             });
     }
 }
