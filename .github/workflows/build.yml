@@ -1,196 +1,496 @@
 # © Muiris Woulfe
 # Licensed under the MIT License
 
+---
+
 name: Build
 
 on:
-  pull_request:
-  push:
+  pull_request: null
+  push: null
   schedule:
-  - cron: '0 0 * * 1'
+    - cron: 0 0 * * 1
+
+defaults:
+  run:
+    shell: pwsh
 
 jobs:
   build-debug:
-    name: Build – Debug
+    name: Build
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration: [Debug, Release]
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@main
 
-    - name: Install .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.101
+      - name: INITIALIZATION – Get Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: tag
+        uses: jossef/action-latest-release-info@master
 
-    - name: Install NuGet Dependencies
-      run: dotnet restore
+      - name: INITIALIZATION – Version Extract
+        id: version
+        run: |-
+          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
+          Write-Output -InputObject "::set-output name=version::$Version"
 
-    - name: Build
-      run: dotnet build --configuration Debug --no-restore /maxCpuCount
+      - name: INITIALIZATION – Version Replace
+        run: |-
+          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
+          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
-    - name: Test
-      run: >-
-        dotnet test
-        --configuration Debug
-        --no-build
-        /property:CollectCoverage=true
-        /property:CoverletOutputFormat=opencover
+      - name: INITIALIZATION – .NET Install
+        uses: actions/setup-dotnet@main
 
-  build-release:
-    name: Build – Release
-    runs-on: windows-latest
+      # SonarCloud Initialization
+      - if: ${{ matrix.configuration == 'Release' }}
+        name: SONARCLOUD INITIALIZATION – Java Install
+        uses: actions/setup-java@main
+        with:
+          java-version: 15.0.1
 
+      - if: ${{ matrix.configuration == 'Release' }}
+        name: SONARCLOUD INITIALIZATION – SonarCloud Install
+        run: dotnet tool install dotnet-sonarscanner --tool-path .sonarcloud
+
+      - if: ${{ matrix.configuration == 'Release' }}
+        name: SONARCLOUD INITIALIZATION – SonarCloud Initialize
+        run: >-
+          .sonarcloud/dotnet-sonarscanner begin
+          /k:"${{ github.repository_owner }}_${{ github.event.repository.name }}"
+          /o:"${{ github.repository_owner }}"
+          /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          /d:sonar.host.url="https://sonarcloud.io"
+
+      # Build & Test
+      - name: BUILD & TEST – Project Restore
+        run: dotnet restore
+
+      - name: BUILD & TEST – Project Build
+        run: dotnet build --configuration ${{ matrix.configuration }} --no-restore /maxCpuCount
+
+      - name: BUILD & TEST – Project Test
+        run: >-
+          dotnet test
+          --configuration ${{ matrix.configuration }}
+          --no-build
+          /property:CollectCoverage=true
+          /property:CoverletOutputFormat=opencover
+
+      # SonarCloud Finalization
+      - if: ${{ matrix.configuration == 'Release' }}
+        name: SONARCLOUD FINALIZATION – SonarCloud Analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: .sonarcloud/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+
+  create-asset:
+    name: Create Asset
+    runs-on: ubuntu-latest
+    env:
+      project: NuGetTransitiveDependencyFinder.ConsoleApp
+    strategy:
+      fail-fast: false
+      matrix:
+        runtime:
+          [
+            linux-arm,
+            linux-arm64,
+            linux-musl-x64,
+            linux-x64,
+            osx-x64,
+            win-arm,
+            win-arm64,
+            win-x64,
+            win-x86
+          ]
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@main
 
-    - name: Install Java
-      uses: actions/setup-java@v1
-      with:
-        java-version: 15
+      - name: INITIALIZATION – Get Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: tag
+        uses: jossef/action-latest-release-info@master
 
-    - name: Install .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.101
+      - name: INITIALIZATION – Version Extract
+        id: version
+        run: |-
+          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
+          Write-Output -InputObject "::set-output name=version::$Version"
 
-    - name: Install NuGet Dependencies
-      run: dotnet restore
+      - name: INITIALIZATION – Version Replace
+        run: |-
+          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
+          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
-    - name: SonarCloud – Cache Packages
-      uses: actions/cache@v2
-      with:
-        path: ~\sonar\cache
-        key: ${{ runner.os }}-sonar
-        restore-keys: ${{ runner.os }}-sonar
+      - name: INITIALIZATION – .NET Install
+        uses: actions/setup-dotnet@main
 
-    - name: SonarCloud – Cache Scanner
-      id: cache-sonar-scanner
-      uses: actions/cache@v2
-      with:
-        path: .\.sonar\scanner
-        key: ${{ runner.os }}-sonar-scanner
-        restore-keys: ${{ runner.os }}-sonar-scanner
+      # Build
+      - name: BUILD – Project Restore
+        run: dotnet restore src/${{ env.project }}/${{ env.project }}.csproj --runtime ${{ matrix.runtime }}
 
-    - name: SonarCloud – Install Scanner
-      if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-      shell: pwsh
-      run: |
-        New-Item -Path .\.sonar\scanner -ItemType Directory
-        dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      - name: BUILD – Project Build
+        run: >-
+          dotnet build src/${{ env.project }}/${{ env.project }}.csproj
+          --configuration Release
+          --no-restore
+          --runtime ${{ matrix.runtime }}
+          /property:PublishSingleFile=true
+          /maxCpuCount
 
-    - name: SonarCloud – Initialize
-      shell: pwsh
-      run: >-
-        .\.sonar\scanner\dotnet-sonarscanner
-        begin
-        /k:"${{ github.repository_owner }}_${{ github.event.repository.name }}"
-        /o:"${{ github.repository_owner }}"
-        /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-        /d:sonar.host.url="https://sonarcloud.io"
-        /d:sonar.cs.opencover.reportsPaths=**/coverage.opencover.xml
+      # Publish
+      - name: PUBLISH – Project Publish
+        run: >-
+          dotnet publish src/${{ env.project }}/${{ env.project }}.csproj
+          --configuration Release
+          --no-build
+          --runtime ${{ matrix.runtime }}
+          --self-contained true
+          /property:PublishSingleFile=true
+          /property:PublishTrimmed=true
 
-    - name: Build
-      run: dotnet build --configuration Release --no-restore /maxCpuCount
+      # Upload
+      - name: UPLOAD – Get Platform
+        id: platform
+        run: |-
+          $Platform = '${{ matrix.runtime }}'.Split('-')[0]
+          Write-Output -InputObject "::set-output name=platform::$Platform"
 
-    - name: Test
-      run: >-
-        dotnet test
-        --configuration Release
-        --no-build
-        /property:CollectCoverage=true
-        /property:CoverletOutputFormat=opencover
+      - name: UPLOAD – Get File Names
+        env:
+          extension: >-
+            {
+              "linux": "",
+              "osx": "",
+              "win": ".exe"
+            }
+        id: file-names
+        run: |-
+          $Extension = '${{ fromJson(env.extension)[steps.platform.outputs.platform] }}'
+          $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
+          $AssetPath = '${{ github.workspace }}/src/${{ env.project }}/bin/Release/net5.0/'
+          $AssetPath += "${{ matrix.runtime }}/publish/${{ env.project }}$Extension"
+          Write-Output -InputObject "::set-output name=asset_path::$AssetPath"
+          Write-Output -InputObject "::set-output name=asset_name::$AssetName"
 
-    - name: SonarCloud – Analyze
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      shell: pwsh
-      run: .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+      - name: UPLOAD – Print Details
+        run: |-
+          $AssetPathFileSize = (Get-Content -LiteralPath '${{ steps.file-names.outputs.asset_path }}').Length
+          $AssetPathFileSize = "$AssetPathFileSize bytes"
+          Write-Output -InputObject 'Asset Name: ${{ steps.file-names.outputs.asset_name }}'
+          Write-Output -InputObject "Asset Path: ${{ steps.file-names.outputs.asset_path }} ($AssetPathFileSize)"
+
+  create-nuget:
+    name: Create NuGet Package
+    runs-on: ubuntu-latest
+    env:
+      nuget-package-prefix: src/NuGetTransitiveDependencyFinder/bin/Release/NuGetTransitiveDependencyFinder
+    steps:
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@main
+
+      - name: INITIALIZATION – Get Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: tag
+        uses: jossef/action-latest-release-info@master
+
+      - name: INITIALIZATION – Version Extract
+        id: version
+        run: |-
+          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
+          Write-Output -InputObject "::set-output name=version::$Version"
+
+      - name: INITIALIZATION – Version Replace
+        run: |-
+          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
+          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
+
+      - name: INITIALIZATION – .NET Install
+        uses: actions/setup-dotnet@main
+
+      # Create Logo
+      - name: CREATE LOGO – Install svgexport
+        run: npm install svgexport
+
+      - name: CREATE LOGO – Install pngout
+        run: npm install pngout-bin
+
+      - name: CREATE LOGO – Convert SVG
+        run: >-
+          node_modules/.bin/svgexport
+          src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
+          src/NuGetTransitiveDependencyFinder/Assets/Logo.png
+
+      - name: CREATE LOGO – Compress with block split threshold 0
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b0','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
+
+      - name: CREATE LOGO – Compress with block split threshold 128
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b128','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
+
+      - name: CREATE LOGO – Compress with block split threshold 192
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b192','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
+
+      - name: CREATE LOGO – Compress with block split threshold 256
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b256','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
+
+      - name: CREATE LOGO – Compress with block split threshold 512
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b512','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
+
+      - name: CREATE LOGO – Compress with block split threshold 1024
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b1024','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
+
+      - name: CREATE LOGO – Compress with block split threshold 2048
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b2048','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
+
+      - name: CREATE LOGO – Compress with block split threshold 4096
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b4096','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
+
+      - name: CREATE LOGO – Compress with block split threshold 8192
+        run: >-
+          Start-Process
+          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b8192','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
+
+      - name: CREATE LOGO – Delete SVG
+        run: Remove-Item -Path 'src/NuGetTransitiveDependencyFinder/Assets/Logo.svg'
+
+      # Build
+      - name: BUILD – Project Restore
+        run: dotnet restore src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+
+      - name: BUILD – Project Build
+        run: >-
+          dotnet build src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+          --configuration Release
+          --no-restore
+          /maxCpuCount
+
+      # Upload
+      - name: UPLOAD – Delete Documentation
+        run: Remove-Item -Path 'src/NuGetTransitiveDependencyFinder/bin/NuGetTransitiveDependencyFinder.xml'
+
+      - name: UPLOAD – Pack
+        run: >-
+          dotnet pack src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+          --configuration Release
+          --no-build
+          /property:PackageReleaseNotes="Release Notes"
+          /property:PackageVersion=${{ steps.version.outputs.version }}
+          /property:RepositoryCommit=${{ github.sha }}
+
+      - name: UPLOAD – Print Details
+        run: |-
+          $NuGetPackage = '${{ env.nuget-package-prefix }}.${{ steps.version.outputs.version }}.nupkg'
+          $NuGetSymbolsPackage = '${{ env.nuget-package-prefix }}.${{ steps.version.outputs.version }}.snupkg'
+          $NuGetPackageSize = (Get-Content -LiteralPath $NuGetPackage).Length
+          $NuGetPackageSize = "$NuGetPackageSize bytes"
+          $NuGetSymbolsPackageSize = (Get-Content -LiteralPath $NuGetSymbolsPackage).Length
+          $NuGetSymbolsPackageSize = "$NuGetSymbolsPackageSize bytes"
+          Write-Output -InputObject "NuGet Package: $NuGetPackageSize"
+          Write-Output -InputObject "NuGet Symbols Package: $NuGetSymbolsPackageSize"
 
   validate:
     name: Validate
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@main
 
-    - name: EditorConfig – Download
-      run: >-
-        curl -L
-        ${{ github.server_url }}/editorconfig-checker/editorconfig-checker/releases/download/2.2.0/ec-linux-amd64.tar.gz
-        > ec-linux-amd64.tar.gz
+      - name: INITIALIZATION – Get Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: tag
+        uses: jossef/action-latest-release-info@master
 
-    - name: EditorConfig – Extract
-      run: tar zxvf ec-linux-amd64.tar.gz
+      - name: INITIALIZATION – Version Extract
+        id: version
+        run: |-
+          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
+          Write-Output -InputObject "::set-output name=version::$Version"
 
-    - name: EditorConfig – Validate
-      run: ./bin/ec-linux-amd64
+      - name: INITIALIZATION – Version Replace
+        run: |-
+          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
+          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
-    - name: Markdown – Validate
-      uses: nosborn/github-action-markdown-cli@v1.1.1
-      with:
-        files: '**/*.md'
-        config_file: .markdownlint.json
+      # Markdown Validation
+      - name: MARKDOWN VALIDATION – Validate Links
+        uses: gaurav-nelson/github-action-markdown-link-check@master
+        with:
+          config-file: .github/linters/markdown-link-check.json
 
-    - name: Markdown – Validate .github
-      uses: nosborn/github-action-markdown-cli@v1.1.1
-      with:
-        files: .github/*.md
-        config_file: .markdownlint.json
+      # JSON Validation
+      - name: JSON VALIDATION – Validate .markdownlint.json
+        uses: Zingabopp/JsonValidate-Action@master
+        with:
+          json-file: .markdownlint.json
+          json-schema: >-
+            https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
+          use-draft: draft-07
 
-    - name: Markdown – Validate .github subdirectories
-      uses: nosborn/github-action-markdown-cli@v1.1.1
-      with:
-        files: .github/**/*.md
-        config_file: .markdownlint.json
+      - name: JSON VALIDATION – Validate src/stylecop.json – Download stylecop.schema.json
+        env:
+          project_url: https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master
+        run: >-
+          Invoke-WebRequest
+          -Uri '${{ env.project_url }}/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json'
+          -OutFile 'stylecop.schema.json'
 
-    - name: Markdown – Validate Links
-      uses: gaurav-nelson/github-action-markdown-link-check@1.0.11
+      - name: JSON VALIDATION – Validate src/stylecop.json – Update stylecop.schema.json
+        run: |-
+          $FileContent = Get-Content -Path 'stylecop.schema.json' -Raw
+          $FileContent = $FileContent -replace 'draft-04/schema#', 'draft-07/schema'
+          Set-Content -NoNewline -Path 'stylecop.schema.json' -Value $FileContent
 
-    - name: Security Scan – Validate
-      uses: ShiftLeftSecurity/scan-action@v1.3.0
-      with:
-        type: credscan,depscan
+      - name: JSON VALIDATION – Validate src/stylecop.json
+        uses: Zingabopp/JsonValidate-Action@master
+        with:
+          json-file: src/stylecop.json
+          json-schema: stylecop.schema.json
 
-    - name: Security Scan – Upload Report
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        sarif_file: reports
+      # INFER#
+      - name: INFER# – Validation
+        id: infersharp
+        uses: microsoft/infersharpaction@main
+        with:
+          binary-path: src
 
-    - name: Infer# – Run
-      id: run_infer_sharp
-      uses: microsoft/infersharpaction@v0.2
-      with:
-        binary-path: srcc
+      - name: INFER# – Print Results
+        run: Write-Output -InputObject '${{ steps.infersharp.outputs.results }}'
 
-    - name: Infer# – Analysis Results
-      run: echo "${{ steps.run_infer_sharp.outputs.results }}"
+      # Security Scan
+      - name: SECURITY SCAN – Validate
+        uses: ShiftLeftSecurity/scan-action@master
+        with:
+          type: credscan,depscan
+
+      - name: SECURITY SCAN – Upload Report
+        uses: github/codeql-action/upload-sarif@main
+        with:
+          sarif_file: reports
+
+  validate-lint:
+    name: Validate – Lint
+    runs-on: ubuntu-latest
+    steps:
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@main
+
+      - name: INITIALIZATION – Get Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: tag
+        uses: jossef/action-latest-release-info@master
+
+      - name: INITIALIZATION – Version Extract
+        id: version
+        run: |-
+          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
+          Write-Output -InputObject "::set-output name=version::$Version"
+
+      - name: INITIALIZATION – Version Replace
+        run: |-
+          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
+          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
+
+      # Validation
+      - name: VALIDATION – Super Linter
+        uses: github/super-linter@master
+        env:
+          EDITORCONFIG_FILE_NAME: ../../.editorconfig
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MARKDOWN_CONFIG_FILE: ../../.markdownlint.json
+          VALIDATE_CSHARP: false
 
   validate-codeql:
     name: Validate – CodeQL
-    runs-on: windows-latest
-
+    runs-on: ubuntu-latest
     steps:
-    - name: Configure Pagefile
-      uses: al-cheb/configure-pagefile-action@v1.2
-      with:
-        maximum-size: 32GB
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@main
 
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: INITIALIZATION – Get Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: tag
+        uses: jossef/action-latest-release-info@master
 
-    - name: CodeQL – Initialize
-      uses: github/codeql-action/init@v1
-      with:
-        queries: security-and-quality
+      - name: INITIALIZATION – Version Extract
+        id: version
+        run: |-
+          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
+          Write-Output -InputObject "::set-output name=version::$Version"
 
-    - name: CodeQL – Build
-      uses: github/codeql-action/autobuild@v1
+      - name: INITIALIZATION – Version Replace
+        run: |-
+          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
+          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
-    - name: CodeQL – Analyze
-      uses: github/codeql-action/analyze@v1
+      # Validation
+      - name: VALIDATION – CodeQL Initialize
+        uses: github/codeql-action/init@main
+        with:
+          queries: security-and-quality
+
+      - name: VALIDATION – CodeQL Build
+        uses: github/codeql-action/autobuild@main
+
+      - name: VALIDATION – CodeQL Analyze
+        uses: github/codeql-action/analyze@main
+
+...

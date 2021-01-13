@@ -129,4 +129,5 @@ For answers to common questions about this code of conduct, see the FAQ at
 <https://www.contributor-covenant.org/faq>. Translations are available at
 <https://www.contributor-covenant.org/translations>.
 
-[email]: mailto:mw.github@outlook.com?subject=CODE%20OF%20CONDUCT:%20NuGet%20Transitive%20Dependency%20Finder
+[email]:
+  mailto:mw.github@outlook.com?subject=CODE%20OF%20CONDUCT:%20NuGet%20Transitive%20Dependency%20Finder
