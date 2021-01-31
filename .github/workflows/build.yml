@@ -27,6 +27,8 @@ jobs:
       # Initialization
       - name: INITIALIZATION – Checkout
         uses: actions/checkout@main
+        with:
+          fetch-depth: 0
 
       - name: INITIALIZATION – Get Tag
         env:
