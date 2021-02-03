@@ -19,7 +19,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <typeparam name="TValue">The type to compare.</typeparam>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="function">The comparison logic specific to <c>TValue</c> which takes two objects of type
+        /// <param name="function">The comparison logic specific to <c>TValue</c>, which takes two objects of type
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
@@ -38,7 +38,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <typeparam name="TValue">The type to compare.</typeparam>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="function">The comparison logic specific to <c>TValue</c> which takes two objects of type
+        /// <param name="function">The comparison logic specific to <c>TValue</c>, which takes two objects of type
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is not equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
@@ -51,7 +51,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <typeparam name="TValue">The type to compare.</typeparam>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="function">The comparison logic specific to <c>TValue</c> which takes two objects of type
+        /// <param name="function">The comparison logic specific to <c>TValue</c>, which takes two objects of type
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is less than <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
@@ -70,7 +70,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <typeparam name="TValue">The type to compare.</typeparam>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="function">The comparison logic specific to <c>TValue</c> which takes two objects of type
+        /// <param name="function">The comparison logic specific to <c>TValue</c>, which takes two objects of type
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is less than or equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
@@ -83,7 +83,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <typeparam name="TValue">The type to compare.</typeparam>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="function">The comparison logic specific to <c>TValue</c> which takes two objects of type
+        /// <param name="function">The comparison logic specific to <c>TValue</c>, which takes two objects of type
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is greater than <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
@@ -102,7 +102,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <typeparam name="TValue">The type to compare.</typeparam>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <param name="function">The comparison logic specific to <c>TValue</c> which takes two objects of type
+        /// <param name="function">The comparison logic specific to <c>TValue</c>, which takes two objects of type
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is greater than or equal to <see paramref="right"/>;
         /// otherwise, <c>false</c>.</returns>
@@ -110,13 +110,13 @@ namespace NuGetTransitiveDependencyFinder.Output
             IsEqual(left, right, function) || IsGreater(left, right, function);
 
         /// <summary>
-        /// Compares the current object to <see paramref="other"/>, returning an integer that indicates their
+        /// Compares <see paramref="current"/> to <see paramref="other"/>, returning an integer that indicates their
         /// relationship.
         /// </summary>
         /// <typeparam name="TValue">The type to compare.</typeparam>
         /// <param name="current">The object corresponding to <c>this</c>, from the context of the caller.</param>
         /// <param name="other">The object against which to compare <see paramref="current"/>.</param>
-        /// <param name="function">The comparison logic specific to <c>TValue</c> which takes two objects of type
+        /// <param name="function">The comparison logic specific to <c>TValue</c>, which takes two objects of type
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>
         /// <returns>A value less than zero if <see paramref="current"/> is less than <see paramref="other"/>, zero if
         /// <see paramref="current"/> is equal to <see paramref="other"/>, or a value greater than zero if
@@ -133,14 +133,14 @@ namespace NuGetTransitiveDependencyFinder.Output
                 };
 
         /// <summary>
-        /// Compares the current object to <see paramref="other"/>, returning an integer that indicates their
+        /// Compares <see paramref="current"/> to <see paramref="other"/>, returning an integer that indicates their
         /// relationship.
         /// </summary>
         /// <typeparam name="TValue">The type to compare.</typeparam>
         /// <exception cref="ArgumentException"><paramref name="obj"/> is not of type <c>TValue</c>.</exception>
         /// <param name="current">The object corresponding to <c>this</c>, from the context of the caller.</param>
         /// <param name="obj">The object against which to compare <see paramref="current"/>.</param>
-        /// <param name="function">The comparison logic specific to <c>TValue</c> which takes two objects of type
+        /// <param name="function">The comparison logic specific to <c>TValue</c>, which takes two objects of type
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>
         /// <param name="className">The name of the calling class, which will be used within the exception
         /// message.</param>
@@ -166,12 +166,12 @@ namespace NuGetTransitiveDependencyFinder.Output
             };
 
         /// <summary>
-        /// Determines if the current object is equal to <see paramref="other"/>.
+        /// Determines if <see paramref="current"/> is equal to <see paramref="other"/>.
         /// </summary>
         /// <typeparam name="TValue">The type to compare.</typeparam>
         /// <param name="current">The object corresponding to <c>this</c>, from the context of the caller.</param>
         /// <param name="other">The object against which to compare <see paramref="current"/>.</param>
-        /// <param name="function">The comparison logic specific to <c>TValue</c> which takes two objects of type
+        /// <param name="function">The comparison logic specific to <c>TValue</c>, which takes two objects of type
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>
         /// <returns><c>true</c> if <see paramref="current"/> is equal to <see paramref="other"/>; otherwise,
         /// <c>false</c>.</returns>
@@ -179,12 +179,12 @@ namespace NuGetTransitiveDependencyFinder.Output
             CompareTo(current, other, function) == 0;
 
         /// <summary>
-        /// Determines if the current object is equal to <see paramref="obj"/>.
+        /// Determines if <see paramref="current"/> is equal to <see paramref="obj"/>.
         /// </summary>
         /// <typeparam name="TValue">The type to compare.</typeparam>
         /// <param name="current">The object corresponding to <c>this</c>, from the context of the caller.</param>
         /// <param name="obj">The object against which to compare <see paramref="current"/>.</param>
-        /// <param name="function">The comparison logic specific to <c>TValue</c> which takes two objects of type
+        /// <param name="function">The comparison logic specific to <c>TValue</c>, which takes two objects of type
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>
         /// <returns><c>true</c> if <see paramref="current"/> is equal to <see paramref="obj"/>; otherwise,
         /// <c>false</c>.</returns>

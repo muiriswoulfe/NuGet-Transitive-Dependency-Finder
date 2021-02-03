@@ -37,9 +37,9 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         private static readonly Project DefaultProject = CreateDefaultProject();
 
         /// <summary>
-        /// The default test value for a <see cref="Project"/> object without children.
+        /// The default test value for a <see cref="Project"/> object not comprising children.
         /// </summary>
-        private static readonly Project DefaultProjectWithoutChildren = new(DefaultIdentifier, 0);
+        private static readonly Project DefaultProjectNotComprisingChildren = new(DefaultIdentifier, 0);
 
         /// <summary>
         /// The data for testing <see cref="Base{Project}.SortedChildren"/>.
@@ -83,25 +83,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests than when <see cref="Projects.IsAddValid(Project?)"/> is called with a <see cref="Project"/> with
-        /// children, it returns <c>true</c>.
+        /// Tests than when <see cref="Projects.IsAddValid(Project?)"/> is called with a <see cref="Project"/> not
+        /// comprising children, it returns <c>false</c>.
         /// </summary>
         [Fact]
-        public void IsAddValid_WithProjectWithChildren_ReturnsTrue()
-        {
-            // Act
-            var result = DefaultValue.IsAddValid(DefaultProject);
-
-            // Assert
-            _ = result.Should().BeTrue();
-        }
-
-        /// <summary>
-        /// Tests than when <see cref="Projects.IsAddValid(Project?)"/> is called with a <see cref="Project"/> without
-        /// children, it returns <c>false</c>.
-        /// </summary>
-        [Fact]
-        public void IsAddValid_WithProjectWithoutChildren_ReturnsFalse()
+        public void IsAddValid_WithProjectNotComprisingChildren_ReturnsFalse()
         {
             // Act
             var result = DefaultValue.IsAddValid(new(DefaultIdentifier, 0));
@@ -111,11 +97,25 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Base{Project}.HasChildren"/> is called for a <see cref="Projects"/> object
-        /// without children, it returns <c>false</c>.
+        /// Tests than when <see cref="Projects.IsAddValid(Project?)"/> is called with a <see cref="Project"/>
+        /// comprising children, it returns <c>true</c>.
         /// </summary>
         [Fact]
-        public void HasChildren_WithoutChildren_ReturnsFalse()
+        public void IsAddValid_WithProjectComprisingChildren_ReturnsTrue()
+        {
+            // Act
+            var result = DefaultValue.IsAddValid(DefaultProject);
+
+            // Assert
+            _ = result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Project}.HasChildren"/> is called for a <see cref="Projects"/> object not
+        /// comprising children, it returns <c>false</c>.
+        /// </summary>
+        [Fact]
+        public void HasChildren_NotComprisingChildren_ReturnsFalse()
         {
             // Act
             var result = DefaultValue.HasChildren;
@@ -125,15 +125,15 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Base{Project}.HasChildren"/> is called for a <see cref="Projects"/> object with
-        /// children containing no children, it returns <c>false</c>.
+        /// Tests that when <see cref="Base{Project}.HasChildren"/> is called for a <see cref="Projects"/> object
+        /// comprising children without children, it returns <c>false</c>.
         /// </summary>
         [Fact]
-        public void HasChildren_WithChildrenContainingNoChildren_ReturnsFalse()
+        public void HasChildren_ComprisingChildrenWithoutChildren_ReturnsFalse()
         {
             // Arrange
             var projects = new Projects(1);
-            projects.Add(DefaultProjectWithoutChildren);
+            projects.Add(DefaultProjectNotComprisingChildren);
 
             // Act
             var result = projects.HasChildren;
@@ -143,11 +143,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Base{Project}.HasChildren"/> is called for a <see cref="Projects"/> object with
-        /// children containing children, it returns <c>true</c>.
+        /// Tests that when <see cref="Base{Project}.HasChildren"/> is called for a <see cref="Projects"/> object
+        /// comprising children with children, it returns <c>true</c>.
         /// </summary>
         [Fact]
-        public void HasChildren_WithChildrenContainingChildren_ReturnsTrue()
+        public void HasChildren_ComprisingChildrenWithChildren_ReturnsTrue()
         {
             // Arrange
             var projects = new Projects(1);
@@ -161,15 +161,15 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Base{Project}.HasChildren"/> is called for a <see cref="Projects"/> object with
-        /// some children containing children, it returns <c>true</c>.
+        /// Tests that when <see cref="Base{Project}.HasChildren"/> is called for a <see cref="Projects"/> object
+        /// comprising children for which a subset have children, it returns <c>true</c>.
         /// </summary>
         [Fact]
-        public void HasChildren_WithSomeChildrenContainingChildren_ReturnsTrue()
+        public void HasChildren_ComprisingChildrenWithSubsetHavingChildren_ReturnsTrue()
         {
             // Arrange
             var projects = new Projects(2);
-            projects.Add(DefaultProjectWithoutChildren);
+            projects.Add(DefaultProjectNotComprisingChildren);
             projects.Add(DefaultProject);
 
             // Act
@@ -180,11 +180,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Base{Project}.SortedChildren"/> is called for a <see cref="Projects"/> object
-        /// without children, it returns the empty collection.
+        /// Tests that when <see cref="Base{Project}.SortedChildren"/> is called for a <see cref="Projects"/> object not
+        /// comprising children, it returns the empty collection.
         /// </summary>
         [Fact]
-        public void SortedChildren_WithoutChildren_ReturnsEmptyCollection()
+        public void SortedChildren_NotComprisingChildren_ReturnsEmptyCollection()
         {
             // Act
             var result = DefaultValue.SortedChildren;
@@ -195,10 +195,10 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="Base{Project}.SortedChildren"/> is called for a <see cref="Projects"/> object
-        /// with children containing no children, it returns the empty collection.
+        /// comprising children without children, it returns the empty collection.
         /// </summary>
         [Fact]
-        public void SortedChildren_WithChildrenContainingNoChildren_ReturnsEmptyCollection()
+        public void SortedChildren_ComprisingChildrenWithoutChildren_ReturnsEmptyCollection()
         {
             // Arrange
             var projects = new Projects(6);
@@ -218,10 +218,10 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="Base{Project}.SortedChildren"/> is called for a <see cref="Projects"/> object
-        /// with children containing children, it returns the sorted collection of children.
+        /// comprising children with children, it returns the sorted collection of children.
         /// </summary>
         [Fact]
-        public void SortedChildren_WithChildrenContainingChildren_ReturnsSortedChildren()
+        public void SortedChildren_ComprisingChildrenWithChildren_ReturnsSortedChildren()
         {
             // Arrange
             var projects = new Projects(6);
@@ -241,10 +241,10 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="Base{Project}.SortedChildren"/> is called for a <see cref="Projects"/> object
-        /// with some children containing children, it returns the sorted collection of children of those children.
+        /// comprising children for which a subset have children, it returns the sorted collection of children.
         /// </summary>
         [Fact]
-        public void SortedChildren_WithSomeChildrenContainingChildren_ReturnsSortedCollection()
+        public void SortedChildren_ComprisingChildrenWithSubsetHavingChildren_ReturnsSortedCollection()
         {
             // Arrange
             var projects = new Projects(6);

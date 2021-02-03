@@ -14,7 +14,7 @@ namespace NuGetTransitiveDependencyFinder.Output
     public sealed class Dependency : IComparable, IComparable<Dependency>, IEquatable<Dependency>
     {
         /// <summary>
-        /// The comparison logic specific to <see cref="Dependency"/> which takes two objects of type
+        /// The comparison logic specific to <see cref="Dependency"/>, which takes two objects of type
         /// <see cref="Dependency"/> and returns an <see cref="int"/>.
         /// </summary>
         private static readonly Func<Dependency, Dependency, int> ComparisonFunction =

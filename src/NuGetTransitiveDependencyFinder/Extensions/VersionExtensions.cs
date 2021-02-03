@@ -15,7 +15,7 @@ namespace NuGetTransitiveDependencyFinder.Extensions
     internal static class VersionExtensions
     {
         /// <summary>
-        /// Converts a <see cref="Version"/> to a shortened string, where the build and revision elements will be
+        /// Converts a <see cref="Version"/> to a shortened string, in which the build and revision elements will be
         /// excluded when they are set to 0.
         /// </summary>
         /// <param name="value">The <see cref="Version"/> to convert.</param>

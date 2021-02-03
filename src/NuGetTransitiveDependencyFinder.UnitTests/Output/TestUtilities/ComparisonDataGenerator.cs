@@ -23,7 +23,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
         /// <param name="defaultValue">The default test value.</param>
         /// <param name="clonedDefaultValue">A clone of <see paramref="defaultValue"/>, where the object contents are
         /// identical, but the object reference is not.</param>
-        /// <param name="lesserValue">The lesser test value, which must occur prior to <see paramref="defaultValue"/>
+        /// <param name="lesserValue">The lesser test value, which occurs prior to <see paramref="defaultValue"/>
         /// according to an ordered sort.</param>
         /// <param name="supplementalTestData">The supplemental class-specific test data to be added to the generic
         /// test data.</param>
@@ -165,7 +165,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
         /// <param name="defaultValue">The default test value.</param>
         /// <param name="clonedDefaultValue">A clone of <see paramref="defaultValue"/>, where the object contents are
         /// identical, but the object reference is not.</param>
-        /// <param name="lesserValue">The lesser test value, which must occur prior to <see paramref="defaultValue"/>
+        /// <param name="lesserValue">The lesser test value, which occurs prior to <see paramref="defaultValue"/>
         /// according to an ordered sort.</param>
         /// <param name="supplementalTestData">The supplemental class-specific test data to be added to the generic
         /// test data.</param>

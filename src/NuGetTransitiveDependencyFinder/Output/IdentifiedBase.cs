@@ -19,7 +19,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         where TChild : notnull
     {
         /// <summary>
-        /// The comparison logic specific to <see cref="IdentifiedBase{TIdentifier, TChild}"/> which takes two objects
+        /// The comparison logic specific to <see cref="IdentifiedBase{TIdentifier, TChild}"/>, which takes two objects
         /// of type <see cref="IdentifiedBase{TIdentifier, TChild}"/> and returns an <see cref="int"/>.
         /// </summary>
         internal static readonly Func<IdentifiedBase<TIdentifier, TChild>, IdentifiedBase<TIdentifier, TChild>, int>
@@ -55,7 +55,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         public TIdentifier Identifier { get; }
 
         /// <summary>
-        /// Gets the comparison logic specific to <see cref="IdentifiedBase{TIdentifier, TChild}"/> which takes two
+        /// Gets the comparison logic specific to <see cref="IdentifiedBase{TIdentifier, TChild}"/>, which takes two
         /// objects of type <see cref="IdentifiedBase{TIdentifier, TChild}"/> and returns an <see cref="int"/>.
         /// </summary>
         internal static Func<IdentifiedBase<TIdentifier, TChild>, IdentifiedBase<TIdentifier, TChild>, int>

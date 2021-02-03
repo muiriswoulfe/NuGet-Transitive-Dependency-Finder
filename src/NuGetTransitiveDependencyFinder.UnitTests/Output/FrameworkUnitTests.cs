@@ -46,7 +46,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         private static readonly Framework DefaultValue = new(DefaultIdentifier, DefaultChildren);
 
         /// <summary>
-        /// A clone of <see cref="DefaultValue"/>, where the object contents are identical, but the object reference is
+        /// A clone of <see cref="DefaultValue"/>, where the object content is identical, but the object reference is
         /// not.
         /// </summary>
         private static readonly Framework ClonedDefaultValue = new(DefaultIdentifier, DefaultChildren);
@@ -497,11 +497,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> without
-        /// children, it returns <c>false</c>.
+        /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> object
+        /// not comprising children, it returns <c>false</c>.
         /// </summary>
         [Fact]
-        public void HasChildren_WithoutChildren_ReturnsFalse()
+        public void HasChildren_NotComprisingChildren_ReturnsFalse()
         {
             // Act
             var result = DefaultValue.HasChildren;
@@ -511,11 +511,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> with
-        /// children added during construction, it returns <c>true</c>.
+        /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> object
+        /// comprising children added during construction, it returns <c>true</c>.
         /// </summary>
         [Fact]
-        public void HasChildren_WithChildrenAddedDuringConstruction_ReturnsTrue()
+        public void HasChildren_ComprisingChildrenAddedDuringConstruction_ReturnsTrue()
         {
             // Arrange
             var framework = new Framework(
@@ -530,11 +530,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> with
-        /// children added after construction, it returns <c>true</c>.
+        /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> object
+        /// comprising children added after construction, it returns <c>true</c>.
         /// </summary>
         [Fact]
-        public void HasChildren_WithChildrenAddedAfterConstruction_ReturnsTrue()
+        public void HasChildren_ComprisingChildrenAddedAfterConstruction_ReturnsTrue()
         {
             // Arrange
             var framework = new Framework(DefaultIdentifier, DefaultChildren);
@@ -548,11 +548,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/>
-        /// without children, it returns the empty collection.
+        /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/> object
+        /// not comprising children, it returns the empty collection.
         /// </summary>
         [Fact]
-        public void SortedChildren_WithoutChildren_ReturnsEmptyCollection()
+        public void SortedChildren_NotComprisingChildren_ReturnsEmptyCollection()
         {
             // Act
             var result = DefaultValue.SortedChildren;
@@ -562,11 +562,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/> with
-        /// children added after construction, it returns the sorted collection of children.
+        /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/> object
+        /// comprising children added during construction, it returns the sorted collection of children.
         /// </summary>
         [Fact]
-        public void SortedChildren_WithChildrenAddedDuringConstruction_ReturnsSortedChildren()
+        public void SortedChildren_ComprisingChildrenAddedDuringConstruction_ReturnsSortedChildren()
         {
             // Arrange
             var framework = new Framework(
@@ -589,11 +589,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/> with
-        /// children added after construction, it returns the sorted collection of children.
+        /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/> object
+        /// comprising children added after construction, it returns the sorted collection of children.
         /// </summary>
         [Fact]
-        public void SortedChildren_WithChildrenAddedAfterConstruction_ReturnsSortedChildren()
+        public void SortedChildren_ComprisingChildrenAddedAfterConstruction_ReturnsSortedChildren()
         {
             // Arrange
             var framework = new Framework(DefaultIdentifier, DefaultChildren);
@@ -612,11 +612,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/> with
-        /// children added both during and after construction, it returns the sorted collection of children.
+        /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/> object
+        /// comprising children added both during and after construction, it returns the sorted collection of children.
         /// </summary>
         [Fact]
-        public void SortedChildren_WithChildrenAddedDuringAndAfterConstruction_ReturnsSortedChildren()
+        public void SortedChildren_ComprisingChildrenAddedDuringAndAfterConstruction_ReturnsSortedChildren()
         {
             // Arrange
             var framework = new Framework(

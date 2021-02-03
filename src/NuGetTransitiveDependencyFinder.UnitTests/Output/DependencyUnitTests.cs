@@ -35,7 +35,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         private static readonly Dependency DefaultValue = new(DefaultIdentifier, DefaultVersion);
 
         /// <summary>
-        /// A clone of <see cref="DefaultValue"/>, where the object contents are identical, but the object reference is
+        /// A clone of <see cref="DefaultValue"/>, where the object content is identical, but the object reference is
         /// not.
         /// </summary>
         private static readonly Dependency ClonedDefaultValue = new(DefaultIdentifier, DefaultVersion);

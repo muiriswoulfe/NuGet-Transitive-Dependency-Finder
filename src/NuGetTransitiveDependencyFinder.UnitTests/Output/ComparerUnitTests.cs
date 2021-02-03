@@ -18,8 +18,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
     public class ComparerUnitTests
     {
         /// <summary>
-        /// The comparison logic specific to <see cref="Version"/> which takes two objects of type <see cref="Version"/>
-        /// and returns an <see cref="int"/>.
+        /// The comparison logic specific to <see cref="Version"/>, which takes two objects of type
+        /// <see cref="Version"/> and returns an <see cref="int"/>.
         /// </summary>
         private static readonly Func<Version, Version, int> ComparisonFunction = (Version current, Version other) =>
             current.CompareTo(other);
@@ -30,7 +30,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         private static readonly Version DefaultValue = new(1, 0, 0, 0);
 
         /// <summary>
-        /// A clone of <see cref="DefaultValue"/>, where the object contents are identical, but the object reference is
+        /// A clone of <see cref="DefaultValue"/>, where the object content is identical, but the object reference is
         /// not.
         /// </summary>
         private static readonly Version ClonedDefaultValue = (DefaultValue.Clone() as Version)!;
