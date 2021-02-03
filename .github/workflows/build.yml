@@ -71,12 +71,20 @@ jobs:
           /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           /d:sonar.host.url="https://sonarcloud.io"
 
-      # Build
-      - name: BUILD – Project Restore
+      # Build & Test
+      - name: BUILD & TEST – Project Restore
         run: dotnet restore
 
-      - name: BUILD – Project Build
+      - name: BUILD & TEST – Project Build
         run: dotnet build --configuration ${{ matrix.configuration }} --no-restore /maxCpuCount
+
+      - name: BUILD & TEST – Project Test
+        run: >-
+          dotnet test
+          --configuration ${{ matrix.configuration }}
+          --no-build
+          /property:CollectCoverage=true
+          /property:CoverletOutputFormat=opencover
 
       # SonarCloud Finalization
       - if: ${{ matrix.configuration == 'Release' }}
@@ -392,6 +400,16 @@ jobs:
         with:
           json-file: src/stylecop.json
           json-schema: stylecop.schema.json
+
+      # INFER#
+      - name: INFER# – Validation
+        id: infersharp
+        uses: microsoft/infersharpaction@main
+        with:
+          binary-path: src
+
+      - name: INFER# – Print Results
+        run: Write-Output -InputObject '${{ steps.infersharp.outputs.results }}'
 
       # Security Scan
       - name: SECURITY SCAN – Validate

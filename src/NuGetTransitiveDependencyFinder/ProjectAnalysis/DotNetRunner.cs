@@ -34,7 +34,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         public DotNetRunner(ILoggerFactory loggerFactory, string parameters, string workingDirectory)
         {
             this.logger = loggerFactory.CreateLogger(nameof(DotNetRunner));
-            this.processStartInfo = new ProcessStartInfo("dotnet", parameters)
+            this.processStartInfo = new("dotnet", parameters)
             {
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,

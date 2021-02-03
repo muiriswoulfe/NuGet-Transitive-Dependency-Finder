@@ -17,7 +17,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Resources
         /// The resource manager, through which the localized strings are accessed.
         /// </summary>
         private static readonly ResourceManager ResourceManager =
-            new ResourceManager(typeof(Strings).FullName!, typeof(Strings).Assembly);
+            new(typeof(Strings).FullName!, typeof(Strings).Assembly);
 
         /// <summary>
         /// Gets the localized string.

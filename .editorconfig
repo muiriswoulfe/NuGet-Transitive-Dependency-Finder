@@ -414,7 +414,7 @@ dotnet_naming_rule.parameters_rule.style                = camel_case_style
 dotnet_naming_rule.parameters_rule.severity             = warning
 
 ##########################################
-# Project-Specific Settings
+# Project-Specific
 ##########################################
 
 [*]
@@ -431,10 +431,11 @@ max_line_length = unset
 
 [*.cs]
 dotnet_analyzer_diagnostic.severity = error
-dotnet_diagnostic.CA1062.severity = none
 dotnet_diagnostic.RCS1142.severity = none
-dotnet_diagnostic.SA1313.severity = none
+dotnet_diagnostic.S3442.severity = none
+dotnet_diagnostic.SA1000.severity = none
 dotnet_diagnostic.SA1009.severity = none
+dotnet_diagnostic.SA1313.severity = none
 
 [*.md]
 indent_size = unset

@@ -6,12 +6,22 @@
 version: 2
 
 updates:
+  - directory: /src/NuGetTransitiveDependencyFinder/
+    package-ecosystem: nuget
+    schedule:
+      interval: daily
+
   - directory: /src/NuGetTransitiveDependencyFinder.ConsoleApp/
     package-ecosystem: nuget
     schedule:
       interval: daily
 
-  - directory: /src/NuGetTransitiveDependencyFinder/
+  - directory: /src/NuGetTransitiveDependencyFinder.ConsoleApp.UnitTests/
+    package-ecosystem: nuget
+    schedule:
+      interval: daily
+
+  - directory: /src/NuGetTransitiveDependencyFinder.UnitTests/
     package-ecosystem: nuget
     schedule:
       interval: daily
