@@ -1,3 +1,6 @@
 {
-  "ignore": ["**/workflows/*.yml"]
+  "ignore": [
+    ".github/workflows/build.yml",
+    ".github/workflows/release.yml"
+  ]
 }
