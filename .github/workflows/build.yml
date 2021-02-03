@@ -30,24 +30,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: INITIALIZATION – Get Tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: tag
-        uses: jossef/action-latest-release-info@master
-
-      - name: INITIALIZATION – Version Extract
-        id: version
-        run: |-
-          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
-          Write-Output -InputObject "::set-output name=version::$Version"
-
-      - name: INITIALIZATION – Version Replace
-        run: |-
-          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
-          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
-          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
-
       - name: INITIALIZATION – .NET Install
         uses: actions/setup-dotnet@main
 
@@ -340,24 +322,6 @@ jobs:
       - name: INITIALIZATION – Checkout
         uses: actions/checkout@main
 
-      - name: INITIALIZATION – Get Tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: tag
-        uses: jossef/action-latest-release-info@master
-
-      - name: INITIALIZATION – Version Extract
-        id: version
-        run: |-
-          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
-          Write-Output -InputObject "::set-output name=version::$Version"
-
-      - name: INITIALIZATION – Version Replace
-        run: |-
-          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
-          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
-          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
-
       # Markdown Validation
       - name: MARKDOWN VALIDATION – Validate Links
         uses: gaurav-nelson/github-action-markdown-link-check@master
@@ -412,24 +376,6 @@ jobs:
       - name: INITIALIZATION – Checkout
         uses: actions/checkout@main
 
-      - name: INITIALIZATION – Get Tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: tag
-        uses: jossef/action-latest-release-info@master
-
-      - name: INITIALIZATION – Version Extract
-        id: version
-        run: |-
-          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
-          Write-Output -InputObject "::set-output name=version::$Version"
-
-      - name: INITIALIZATION – Version Replace
-        run: |-
-          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
-          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
-          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
-
       # Validation
       - name: VALIDATION – Super Linter
         uses: github/super-linter@master
@@ -446,24 +392,6 @@ jobs:
       # Initialization
       - name: INITIALIZATION – Checkout
         uses: actions/checkout@main
-
-      - name: INITIALIZATION – Get Tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: tag
-        uses: jossef/action-latest-release-info@master
-
-      - name: INITIALIZATION – Version Extract
-        id: version
-        run: |-
-          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
-          Write-Output -InputObject "::set-output name=version::$Version"
-
-      - name: INITIALIZATION – Version Replace
-        run: |-
-          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
-          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
-          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       # Validation
       - name: VALIDATION – CodeQL Initialize
