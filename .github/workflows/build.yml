@@ -16,7 +16,7 @@ defaults:
     shell: pwsh
 
 jobs:
-  build-debug:
+  build:
     name: Build
     runs-on: ubuntu-latest
     strategy:
@@ -76,8 +76,43 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: .sonarcloud/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
+  replace-version:
+    name: Replace Version
+    runs-on: ubuntu-latest
+    steps:
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@main
+
+      - name: INITIALIZATION – Get Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: tag
+        uses: jossef/action-latest-release-info@master
+
+      - name: INITIALIZATION – Version Extract
+        id: version
+        run: |-
+          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
+          Write-Output -InputObject "::set-output name=version::$Version"
+
+      - name: INITIALIZATION – Version Replace
+        run: |-
+          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
+          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
+
+      # Store
+      - name: STORE – Upload AssemblyAttributes.cs
+        uses: actions/upload-artifact@main
+        with:
+          name: AssemblyAttributes.cs
+          path: src/Shared/Properties/AssemblyAttributes.cs
+          retention-days: 1
+
   create-asset:
     name: Create Asset
+    needs: replace-version
     runs-on: ubuntu-latest
     env:
       project: NuGetTransitiveDependencyFinder.ConsoleApp
@@ -101,23 +136,11 @@ jobs:
       - name: INITIALIZATION – Checkout
         uses: actions/checkout@main
 
-      - name: INITIALIZATION – Get Tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: tag
-        uses: jossef/action-latest-release-info@master
-
-      - name: INITIALIZATION – Version Extract
-        id: version
-        run: |-
-          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
-          Write-Output -InputObject "::set-output name=version::$Version"
-
-      - name: INITIALIZATION – Version Replace
-        run: |-
-          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
-          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
-          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
+      - name: INITIALIZATION – Download AssemblyAttributes.cs
+        uses: actions/download-artifact@main
+        with:
+          name: AssemblyAttributes.cs
+          path: src/Shared/Properties/AssemblyAttributes.cs
 
       - name: INITIALIZATION – .NET Install
         uses: actions/setup-dotnet@main
@@ -179,6 +202,7 @@ jobs:
 
   create-nuget:
     name: Create NuGet Package
+    needs: replace-version
     runs-on: ubuntu-latest
     env:
       nuget-package-prefix: src/NuGetTransitiveDependencyFinder/bin/Release/NuGetTransitiveDependencyFinder
@@ -187,23 +211,11 @@ jobs:
       - name: INITIALIZATION – Checkout
         uses: actions/checkout@main
 
-      - name: INITIALIZATION – Get Tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: tag
-        uses: jossef/action-latest-release-info@master
-
-      - name: INITIALIZATION – Version Extract
-        id: version
-        run: |-
-          $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
-          Write-Output -InputObject "::set-output name=version::$Version"
-
-      - name: INITIALIZATION – Version Replace
-        run: |-
-          $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
-          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
-          Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
+      - name: INITIALIZATION – Download AssemblyAttributes.cs
+        uses: actions/download-artifact@main
+        with:
+          name: AssemblyAttributes.cs
+          path: src/Shared/Properties/AssemblyAttributes.cs
 
       - name: INITIALIZATION – .NET Install
         uses: actions/setup-dotnet@main
