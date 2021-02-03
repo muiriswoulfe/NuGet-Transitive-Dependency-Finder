@@ -393,16 +393,6 @@ jobs:
           json-file: src/stylecop.json
           json-schema: stylecop.schema.json
 
-      # Application Inspector
-      - name: APPLICATION INSPECTOR – Validate
-        uses: microsoft/ApplicationInspector-Action@main
-
-      - name: APPLICATION INSPECTOR – Upload Results
-        uses: actions/upload-artifact@main
-        with:
-          name: Application Inspector Results
-          path: AppInspectorResults.json
-
       # Security Scan
       - name: SECURITY SCAN – Validate
         uses: ShiftLeftSecurity/scan-action@master
@@ -413,6 +403,16 @@ jobs:
         uses: github/codeql-action/upload-sarif@main
         with:
           sarif_file: reports
+
+      # Application Inspector
+      - name: APPLICATION INSPECTOR – Run
+        uses: microsoft/ApplicationInspector-Action@main
+
+      - name: APPLICATION INSPECTOR – Upload Results
+        uses: actions/upload-artifact@main
+        with:
+          name: Application Inspector Results
+          path: AppInspectorResults.json
 
   validate-lint:
     name: Validate – Lint
