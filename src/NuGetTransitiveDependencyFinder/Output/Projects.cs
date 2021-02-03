@@ -9,20 +9,20 @@ namespace NuGetTransitiveDependencyFinder.Output
     /// A class representing the outputted projects information.
     /// </summary>
     /// <remarks>The child elements of this class are the <see cref="Project"/> objects.</remarks>
-    public class Projects : Base<Project>
+    public sealed class Projects : Base<Project>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Projects"/> class.
         /// </summary>
         /// <param name="capacity">The quantity of projects for which the collection initially has adequate
         /// capacity.</param>
-        public Projects(int capacity)
+        internal Projects(int capacity)
             : base(capacity)
         {
         }
 
         /// <inheritdoc/>
-        protected override bool IsAddValid(Project child) =>
+        internal override bool IsAddValid(Project child) =>
             child.HasChildren;
     }
 }

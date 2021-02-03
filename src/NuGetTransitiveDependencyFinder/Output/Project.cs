@@ -23,7 +23,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="identifier">The project identifier.</param>
         /// <param name="capacity">The quantity of .NET framework identifiers for which the collection initially has
         /// adequate capacity.</param>
-        public Project(string identifier, int capacity)
+        internal Project(string identifier, int capacity)
             : base(identifier, capacity)
         {
         }
@@ -37,8 +37,8 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="right">The right operand to compare.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
-        public static bool operator ==(Project left, Project right) =>
-            left.CompareTo(right) == 0;
+        public static bool operator ==(Project? left, Project? right) =>
+            Comparer.IsEqual(left, right, ComparisonFunction);
 
         /// <summary>
         /// Determines if <see paramref="left"/> is not equal to <see paramref="right"/>.
@@ -49,8 +49,8 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="right">The right operand to compare.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is not equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
-        public static bool operator !=(Project left, Project right) =>
-            left.CompareTo(right) != 0;
+        public static bool operator !=(Project? left, Project? right) =>
+            Comparer.IsNotEqual(left, right, ComparisonFunction);
 
         /// <summary>
         /// Determines if <see paramref="left"/> is less than <see paramref="right"/>.
@@ -61,8 +61,8 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="right">The right operand to compare.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is less than <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
-        public static bool operator <(Project left, Project right) =>
-            left.CompareTo(right) < 0;
+        public static bool operator <(Project? left, Project? right) =>
+            Comparer.IsLess(left, right, ComparisonFunction);
 
         /// <summary>
         /// Determines if <see paramref="left"/> is less than or equal to <see paramref="right"/>.
@@ -73,8 +73,8 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="right">The right operand to compare.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is less than or equal to <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
-        public static bool operator <=(Project left, Project right) =>
-            left.CompareTo(right) <= 0;
+        public static bool operator <=(Project? left, Project? right) =>
+            Comparer.IsLessOrEqual(left, right, ComparisonFunction);
 
         /// <summary>
         /// Determines if <see paramref="left"/> is greater than <see paramref="right"/>.
@@ -85,8 +85,8 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="right">The right operand to compare.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is greater than <see paramref="right"/>; otherwise,
         /// <c>false</c>.</returns>
-        public static bool operator >(Project left, Project right) =>
-            left.CompareTo(right) > 0;
+        public static bool operator >(Project? left, Project? right) =>
+            Comparer.IsGreater(left, right, ComparisonFunction);
 
         /// <summary>
         /// Determines if <see paramref="left"/> is greater than or equal to <see paramref="right"/>.
@@ -97,32 +97,32 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <param name="right">The right operand to compare.</param>
         /// <returns><c>true</c> if <see paramref="left"/> is greater than or equal to <see paramref="right"/>;
         /// otherwise, <c>false</c>.</returns>
-        public static bool operator >=(Project left, Project right) =>
-            left.CompareTo(right) >= 0;
+        public static bool operator >=(Project? left, Project? right) =>
+            Comparer.IsGreaterOrEqual(left, right, ComparisonFunction);
 
         /// <inheritdoc/>
         /// <remarks>The result of this method is solely dependent on
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         public int CompareTo(Project? other) =>
-            this.BaseCompareTo(other);
+            Comparer.CompareTo(this, other, ComparisonFunction);
 
         /// <inheritdoc/>
         /// <remarks>The result of this method is solely dependent on
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         public int CompareTo(object? obj) =>
-            this.BaseCompareTo(obj);
+            Comparer.CompareTo(this, obj, ComparisonFunction, nameof(Project));
 
         /// <inheritdoc/>
         /// <remarks>The result of this method is solely dependent on
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         public bool Equals(Project? other) =>
-            this.BaseCompareTo(other) == 0;
+            Comparer.Equals(this, other, ComparisonFunction);
 
         /// <inheritdoc/>
         /// <remarks>The result of this method is solely dependent on
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         public override bool Equals(object? obj) =>
-            this.BaseCompareTo(obj) == 0;
+            Comparer.Equals(this, obj, ComparisonFunction);
 
         /// <inheritdoc/>
         /// <remarks>The result of this method is solely dependent on
@@ -131,7 +131,7 @@ namespace NuGetTransitiveDependencyFinder.Output
             this.BaseHashCode;
 
         /// <inheritdoc/>
-        protected override bool IsAddValid(Framework child) =>
+        internal override bool IsAddValid(Framework child) =>
             child.HasChildren;
     }
 }

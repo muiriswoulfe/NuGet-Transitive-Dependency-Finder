@@ -19,12 +19,24 @@ namespace NuGetTransitiveDependencyFinder.Output
         where TChild : notnull
     {
         /// <summary>
+        /// The comparison logic specific to <see cref="IdentifiedBase{TIdentifier, TChild}"/>, which takes two objects
+        /// of type <see cref="IdentifiedBase{TIdentifier, TChild}"/> and returns an <see cref="int"/>.
+        /// </summary>
+        internal static readonly Func<IdentifiedBase<TIdentifier, TChild>, IdentifiedBase<TIdentifier, TChild>, int>
+            InternalComparisonFunction =
+            (IdentifiedBase<TIdentifier, TChild> current, IdentifiedBase<TIdentifier, TChild> other) =>
+                Comparer.MapCompareTo(
+                    StringComparer.OrdinalIgnoreCase.Compare(
+                        current.Identifier.ToString(),
+                        other.Identifier.ToString()));
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="IdentifiedBase{TIdentifier, TChild}"/> class.
         /// </summary>
         /// <param name="identifier">The identifier of the object.</param>
         /// <param name="capacity">The quantity of child elements for which the collection initially has adequate
         /// capacity.</param>
-        protected IdentifiedBase(TIdentifier identifier, int capacity)
+        internal IdentifiedBase(TIdentifier identifier, int capacity)
             : base(capacity) =>
             this.Identifier = identifier;
 
@@ -33,7 +45,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// </summary>
         /// <param name="identifier">The identifier of the object.</param>
         /// <param name="children">The child elements with which to initialize the collection.</param>
-        protected IdentifiedBase(TIdentifier identifier, IReadOnlyCollection<TChild> children)
+        internal IdentifiedBase(TIdentifier identifier, IReadOnlyCollection<TChild> children)
             : base(children) =>
             this.Identifier = identifier;
 
@@ -43,10 +55,18 @@ namespace NuGetTransitiveDependencyFinder.Output
         public TIdentifier Identifier { get; }
 
         /// <summary>
+        /// Gets the comparison logic specific to <see cref="IdentifiedBase{TIdentifier, TChild}"/>, which takes two
+        /// objects of type <see cref="IdentifiedBase{TIdentifier, TChild}"/> and returns an <see cref="int"/>.
+        /// </summary>
+        internal static Func<IdentifiedBase<TIdentifier, TChild>, IdentifiedBase<TIdentifier, TChild>, int>
+            ComparisonFunction =>
+            InternalComparisonFunction;
+
+        /// <summary>
         /// Gets a hash code for the current object.
         /// </summary>
         /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
-        protected int BaseHashCode =>
+        internal int BaseHashCode =>
             StringComparer.OrdinalIgnoreCase.GetHashCode(this.Identifier.ToString()!);
 
         /// <inheritdoc/>
@@ -55,59 +75,11 @@ namespace NuGetTransitiveDependencyFinder.Output
             this.Identifier.ToString()!;
 
         /// <summary>
-        /// Compares the current object to <see paramref="other"/>, returning an integer that indicates their
-        /// relationship.
-        /// </summary>
-        /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
-        /// <param name="other">The object against which to compare the current object.</param>
-        /// <returns>A value less than zero if the current object is less than <see paramref="other"/>, zero if the
-        /// current object is equal to <see paramref="other"/>, or a value greater than zero if the current object is
-        /// greater than <see paramref="other"/>.</returns>
-        protected int BaseCompareTo(IdentifiedBase<TIdentifier, TChild>? other)
-        {
-            if (ReferenceEquals(this, other))
-            {
-                return 0;
-            }
-
-            if (other is null)
-            {
-                return 1;
-            }
-
-            return StringComparer.OrdinalIgnoreCase.Compare(this.Identifier.ToString(), other.Identifier.ToString());
-        }
-
-        /// <summary>
-        /// Compares the current object to <see paramref="other"/>, returning an integer that indicates their
-        /// relationship.
-        /// </summary>
-        /// <remarks>The result of this method is solely dependent on <see cref="Identifier"/>.</remarks>
-        /// <param name="obj">The object against which to compare the current object.</param>
-        /// <returns>A value less than zero if the current object is less than <see paramref="other"/>, zero if the
-        /// current object is equal to <see paramref="other"/>, or a value greater than zero if the current object is
-        /// greater than <see paramref="other"/>.</returns>
-        protected int BaseCompareTo(object? obj)
-        {
-            if (ReferenceEquals(this, obj))
-            {
-                return 0;
-            }
-
-            if (obj is null)
-            {
-                return 1;
-            }
-
-            return this.BaseCompareTo(obj as IdentifiedBase<TIdentifier, TChild>);
-        }
-
-        /// <summary>
         /// Determines whether performing an <see cref="Base{TChild}.Add(TChild)"/> operation on the specified child
         /// element is valid.
         /// </summary>
         /// <param name="child">The child element to check.</param>
         /// <returns>A value indicating whether the child element should be added the collection.</returns>
-        protected abstract override bool IsAddValid(TChild child);
+        internal abstract override bool IsAddValid(TChild child);
     }
 }

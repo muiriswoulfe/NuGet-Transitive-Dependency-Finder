@@ -64,6 +64,38 @@
       ],
       "cwd": "${workspaceFolder}",
       "console": "externalTerminal"
+    },
+    {
+      "name": "Test Debug",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "dotnet",
+      "args": [
+        "test",
+        "--configuration",
+        "Debug",
+        "/property:CollectCoverage=true",
+        "/property:CoverletOutputFormat=lcov",
+        "/property:CoverletOutput=./lcov.info",
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+      ],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Test Release",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "dotnet",
+      "args": [
+        "test",
+        "--configuration",
+        "Release",
+        "/property:CollectCoverage=true",
+        "/property:CoverletOutputFormat=lcov",
+        "/property:CoverletOutput=./lcov.info",
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+      ],
+      "cwd": "${workspaceFolder}"
     }
   ]
 }

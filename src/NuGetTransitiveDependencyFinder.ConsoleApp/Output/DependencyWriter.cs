@@ -69,7 +69,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         {
             const int indentationSize = 4;
 
-            return new string(' ', indentLevel * indentationSize);
+            return new(' ', indentLevel * indentationSize);
         }
 
         /// <summary>
