@@ -136,6 +136,9 @@ jobs:
       - name: INITIALIZATION – Checkout
         uses: actions/checkout@main
 
+      - name: INITIALIZATION – Delete AssemblyAttributes.cs
+        run: Remove-Item -Path 'src/Shared/Properties/AssemblyAttributes.cs'
+
       - name: INITIALIZATION – Download AssemblyAttributes.cs
         uses: actions/download-artifact@main
         with:
@@ -210,6 +213,9 @@ jobs:
       # Initialization
       - name: INITIALIZATION – Checkout
         uses: actions/checkout@main
+
+      - name: INITIALIZATION – Delete AssemblyAttributes.cs
+        run: Remove-Item -Path 'src/Shared/Properties/AssemblyAttributes.cs'
 
       - name: INITIALIZATION – Download AssemblyAttributes.cs
         uses: actions/download-artifact@main
