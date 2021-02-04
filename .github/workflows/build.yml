@@ -323,48 +323,13 @@ jobs:
           Write-Output -InputObject "NuGet Package: $NuGetPackageSize"
           Write-Output -InputObject "NuGet Symbols Package: $NuGetSymbolsPackageSize"
 
-  validate:
-    name: Validate
+  validate-security:
+    name: Validate – Security
     runs-on: ubuntu-latest
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
         uses: actions/checkout@main
-
-      # Markdown Validation
-      - name: MARKDOWN VALIDATION – Validate Links
-        uses: gaurav-nelson/github-action-markdown-link-check@master
-        with:
-          config-file: .github/linters/markdown-link-check.json
-
-      # JSON Validation
-      - name: JSON VALIDATION – Validate .markdownlint.json
-        uses: Zingabopp/JsonValidate-Action@master
-        with:
-          json-file: .markdownlint.json
-          json-schema: >-
-            https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
-          use-draft: draft-07
-
-      - name: JSON VALIDATION – Validate src/stylecop.json – Download stylecop.schema.json
-        env:
-          project_url: https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master
-        run: >-
-          Invoke-WebRequest
-          -Uri '${{ env.project_url }}/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json'
-          -OutFile 'stylecop.schema.json'
-
-      - name: JSON VALIDATION – Validate src/stylecop.json – Update stylecop.schema.json
-        run: |-
-          $FileContent = Get-Content -Path 'stylecop.schema.json' -Raw
-          $FileContent = $FileContent -replace 'draft-04/schema#', 'draft-07/schema'
-          Set-Content -NoNewline -Path 'stylecop.schema.json' -Value $FileContent
-
-      - name: JSON VALIDATION – Validate src/stylecop.json
-        uses: Zingabopp/JsonValidate-Action@master
-        with:
-          json-file: src/stylecop.json
-          json-schema: stylecop.schema.json
 
       # INFER#
       - name: INFER# – Validation
@@ -405,14 +370,49 @@ jobs:
       - name: INITIALIZATION – Checkout
         uses: actions/checkout@main
 
-      # Validation
-      - name: VALIDATION – Super Linter
+      # Linter Validation
+      - name: LINTER VALIDATION – Super Linter
         uses: github/super-linter@master
         env:
           EDITORCONFIG_FILE_NAME: ../../.editorconfig
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MARKDOWN_CONFIG_FILE: ../../.markdownlint.json
           VALIDATE_CSHARP: false
+
+      # Markdown Validation
+      - name: MARKDOWN VALIDATION – Validate Links
+        uses: gaurav-nelson/github-action-markdown-link-check@master
+        with:
+          config-file: .github/linters/markdown-link-check.json
+
+      # JSON Validation
+      - name: JSON VALIDATION – Validate .markdownlint.json
+        uses: Zingabopp/JsonValidate-Action@master
+        with:
+          json-file: .markdownlint.json
+          json-schema: >-
+            https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
+          use-draft: draft-07
+
+      - name: JSON VALIDATION – Validate src/stylecop.json – Download stylecop.schema.json
+        env:
+          project_url: https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master
+        run: >-
+          Invoke-WebRequest
+          -Uri '${{ env.project_url }}/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json'
+          -OutFile 'stylecop.schema.json'
+
+      - name: JSON VALIDATION – Validate src/stylecop.json – Update stylecop.schema.json
+        run: |-
+          $FileContent = Get-Content -Path 'stylecop.schema.json' -Raw
+          $FileContent = $FileContent -replace 'draft-04/schema#', 'draft-07/schema'
+          Set-Content -NoNewline -Path 'stylecop.schema.json' -Value $FileContent
+
+      - name: JSON VALIDATION – Validate src/stylecop.json
+        uses: Zingabopp/JsonValidate-Action@master
+        with:
+          json-file: src/stylecop.json
+          json-schema: stylecop.schema.json
 
   validate-codeql:
     name: Validate – CodeQL
