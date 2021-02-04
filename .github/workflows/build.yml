@@ -52,8 +52,7 @@ jobs:
           /o:"${{ github.repository_owner }}"
           /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           /d:sonar.host.url="https://sonarcloud.io"
-          /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml"
-          /d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"
+          /d:sonar.cs.opencover.reportsPaths="src/**/coverage.opencover.xml"
 
       # Build & Test
       - name: BUILD & TEST – Project Restore
@@ -67,7 +66,6 @@ jobs:
           dotnet test
           --configuration ${{ matrix.configuration }}
           --no-build
-          --logger trx
           /property:CollectCoverage=true
           /property:CoverletOutputFormat=opencover
 
