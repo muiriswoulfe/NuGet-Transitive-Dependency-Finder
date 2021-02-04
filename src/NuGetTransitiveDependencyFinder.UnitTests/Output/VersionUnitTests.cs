@@ -309,7 +309,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         public void EqualsObject_WithDifferentObjectTypes_ReturnsFalse()
         {
             // Act
-            var result = DefaultValue.Equals("value"); // lgtm[cs/equals-on-unrelated-types]
+            var result = DefaultValue.Equals("value");
 
             // Assert
             _ = result.Should().Be(false);
