@@ -323,45 +323,6 @@ jobs:
           Write-Output -InputObject "NuGet Package: $NuGetPackageSize"
           Write-Output -InputObject "NuGet Symbols Package: $NuGetSymbolsPackageSize"
 
-  validate-security:
-    name: Validate – Security
-    runs-on: ubuntu-latest
-    steps:
-      # Initialization
-      - name: INITIALIZATION – Checkout
-        uses: actions/checkout@main
-
-      # INFER#
-      - name: INFER# – Validation
-        id: infersharp
-        uses: microsoft/infersharpaction@main
-        with:
-          binary-path: src
-
-      - name: INFER# – Print Results
-        run: Write-Output -InputObject '${{ steps.infersharp.outputs.results }}'
-
-      # Security Scan
-      - name: SECURITY SCAN – Validate
-        uses: ShiftLeftSecurity/scan-action@master
-        with:
-          type: credscan,depscan
-
-      - name: SECURITY SCAN – Upload Report
-        uses: github/codeql-action/upload-sarif@main
-        with:
-          sarif_file: reports
-
-      # Application Inspector
-      - name: APPLICATION INSPECTOR – Run
-        uses: microsoft/ApplicationInspector-Action@main
-
-      - name: APPLICATION INSPECTOR – Upload Results
-        uses: actions/upload-artifact@main
-        with:
-          name: Application Inspector Results
-          path: AppInspectorResults.json
-
   validate-lint:
     name: Validate – Lint
     runs-on: ubuntu-latest
@@ -413,6 +374,45 @@ jobs:
         with:
           json-file: src/stylecop.json
           json-schema: stylecop.schema.json
+
+  validate-security:
+    name: Validate – Security
+    runs-on: ubuntu-latest
+    steps:
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@main
+
+      # INFER#
+      - name: INFER# – Validation
+        id: infersharp
+        uses: microsoft/infersharpaction@main
+        with:
+          binary-path: src
+
+      - name: INFER# – Print Results
+        run: Write-Output -InputObject '${{ steps.infersharp.outputs.results }}'
+
+      # Security Scan
+      - name: SECURITY SCAN – Validate
+        uses: ShiftLeftSecurity/scan-action@master
+        with:
+          type: credscan,depscan
+
+      - name: SECURITY SCAN – Upload Report
+        uses: github/codeql-action/upload-sarif@main
+        with:
+          sarif_file: reports
+
+      # Application Inspector
+      - name: APPLICATION INSPECTOR – Run
+        uses: microsoft/ApplicationInspector-Action@main
+
+      - name: APPLICATION INSPECTOR – Upload Results
+        uses: actions/upload-artifact@main
+        with:
+          name: Application Inspector Results
+          path: AppInspectorResults.json
 
   validate-codeql:
     name: Validate – CodeQL
