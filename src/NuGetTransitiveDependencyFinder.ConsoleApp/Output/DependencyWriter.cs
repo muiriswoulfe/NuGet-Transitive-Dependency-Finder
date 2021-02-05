@@ -19,14 +19,14 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         /// <summary>
         /// The logger object to which to write the output.
         /// </summary>
-        private readonly ILogger logger;
+        private readonly ILogger<DependencyWriter> logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DependencyWriter"/> class.
         /// </summary>
-        /// <param name="loggerFactory">The logger factory from which a logger will be constructed.</param>
-        public DependencyWriter(ILoggerFactory loggerFactory) =>
-            this.logger = loggerFactory.CreateLogger(nameof(DependencyWriter));
+        /// <param name="logger">The logger object to which to write the output.</param>
+        public DependencyWriter(ILogger<DependencyWriter> logger) =>
+            this.logger = logger;
 
         /// <summary>
         /// Writes the NuGet dependency information.

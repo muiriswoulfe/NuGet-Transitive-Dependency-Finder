@@ -9,7 +9,6 @@ namespace NuGetTransitiveDependencyFinder
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
-    using Microsoft.Extensions.Logging;
     using NuGet.ProjectModel;
     using NuGetTransitiveDependencyFinder.Output;
     using NuGetTransitiveDependencyFinder.ProjectAnalysis;
@@ -20,9 +19,14 @@ namespace NuGetTransitiveDependencyFinder
     public sealed class TransitiveDependencyFinder
     {
         /// <summary>
-        /// The logger factory from which a logger will be constructed.
+        /// The object representing the contents of a "project.assets.json" file.
         /// </summary>
-        private readonly ILoggerFactory loggerFactory;
+        private readonly Assets assets;
+
+        /// <summary>
+        /// The object representing a dependency graph of .NET projects and their NuGet dependencies.
+        /// </summary>
+        private readonly DependencyGraph dependencyGraph;
 
         /// <summary>
         /// The collection of dependencies recorded and stored temporarily for the purposes of finding transitive NuGet
@@ -36,9 +40,14 @@ namespace NuGetTransitiveDependencyFinder
         /// <summary>
         /// Initializes a new instance of the <see cref="TransitiveDependencyFinder"/> class.
         /// </summary>
-        /// <param name="loggerFactory">The logger factory from which a logger will be constructed.</param>
-        public TransitiveDependencyFinder(ILoggerFactory loggerFactory) =>
-            this.loggerFactory = loggerFactory;
+        /// <param name="assets">The object representing the contents of a "project.assets.json" file.</param>
+        /// <param name="dependencyGraph">The object representing a dependency graph of .NET projects and their NuGet
+        /// dependencies.</param>
+        public TransitiveDependencyFinder(Assets assets, DependencyGraph dependencyGraph)
+        {
+            this.assets = assets;
+            this.dependencyGraph = dependencyGraph;
+        }
 
         /// <summary>
         /// Runs the logic for finding transitive NuGet dependencies.
@@ -99,22 +108,16 @@ namespace NuGetTransitiveDependencyFinder
         /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
         /// name.</param>
         /// <returns>The project dependency graph.</returns>
-        private DependencyGraphSpec CreateProjectDependencyGraph(string projectOrSolutionPath)
-        {
-            using var dependencyGraph = new DependencyGraph(this.loggerFactory, projectOrSolutionPath);
-            return dependencyGraph.Create();
-        }
+        private DependencyGraphSpec CreateProjectDependencyGraph(string projectOrSolutionPath) =>
+            this.dependencyGraph.Create(projectOrSolutionPath);
 
         /// <summary>
         /// Creates the collection of assets files to be analyzed.
         /// </summary>
         /// <param name="project">The .NET project to analyze.</param>
         /// <returns>The collection of assets files.</returns>
-        private IReadOnlyCollection<LockFileTarget>? CreateAssetsFiles(PackageSpec project)
-        {
-            var assets = new Assets(this.loggerFactory, project.FilePath, project.RestoreMetadata.OutputPath);
-            return assets.Create()?.Targets?.ToArray();
-        }
+        private IReadOnlyCollection<LockFileTarget>? CreateAssetsFiles(PackageSpec project) =>
+            this.assets.Create(project.FilePath, project.RestoreMetadata.OutputPath)?.Targets?.ToArray();
 
         /// <summary>
         /// Populates the collection of dependencies for a .NET project and framework combination.

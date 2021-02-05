@@ -7,35 +7,24 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 {
     using System;
     using System.IO;
-    using Microsoft.Extensions.Logging;
     using NuGet.ProjectModel;
     using static System.FormattableString;
 
     /// <summary>
     /// A class representing a dependency graph of .NET projects and their NuGet dependencies.
     /// </summary>
-    internal sealed class DependencyGraph : IDisposable
+    public sealed class DependencyGraph : IDisposable
     {
         /// <summary>
-        /// The logger factory from which a logger will be constructed.
+        /// The object managing the running of .NET commands on project and solution files.
         /// </summary>
-        private readonly ILoggerFactory loggerFactory;
+        private readonly DotNetRunner dotNetRunner;
 
         /// <summary>
         /// A temporary file for storing the dependency graph information.
         /// </summary>
         /// <remarks>This file will be deleted when <see cref="Dispose()"/> is invoked.</remarks>
         private readonly string filePath;
-
-        /// <summary>
-        /// The path of the directory containing the .NET project or solution file.
-        /// </summary>
-        private readonly string projectOrSolutionDirectory;
-
-        /// <summary>
-        /// The command-line parameters for the .NET process.
-        /// </summary>
-        private readonly string arguments;
 
         /// <summary>
         /// A value tracking whether <see cref="Dispose()"/> has been invoked.
@@ -45,18 +34,13 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// <summary>
         /// Initializes a new instance of the <see cref="DependencyGraph"/> class.
         /// </summary>
-        /// <param name="loggerFactory">The logger factory from which a logger will be constructed.</param>
-        /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
-        /// name.</param>
-        public DependencyGraph(ILoggerFactory loggerFactory, string projectOrSolutionPath)
+        /// <param name="dotNetRunner">The object managing the running of .NET commands on project and solution
+        /// files.</param>
+        public DependencyGraph(DotNetRunner dotNetRunner)
         {
-            this.loggerFactory = loggerFactory;
-            this.filePath = Path.GetTempFileName();
-            this.projectOrSolutionDirectory = Path.GetDirectoryName(projectOrSolutionPath)!;
+            this.dotNetRunner = dotNetRunner;
 
-            this.arguments =
-                Invariant($"msbuild \"{projectOrSolutionPath}\" /maxCpuCount /target:GenerateRestoreGraphFile ") +
-                Invariant($"/property:RestoreGraphOutputPath=\"{this.filePath}\"");
+            this.filePath = Path.GetTempFileName();
         }
 
         /// <summary>
@@ -65,23 +49,28 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         ~DependencyGraph() =>
             this.Dispose(false);
 
-        /// <summary>
-        /// Creates a <see cref="DependencyGraphSpec"/> object representing the project dependency graph.
-        /// </summary>
-        /// <returns>The <see cref="DependencyGraphSpec"/> object.</returns>
-        public DependencyGraphSpec Create()
-        {
-            var dotNetRunner = new DotNetRunner(this.loggerFactory, this.arguments, this.projectOrSolutionDirectory);
-            dotNetRunner.Run();
-
-            return DependencyGraphSpec.Load(this.filePath);
-        }
-
         /// <inheritdoc/>
         public void Dispose()
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="DependencyGraphSpec"/> object representing the project dependency graph.
+        /// </summary>
+        /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
+        /// name.</param>
+        /// <returns>The <see cref="DependencyGraphSpec"/> object.</returns>
+        internal DependencyGraphSpec Create(string projectOrSolutionPath)
+        {
+            var projectOrSolutionDirectory = Path.GetDirectoryName(projectOrSolutionPath)!;
+            var arguments =
+                Invariant($"msbuild \"{projectOrSolutionPath}\" /maxCpuCount /target:GenerateRestoreGraphFile ") +
+                Invariant($"/property:RestoreGraphOutputPath=\"{this.filePath}\"");
+            this.dotNetRunner.Run(arguments, projectOrSolutionDirectory);
+
+            return DependencyGraphSpec.Load(this.filePath);
         }
 
         /// <summary>
