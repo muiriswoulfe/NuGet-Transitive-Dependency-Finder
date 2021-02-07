@@ -21,7 +21,8 @@ namespace NuGetTransitiveDependencyFinder.Extensions
         /// <param name="value">The <see cref="IServiceCollection"/> to which to add the dependencies.</param>
         /// <param name="loggingBuilderAction">The <see cref="Action{ILoggerBuilder}"/>, which defines the logging
         /// action for both the current application and the NuGet Transitive Dependency Finder library.</param>
-        /// <returns>The <see cref="IServiceCollection"/> passed to the method, with the dependencies added.</returns>
+        /// <returns>The <see cref="IServiceCollection"/> passed to the method with the additional dependencies
+        /// included.</returns>
         public static IServiceCollection AddNuGetTransitiveDependencyFinder(
             this IServiceCollection value,
             Action<ILoggingBuilder> loggingBuilderAction) =>

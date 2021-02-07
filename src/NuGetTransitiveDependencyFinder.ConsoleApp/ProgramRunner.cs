@@ -29,7 +29,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
         /// <summary>
         /// The logger object to which to write the output.
         /// </summary>
-        private readonly ILogger<IProgramRunner> logger;
+        private readonly ILogger<ProgramRunner> logger;
 
         /// <summary>
         /// The object that manages the overall process of finding transitive NuGet dependencies.
@@ -47,7 +47,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
         public ProgramRunner(
             ICommandLineOptions commandLineOptions,
             IDependencyWriter dependencyWriter,
-            ILogger<IProgramRunner> logger,
+            ILogger<ProgramRunner> logger,
             ITransitiveDependencyFinder transitiveDependencyFinder)
         {
             this.commandLineOptions = commandLineOptions;
