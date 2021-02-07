@@ -1,5 +1,8 @@
 #nullable enable
 
+NuGetTransitiveDependencyFinder.Extensions.ServiceCollectionExtensions
+NuGetTransitiveDependencyFinder.ITransitiveDependencyFinder
+NuGetTransitiveDependencyFinder.ITransitiveDependencyFinder.Run(string! projectOrSolutionPath, bool collateAllDependencies) -> NuGetTransitiveDependencyFinder.Output.Projects!
 NuGetTransitiveDependencyFinder.Output.Base<TChild>
 NuGetTransitiveDependencyFinder.Output.Base<TChild>.Add(TChild child) -> void
 NuGetTransitiveDependencyFinder.Output.Base<TChild>.HasChildren.get -> bool
@@ -22,9 +25,6 @@ NuGetTransitiveDependencyFinder.Output.Project.CompareTo(NuGetTransitiveDependen
 NuGetTransitiveDependencyFinder.Output.Project.CompareTo(object? obj) -> int
 NuGetTransitiveDependencyFinder.Output.Project.Equals(NuGetTransitiveDependencyFinder.Output.Project? other) -> bool
 NuGetTransitiveDependencyFinder.Output.Projects
-NuGetTransitiveDependencyFinder.TransitiveDependencyFinder
-NuGetTransitiveDependencyFinder.TransitiveDependencyFinder.Run(string! projectOrSolutionPath, bool collateAllDependencies) -> NuGetTransitiveDependencyFinder.Output.Projects!
-NuGetTransitiveDependencyFinder.TransitiveDependencyFinder.TransitiveDependencyFinder(Microsoft.Extensions.Logging.ILoggerFactory! loggerFactory) -> void
 override NuGetTransitiveDependencyFinder.Output.Dependency.Equals(object? obj) -> bool
 override NuGetTransitiveDependencyFinder.Output.Dependency.GetHashCode() -> int
 override NuGetTransitiveDependencyFinder.Output.Dependency.ToString() -> string!
@@ -34,6 +34,7 @@ override NuGetTransitiveDependencyFinder.Output.Framework.ToString() -> string!
 override NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.ToString() -> string!
 override NuGetTransitiveDependencyFinder.Output.Project.Equals(object? obj) -> bool
 override NuGetTransitiveDependencyFinder.Output.Project.GetHashCode() -> int
+static NuGetTransitiveDependencyFinder.Extensions.ServiceCollectionExtensions.AddNuGetTransitiveDependencyFinder(this Microsoft.Extensions.DependencyInjection.IServiceCollection! value, System.Action<Microsoft.Extensions.Logging.ILoggingBuilder!>! loggingBuilderAction) -> Microsoft.Extensions.DependencyInjection.IServiceCollection!
 static NuGetTransitiveDependencyFinder.Output.Dependency.operator !=(NuGetTransitiveDependencyFinder.Output.Dependency? left, NuGetTransitiveDependencyFinder.Output.Dependency? right) -> bool
 static NuGetTransitiveDependencyFinder.Output.Dependency.operator <(NuGetTransitiveDependencyFinder.Output.Dependency? left, NuGetTransitiveDependencyFinder.Output.Dependency? right) -> bool
 static NuGetTransitiveDependencyFinder.Output.Dependency.operator <=(NuGetTransitiveDependencyFinder.Output.Dependency? left, NuGetTransitiveDependencyFinder.Output.Dependency? right) -> bool

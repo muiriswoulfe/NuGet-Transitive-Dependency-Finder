@@ -5,18 +5,31 @@
 
 namespace NuGetTransitiveDependencyFinder.ConsoleApp
 {
+    using System;
     using CommandLine;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Console;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Input;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Output;
-    using NuGetTransitiveDependencyFinder.ConsoleApp.Resources.Messages;
+    using NuGetTransitiveDependencyFinder.Extensions;
 
     /// <summary>
     /// The main class of the application, defining the entry point and the basic operation of the application.
     /// </summary>
     internal static class Program
     {
+        /// <summary>
+        /// The <see cref="Action{ILoggerBuilder}"/>, which defines the logging action for both the current application
+        /// and the NuGet Transitive Dependency Finder library.
+        /// </summary>
+        private static readonly Action<ILoggingBuilder> LoggingBuilderAction =
+            configure => configure
+                .AddConsole(configure => configure.FormatterName = nameof(PlainConsoleFormatter))
+                .AddDebug()
+                .AddConsoleFormatter<PlainConsoleFormatter, ConsoleFormatterOptions>()
+                .SetMinimumLevel(LogLevel.Trace);
+
         /// <summary>
         /// The entry point of the application.
         /// </summary>
@@ -29,16 +42,10 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
 
             return Parser.Default.ParseArguments<CommandLineOptions>(parameters)
                 .MapResult(
-                    options =>
+                    commandLineOptions =>
                     {
-                        using var loggerFactory = CreateLoggerFactory();
-                        var logger = loggerFactory.CreateLogger(nameof(Program));
-                        logger.LogInformation(Information.CommencingAnalysis);
-
-                        var finder = new TransitiveDependencyFinder(loggerFactory);
-                        var projects = finder.Run(options.ProjectOrSolution!, options.All);
-                        var writer = new DependencyWriter(loggerFactory);
-                        writer.Write(projects);
+                        using var serviceProvider = CreateServiceProvider(commandLineOptions);
+                        serviceProvider.GetService<IProgramRunner>()!.Run();
 
                         return success;
                     },
@@ -47,15 +54,17 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
         }
 
         /// <summary>
-        /// Creates the logger factory from which a logger will be constructed.
+        /// Creates the service provider, which initializes dependency injection for the application.
         /// </summary>
-        /// <returns>The logger factory.</returns>
-        private static ILoggerFactory CreateLoggerFactory() =>
-            LoggerFactory.Create(builder =>
-            {
-                _ = builder.AddConsole(options => options.FormatterName = nameof(PlainConsoleFormatter))
-                    .AddConsoleFormatter<PlainConsoleFormatter, ConsoleFormatterOptions>()
-                    .SetMinimumLevel(LogLevel.Trace);
-            });
+        /// <param name="commandLineOptions">The command-line options.</param>
+        /// <returns>The service provider, which specifies the project dependencies.</returns>
+        private static ServiceProvider CreateServiceProvider(ICommandLineOptions commandLineOptions) =>
+            new ServiceCollection()
+                .AddLogging(LoggingBuilderAction)
+                .AddScoped(_ => commandLineOptions)
+                .AddScoped<IDependencyWriter, DependencyWriter>()
+                .AddScoped<IProgramRunner, ProgramRunner>()
+                .AddNuGetTransitiveDependencyFinder(LoggingBuilderAction)
+                .BuildServiceProvider();
     }
 }
