@@ -13,12 +13,12 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
     /// <summary>
     /// A class representing a dependency graph of .NET projects and their NuGet dependencies.
     /// </summary>
-    internal sealed class DependencyGraph : IDisposable
+    internal sealed class DependencyGraph : IDependencyGraph, IDisposable
     {
         /// <summary>
         /// The object managing the running of .NET commands on project and solution files.
         /// </summary>
-        private readonly DotNetRunner dotNetRunner;
+        private readonly IDotNetRunner dotNetRunner;
 
         /// <summary>
         /// A temporary file for storing the dependency graph information.
@@ -36,7 +36,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// </summary>
         /// <param name="dotNetRunner">The object managing the running of .NET commands on project and solution
         /// files.</param>
-        public DependencyGraph(DotNetRunner dotNetRunner)
+        public DependencyGraph(IDotNetRunner dotNetRunner)
         {
             this.dotNetRunner = dotNetRunner;
 
@@ -56,12 +56,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
             GC.SuppressFinalize(this);
         }
 
-        /// <summary>
-        /// Creates a <see cref="DependencyGraphSpec"/> object representing the project dependency graph.
-        /// </summary>
-        /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
-        /// name.</param>
-        /// <returns>The <see cref="DependencyGraphSpec"/> object.</returns>
+        /// <inheritdoc/>
         public DependencyGraphSpec Create(string projectOrSolutionPath)
         {
             var projectOrSolutionDirectory = Path.GetDirectoryName(projectOrSolutionPath)!;

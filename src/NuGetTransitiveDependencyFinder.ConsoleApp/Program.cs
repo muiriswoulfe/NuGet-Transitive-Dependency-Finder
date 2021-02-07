@@ -12,6 +12,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
     using Microsoft.Extensions.Logging.Console;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Input;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Output;
+    using NuGetTransitiveDependencyFinder.Extensions;
 
     /// <summary>
     /// The main class of the application, defining the entry point and the basic operation of the application.
@@ -44,7 +45,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
                     commandLineOptions =>
                     {
                         using var serviceProvider = CreateServiceProvider(commandLineOptions);
-                        serviceProvider.GetService<ProgramRunner>()!.Run();
+                        serviceProvider.GetService<IProgramRunner>()!.Run();
 
                         return success;
                     },
@@ -57,14 +58,13 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
         /// </summary>
         /// <param name="commandLineOptions">The command-line options.</param>
         /// <returns>The service provider, which specifies the project dependencies.</returns>
-        private static ServiceProvider CreateServiceProvider(CommandLineOptions commandLineOptions) =>
+        private static ServiceProvider CreateServiceProvider(ICommandLineOptions commandLineOptions) =>
             new ServiceCollection()
                 .AddLogging(LoggingBuilderAction)
                 .AddScoped(_ => commandLineOptions)
-                .AddScoped<DependencyWriter>()
-                .AddScoped<ProgramRunner>()
-                .AddScoped<TransitiveDependencyFinder>()
-                .AddSingleton(LoggingBuilderAction)
+                .AddScoped<IDependencyWriter, DependencyWriter>()
+                .AddScoped<IProgramRunner, ProgramRunner>()
+                .AddNuGetTransitiveDependencyFinder(LoggingBuilderAction)
                 .BuildServiceProvider();
     }
 }

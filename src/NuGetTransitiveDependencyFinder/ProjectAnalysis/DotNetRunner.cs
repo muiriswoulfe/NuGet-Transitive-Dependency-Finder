@@ -11,7 +11,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
     /// <summary>
     /// A class that manages the running of .NET commands on project and solution files.
     /// </summary>
-    internal class DotNetRunner
+    internal class DotNetRunner : IDotNetRunner
     {
         /// <summary>
         /// The logger for asynchronous messages that have been created by external processes.
@@ -26,13 +26,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         public DotNetRunner(ILogger<DotNetRunner> logger) =>
             this.logger = logger;
 
-        /// <summary>
-        /// Runs the .NET process.
-        /// </summary>
-        /// <param name="parameters">The parameters to pass to the "dotnet" command, excluding the file name of the
-        /// executable.</param>
-        /// <param name="workingDirectory">The path of the directory in which to store the files created after running
-        /// the "dotnet" command.</param>
+        /// <inheritdoc/>
         public void Run(string parameters, string workingDirectory)
         {
             using var process = new Process();

@@ -13,28 +13,22 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
     /// <summary>
     /// A class representing the contents of a "project.assets.json" file.
     /// </summary>
-    internal class Assets
+    internal class Assets : IAssets
     {
         /// <summary>
         /// The object managing the running of .NET commands on project and solution files.
         /// </summary>
-        private readonly DotNetRunner dotNetRunner;
+        private readonly IDotNetRunner dotNetRunner;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Assets"/> class.
         /// </summary>
         /// <param name="dotNetRunner">The object managing the running of .NET commands on project and solution
         /// files.</param>
-        public Assets(DotNetRunner dotNetRunner) =>
+        public Assets(IDotNetRunner dotNetRunner) =>
             this.dotNetRunner = dotNetRunner;
 
-        /// <summary>
-        /// Creates a <see cref="LockFile"/> object representing the "project.assets.json" file contents.
-        /// </summary>
-        /// <param name="projectPath">The path of the .NET project file, including the file name.</param>
-        /// <param name="outputDirectory">The path of the directory in which to store the project restore
-        /// outputs.</param>
-        /// <returns>The <see cref="LockFile"/> object.</returns>
+        /// <inheritdoc/>
         public LockFile? Create(string projectPath, string outputDirectory)
         {
             var parameters = Invariant($"restore \"{projectPath}\"");

@@ -14,27 +14,27 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
     /// <summary>
     /// The class defining the flow of the main application logic.
     /// </summary>
-    internal class ProgramRunner
+    internal class ProgramRunner : IProgramRunner
     {
         /// <summary>
         /// The command-line options.
         /// </summary>
-        private readonly CommandLineOptions commandLineOptions;
+        private readonly ICommandLineOptions commandLineOptions;
 
         /// <summary>
         /// The writer for NuGet dependency information.
         /// </summary>
-        private readonly DependencyWriter dependencyWriter;
+        private readonly IDependencyWriter dependencyWriter;
 
         /// <summary>
         /// The logger object to which to write the output.
         /// </summary>
-        private readonly ILogger<ProgramRunner> logger;
+        private readonly ILogger<IProgramRunner> logger;
 
         /// <summary>
         /// The object that manages the overall process of finding transitive NuGet dependencies.
         /// </summary>
-        private readonly TransitiveDependencyFinder transitiveDependencyFinder;
+        private readonly ITransitiveDependencyFinder transitiveDependencyFinder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProgramRunner"/> class.
@@ -45,10 +45,10 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
         /// <param name="transitiveDependencyFinder">The object that manages the overall process of finding transitive
         /// NuGet dependencies.</param>
         public ProgramRunner(
-            CommandLineOptions commandLineOptions,
-            DependencyWriter dependencyWriter,
-            ILogger<ProgramRunner> logger,
-            TransitiveDependencyFinder transitiveDependencyFinder)
+            ICommandLineOptions commandLineOptions,
+            IDependencyWriter dependencyWriter,
+            ILogger<IProgramRunner> logger,
+            ITransitiveDependencyFinder transitiveDependencyFinder)
         {
             this.commandLineOptions = commandLineOptions;
             this.dependencyWriter = dependencyWriter;
@@ -56,9 +56,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
             this.transitiveDependencyFinder = transitiveDependencyFinder;
         }
 
-        /// <summary>
-        /// Runs the main application logic.
-        /// </summary>
+        /// <inheritdoc/>
         public void Run()
         {
             this.logger.LogInformation(Information.CommencingAnalysis);

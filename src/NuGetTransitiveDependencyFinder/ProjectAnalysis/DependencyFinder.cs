@@ -16,17 +16,17 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
     /// An internal class that manages the overall process of finding transitive NuGet dependencies, abstracting away
     /// internal APIs from applications consuming the library.
     /// </summary>
-    internal class DependencyFinder
+    internal class DependencyFinder : IDependencyFinder
     {
         /// <summary>
         /// The object representing the contents of a "project.assets.json" file.
         /// </summary>
-        private readonly Assets assets;
+        private readonly IAssets assets;
 
         /// <summary>
         /// The object representing a dependency graph of .NET projects and their NuGet dependencies.
         /// </summary>
-        private readonly DependencyGraph dependencyGraph;
+        private readonly IDependencyGraph dependencyGraph;
 
         /// <summary>
         /// The collection of dependencies recorded and stored temporarily for the purposes of finding transitive NuGet
@@ -43,20 +43,13 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// <param name="assets">The object representing the contents of a "project.assets.json" file.</param>
         /// <param name="dependencyGraph">The object representing a dependency graph of .NET projects and their NuGet
         /// dependencies.</param>
-        public DependencyFinder(Assets assets, DependencyGraph dependencyGraph)
+        public DependencyFinder(IAssets assets, IDependencyGraph dependencyGraph)
         {
             this.assets = assets;
             this.dependencyGraph = dependencyGraph;
         }
 
-        /// <summary>
-        /// Runs the logic for finding transitive NuGet dependencies.
-        /// </summary>
-        /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
-        /// name.</param>
-        /// <param name="collateAllDependencies">A value indicating whether all dependencies, or merely those that are
-        /// transitive, should be collated.</param>
-        /// <returns>The transitive NuGet dependency information, which can be processed for display.</returns>
+        /// <inheritdoc/>
         public Projects Run(string projectOrSolutionPath, bool collateAllDependencies)
         {
             var projects = this.CreateProjects(projectOrSolutionPath);

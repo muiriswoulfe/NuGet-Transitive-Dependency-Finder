@@ -14,7 +14,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
     /// <summary>
     /// A class for writing NuGet dependency information.
     /// </summary>
-    internal class DependencyWriter
+    internal class DependencyWriter : IDependencyWriter
     {
         /// <summary>
         /// The logger object to which to write the output.
@@ -28,10 +28,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         public DependencyWriter(ILogger<DependencyWriter> logger) =>
             this.logger = logger;
 
-        /// <summary>
-        /// Writes the NuGet dependency information.
-        /// </summary>
-        /// <param name="projects">The details of the projects.</param>
+        /// <inheritdoc/>
         public void Write(Projects projects)
         {
             const int frameworkIndentationLevel = 1;

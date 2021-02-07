@@ -14,7 +14,7 @@ namespace NuGetTransitiveDependencyFinder
     /// <summary>
     /// A class that manages the overall process of finding transitive NuGet dependencies.
     /// </summary>
-    public sealed class TransitiveDependencyFinder : IDisposable
+    internal sealed class TransitiveDependencyFinder : ITransitiveDependencyFinder, IDisposable
     {
         /// <summary>
         /// The service provider, which specifies the project dependencies.
@@ -47,17 +47,10 @@ namespace NuGetTransitiveDependencyFinder
             GC.SuppressFinalize(this);
         }
 
-        /// <summary>
-        /// Runs the logic for finding transitive NuGet dependencies.
-        /// </summary>
-        /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
-        /// name.</param>
-        /// <param name="collateAllDependencies">A value indicating whether all dependencies, or merely those that are
-        /// transitive, should be collated.</param>
-        /// <returns>The transitive NuGet dependency information, which can be processed for display.</returns>
+        /// <inheritdoc/>
         public Projects Run(string projectOrSolutionPath, bool collateAllDependencies) =>
             this.serviceProvider
-                .GetService<DependencyFinder>()!
+                .GetService<IDependencyFinder>()!
                 .Run(projectOrSolutionPath, collateAllDependencies);
 
         /// <summary>
@@ -69,10 +62,10 @@ namespace NuGetTransitiveDependencyFinder
         private static ServiceProvider CreateServiceProvider(Action<ILoggingBuilder> loggingBuilderAction) =>
             new ServiceCollection()
                 .AddLogging(loggingBuilderAction)
-                .AddScoped<Assets>()
-                .AddScoped<DependencyFinder>()
-                .AddScoped<DotNetRunner>()
-                .AddTransient<DependencyGraph>()
+                .AddScoped<IAssets, Assets>()
+                .AddScoped<IDependencyFinder, DependencyFinder>()
+                .AddScoped<IDotNetRunner, DotNetRunner>()
+                .AddTransient<IDependencyGraph, DependencyGraph>()
                 .BuildServiceProvider();
 
         /// <summary>
