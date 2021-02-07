@@ -69,6 +69,13 @@ jobs:
           /property:CollectCoverage=true
           /property:CoverletOutputFormat=opencover
 
+      - name: BUILD & TEST – Project Test
+      - if: ${{ matrix.configuration == 'Release' }}
+        name: BUILD & TEST – Upload to Codecov
+        uses: codecov/codecov-action@master
+        with:
+          fail_ci_if_error: true
+
       # SonarCloud Finalization
       - if: ${{ matrix.configuration == 'Release' }}
         name: SONARCLOUD FINALIZATION – SonarCloud Analyze
