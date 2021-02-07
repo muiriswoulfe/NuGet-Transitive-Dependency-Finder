@@ -69,7 +69,6 @@ jobs:
           /property:CollectCoverage=true
           /property:CoverletOutputFormat=opencover
 
-      - name: BUILD & TEST – Project Test
       - if: ${{ matrix.configuration == 'Release' }}
         name: BUILD & TEST – Upload to Codecov
         uses: codecov/codecov-action@master
