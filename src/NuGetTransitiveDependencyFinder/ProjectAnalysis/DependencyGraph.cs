@@ -13,7 +13,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
     /// <summary>
     /// A class representing a dependency graph of .NET projects and their NuGet dependencies.
     /// </summary>
-    public sealed class DependencyGraph : IDisposable
+    internal sealed class DependencyGraph : IDisposable
     {
         /// <summary>
         /// The object managing the running of .NET commands on project and solution files.
@@ -62,7 +62,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
         /// name.</param>
         /// <returns>The <see cref="DependencyGraphSpec"/> object.</returns>
-        internal DependencyGraphSpec Create(string projectOrSolutionPath)
+        public DependencyGraphSpec Create(string projectOrSolutionPath)
         {
             var projectOrSolutionDirectory = Path.GetDirectoryName(projectOrSolutionPath)!;
             var arguments =

@@ -11,7 +11,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
     /// <summary>
     /// A class that manages the running of .NET commands on project and solution files.
     /// </summary>
-    public class DotNetRunner
+    internal class DotNetRunner
     {
         /// <summary>
         /// The logger for asynchronous messages that have been created by external processes.
@@ -33,7 +33,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// executable.</param>
         /// <param name="workingDirectory">The path of the directory in which to store the files created after running
         /// the "dotnet" command.</param>
-        internal void Run(string parameters, string workingDirectory)
+        public void Run(string parameters, string workingDirectory)
         {
             using var process = new Process();
 

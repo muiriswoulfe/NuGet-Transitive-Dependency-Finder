@@ -13,7 +13,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
     /// <summary>
     /// A class representing the contents of a "project.assets.json" file.
     /// </summary>
-    public class Assets
+    internal class Assets
     {
         /// <summary>
         /// The object managing the running of .NET commands on project and solution files.
@@ -35,7 +35,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// <param name="outputDirectory">The path of the directory in which to store the project restore
         /// outputs.</param>
         /// <returns>The <see cref="LockFile"/> object.</returns>
-        internal LockFile? Create(string projectPath, string outputDirectory)
+        public LockFile? Create(string projectPath, string outputDirectory)
         {
             var parameters = Invariant($"restore \"{projectPath}\"");
             var projectDirectory = Path.GetDirectoryName(projectPath)!;

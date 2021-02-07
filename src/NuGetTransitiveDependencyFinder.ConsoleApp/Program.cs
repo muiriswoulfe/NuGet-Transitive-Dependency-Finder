@@ -5,19 +5,30 @@
 
 namespace NuGetTransitiveDependencyFinder.ConsoleApp
 {
+    using System;
     using CommandLine;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Console;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Input;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Output;
-    using NuGetTransitiveDependencyFinder.Extensions;
 
     /// <summary>
     /// The main class of the application, defining the entry point and the basic operation of the application.
     /// </summary>
     internal static class Program
     {
+        /// <summary>
+        /// The <see cref="Action{ILoggerBuilder}"/>, which defines the logging action for both the current application
+        /// and the NuGet Transitive Dependency Finder library.
+        /// </summary>
+        private static readonly Action<ILoggingBuilder> LoggingBuilderAction =
+            configure => configure
+                .AddConsole(configure => configure.FormatterName = nameof(PlainConsoleFormatter))
+                .AddDebug()
+                .AddConsoleFormatter<PlainConsoleFormatter, ConsoleFormatterOptions>()
+                .SetMinimumLevel(LogLevel.Trace);
+
         /// <summary>
         /// The entry point of the application.
         /// </summary>
@@ -32,7 +43,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
                 .MapResult(
                     commandLineOptions =>
                     {
-                        var serviceProvider = CreateServiceProvider(commandLineOptions);
+                        using var serviceProvider = CreateServiceProvider(commandLineOptions);
                         serviceProvider.GetService<ProgramRunner>()!.Run();
 
                         return success;
@@ -45,17 +56,15 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
         /// Creates the service provider, which initializes dependency injection for the application.
         /// </summary>
         /// <param name="commandLineOptions">The command-line options.</param>
-        /// <returns>The service provider.</returns>
+        /// <returns>The service provider, which specifies the project dependencies.</returns>
         private static ServiceProvider CreateServiceProvider(CommandLineOptions commandLineOptions) =>
             new ServiceCollection()
-                .AddLogging(logging =>
-                    logging.AddConsole(options => options.FormatterName = nameof(PlainConsoleFormatter))
-                        .AddConsoleFormatter<PlainConsoleFormatter, ConsoleFormatterOptions>()
-                        .SetMinimumLevel(LogLevel.Trace))
-                .AddSingleton(_ => commandLineOptions)
-                .AddSingleton<DependencyWriter>()
-                .AddSingleton<ProgramRunner>()
-                .AddNuGetTransitiveDependencyFinder()
+                .AddLogging(LoggingBuilderAction)
+                .AddScoped(_ => commandLineOptions)
+                .AddScoped<DependencyWriter>()
+                .AddScoped<ProgramRunner>()
+                .AddScoped<TransitiveDependencyFinder>()
+                .AddSingleton(LoggingBuilderAction)
                 .BuildServiceProvider();
     }
 }
