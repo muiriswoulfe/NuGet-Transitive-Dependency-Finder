@@ -7,6 +7,7 @@ name: Build
 
 on:
   push: null
+  pull_request: null
   schedule:
     - cron: 0 0 * * 1
 
@@ -17,11 +18,12 @@ defaults:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         configuration: [Debug, Release]
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
@@ -33,17 +35,17 @@ jobs:
         uses: actions/setup-dotnet@main
 
       # SonarCloud Initialization
-      - if: ${{ matrix.configuration == 'Release' }}
+      - if: ${{ matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' }}
         name: SONARCLOUD INITIALIZATION – Java Install
         uses: actions/setup-java@main
         with:
           java-version: 15.0.1
 
-      - if: ${{ matrix.configuration == 'Release' }}
+      - if: ${{ matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' }}
         name: SONARCLOUD INITIALIZATION – SonarCloud Install
         run: dotnet tool install dotnet-sonarscanner --tool-path .sonarcloud
 
-      - if: ${{ matrix.configuration == 'Release' }}
+      - if: ${{ matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' }}
         name: SONARCLOUD INITIALIZATION – SonarCloud Initialize
         run: >-
           .sonarcloud/dotnet-sonarscanner begin
@@ -68,14 +70,14 @@ jobs:
           /property:CollectCoverage=true
           /property:CoverletOutputFormat=opencover
 
-      - if: ${{ matrix.configuration == 'Release' }}
+      - if: ${{ matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' }}
         name: BUILD & TEST – Upload to Codecov
         uses: codecov/codecov-action@master
         with:
           fail_ci_if_error: true
 
       # SonarCloud Finalization
-      - if: ${{ matrix.configuration == 'Release' }}
+      - if: ${{ matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' }}
         name: SONARCLOUD FINALIZATION – SonarCloud Analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -84,7 +86,6 @@ jobs:
 
   create-asset:
     name: Create Asset
-    runs-on: ubuntu-latest
     env:
       project: NuGetTransitiveDependencyFinder.ConsoleApp
     strategy:
@@ -102,6 +103,7 @@ jobs:
             win-x64,
             win-x86
           ]
+    runs-on: ubuntu-latest
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
@@ -185,9 +187,9 @@ jobs:
 
   create-nuget:
     name: Create NuGet Package
-    runs-on: ubuntu-latest
     env:
       nuget-package-prefix: src/Product/NuGetTransitiveDependencyFinder/bin/Release/NuGetTransitiveDependencyFinder
+    runs-on: ubuntu-latest
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
