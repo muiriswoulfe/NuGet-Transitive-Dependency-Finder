@@ -170,7 +170,7 @@ jobs:
     needs: create-release
     runs-on: ubuntu-latest
     env:
-      nuget-package-prefix: src/NuGetTransitiveDependencyFinder/bin/Release/NuGetTransitiveDependencyFinder
+      nuget-package-prefix: src/Product/NuGetTransitiveDependencyFinder/bin/Release/NuGetTransitiveDependencyFinder
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
@@ -195,66 +195,66 @@ jobs:
       - name: CREATE LOGO – Convert SVG
         run: >-
           node_modules/.bin/svgexport
-          src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
-          src/NuGetTransitiveDependencyFinder/Assets/Logo.png
+          src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.svg
+          src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png
 
       - name: CREATE LOGO – Compress with block split threshold 0
         continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b0 -q
+        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b0 -q
 
       - name: CREATE LOGO – Compress with block split threshold 128
         continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b128 -q
+        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b128 -q
 
       - name: CREATE LOGO – Compress with block split threshold 192
         continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b192 -q
+        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b192 -q
 
       - name: CREATE LOGO – Compress with block split threshold 256
         continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b256 -q
+        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b256 -q
 
       - name: CREATE LOGO – Compress with block split threshold 512
         continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b512 -q
+        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b512 -q
 
       - name: CREATE LOGO – Compress with block split threshold 1024
         continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b1024 -q
+        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b1024 -q
 
       - name: CREATE LOGO – Compress with block split threshold 2048
         continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b2048 -q
+        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b2048 -q
 
       - name: CREATE LOGO – Compress with block split threshold 4096
         continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b4096 -q
+        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b4096 -q
 
       - name: CREATE LOGO – Compress with block split threshold 8192
         continue-on-error: true
-        run: node_modules/.bin/pngout src/NuGetTransitiveDependencyFinder/Assets/Logo.png -b8192 -q
+        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b8192 -q
 
       - name: CREATE LOGO – Delete SVG
-        run: Remove-Item -Path 'src/NuGetTransitiveDependencyFinder/Assets/Logo.svg'
+        run: Remove-Item -Path 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.svg'
 
       # Build
       - name: BUILD – Project Restore
-        run: dotnet restore src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+        run: dotnet restore src/Product/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
 
       - name: BUILD – Project Build
         run: >-
-          dotnet build src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+          dotnet build src/Product/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
           --configuration Release
           --no-restore
           /maxCpuCount
 
       # Upload
       - name: UPLOAD – Delete Documentation
-        run: Remove-Item -Path 'src/NuGetTransitiveDependencyFinder/bin/NuGetTransitiveDependencyFinder.xml'
+        run: Remove-Item -Path 'src/Product/NuGetTransitiveDependencyFinder/bin/NuGetTransitiveDependencyFinder.xml'
 
       - name: UPLOAD – Pack
         run: >-
-          dotnet pack src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+          dotnet pack src/Product/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
           --configuration Release
           --no-build
           /property:PackageReleaseNotes="${{ github.event.inputs.release-notes }}"

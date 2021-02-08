@@ -7,5 +7,5 @@ using System;
 using System.Reflection;
 
 [assembly: AssemblyProduct("NuGet Transitive Dependency Finder Console App Unit Tests")]
-[assembly: AssemblyTitle("NuGetTransitiveDependencyFinder.ConsoleApp.UnitTests")]
+[assembly: AssemblyTitle("NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp")]
 [assembly: CLSCompliant(false)]

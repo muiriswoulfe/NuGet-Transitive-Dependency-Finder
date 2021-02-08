@@ -3,7 +3,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj" />
+    <ProjectReference Include="..\..\Product\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj" />
   </ItemGroup>
 
 </Project>

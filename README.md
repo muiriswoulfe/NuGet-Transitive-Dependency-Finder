@@ -206,9 +206,9 @@ be located [here][sonarcloud].
 [sonarcloud]:
   https://sonarcloud.io/dashboard?id=muiriswoulfe_NuGet-Transitive-Dependency-Finder
 [codelibrary]:
-  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/NuGetTransitiveDependencyFinder
+  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/Product/NuGetTransitiveDependencyFinder
 [codeconsoleapp]:
-  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/NuGetTransitiveDependencyFinder.ConsoleApp
+  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp
 [codesolution]:
   https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/blob/main/NuGetTransitiveDependencyFinder.sln
 [git]:

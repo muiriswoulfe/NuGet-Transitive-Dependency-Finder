@@ -5,13 +5,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 
 VisualStudioVersion = 16.0.28701.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder", "src\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj", "{FAEC5437-7DF8-4DFB-872A-6BEBF216A3F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder", "src\Product\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj", "{FAEC5437-7DF8-4DFB-872A-6BEBF216A3F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder.ConsoleApp", "src\NuGetTransitiveDependencyFinder.ConsoleApp\NuGetTransitiveDependencyFinder.ConsoleApp.csproj", "{B128460D-E702-45EA-B6B4-FAF8C53E1456}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder.ConsoleApp", "src\Product\NuGetTransitiveDependencyFinder.ConsoleApp\NuGetTransitiveDependencyFinder.ConsoleApp.csproj", "{B128460D-E702-45EA-B6B4-FAF8C53E1456}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder.UnitTests", "src\NuGetTransitiveDependencyFinder.UnitTests\NuGetTransitiveDependencyFinder.UnitTests.csproj", "{49D32528-1A50-4094-AA62-32A190438BBD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder.UnitTests", "src\Tests\NuGetTransitiveDependencyFinder.UnitTests\NuGetTransitiveDependencyFinder.UnitTests.csproj", "{49D32528-1A50-4094-AA62-32A190438BBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder.ConsoleApp.UnitTests", "src\NuGetTransitiveDependencyFinder.ConsoleApp.UnitTests\NuGetTransitiveDependencyFinder.ConsoleApp.UnitTests.csproj", "{62A6B208-7688-4975-86A7-E2673F6B3432}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp", "src\Tests\NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp\NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.csproj", "{62A6B208-7688-4975-86A7-E2673F6B3432}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Product", "Product", "{13D4008F-3C47-4651-9F3A-B8033A7D516F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BACFCDE2-F6A1-4D4E-82D2-FBAC345C5919}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,5 +47,9 @@ Global
 		SolutionGuid = {B9342362-98E1-4CD7-8250-104A96E314CE}
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{FAEC5437-7DF8-4DFB-872A-6BEBF216A3F4} = {13D4008F-3C47-4651-9F3A-B8033A7D516F}
+		{B128460D-E702-45EA-B6B4-FAF8C53E1456} = {13D4008F-3C47-4651-9F3A-B8033A7D516F}
+		{49D32528-1A50-4094-AA62-32A190438BBD} = {BACFCDE2-F6A1-4D4E-82D2-FBAC345C5919}
+		{62A6B208-7688-4975-86A7-E2673F6B3432} = {BACFCDE2-F6A1-4D4E-82D2-FBAC345C5919}
 	EndGlobalSection
 EndGlobal

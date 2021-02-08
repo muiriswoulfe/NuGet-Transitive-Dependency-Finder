@@ -6,7 +6,6 @@
 name: Build
 
 on:
-  pull_request: null
   push: null
   schedule:
     - cron: 0 0 * * 1
@@ -131,11 +130,11 @@ jobs:
 
       # Build
       - name: BUILD – Project Restore
-        run: dotnet restore src/${{ env.project }}/${{ env.project }}.csproj --runtime ${{ matrix.runtime }}
+        run: dotnet restore src/Product/${{ env.project }}/${{ env.project }}.csproj --runtime ${{ matrix.runtime }}
 
       - name: BUILD – Project Build
         run: >-
-          dotnet build src/${{ env.project }}/${{ env.project }}.csproj
+          dotnet build src/Product/${{ env.project }}/${{ env.project }}.csproj
           --configuration Release
           --no-restore
           --runtime ${{ matrix.runtime }}
@@ -145,7 +144,7 @@ jobs:
       # Publish
       - name: PUBLISH – Project Publish
         run: >-
-          dotnet publish src/${{ env.project }}/${{ env.project }}.csproj
+          dotnet publish src/Product/${{ env.project }}/${{ env.project }}.csproj
           --configuration Release
           --no-build
           --runtime ${{ matrix.runtime }}
@@ -172,7 +171,7 @@ jobs:
         run: |-
           $Extension = '${{ fromJson(env.extension)[steps.platform.outputs.platform] }}'
           $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
-          $AssetPath = '${{ github.workspace }}/src/${{ env.project }}/bin/Release/net5.0/'
+          $AssetPath = '${{ github.workspace }}/src/Product/${{ env.project }}/bin/Release/net5.0/'
           $AssetPath += "${{ matrix.runtime }}/publish/${{ env.project }}$Extension"
           Write-Output -InputObject "::set-output name=asset_path::$AssetPath"
           Write-Output -InputObject "::set-output name=asset_name::$AssetName"
@@ -188,7 +187,7 @@ jobs:
     name: Create NuGet Package
     runs-on: ubuntu-latest
     env:
-      nuget-package-prefix: src/NuGetTransitiveDependencyFinder/bin/Release/NuGetTransitiveDependencyFinder
+      nuget-package-prefix: src/Product/NuGetTransitiveDependencyFinder/bin/Release/NuGetTransitiveDependencyFinder
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
@@ -225,93 +224,93 @@ jobs:
       - name: CREATE LOGO – Convert SVG
         run: >-
           node_modules/.bin/svgexport
-          src/NuGetTransitiveDependencyFinder/Assets/Logo.svg
-          src/NuGetTransitiveDependencyFinder/Assets/Logo.png
+          src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.svg
+          src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png
 
       - name: CREATE LOGO – Compress with block split threshold 0
         run: >-
           Start-Process
-          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b0','-q'
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b0','-q'
           -FilePath 'node_modules/.bin/pngout'
           -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 128
         run: >-
           Start-Process
-          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b128','-q'
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b128','-q'
           -FilePath 'node_modules/.bin/pngout'
           -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 192
         run: >-
           Start-Process
-          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b192','-q'
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b192','-q'
           -FilePath 'node_modules/.bin/pngout'
           -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 256
         run: >-
           Start-Process
-          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b256','-q'
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b256','-q'
           -FilePath 'node_modules/.bin/pngout'
           -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 512
         run: >-
           Start-Process
-          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b512','-q'
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b512','-q'
           -FilePath 'node_modules/.bin/pngout'
           -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 1024
         run: >-
           Start-Process
-          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b1024','-q'
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b1024','-q'
           -FilePath 'node_modules/.bin/pngout'
           -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 2048
         run: >-
           Start-Process
-          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b2048','-q'
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b2048','-q'
           -FilePath 'node_modules/.bin/pngout'
           -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 4096
         run: >-
           Start-Process
-          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b4096','-q'
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b4096','-q'
           -FilePath 'node_modules/.bin/pngout'
           -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 8192
         run: >-
           Start-Process
-          -ArgumentList 'src/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b8192','-q'
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b8192','-q'
           -FilePath 'node_modules/.bin/pngout'
           -Wait
 
       - name: CREATE LOGO – Delete SVG
-        run: Remove-Item -Path 'src/NuGetTransitiveDependencyFinder/Assets/Logo.svg'
+        run: Remove-Item -Path 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.svg'
 
       # Build
       - name: BUILD – Project Restore
-        run: dotnet restore src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+        run: dotnet restore src/Product/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
 
       - name: BUILD – Project Build
         run: >-
-          dotnet build src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+          dotnet build src/Product/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
           --configuration Release
           --no-restore
           /maxCpuCount
 
       # Upload
       - name: UPLOAD – Delete Documentation
-        run: Remove-Item -Path 'src/NuGetTransitiveDependencyFinder/bin/NuGetTransitiveDependencyFinder.xml'
+        run: Remove-Item -Path 'src/Product/NuGetTransitiveDependencyFinder/bin/NuGetTransitiveDependencyFinder.xml'
 
       - name: UPLOAD – Pack
         run: >-
-          dotnet pack src/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
+          dotnet pack src/Product/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
           --configuration Release
           --no-build
           /property:PackageReleaseNotes="Release Notes"
