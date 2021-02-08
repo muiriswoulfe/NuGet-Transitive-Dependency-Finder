@@ -3,7 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGetTransitiveDependencyFinder.ConsoleApp.UnitTests.Input
+namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Input
 {
     using FluentAssertions;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Input;

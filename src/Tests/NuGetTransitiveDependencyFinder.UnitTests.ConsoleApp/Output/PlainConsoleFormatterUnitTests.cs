@@ -3,7 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGetTransitiveDependencyFinder.ConsoleApp.UnitTests.Output
+namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
 {
     using System;
     using System.ComponentModel;

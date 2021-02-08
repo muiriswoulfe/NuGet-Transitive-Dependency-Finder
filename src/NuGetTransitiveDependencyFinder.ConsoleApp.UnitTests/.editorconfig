@@ -1,6 +1,0 @@
-# © Muiris Woulfe
-# Licensed under the MIT License
-
-[*.cs]
-dotnet_diagnostic.CA1062.severity = none
-dotnet_diagnostic.CA1707.severity = none
