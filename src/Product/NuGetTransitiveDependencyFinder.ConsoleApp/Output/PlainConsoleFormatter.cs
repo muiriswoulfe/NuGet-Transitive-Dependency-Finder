@@ -23,6 +23,36 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
     internal class PlainConsoleFormatter : ConsoleFormatter
     {
         /// <summary>
+        /// The console formatting code indicating that the foreground should be bold.
+        /// </summary>
+        private const string Bold = "\x1B[1m";
+
+        /// <summary>
+        /// The console formatting code indicating that the foreground should be dark yellow.
+        /// </summary>
+        private const string DarkYellow = "\x1B[33m";
+
+        /// <summary>
+        /// The console formatting code indicating that the foreground should be green.
+        /// </summary>
+        private const string Green = "\x1B[32m";
+
+        /// <summary>
+        /// The console formatting code indicating that the foreground should be magenta.
+        /// </summary>
+        private const string Magenta = "\x1B[35m";
+
+        /// <summary>
+        /// The console formatting code indicating that the foreground should be red.
+        /// </summary>
+        private const string Red = "\x1B[31m";
+
+        /// <summary>
+        /// The console formatting code indicating that the foreground should be yellow.
+        /// </summary>
+        private const string Yellow = "\x1B[33m";
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PlainConsoleFormatter"/> class.
         /// </summary>
         /// <param name="_">The unused set of formatting options.</param>
@@ -57,19 +87,19 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
             logLevel switch
             {
                 LogLevel.Trace =>
-                    "\x1B[32m", // Green
+                    Green,
                 LogLevel.Debug =>
                     string.Empty,
                 LogLevel.Information =>
-                    "\x1B[1m", // Bold
+                    Bold,
                 LogLevel.Warning =>
-                    "\x1B[1m\x1B[33m", // Bold Dark Yellow
+                    Bold + DarkYellow,
                 LogLevel.Error =>
-                    "\x1B[1m\x1B[31m", // Bold Red
+                    Bold + Red,
                 LogLevel.Critical =>
-                    "\x1B[1m\x1B[35m", // Bold Magenta
+                    Bold + Magenta,
                 LogLevel.None =>
-                    "\x1B[33m", // Yellow
+                    Yellow,
                 _ =>
                     throw new InvalidEnumArgumentException(nameof(logLevel), (int)logLevel, typeof(LogLevel)),
             };
