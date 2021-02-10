@@ -57,8 +57,10 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         [InlineData((NuGetLogLevel)100, LogLevel.None)]
         public void Log_WithEachLevel_ConvertsLevel(NuGetLogLevel inputLogLevel, LogLevel expectedLogLevel)
         {
+            // Act
             this.nuGetLogger.Log(new LogMessage(inputLogLevel, "Message", NuGetLogCode.NU1000));
 
+            // Assert
             _ = this.loggerMock.Entries.Should().ContainSingle();
             _ = this.loggerMock.Entries[0].LogLevel.Should().Be(expectedLogLevel);
             _ = this.loggerMock.Entries[0].Message.Should()
@@ -73,13 +75,16 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         [Fact]
         public void Log_WithAllLevelsInEnumeration_ConvertsLevel()
         {
+            // Arrange
             var values = Enum.GetValues(typeof(NuGetLogLevel)).Cast<NuGetLogLevel>().ToList();
 
+            // Act
             foreach (var value in values)
             {
                 this.nuGetLogger.Log(new LogMessage(value, "Message", NuGetLogCode.NU1000));
             }
 
+            // Assert
             _ = this.loggerMock.Entries.Should().HaveCount(values.Count);
             foreach (var entry in this.loggerMock.Entries)
             {
