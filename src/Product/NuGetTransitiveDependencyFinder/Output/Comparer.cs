@@ -137,7 +137,6 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// relationship.
         /// </summary>
         /// <typeparam name="TValue">The type to compare.</typeparam>
-        /// <exception cref="ArgumentException"><paramref name="obj"/> is not of type <c>TValue</c>.</exception>
         /// <param name="current">The object corresponding to <c>this</c>, from the context of the caller.</param>
         /// <param name="obj">The object against which to compare <see paramref="current"/>.</param>
         /// <param name="function">The comparison logic specific to <c>TValue</c>, which takes two objects of type
@@ -147,6 +146,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <returns>A value less than zero if <see paramref="current"/> is less than <see paramref="obj"/>, zero if
         /// <see paramref="current"/> is equal to <see paramref="obj"/>, or a value greater than zero if
         /// <see paramref="current"/> is greater than <see paramref="obj"/>.</returns>
+        /// <exception cref="ArgumentException"><paramref name="obj"/> is not of type <c>TValue</c>.</exception>
         public static int CompareTo<TValue>(
             TValue current,
             object? obj,
