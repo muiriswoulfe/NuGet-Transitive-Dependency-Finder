@@ -16,12 +16,17 @@ updates:
     schedule:
       interval: daily
 
-  - directory: /src/Product/NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp/
+  - directory: /src/Tests/NuGetTransitiveDependencyFinder.TestUtilities/
     package-ecosystem: nuget
     schedule:
       interval: daily
 
-  - directory: /src/Product/NuGetTransitiveDependencyFinder.UnitTests/
+  - directory: /src/Tests/NuGetTransitiveDependencyFinder.UnitTests/
+    package-ecosystem: nuget
+    schedule:
+      interval: daily
+
+  - directory: /src/Tests/NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp/
     package-ecosystem: nuget
     schedule:
       interval: daily

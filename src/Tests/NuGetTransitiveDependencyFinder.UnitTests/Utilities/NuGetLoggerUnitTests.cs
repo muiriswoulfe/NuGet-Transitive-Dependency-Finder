@@ -10,6 +10,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
     using System.Threading.Tasks;
     using FluentAssertions;
     using NuGet.Common;
+    using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
     using NuGetTransitiveDependencyFinder.Utilities;
     using NuGetTransitiveDependencyFinder.UnitTests.TestUtilities;
     using Xunit;
@@ -364,7 +365,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// <summary>
         /// Tests that when <see cref="LoggerBase.LogError(string)"/> is called, the logging is performed correctly.
         /// </summary>
-        [Fact]
+        [CultureFact]
         public void LogError_WithEachLevel_LogsCorrectly()
         {
             // Act
