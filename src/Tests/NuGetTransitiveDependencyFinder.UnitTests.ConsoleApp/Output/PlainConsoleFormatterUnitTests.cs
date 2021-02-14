@@ -92,10 +92,9 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
             var values = Enum.GetValues(typeof(LogLevel)).Cast<LogLevel>();
             using var result = new StringWriter();
 
-            foreach (var value in values)
-            {
-                // Act
-                Action action = () => plainConsoleFormatter.Write(
+            // Act
+            var actions = values.Select(value =>
+                new Action(() => plainConsoleFormatter.Write(
                     new LogEntry<string>(
                         value,
                         "Category",
@@ -104,9 +103,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
                         new NotSupportedException(),
                         (string state, Exception exception) => Invariant($"{state} {exception}")),
                     ExternalScopeProviderMock.Object,
-                    result);
+                    result)));
 
-                // Assert
+            // Assert
+            foreach (var action in actions)
+            {
                 action.Should().NotThrow<InvalidEnumArgumentException>();
             }
         }
