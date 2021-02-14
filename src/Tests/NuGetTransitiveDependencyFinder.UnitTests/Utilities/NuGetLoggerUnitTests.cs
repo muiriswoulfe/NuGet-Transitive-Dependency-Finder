@@ -302,7 +302,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         }
 
         /// <summary>
-        /// Tests that when <see cref="LoggerBase.LogInformation(string)"/> is called, the logging is performed correctly.
+        /// Tests that when <see cref="LoggerBase.LogInformation(string)"/> is called, the logging is performed
+        /// correctly.
         /// </summary>
         [AllCulturesFact]
         public void LogInformation_WithEachLevel_LogsCorrectly()

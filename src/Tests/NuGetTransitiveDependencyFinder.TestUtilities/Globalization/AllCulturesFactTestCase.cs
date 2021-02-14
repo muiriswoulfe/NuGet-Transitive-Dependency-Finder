@@ -55,11 +55,11 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
             CultureInfo culture,
             object[]? testMethodArguments = null)
             : base(
-                  diagnosticMessageSink,
-                  defaultMethodDisplay,
-                  defaultMethodDisplayOptions,
-                  testMethod,
-                  testMethodArguments) =>
+                diagnosticMessageSink,
+                defaultMethodDisplay,
+                defaultMethodDisplayOptions,
+                testMethod,
+                testMethodArguments) =>
             this.Initialize(culture);
 
         /// <summary>
