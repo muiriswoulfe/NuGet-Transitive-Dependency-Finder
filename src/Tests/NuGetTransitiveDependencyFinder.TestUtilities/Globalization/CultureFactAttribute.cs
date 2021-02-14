@@ -13,7 +13,7 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
     /// within the system running the tests.
     /// </summary>
     [XunitTestCaseDiscoverer(
-        "NuGetTransitiveDependencyFinder.TestUtilities.Globalization.CultureFactAttributeDiscoverer",
+        "NuGetTransitiveDependencyFinder.TestUtilities.Globalization.CultureAttributeDiscoverer",
         "NuGetTransitiveDependencyFinder.TestUtilities")]
     public sealed class CultureFactAttribute : FactAttribute
     {

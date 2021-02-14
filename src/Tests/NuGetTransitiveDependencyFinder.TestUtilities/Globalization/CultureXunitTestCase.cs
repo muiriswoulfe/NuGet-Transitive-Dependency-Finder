@@ -70,7 +70,7 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         {
             base.Deserialize(data);
 
-            this.Initialize(data.GetValue<CultureInfo>("Culture"));
+            this.Initialize(data.GetValue<CultureInfo>(nameof(this.culture)));
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         {
             base.Serialize(data);
 
-            data.AddValue("Culture", this.culture);
+            data.AddValue(nameof(this.culture), this.culture);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         private void Initialize(CultureInfo culture)
         {
             this.culture = culture;
-            this.Traits.Add("Culture", new List<string> { this.culture.Name });
+            this.Traits.Add(nameof(this.culture), new List<string> { this.culture.Name });
             this.DisplayName += Invariant($"[{this.culture.Name}]");
         }
     }
