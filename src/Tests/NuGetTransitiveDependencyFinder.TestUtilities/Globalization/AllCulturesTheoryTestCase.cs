@@ -38,7 +38,7 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         /// Initializes a new instance of the <see cref="AllCulturesTheoryTestCase"/> class.
         /// </summary>
         /// <param name="diagnosticMessageSink">The message sink that receives the test result messages.</param>
-        /// <param name="defaultMethodDisplay">The default method display to use,  for when no customization has been
+        /// <param name="defaultMethodDisplay">The default method display to use, for when no customization has been
         /// performed.</param>
         /// <param name="defaultMethodDisplayOptions">The default method display options to use, for when no
         /// customization has been performed.</param>

@@ -1,5 +1,5 @@
 // <copyright file="AllCulturesBaseTestCase.cs" company="Muiris Woulfe">
-// ? Muiris Woulfe
+// © Muiris Woulfe
 // Licensed under the MIT License
 // </copyright>
 

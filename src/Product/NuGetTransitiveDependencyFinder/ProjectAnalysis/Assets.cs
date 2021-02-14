@@ -21,7 +21,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         private readonly IDotNetRunner dotNetRunner;
 
         /// <summary>
-        /// The object manages logging from within the NuGet infrastructure.
+        /// The object managing logging from within the NuGet infrastructure.
         /// </summary>
         private readonly INuGetLogger nuGetLogger;
 
@@ -30,7 +30,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// </summary>
         /// <param name="dotNetRunner">The object managing the running of .NET commands on project and solution
         /// files.</param>
-        /// <param name="nuGetLogger">The object manages logging from within the NuGet infrastructure.</param>
+        /// <param name="nuGetLogger">The object managing logging from within the NuGet infrastructure.</param>
         public Assets(IDotNetRunner dotNetRunner, INuGetLogger nuGetLogger)
         {
             this.dotNetRunner = dotNetRunner;
