@@ -6,22 +6,20 @@
 namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
 {
     using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
+    using System.Diagnostics.CodeAnalysis;
     using Xunit.Abstractions;
     using Xunit.Sdk;
 
     /// <summary>
     /// An attribute discoverer, for applying all cultures to xUnit.net tests marked with
-    /// <see cref="AllCulturesFactAttribute"/> .
+    /// <see cref="AllCulturesFactAttribute"/>.
     /// </summary>
-    public class AllCulturesFactAttributeDiscoverer : IXunitTestCaseDiscoverer
+    [SuppressMessage(
+        "Microsoft.Performance",
+        "CA1812:AvoidUninstantiatedInternalClasses",
+        Justification = "Instantiated via reflection.")]
+    internal class AllCulturesFactAttributeDiscoverer : IXunitTestCaseDiscoverer
     {
-        /// <summary>
-        /// The collection of all cultures present within the system running the tests.
-        /// </summary>
-        private static readonly CultureInfo[] AllCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
-
         /// <summary>
         /// The message sink that receives the test result messages.
         /// </summary>
@@ -35,8 +33,8 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
             this.diagnosticMessageSink = diagnosticMessageSink;
 
         /// <summary>
-        /// Discovers the set of full suite of test case, where each test case validates a single culture, corresponding
-        /// to each test method marked with <see cref="AllCulturesFactAttribute"/>.
+        /// Discovers the full suite of test cases, where each test case validates a single culture, corresponding to
+        /// each test method marked with <see cref="AllCulturesFactAttribute"/>.
         /// </summary>
         /// <param name="discoveryOptions">The discovery options to use.</param>
         /// <param name="testMethod">The test method to which the current test case belongs.</param>
@@ -46,12 +44,9 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
             ITestFrameworkDiscoveryOptions discoveryOptions,
             ITestMethod testMethod,
             IAttributeInfo factAttribute) =>
-            AllCultures.Select(
-                culture => new AllCulturesFactTestCase(
-                    this.diagnosticMessageSink,
-                    discoveryOptions.MethodDisplayOrDefault(),
-                    discoveryOptions.MethodDisplayOptionsOrDefault(),
-                    testMethod,
-                    culture));
+            AllCulturesBaseAttributeDiscoverer.CreateFactTestCases(
+                this.diagnosticMessageSink,
+                discoveryOptions,
+                testMethod);
     }
 }

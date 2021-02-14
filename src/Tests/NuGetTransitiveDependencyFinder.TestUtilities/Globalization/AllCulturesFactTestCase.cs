@@ -6,19 +6,17 @@
 namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Globalization;
     using System.Threading;
     using System.Threading.Tasks;
     using Xunit.Abstractions;
     using Xunit.Sdk;
-    using static System.FormattableString;
 
     /// <summary>
     /// An xUnit.net test case, which covers a test method to be run with a single culture.
     /// </summary>
-    public class AllCulturesFactTestCase : XunitTestCase
+    internal class AllCulturesFactTestCase : XunitTestCase
     {
         /// <summary>
         /// The culture for which to run the current test.
@@ -70,7 +68,7 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         {
             base.Deserialize(data);
 
-            this.Initialize(data.GetValue<CultureInfo>(nameof(this.culture)));
+            this.Initialize(AllCulturesBaseTestCase.Deserialize(data));
         }
 
         /// <summary>
@@ -81,7 +79,7 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         {
             base.Serialize(data);
 
-            data.AddValue(nameof(this.culture), this.culture);
+            AllCulturesBaseTestCase.Serialize(data, this.culture);
         }
 
         /// <summary>
@@ -95,41 +93,27 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         /// has been requested.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation, which contains the summary of the
         /// test case run.</returns>
-        public override async Task<RunSummary> RunAsync(
+        public override Task<RunSummary> RunAsync(
             IMessageSink diagnosticMessageSink,
             IMessageBus messageBus,
             object[] constructorArguments,
             ExceptionAggregator aggregator,
-            CancellationTokenSource cancellationTokenSource)
-        {
-            var originalCulture = CultureInfo.CurrentCulture;
-            var originalUICulture = CultureInfo.CurrentUICulture;
-
-            try
-            {
-                CultureInfo.CurrentCulture = this.culture;
-                CultureInfo.CurrentUICulture = this.culture;
-
-                return await base.RunAsync(
+            CancellationTokenSource cancellationTokenSource) =>
+            AllCulturesBaseTestCase.RunAsync(
+                () => base.RunAsync(
                     diagnosticMessageSink,
                     messageBus,
                     constructorArguments,
                     aggregator,
-                    cancellationTokenSource).ConfigureAwait(false);
-            }
-            finally
-            {
-                CultureInfo.CurrentCulture = originalCulture;
-                CultureInfo.CurrentUICulture = originalUICulture;
-            }
-        }
+                    cancellationTokenSource),
+                this.culture);
 
         /// <summary>
         /// Gets a unique identifier for the test case.
         /// </summary>
         /// <returns>The unique identifier.</returns>
         protected override string GetUniqueID() =>
-            Invariant($"{base.GetUniqueID()}[{this.culture.Name}]");
+            AllCulturesBaseTestCase.GetUniqueId(base.GetUniqueID(), this.culture);
 
         /// <summary>
         /// Initializes the data stored within the current instance of the <see cref="AllCulturesFactTestCase"/> class.
@@ -138,8 +122,8 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         private void Initialize(CultureInfo culture)
         {
             this.culture = culture;
-            this.Traits.Add(nameof(this.culture), new List<string> { this.culture.Name });
-            this.DisplayName += Invariant($"[{this.culture.Name}]");
+            this.DisplayName += AllCulturesBaseTestCase.GetDisplayNameSuffix(culture);
+            AllCulturesBaseTestCase.InitializeTraits(this.Traits, culture);
         }
     }
 }

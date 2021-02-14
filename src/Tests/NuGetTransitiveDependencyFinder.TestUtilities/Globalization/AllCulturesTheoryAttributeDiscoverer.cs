@@ -6,8 +6,7 @@
 namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
 {
     using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
+    using System.Diagnostics.CodeAnalysis;
     using Xunit.Abstractions;
     using Xunit.Sdk;
 
@@ -15,13 +14,12 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
     /// An attribute discoverer, for applying all cultures to xUnit.net tests marked with
     /// <see cref="AllCulturesTheoryAttribute"/>.
     /// </summary>
-    public class AllCulturesTheoryAttributeDiscoverer : TheoryDiscoverer
+    [SuppressMessage(
+        "Microsoft.Performance",
+        "CA1812:AvoidUninstantiatedInternalClasses",
+        Justification = "Instantiated via reflection.")]
+    internal class AllCulturesTheoryAttributeDiscoverer : TheoryDiscoverer
     {
-        /// <summary>
-        /// The collection of all cultures present within the system running the tests.
-        /// </summary>
-        private static readonly CultureInfo[] AllCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AllCulturesTheoryAttributeDiscoverer"/> class.
         /// </summary>
@@ -44,14 +42,11 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
             ITestMethod testMethod,
             IAttributeInfo theoryAttribute,
             object[] dataRow) =>
-            AllCultures.Select(
-                culture => new AllCulturesFactTestCase(
-                    this.DiagnosticMessageSink,
-                    discoveryOptions.MethodDisplayOrDefault(),
-                    discoveryOptions.MethodDisplayOptionsOrDefault(),
-                    testMethod,
-                    culture,
-                    dataRow));
+            AllCulturesBaseAttributeDiscoverer.CreateFactTestCases(
+                this.DiagnosticMessageSink,
+                discoveryOptions,
+                testMethod,
+                dataRow);
 
         /// <summary>
         /// Creates test cases for the entire theory. This is used when one or more of the theory data items are not
@@ -65,12 +60,9 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
             ITestFrameworkDiscoveryOptions discoveryOptions,
             ITestMethod testMethod,
             IAttributeInfo theoryAttribute) =>
-            AllCultures.Select(
-                culture => new AllCulturesTheoryTestCase(
-                    this.DiagnosticMessageSink,
-                    discoveryOptions.MethodDisplayOrDefault(),
-                    discoveryOptions.MethodDisplayOptionsOrDefault(),
-                    testMethod,
-                    culture));
+            AllCulturesBaseAttributeDiscoverer.CreateTheoryTestCases(
+                this.DiagnosticMessageSink,
+                discoveryOptions,
+                testMethod);
     }
 }

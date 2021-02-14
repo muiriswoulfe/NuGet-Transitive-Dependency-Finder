@@ -35,6 +35,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)\Shared\Properties\AssemblyAttributes.cs" />
   </ItemGroup>
 
+  <ItemGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
+    <Content Include="$(MSBuildThisFileDirectory)\xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.5.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -69,6 +69,7 @@ jobs:
           --no-build
           /property:CollectCoverage=true
           /property:CoverletOutputFormat=opencover
+          /property:Exclude=[NuGetTransitiveDependencyFinder.TestUtilities]*
 
       - if: ${{ matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' }}
         name: BUILD & TEST – Upload to Codecov
@@ -381,6 +382,12 @@ jobs:
         with:
           json-file: src/stylecop.json
           json-schema: stylecop.schema.json
+
+      - name: JSON VALIDATION – Validate xunit.runner.json
+        uses: Zingabopp/JsonValidate-Action@master
+        with:
+          json-file: src/xunit.runner.json
+          json-schema: https://xunit.net/schema/current/xunit.runner.schema.json
 
   validate-security:
     name: Validate – Security
