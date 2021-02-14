@@ -383,11 +383,23 @@ jobs:
           json-file: src/stylecop.json
           json-schema: stylecop.schema.json
 
+      - name: JSON VALIDATION – Validate src/xunit.runner.json – Download xunit.runner.schema.json
+        run: >-
+          Invoke-WebRequest
+          -Uri 'https://xunit.net/schema/current/xunit.runner.schema.json'
+          -OutFile 'xunit.runner.schema.json'
+
+      - name: JSON VALIDATION – Validate src/xunit.runner.json – Update xunit.runner.schema.json
+        run: |-
+          $FileContent = Get-Content -Path 'xunit.runner.schema.json' -Raw
+          $FileContent = $FileContent -replace 'draft-04/schema', 'draft-07/schema'
+          Set-Content -NoNewline -Path 'xunit.runner.schema.json' -Value $FileContent
+
       - name: JSON VALIDATION – Validate xunit.runner.json
         uses: Zingabopp/JsonValidate-Action@master
         with:
           json-file: src/xunit.runner.json
-          json-schema: https://xunit.net/schema/current/xunit.runner.schema.json
+          json-schema: xunit.runner.schema.json
 
   validate-security:
     name: Validate – Security

@@ -236,6 +236,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = projects.SortedChildren;
 
             // Assert
+            _ = result.Should().BeInAscendingOrder();
             _ = result.Should().Equal(SortedChildrenTestData);
         }
 
@@ -259,6 +260,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = projects.SortedChildren;
 
             // Assert
+            _ = result.Should().BeInAscendingOrder();
             _ = result.Should().Equal(
                 SortedChildrenTestData[0],
                 SortedChildrenTestData[3],
