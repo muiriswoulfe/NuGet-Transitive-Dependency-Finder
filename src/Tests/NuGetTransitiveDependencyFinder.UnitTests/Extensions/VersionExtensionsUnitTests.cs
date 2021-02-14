@@ -8,6 +8,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Extensions
     using System;
     using FluentAssertions;
     using NuGetTransitiveDependencyFinder.Extensions;
+    using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
     using Xunit;
 
     /// <summary>
@@ -35,7 +36,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Extensions
         /// </summary>
         /// <param name="value">The value to be converted to a string.</param>
         /// <param name="expected">The expected result.</param>
-        [Theory]
+        [CultureTheory]
         [MemberData(nameof(ToShortenedStringTestData))]
         public void ToShortenedString_WithDifferentValues_ReturnsCorrectValues(Version value, string expected)
         {

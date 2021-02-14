@@ -1,4 +1,4 @@
-// <copyright file="CultureXunitTestCase.cs" company="Muiris Woulfe">
+// <copyright file="CultureXunitTheoryTestCase.cs" company="Muiris Woulfe">
 // © Muiris Woulfe
 // Licensed under the MIT License
 // </copyright>
@@ -16,28 +16,28 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
     using static System.FormattableString;
 
     /// <summary>
-    /// An xUnit.net test case, which covers a test method to be run with a single culture.
+    /// An xUnit.net theory test case, which covers a theory test method to be run with a single culture.
     /// </summary>
-    public class CultureXunitTestCase : XunitTestCase
+    public class CultureXunitTheoryTestCase : XunitTheoryTestCase
     {
         /// <summary>
-        /// The culture for which to run the current test.
+        /// Gets the culture for which to run the current test.
         /// </summary>
-        private CultureInfo culture = CultureInfo.InvariantCulture;
+        public CultureInfo Culture { get; private set; } = CultureInfo.InvariantCulture;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CultureXunitTestCase"/> class.
+        /// Initializes a new instance of the <see cref="CultureXunitTheoryTestCase"/> class.
         /// </summary>
         /// <remarks>This constructor should never be explicitly called, as it is only provided to enable
         /// deserialization.</remarks>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Required for deserialization.")]
-        public CultureXunitTestCase()
+        public CultureXunitTheoryTestCase()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CultureXunitTestCase"/> class.
+        /// Initializes a new instance of the <see cref="CultureXunitTheoryTestCase"/> class.
         /// </summary>
         /// <param name="diagnosticMessageSink">The message sink that receives the test result messages.</param>
         /// <param name="defaultMethodDisplay">The default method display to use,  for when no customization has been
@@ -46,20 +46,13 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         /// customization has been performed.</param>
         /// <param name="testMethod">The test method to which the current test case belongs.</param>
         /// <param name="culture">The culture for which to run the current test.</param>
-        /// <param name="testMethodArguments">The arguments for the test method.</param>
-        public CultureXunitTestCase(
+        public CultureXunitTheoryTestCase(
             IMessageSink diagnosticMessageSink,
             TestMethodDisplay defaultMethodDisplay,
             TestMethodDisplayOptions defaultMethodDisplayOptions,
             ITestMethod testMethod,
-            CultureInfo culture,
-            object[]? testMethodArguments = null)
-            : base(
-                  diagnosticMessageSink,
-                  defaultMethodDisplay,
-                  defaultMethodDisplayOptions,
-                  testMethod,
-                  testMethodArguments) =>
+            CultureInfo culture)
+            : base(diagnosticMessageSink, defaultMethodDisplay, defaultMethodDisplayOptions, testMethod) =>
             this.Initialize(culture);
 
         /// <summary>
@@ -81,7 +74,7 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         {
             base.Serialize(data);
 
-            data.AddValue("Culture", this.culture);
+            data.AddValue("Culture", this.Culture);
         }
 
         /// <summary>
@@ -95,51 +88,39 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         /// has been requested.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation, which contains the summary of the
         /// test case run.</returns>
-        public override async Task<RunSummary> RunAsync(
+        public override Task<RunSummary> RunAsync(
             IMessageSink diagnosticMessageSink,
             IMessageBus messageBus,
             object[] constructorArguments,
             ExceptionAggregator aggregator,
-            CancellationTokenSource cancellationTokenSource)
-        {
-            var originalCulture = CultureInfo.CurrentCulture;
-            var originalUICulture = CultureInfo.CurrentUICulture;
-
-            try
-            {
-                CultureInfo.CurrentCulture = this.culture;
-                CultureInfo.CurrentUICulture = this.culture;
-
-                return await base.RunAsync(
-                    diagnosticMessageSink,
-                    messageBus,
-                    constructorArguments,
-                    aggregator,
-                    cancellationTokenSource).ConfigureAwait(false);
-            }
-            finally
-            {
-                CultureInfo.CurrentCulture = originalCulture;
-                CultureInfo.CurrentUICulture = originalUICulture;
-            }
-        }
+            CancellationTokenSource cancellationTokenSource) =>
+            new CultureXunitTheoryTestCaseRunner(
+                this,
+                this.DisplayName,
+                this.SkipReason,
+                constructorArguments,
+                diagnosticMessageSink,
+                messageBus,
+                aggregator,
+                cancellationTokenSource).RunAsync();
 
         /// <summary>
         /// Gets a unique identifier for the test case.
         /// </summary>
         /// <returns>The unique identifier.</returns>
         protected override string GetUniqueID() =>
-            Invariant($"{base.GetUniqueID()}[{this.culture.Name}]");
+            Invariant($"{base.GetUniqueID()}[{this.Culture.Name}]");
 
         /// <summary>
-        /// Initializes the data stored within the current instance of the <see cref="CultureXunitTestCase"/> class.
+        /// Initializes the data stored within the current instance of the <see cref="CultureXunitTheoryTestCase"/>
+        /// class.
         /// </summary>
         /// <param name="culture">The culture for which to run the current test.</param>
         private void Initialize(CultureInfo culture)
         {
-            this.culture = culture;
-            this.Traits.Add("Culture", new List<string> { this.culture.Name });
-            this.DisplayName += Invariant($"[{this.culture.Name}]");
+            this.Culture = culture;
+            this.Traits.Add("Culture", new List<string> { this.Culture.Name });
+            this.DisplayName += Invariant($"[{this.Culture.Name}]");
         }
     }
 }

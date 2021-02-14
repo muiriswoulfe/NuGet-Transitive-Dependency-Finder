@@ -16,7 +16,7 @@ namespace NuGetTransitiveDependencyFinder
     /// <summary>
     /// A class that manages the overall process of finding transitive NuGet dependencies.
     /// </summary>
-    internal sealed class TransitiveDependencyFinder : ITransitiveDependencyFinder, IDisposable
+    internal sealed class TransitiveDependencyFinder : ITransitiveDependencyFinder
     {
         /// <summary>
         /// The service provider, which specifies the project dependencies.

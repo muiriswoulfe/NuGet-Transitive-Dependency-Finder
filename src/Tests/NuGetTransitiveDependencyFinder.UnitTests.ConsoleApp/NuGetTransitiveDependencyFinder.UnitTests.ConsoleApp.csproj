@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Product\NuGetTransitiveDependencyFinder.ConsoleApp\NuGetTransitiveDependencyFinder.ConsoleApp.csproj" />
+    <ProjectReference Include="..\NuGetTransitiveDependencyFinder.TestUtilities\NuGetTransitiveDependencyFinder.TestUtilities.csproj" />
   </ItemGroup>
 
 </Project>
