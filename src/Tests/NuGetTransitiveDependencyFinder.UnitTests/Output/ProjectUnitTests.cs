@@ -178,7 +178,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(OperatorEqualTestData))]
         public void OperatorEqual_WithAllCases_ReturnsValue(Project left, Project right, bool expected)
         {
@@ -196,7 +196,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(OperatorNotEqualTestData))]
         public void OperatorNotEqual_WithAllCases_ReturnsValue(Project left, Project right, bool expected)
         {
@@ -214,7 +214,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(OperatorLessThanTestData))]
         public void OperatorLessThan_WithAllCases_ReturnsValue(Project left, Project right, bool expected)
         {
@@ -232,7 +232,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(OperatorLessThanOrEqualTestData))]
         public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(Project left, Project right, bool expected)
         {
@@ -250,7 +250,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(OperatorGreaterThanTestData))]
         public void OperatorGreaterThan_WithAllCases_ReturnsValue(Project left, Project right, bool expected)
         {
@@ -268,7 +268,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(OperatorGreaterThanOrEqualTestData))]
         public void OperatorGreaterThanOrEqual_WithAllCases_ReturnsValue(Project left, Project right, bool expected)
         {
@@ -286,7 +286,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(CompareToTestData))]
         public void CompareTo_WithAllCases_ReturnsValue(Project left, Project right, int expected)
         {
@@ -304,7 +304,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(CompareToTestData))]
         public void CompareToObject_WithAllCases_ReturnsValue(Project left, object right, int expected)
         {
@@ -319,7 +319,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="IComparable.CompareTo"/> is called with different object types, it throws an
         /// <see cref="ArgumentException"/>.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void CompareToObject_WithDifferentObjectTypes_ThrowsArgumentException()
         {
             // Act
@@ -338,7 +338,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(EqualsTestData))]
         public void Equals_WithAllCases_ReturnsValue(Project left, Project right, bool expected)
         {
@@ -356,7 +356,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(EqualsTestData))]
         public void EqualsObject_WithAllCases_ReturnsValue(Project left, object right, bool expected)
         {
@@ -371,7 +371,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="IEquatable{Project}.Equals"/> is called with different object types, it returns
         /// <c>false</c>.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void EqualsObject_WithDifferentObjectTypes_ReturnsFalse()
         {
             // Act
@@ -387,7 +387,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="value1">The first value for which to compute a hash code.</param>
         /// <param name="value2">The second value for which to compute a hash code.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(GetHashCodeTestData))]
         public void GetHashCode_WithIdenticalObjects_ReturnsSameValue(Project value1, Project value2)
         {
@@ -403,7 +403,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Project.GetHashCode()"/> is called with different objects, it returns different
         /// values for each object.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void GetHashCode_WithDifferentObjects_ReturnsDifferentValues()
         {
             // Act
@@ -420,7 +420,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="value">The value to be converted to a string.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(ToStringTestData))]
         public void ToString_WithDifferentObjects_ReturnsString(Project value, string expected)
         {
@@ -438,7 +438,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests than when <see cref="Project.IsAddValid(Framework?)"/> is called with a <see cref="Framework"/> not
         /// comprising children, it returns <c>false</c>.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void IsAddValid_WithFrameworkNotComprisingChildren_ReturnsFalse()
         {
             // Act
@@ -452,7 +452,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests than when <see cref="Project.IsAddValid(Framework?)"/> is called with a <see cref="Framework"/>
         /// comprising children, it returns <c>true</c>.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void IsAddValid_WithFrameworkComprisingChildren_ReturnsTrue()
         {
             // Act
@@ -466,7 +466,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Base{Framework}.HasChildren"/> is called for a <see cref="Project"/> object not
         /// comprising children, it returns <c>false</c>.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void HasChildren_NotComprisingChildren_ReturnsFalse()
         {
             // Act
@@ -480,7 +480,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Base{Framework}.HasChildren"/> is called for a <see cref="Project"/> object
         /// comprising children without children, it returns <c>false</c>.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void HasChildren_ComprisingChildrenWithoutChildren_ReturnsFalse()
         {
             // Arrange
@@ -498,7 +498,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Base{Framework}.HasChildren"/> is called for a <see cref="Project"/> object
         /// comprising children with children, it returns <c>true</c>.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void HasChildren_ComprisingChildrenWithChildren_ReturnsTrue()
         {
             // Arrange
@@ -516,7 +516,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Base{Framework}.HasChildren"/> is called for a <see cref="Project"/> object
         /// comprising children for which a subset have children, it returns <c>true</c>.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void HasChildren_ComprisingChildrenWithSubsetHavingChildren_ReturnsTrue()
         {
             // Arrange
@@ -535,7 +535,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Base{Framework}.SortedChildren"/> is called for a <see cref="Project"/> object
         /// not comprising children, it returns the empty collection.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void SortedChildren_NotComprisingChildren_ReturnsEmptyCollection()
         {
             // Act
@@ -549,7 +549,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Base{Framework}.SortedChildren"/> is called for a <see cref="Project"/> object
         /// comprising children without children, it returns the empty collection.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void SortedChildren_ComprisingChildrenWithoutChildren_ReturnsEmptyCollection()
         {
             // Arrange
@@ -572,7 +572,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Base{Framework}.SortedChildren"/> is called for a <see cref="Project"/> object
         /// comprising children with children, it returns the sorted collection of children.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void SortedChildren_ComprisingChildrenWithChildren_ReturnsSortedChildren()
         {
             // Arrange
@@ -595,7 +595,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Base{Framework}.SortedChildren"/> is called for a <see cref="Project"/> object
         /// comprising children for which a subset have children, it returns the sorted collection of children.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void SortedChildren_ComprisingChildrenWithSubsetHavingChildren_ReturnsSortedCollection()
         {
             // Arrange

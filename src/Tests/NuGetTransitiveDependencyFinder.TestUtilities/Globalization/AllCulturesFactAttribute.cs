@@ -1,4 +1,4 @@
-// <copyright file="CultureFactAttribute.cs" company="Muiris Woulfe">
+// <copyright file="AllCulturesFactAttribute.cs" company="Muiris Woulfe">
 // © Muiris Woulfe
 // Licensed under the MIT License
 // </copyright>
@@ -13,9 +13,9 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
     /// within the system running the tests.
     /// </summary>
     [XunitTestCaseDiscoverer(
-        "NuGetTransitiveDependencyFinder.TestUtilities.Globalization.CultureAttributeDiscoverer",
+        "NuGetTransitiveDependencyFinder.TestUtilities.Globalization.AllCulturesFactAttributeDiscoverer",
         "NuGetTransitiveDependencyFinder.TestUtilities")]
-    public sealed class CultureFactAttribute : FactAttribute
+    public sealed class AllCulturesFactAttribute : FactAttribute
     {
     }
 }

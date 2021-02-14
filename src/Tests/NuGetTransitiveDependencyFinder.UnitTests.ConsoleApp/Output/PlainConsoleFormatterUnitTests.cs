@@ -43,7 +43,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
         /// </summary>
         /// <param name="logLevel">The log level.</param>
         /// <param name="expectedPrefix">The expected color and formatting prefix result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [InlineData(LogLevel.Trace, "\x1B[32m")]
         [InlineData(LogLevel.Debug, "")]
         [InlineData(LogLevel.Information, "\x1B[1m")]
@@ -83,7 +83,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
         /// called with each <see cref="LogLevel"/> present in the enumeration, the appropriate conversion is performed
         /// and <see cref="InvalidEnumArgumentException"/> is never thrown.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void Write_WithAllLevelsInEnumeration_DoesNotThrow()
         {
             // Arrange
@@ -116,7 +116,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
         /// <see cref="ConsoleFormatter.Write{TState}(in LogEntry{TState}, IExternalScopeProvider, TextWriter)"/> is
         /// called with an invalid log level, a <see cref="InvalidEnumArgumentException"/> is thrown.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void Write_WithInvalidLevel_ThrowsInvalidEnumArgumentException()
         {
             // Arrange

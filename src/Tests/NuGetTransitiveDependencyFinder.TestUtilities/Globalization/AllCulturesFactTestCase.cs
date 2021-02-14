@@ -1,4 +1,4 @@
-// <copyright file="CultureXunitTestCase.cs" company="Muiris Woulfe">
+// <copyright file="AllCulturesFactTestCase.cs" company="Muiris Woulfe">
 // © Muiris Woulfe
 // Licensed under the MIT License
 // </copyright>
@@ -18,7 +18,7 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
     /// <summary>
     /// An xUnit.net test case, which covers a test method to be run with a single culture.
     /// </summary>
-    public class CultureXunitTestCase : XunitTestCase
+    public class AllCulturesFactTestCase : XunitTestCase
     {
         /// <summary>
         /// The culture for which to run the current test.
@@ -26,18 +26,18 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         private CultureInfo culture = CultureInfo.InvariantCulture;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CultureXunitTestCase"/> class.
+        /// Initializes a new instance of the <see cref="AllCulturesFactTestCase"/> class.
         /// </summary>
         /// <remarks>This constructor should never be explicitly called, as it is only provided to enable
         /// deserialization.</remarks>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Required for deserialization.")]
-        public CultureXunitTestCase()
+        public AllCulturesFactTestCase()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CultureXunitTestCase"/> class.
+        /// Initializes a new instance of the <see cref="AllCulturesFactTestCase"/> class.
         /// </summary>
         /// <param name="diagnosticMessageSink">The message sink that receives the test result messages.</param>
         /// <param name="defaultMethodDisplay">The default method display to use,  for when no customization has been
@@ -47,7 +47,7 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         /// <param name="testMethod">The test method to which the current test case belongs.</param>
         /// <param name="culture">The culture for which to run the current test.</param>
         /// <param name="testMethodArguments">The arguments for the test method.</param>
-        public CultureXunitTestCase(
+        public AllCulturesFactTestCase(
             IMessageSink diagnosticMessageSink,
             TestMethodDisplay defaultMethodDisplay,
             TestMethodDisplayOptions defaultMethodDisplayOptions,
@@ -85,7 +85,7 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         }
 
         /// <summary>
-        /// Asychronously executes the test case, returning zero or more test result messages through the message sink.
+        /// Asynchronously executes the test case, returning zero or more test result messages through the message sink.
         /// </summary>
         /// <param name="diagnosticMessageSink">The message sink that receives the test result messages.</param>
         /// <param name="messageBus">The message bus to which to report the results.</param>
@@ -132,7 +132,7 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
             Invariant($"{base.GetUniqueID()}[{this.culture.Name}]");
 
         /// <summary>
-        /// Initializes the data stored within the current instance of the <see cref="CultureXunitTestCase"/> class.
+        /// Initializes the data stored within the current instance of the <see cref="AllCulturesFactTestCase"/> class.
         /// </summary>
         /// <param name="culture">The culture for which to run the current test.</param>
         private void Initialize(CultureInfo culture)

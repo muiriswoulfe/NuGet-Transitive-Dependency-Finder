@@ -36,7 +36,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Extensions
         /// </summary>
         /// <param name="value">The value to be converted to a string.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(ToShortenedStringTestData))]
         public void ToShortenedString_WithDifferentValues_ReturnsCorrectValues(Version value, string expected)
         {

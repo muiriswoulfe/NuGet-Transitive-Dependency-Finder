@@ -153,7 +153,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// specified.
         /// </summary>
         /// <param name="value">The value of <see cref="Dependency.Identifier"/>.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [InlineData("Identifier 1")]
         [InlineData("Identifier 2")]
         public void Identifer_AfterConstruction_ReturnsValue(string value)
@@ -170,7 +170,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// specified.
         /// </summary>
         /// <param name="value">The value of <see cref="Dependency.Version"/>.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [InlineData("0.9.9")]
         [InlineData("1.0.0-alpha")]
         [InlineData("2.0.0-beta")]
@@ -188,7 +188,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// specified.
         /// </summary>
         /// <param name="value">The value of <see cref="Dependency.IsTransitive"/>.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [InlineData(true)]
         [InlineData(false)]
         public void IsTransitive_AfterSetting_ReturnsValue(bool value)
@@ -210,7 +210,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(OperatorEqualTestData))]
         public void OperatorEqual_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
         {
@@ -228,7 +228,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(OperatorNotEqualTestData))]
         public void OperatorNotEqual_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
         {
@@ -246,7 +246,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(OperatorLessThanTestData))]
         public void OperatorLessThan_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
         {
@@ -264,7 +264,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(OperatorLessThanOrEqualTestData))]
         public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
         {
@@ -282,7 +282,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(OperatorGreaterThanTestData))]
         public void OperatorGreaterThan_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
         {
@@ -300,7 +300,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(OperatorGreaterThanOrEqualTestData))]
         public void OperatorGreaterThanOrEqual_WithAllCases_ReturnsValue(
             Dependency left,
@@ -321,7 +321,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(CompareToTestData))]
         public void CompareTo_WithAllCases_ReturnsValue(Dependency left, Dependency right, int expected)
         {
@@ -339,7 +339,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(CompareToTestData))]
         public void CompareToObject_WithAllCases_ReturnsValue(Dependency left, object right, int expected)
         {
@@ -354,7 +354,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="IComparable.CompareTo"/> is called with different object types, it throws an
         /// <see cref="ArgumentException"/>.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void CompareToObject_WithDifferentObjectTypes_ThrowsArgumentException()
         {
             // Act
@@ -373,7 +373,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(EqualsTestData))]
         public void Equals_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
         {
@@ -391,7 +391,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(EqualsTestData))]
         public void EqualsObject_WithAllCases_ReturnsValue(Dependency left, object right, bool expected)
         {
@@ -406,7 +406,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="IEquatable{Dependency}.Equals"/> is called with different object types, it
         /// returns <c>false</c>.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void EqualsObject_WithDifferentObjectTypes_ReturnsFalse()
         {
             // Act
@@ -422,7 +422,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="value1">The first value for which to compute a hash code.</param>
         /// <param name="value2">The second value for which to compute a hash code.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(GetHashCodeTestData))]
         public void GetHashCode_WithIdenticalObjects_ReturnsSameValue(Dependency value1, Dependency value2)
         {
@@ -438,7 +438,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Dependency.GetHashCode()"/> is called with different objects, it returns
         /// different values for each object.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void GetHashCode_WithDifferentObjects_ReturnsDifferentValues()
         {
             // Act
@@ -455,7 +455,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// </summary>
         /// <param name="value">The value to be converted to a string.</param>
         /// <param name="expected">The expected result.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(ToStringTestData))]
         public void ToString_WithDifferentObjects_ReturnsString(Dependency value, string expected)
         {

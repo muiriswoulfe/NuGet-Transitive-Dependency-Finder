@@ -1,4 +1,4 @@
-// <copyright file="CultureAttributeDiscoverer.cs" company="Muiris Woulfe">
+// <copyright file="AllCulturesFactAttributeDiscoverer.cs" company="Muiris Woulfe">
 // © Muiris Woulfe
 // Licensed under the MIT License
 // </copyright>
@@ -13,9 +13,9 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
 
     /// <summary>
     /// An attribute discoverer, for applying all cultures to xUnit.net tests marked with
-    /// <see cref="CultureFactAttribute"/> or <see cref="CultureTheoryAttribute"/>.
+    /// <see cref="AllCulturesFactAttribute"/> .
     /// </summary>
-    public class CultureAttributeDiscoverer : IXunitTestCaseDiscoverer
+    public class AllCulturesFactAttributeDiscoverer : IXunitTestCaseDiscoverer
     {
         /// <summary>
         /// The collection of all cultures present within the system running the tests.
@@ -28,17 +28,17 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         private readonly IMessageSink diagnosticMessageSink;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CultureAttributeDiscoverer"/> class.
+        /// Initializes a new instance of the <see cref="AllCulturesFactAttributeDiscoverer"/> class.
         /// </summary>
         /// <param name="diagnosticMessageSink">The message sink that receives the test result messages.</param>
-        public CultureAttributeDiscoverer(IMessageSink diagnosticMessageSink) =>
+        public AllCulturesFactAttributeDiscoverer(IMessageSink diagnosticMessageSink) =>
             this.diagnosticMessageSink = diagnosticMessageSink;
 
         /// <summary>
         /// Discovers the set of full suite of test case, where each test case validates a single culture, corresponding
-        /// to each test method marked with <see cref="CultureFactAttribute"/> or <see cref="CultureTheoryAttribute"/>.
+        /// to each test method marked with <see cref="AllCulturesFactAttribute"/>.
         /// </summary>
-        /// <param name="discoveryOptions">">The discovery options to use.</param>
+        /// <param name="discoveryOptions">The discovery options to use.</param>
         /// <param name="testMethod">The test method to which the current test case belongs.</param>
         /// <param name="factAttribute">The fact attribute attached to the test method.</param>
         /// <returns>The full suite of test cases to run.</returns>
@@ -47,7 +47,7 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
             ITestMethod testMethod,
             IAttributeInfo factAttribute) =>
             AllCultures.Select(
-                culture => new CultureXunitTestCase(
+                culture => new AllCulturesFactTestCase(
                     this.diagnosticMessageSink,
                     discoveryOptions.MethodDisplayOrDefault(),
                     discoveryOptions.MethodDisplayOptionsOrDefault(),

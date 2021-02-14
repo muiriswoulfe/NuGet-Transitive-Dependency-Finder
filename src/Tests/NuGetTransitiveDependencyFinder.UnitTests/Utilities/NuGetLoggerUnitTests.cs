@@ -82,7 +82,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// <param name="inputLogLevel">The <see cref="NuGetLogLevel"/> to input.</param>
         /// <param name="expectedLogLevel">The expected <see cref="LogLevel"/> resulting from converting
         /// <paramref name="inputLogLevel"/>.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(LogLevelTestData))]
         public void LogWithLogMessage_WithEachLevel_ConvertsLevel(
             NuGetLogLevel inputLogLevel,
@@ -102,7 +102,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// present in the enumeration, the appropriate conversion is performed and <see cref="LogLevel.None"/> is never
         /// used.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void LogWithLogMessage_WithAllLevelsInEnumeration_ConvertsLevel()
         {
             // Arrange
@@ -130,7 +130,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// <param name="inputLogLevel">The <see cref="NuGetLogLevel"/> to input.</param>
         /// <param name="expectedLogLevel">The expected <see cref="LogLevel"/> resulting from converting
         /// <paramref name="inputLogLevel"/>.</param>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(LogLevelTestData))]
         public void LogWithLevelAndString_WithEachLevel_ConvertsLevel(
             NuGetLogLevel inputLogLevel,
@@ -150,7 +150,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// <see cref="NuGetLogLevel"/> present in the enumeration, the appropriate conversion is performed and
         /// <see cref="LogLevel.None"/> is never used.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void LogWithLevelAndString_WithAllLevelsInEnumeration_ConvertsLevel()
         {
             // Arrange
@@ -179,7 +179,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// <param name="expectedLogLevel">The expected <see cref="LogLevel"/> resulting from converting
         /// <paramref name="inputLogLevel"/>.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(LogLevelTestData))]
         public async Task LogAsyncWithLogMessage_WithEachLevel_ConvertsLevel(
             NuGetLogLevel inputLogLevel,
@@ -200,7 +200,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// <see cref="LogLevel.None"/> is never used.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        [CultureFact]
+        [AllCulturesFact]
         public async Task LogAsyncWithLogMessage_WithAllLevelsInEnumeration_ConvertsLevel()
         {
             // Arrange
@@ -229,7 +229,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// <param name="expectedLogLevel">The expected <see cref="LogLevel"/> resulting from converting
         /// <paramref name="inputLogLevel"/>.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        [CultureTheory]
+        [AllCulturesTheory]
         [MemberData(nameof(LogLevelTestData))]
         public async Task LogAsyncWithLevelAndString_WithEachLevel_ConvertsLevel(
             NuGetLogLevel inputLogLevel,
@@ -250,7 +250,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// <see cref="LogLevel.None"/> is never used.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        [CultureFact]
+        [AllCulturesFact]
         public async Task LogAsyncWithLevelAndString_WithAllLevelsInEnumeration_ConvertsLevel()
         {
             // Arrange
@@ -274,7 +274,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// <summary>
         /// Tests that when <see cref="LoggerBase.LogDebug(string)"/> is called, the logging is performed correctly.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void LogDebug_WithEachLevel_LogsCorrectly()
         {
             // Act
@@ -289,7 +289,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// <summary>
         /// Tests that when <see cref="LoggerBase.LogVerbose(string)"/> is called, the logging is performed correctly.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void LogVerbose_WithEachLevel_LogsCorrectly()
         {
             // Act
@@ -304,7 +304,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// <summary>
         /// Tests that when <see cref="LoggerBase.LogInformation(string)"/> is called, the logging is performed correctly.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void LogInformation_WithEachLevel_LogsCorrectly()
         {
             // Act
@@ -320,7 +320,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// Tests that when <see cref="LoggerBase.LogInformationSummary(string)"/> is called, the logging is performed
         /// correctly.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void LogInformationSummary_WithEachLevel_LogsCorrectly()
         {
             // Act
@@ -335,7 +335,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// <summary>
         /// Tests that when <see cref="LoggerBase.LogMinimal(string)"/> is called, the logging is performed correctly.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void LogMinimal_WithEachLevel_LogsCorrectly()
         {
             // Act
@@ -350,7 +350,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// <summary>
         /// Tests that when <see cref="LoggerBase.LogWarning(string)"/> is called, the logging is performed correctly.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void LogWarning_WithEachLevel_LogsCorrectly()
         {
             // Act
@@ -365,7 +365,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// <summary>
         /// Tests that when <see cref="LoggerBase.LogError(string)"/> is called, the logging is performed correctly.
         /// </summary>
-        [CultureFact]
+        [AllCulturesFact]
         public void LogError_WithEachLevel_LogsCorrectly()
         {
             // Act

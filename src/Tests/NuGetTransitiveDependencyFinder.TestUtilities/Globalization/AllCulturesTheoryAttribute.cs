@@ -1,4 +1,4 @@
-// <copyright file="CultureTheoryAttribute.cs" company="Muiris Woulfe">
+// <copyright file="AllCulturesTheoryAttribute.cs" company="Muiris Woulfe">
 // © Muiris Woulfe
 // Licensed under the MIT License
 // </copyright>
@@ -13,9 +13,9 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
     /// within the system running the tests.
     /// </summary>
     [XunitTestCaseDiscoverer(
-        "NuGetTransitiveDependencyFinder.TestUtilities.Globalization.CultureAttributeDiscoverer",
-        "NuGetTransitiveDependencyFinder.TestUtilities.Globalization")]
-    public sealed class CultureTheoryAttribute : TheoryAttribute
+        "NuGetTransitiveDependencyFinder.TestUtilities.Globalization.AllCulturesTheoryAttributeDiscoverer",
+        "NuGetTransitiveDependencyFinder.TestUtilities")]
+    public sealed class AllCulturesTheoryAttribute : TheoryAttribute
     {
     }
 }
