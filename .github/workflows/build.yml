@@ -332,7 +332,7 @@ jobs:
           Write-Output -InputObject "NuGet Symbols Package: $NuGetSymbolsPackageSize"
 
   validate:
-    name: Validate
+    name: Validate – Lint
     runs-on: ubuntu-latest
     steps:
       # Initialization
@@ -353,49 +353,6 @@ jobs:
         uses: gaurav-nelson/github-action-markdown-link-check@master
         with:
           config-file: .github/linters/markdown-link-check.json
-
-      # CodeQL
-      - name: CODEQL – Initialize
-        uses: github/codeql-action/init@main
-        with:
-          queries: security-and-quality
-
-      - name: CODEQL – Build
-        uses: github/codeql-action/autobuild@main
-
-      - name: CODEQL – Analyze
-        uses: github/codeql-action/analyze@main
-
-      # INFER#
-      - name: INFER# – Validation
-        id: infersharp
-        uses: microsoft/infersharpaction@main
-        with:
-          binary-path: src
-
-      - name: INFER# – Print Results
-        run: Write-Output -InputObject '${{ steps.infersharp.outputs.results }}'
-
-      # Security Scan
-      - name: SECURITY SCAN – Validate
-        uses: ShiftLeftSecurity/scan-action@master
-        with:
-          type: credscan,depscan
-
-      - name: SECURITY SCAN – Upload Report
-        uses: github/codeql-action/upload-sarif@main
-        with:
-          sarif_file: reports
-
-      # Application Inspector
-      - name: APPLICATION INSPECTOR – Run
-        uses: microsoft/ApplicationInspector-Action@main
-
-      - name: APPLICATION INSPECTOR – Upload Results
-        uses: actions/upload-artifact@main
-        with:
-          name: Application Inspector Results
-          path: AppInspectorResults.json
 
       # JSON Validation
       - name: JSON VALIDATION – Validate .markdownlint.json
@@ -443,5 +400,64 @@ jobs:
         with:
           json-file: src/xunit.runner.json
           json-schema: xunit.runner.schema.json
+
+  validate-security:
+    name: Validate – Security
+    runs-on: ubuntu-latest
+    steps:
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@main
+
+      # INFER#
+      - name: INFER# – Validation
+        id: infersharp
+        uses: microsoft/infersharpaction@main
+        with:
+          binary-path: src
+
+      - name: INFER# – Print Results
+        run: Write-Output -InputObject '${{ steps.infersharp.outputs.results }}'
+
+      # Security Scan
+      - name: SECURITY SCAN – Validate
+        uses: ShiftLeftSecurity/scan-action@master
+        with:
+          type: credscan,depscan
+
+      - name: SECURITY SCAN – Upload Report
+        uses: github/codeql-action/upload-sarif@main
+        with:
+          sarif_file: reports
+
+      # Application Inspector
+      - name: APPLICATION INSPECTOR – Run
+        uses: microsoft/ApplicationInspector-Action@main
+
+      - name: APPLICATION INSPECTOR – Upload Results
+        uses: actions/upload-artifact@main
+        with:
+          name: Application Inspector Results
+          path: AppInspectorResults.json
+
+  validate-codeql:
+    name: Validate – CodeQL
+    runs-on: ubuntu-latest
+    steps:
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@main
+
+      # CodeQL
+      - name: CODEQL – Initialize
+        uses: github/codeql-action/init@main
+        with:
+          queries: security-and-quality
+
+      - name: CODEQL – Build
+        uses: github/codeql-action/autobuild@main
+
+      - name: CODEQL – Analyze
+        uses: github/codeql-action/analyze@main
 
 ...
