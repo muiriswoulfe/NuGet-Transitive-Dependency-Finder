@@ -18,6 +18,11 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
     public class AllCulturesTheoryAttributeDiscoverer : TheoryDiscoverer
     {
         /// <summary>
+        /// The collection of all cultures present within the system running the tests.
+        /// </summary>
+        private static readonly CultureInfo[] AllCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AllCulturesTheoryAttributeDiscoverer"/> class.
         /// </summary>
         /// <param name="diagnosticMessageSink">The message sink that receives the test result messages.</param>
@@ -38,10 +43,8 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
             ITestFrameworkDiscoveryOptions discoveryOptions,
             ITestMethod testMethod,
             IAttributeInfo theoryAttribute,
-            object[] dataRow)
-        {
-            var cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
-            return cultures.Select(
+            object[] dataRow) =>
+            AllCultures.Select(
                 culture => new AllCulturesFactTestCase(
                     this.DiagnosticMessageSink,
                     discoveryOptions.MethodDisplayOrDefault(),
@@ -49,7 +52,6 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
                     testMethod,
                     culture,
                     dataRow));
-        }
 
         /// <summary>
         /// Creates test cases for the entire theory. This is used when one or more of the theory data items are not
@@ -62,16 +64,13 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         protected override IEnumerable<IXunitTestCase> CreateTestCasesForTheory(
             ITestFrameworkDiscoveryOptions discoveryOptions,
             ITestMethod testMethod,
-            IAttributeInfo theoryAttribute)
-        {
-            var cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
-            return cultures.Select(
+            IAttributeInfo theoryAttribute) =>
+            AllCultures.Select(
                 culture => new AllCulturesTheoryTestCase(
                     this.DiagnosticMessageSink,
                     discoveryOptions.MethodDisplayOrDefault(),
                     discoveryOptions.MethodDisplayOptionsOrDefault(),
                     testMethod,
                     culture));
-        }
     }
 }

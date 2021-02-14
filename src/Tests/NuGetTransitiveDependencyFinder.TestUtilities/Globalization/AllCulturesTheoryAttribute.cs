@@ -9,8 +9,8 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
     using Xunit.Sdk;
 
     /// <summary>
-    /// An attribute whose application to an xUnit.net test will result in that test being run for all cultures present
-    /// within the system running the tests.
+    /// An attribute whose application to an xUnit.net theory test will result in that test being run for all cultures
+    /// present within the system running the tests.
     /// </summary>
     [XunitTestCaseDiscoverer(
         "NuGetTransitiveDependencyFinder.TestUtilities.Globalization.AllCulturesTheoryAttributeDiscoverer",
