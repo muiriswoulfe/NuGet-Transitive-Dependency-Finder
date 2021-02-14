@@ -641,5 +641,35 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             _ = result.Should().BeInAscendingOrder();
             _ = result.Should().Equal(SortedChildrenTestData);
         }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/> object
+        /// comprising children added after an initial call to <see cref="Base{Dependency}.SortedChildren"/>, it returns
+        /// the sorted collection of children.
+        /// </summary>
+        [AllCulturesFact]
+        public void SortedChildren_ComprisingChildrenAddedAfterInitialSortedChildrenCall_ReturnsSortedChildren()
+        {
+            // Arrange
+            var framework = new Framework(
+                DefaultIdentifier,
+                new Dependency[]
+                {
+                    SortedChildrenTestData[5],
+                    SortedChildrenTestData[4],
+                    SortedChildrenTestData[1],
+                });
+            _ = framework.SortedChildren;
+            framework.Add(SortedChildrenTestData[3]);
+            framework.Add(SortedChildrenTestData[2]);
+            framework.Add(SortedChildrenTestData[0]);
+
+            // Act
+            var result = framework.SortedChildren;
+
+            // Assert
+            _ = result.Should().BeInAscendingOrder();
+            _ = result.Should().Equal(SortedChildrenTestData);
+        }
     }
 }
