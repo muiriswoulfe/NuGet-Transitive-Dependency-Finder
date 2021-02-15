@@ -87,7 +87,7 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Globalization
         /// <summary>
         /// Initializes the test traits with the provided culture information.
         /// </summary>
-        /// <param name="traits">The test traits to which the culture information is to be applied.</param>
+        /// <param name="traits">The test traits to which the culture information are to be applied.</param>
         /// <param name="culture">The culture associated with the test.</param>
         public static void InitializeTraits(Dictionary<string, List<string>> traits, CultureInfo culture) =>
             traits.Add(CultureFieldName, new List<string> { culture.Name });

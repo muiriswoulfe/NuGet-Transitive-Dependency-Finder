@@ -32,13 +32,13 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities
         /// <typeparam name="TState">The type of the state for which to begin the scope.</typeparam>
         /// <exception cref="NotSupportedException">Always thrown, as the method has not been implemented within the
         /// mock.</exception>
-        /// <param name="state">The identifier for the scope.</param>
-        /// <returns>A disposable object that ends the logical operation scope on dispose.</returns>
+        /// <param name="state">The identifier of the scope.</param>
+        /// <returns>A disposable object that ends the logical operation scope on disposal.</returns>
         public IDisposable BeginScope<TState>(TState state) =>
             throw new NotSupportedException();
 
         /// <summary>
-        /// Determines if the specified <paramref name="logLevel"/> is enabled.
+        /// Determines if logging for the specified <paramref name="logLevel"/> is enabled.
         /// </summary>
         /// <exception cref="NotSupportedException">Always thrown, as the method has not been implemented within the
         /// mock.</exception>
