@@ -331,7 +331,7 @@ jobs:
           Write-Output -InputObject "NuGet Package: $NuGetPackageSize"
           Write-Output -InputObject "NuGet Symbols Package: $NuGetSymbolsPackageSize"
 
-  validate:
+  validate-lint:
     name: Validate – Lint
     runs-on: ubuntu-latest
     steps:
