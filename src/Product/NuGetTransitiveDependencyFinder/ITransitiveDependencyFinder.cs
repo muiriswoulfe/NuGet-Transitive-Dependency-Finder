@@ -5,12 +5,13 @@
 
 namespace NuGetTransitiveDependencyFinder
 {
+    using System;
     using NuGetTransitiveDependencyFinder.Output;
 
     /// <summary>
     /// An interface that manages the overall process of finding transitive NuGet dependencies.
     /// </summary>
-    public interface ITransitiveDependencyFinder
+    public interface ITransitiveDependencyFinder : IDisposable
     {
         /// <summary>
         /// Runs the logic for finding transitive NuGet dependencies.

@@ -8,7 +8,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
     using System.Collections.Generic;
     using FluentAssertions;
     using NuGetTransitiveDependencyFinder.Output;
-    using Xunit;
+    using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
 
     /// <summary>
     /// Unit tests for the <see cref="Projects"/> class.
@@ -86,7 +86,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests than when <see cref="Projects.IsAddValid(Project?)"/> is called with a <see cref="Project"/> not
         /// comprising children, it returns <c>false</c>.
         /// </summary>
-        [Fact]
+        [AllCulturesFact]
         public void IsAddValid_WithProjectNotComprisingChildren_ReturnsFalse()
         {
             // Act
@@ -100,7 +100,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests than when <see cref="Projects.IsAddValid(Project?)"/> is called with a <see cref="Project"/>
         /// comprising children, it returns <c>true</c>.
         /// </summary>
-        [Fact]
+        [AllCulturesFact]
         public void IsAddValid_WithProjectComprisingChildren_ReturnsTrue()
         {
             // Act
@@ -114,7 +114,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Base{Project}.HasChildren"/> is called for a <see cref="Projects"/> object not
         /// comprising children, it returns <c>false</c>.
         /// </summary>
-        [Fact]
+        [AllCulturesFact]
         public void HasChildren_NotComprisingChildren_ReturnsFalse()
         {
             // Act
@@ -128,7 +128,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Base{Project}.HasChildren"/> is called for a <see cref="Projects"/> object
         /// comprising children without children, it returns <c>false</c>.
         /// </summary>
-        [Fact]
+        [AllCulturesFact]
         public void HasChildren_ComprisingChildrenWithoutChildren_ReturnsFalse()
         {
             // Arrange
@@ -146,7 +146,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Base{Project}.HasChildren"/> is called for a <see cref="Projects"/> object
         /// comprising children with children, it returns <c>true</c>.
         /// </summary>
-        [Fact]
+        [AllCulturesFact]
         public void HasChildren_ComprisingChildrenWithChildren_ReturnsTrue()
         {
             // Arrange
@@ -164,7 +164,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Base{Project}.HasChildren"/> is called for a <see cref="Projects"/> object
         /// comprising children for which a subset have children, it returns <c>true</c>.
         /// </summary>
-        [Fact]
+        [AllCulturesFact]
         public void HasChildren_ComprisingChildrenWithSubsetHavingChildren_ReturnsTrue()
         {
             // Arrange
@@ -183,7 +183,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Base{Project}.SortedChildren"/> is called for a <see cref="Projects"/> object not
         /// comprising children, it returns the empty collection.
         /// </summary>
-        [Fact]
+        [AllCulturesFact]
         public void SortedChildren_NotComprisingChildren_ReturnsEmptyCollection()
         {
             // Act
@@ -197,7 +197,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Base{Project}.SortedChildren"/> is called for a <see cref="Projects"/> object
         /// comprising children without children, it returns the empty collection.
         /// </summary>
-        [Fact]
+        [AllCulturesFact]
         public void SortedChildren_ComprisingChildrenWithoutChildren_ReturnsEmptyCollection()
         {
             // Arrange
@@ -220,7 +220,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Base{Project}.SortedChildren"/> is called for a <see cref="Projects"/> object
         /// comprising children with children, it returns the sorted collection of children.
         /// </summary>
-        [Fact]
+        [AllCulturesFact]
         public void SortedChildren_ComprisingChildrenWithChildren_ReturnsSortedChildren()
         {
             // Arrange
@@ -236,6 +236,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = projects.SortedChildren;
 
             // Assert
+            _ = result.Should().BeInAscendingOrder();
             _ = result.Should().Equal(SortedChildrenTestData);
         }
 
@@ -243,7 +244,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Tests that when <see cref="Base{Project}.SortedChildren"/> is called for a <see cref="Projects"/> object
         /// comprising children for which a subset have children, it returns the sorted collection of children.
         /// </summary>
-        [Fact]
+        [AllCulturesFact]
         public void SortedChildren_ComprisingChildrenWithSubsetHavingChildren_ReturnsSortedCollection()
         {
             // Arrange
@@ -259,10 +260,37 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = projects.SortedChildren;
 
             // Assert
+            _ = result.Should().BeInAscendingOrder();
             _ = result.Should().Equal(
                 SortedChildrenTestData[0],
                 SortedChildrenTestData[3],
                 SortedChildrenTestData[5]);
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="Base{Project}.SortedChildren"/> is called for a <see cref="Projects"/> object
+        /// comprising children added after an initial call to <see cref="Base{Project}.SortedChildren"/>, it returns
+        /// the sorted collection of children.
+        /// </summary>
+        [AllCulturesFact]
+        public void SortedChildren_ComprisingChildrenAddedAfterInitialSortedChildrenCall_ReturnsSortedChildren()
+        {
+            // Arrange
+            var projects = new Projects(6);
+            projects.Add(SortedChildrenTestData[5]);
+            projects.Add(SortedChildrenTestData[4]);
+            projects.Add(SortedChildrenTestData[1]);
+            _ = projects.SortedChildren;
+            projects.Add(SortedChildrenTestData[3]);
+            projects.Add(SortedChildrenTestData[2]);
+            projects.Add(SortedChildrenTestData[0]);
+
+            // Act
+            var result = projects.SortedChildren;
+
+            // Assert
+            _ = result.Should().BeInAscendingOrder();
+            _ = result.Should().Equal(SortedChildrenTestData);
         }
     }
 }

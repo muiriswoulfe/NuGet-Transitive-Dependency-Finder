@@ -4,6 +4,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Product\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj" />
+    <ProjectReference Include="..\NuGetTransitiveDependencyFinder.TestUtilities\NuGetTransitiveDependencyFinder.TestUtilities.csproj" />
   </ItemGroup>
 
 </Project>

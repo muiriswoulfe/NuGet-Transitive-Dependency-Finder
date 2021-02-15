@@ -7,6 +7,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Input
 {
     using FluentAssertions;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Input;
+    using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
     using Xunit;
 
     /// <summary>
@@ -19,7 +20,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Input
         /// specified.
         /// </summary>
         /// <param name="value">The value of <see cref="CommandLineOptions.All"/>.</param>
-        [Theory]
+        [AllCulturesTheory]
         [InlineData(true)]
         [InlineData(false)]
         public void All_AfterSetting_ReturnsValue(bool value)
@@ -39,7 +40,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Input
         /// value specified.
         /// </summary>
         /// <param name="value">The value of <see cref="CommandLineOptions.ProjectOrSolution"/>.</param>
-        [Theory]
+        [AllCulturesTheory]
         [InlineData(null)]
         [InlineData("ProjectOrSolution")]
         public void ProjectOrSolution_AfterSetting_ReturnsValue(string value)

@@ -10,11 +10,13 @@ namespace NuGetTransitiveDependencyFinder
     using Microsoft.Extensions.Logging;
     using NuGetTransitiveDependencyFinder.Output;
     using NuGetTransitiveDependencyFinder.ProjectAnalysis;
+    using NuGetTransitiveDependencyFinder.Utilities;
+    using INuGetLogger = NuGet.Common.ILogger;
 
     /// <summary>
     /// A class that manages the overall process of finding transitive NuGet dependencies.
     /// </summary>
-    internal sealed class TransitiveDependencyFinder : ITransitiveDependencyFinder, IDisposable
+    internal sealed class TransitiveDependencyFinder : ITransitiveDependencyFinder
     {
         /// <summary>
         /// The service provider, which specifies the project dependencies.
@@ -65,6 +67,7 @@ namespace NuGetTransitiveDependencyFinder
                 .AddScoped<IAssets, Assets>()
                 .AddScoped<IDependencyFinder, DependencyFinder>()
                 .AddScoped<IDotNetRunner, DotNetRunner>()
+                .AddScoped<INuGetLogger, NuGetLogger>()
                 .AddTransient<IDependencyGraph, DependencyGraph>()
                 .BuildServiceProvider();
 

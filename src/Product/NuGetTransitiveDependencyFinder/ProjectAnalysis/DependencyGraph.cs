@@ -13,7 +13,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
     /// <summary>
     /// A class representing a dependency graph of .NET projects and their NuGet dependencies.
     /// </summary>
-    internal sealed class DependencyGraph : IDependencyGraph, IDisposable
+    internal sealed class DependencyGraph : IDependencyGraph
     {
         /// <summary>
         /// The object managing the running of .NET commands on project and solution files.

@@ -5,12 +5,13 @@
 
 namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 {
+    using System;
     using NuGet.ProjectModel;
 
     /// <summary>
     /// An interface representing a dependency graph of .NET projects and their NuGet dependencies.
     /// </summary>
-    internal interface IDependencyGraph
+    internal interface IDependencyGraph : IDisposable
     {
         /// <summary>
         /// Creates a <see cref="DependencyGraphSpec"/> object representing the project dependency graph.

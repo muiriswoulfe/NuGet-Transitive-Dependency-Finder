@@ -211,10 +211,10 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
         /// Converts a <see cref="Comparisons"/> value to the equivalent result from a call to
         /// <see cref="IComparable{TValue}.CompareTo"/>.
         /// </summary>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> is set to an unacceptable
-        /// value.</exception>
         /// <param name="value">The value to convert.</param>
         /// <returns>The converted value.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> is set to an unacceptable
+        /// value.</exception>
         private static int ConvertComparisonsToCompareToValue(Comparisons value) =>
             value switch
             {

@@ -69,6 +69,7 @@ jobs:
           --no-build
           /property:CollectCoverage=true
           /property:CoverletOutputFormat=opencover
+          /property:Exclude=[NuGetTransitiveDependencyFinder.TestUtilities]*
 
       - if: ${{ matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' }}
         name: BUILD & TEST – Upload to Codecov
@@ -330,7 +331,7 @@ jobs:
           Write-Output -InputObject "NuGet Package: $NuGetPackageSize"
           Write-Output -InputObject "NuGet Symbols Package: $NuGetSymbolsPackageSize"
 
-  validate-lint:
+  validate:
     name: Validate – Lint
     runs-on: ubuntu-latest
     steps:
@@ -382,6 +383,24 @@ jobs:
           json-file: src/stylecop.json
           json-schema: stylecop.schema.json
 
+      - name: JSON VALIDATION – Validate src/xunit.runner.json – Download xunit.runner.schema.json
+        run: >-
+          Invoke-WebRequest
+          -Uri 'https://xunit.net/schema/current/xunit.runner.schema.json'
+          -OutFile 'xunit.runner.schema.json'
+
+      - name: JSON VALIDATION – Validate src/xunit.runner.json – Update xunit.runner.schema.json
+        run: |-
+          $FileContent = Get-Content -Path 'xunit.runner.schema.json' -Raw
+          $FileContent = $FileContent -replace 'draft-04/schema', 'draft-07/schema'
+          Set-Content -NoNewline -Path 'xunit.runner.schema.json' -Value $FileContent
+
+      - name: JSON VALIDATION – Validate xunit.runner.json
+        uses: Zingabopp/JsonValidate-Action@master
+        with:
+          json-file: src/xunit.runner.json
+          json-schema: xunit.runner.schema.json
+
   validate-security:
     name: Validate – Security
     runs-on: ubuntu-latest
@@ -429,16 +448,16 @@ jobs:
       - name: INITIALIZATION – Checkout
         uses: actions/checkout@main
 
-      # Validation
-      - name: VALIDATION – CodeQL Initialize
+      # CodeQL
+      - name: CODEQL – Initialize
         uses: github/codeql-action/init@main
         with:
           queries: security-and-quality
 
-      - name: VALIDATION – CodeQL Build
+      - name: CODEQL – Build
         uses: github/codeql-action/autobuild@main
 
-      - name: VALIDATION – CodeQL Analyze
+      - name: CODEQL – Analyze
         uses: github/codeql-action/analyze@main
 
 ...
