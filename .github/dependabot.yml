@@ -9,6 +9,6 @@ updates:
   - directory: /
     package-ecosystem: nuget
     schedule:
-      interval: live
+      interval: daily
 
 ...
