@@ -18,7 +18,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Resources.Message
         /// Tests that when <see cref="CommandLineHelp.All"/> is called, it returns the expected string.
         /// </summary>
         [AllCulturesFact]
-        public void All_WhenCalled_ReturnsExpectedString()
+        public void All_Called_ReturnsExpectedString()
         {
             // Act
             var result = CommandLineHelp.All;
@@ -32,7 +32,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Resources.Message
         /// Tests that when <see cref="CommandLineHelp.ProjectOrSolution"/> is called, it returns the expected string.
         /// </summary>
         [AllCulturesFact]
-        public void ProjectOrSolution_WhenCalled_ReturnsExpectedString()
+        public void ProjectOrSolution_Called_ReturnsExpectedString()
         {
             // Act
             var result = CommandLineHelp.ProjectOrSolution;

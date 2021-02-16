@@ -17,6 +17,16 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
     internal class DependencyWriter : IDependencyWriter
     {
         /// <summary>
+        /// The string prefix for each framework, comprising one level of indentation.
+        /// </summary>
+        private static readonly string FrameworkPrefix = CreatePrefix(1);
+
+        /// <summary>
+        /// The string prefix for each dependency, comprising two levels of indentation.
+        /// </summary>
+        private static readonly string DependencyPrefix = CreatePrefix(2);
+
+        /// <summary>
         /// The logger object to which to write the output.
         /// </summary>
         private readonly ILogger<DependencyWriter> logger;
@@ -31,8 +41,6 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         /// <inheritdoc/>
         public void Write(Projects projects)
         {
-            const int frameworkIndentationLevel = 1;
-
             if (!projects.HasChildren)
             {
                 this.logger.LogInformation(Information.NoDependencies);
@@ -44,12 +52,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
                 this.logger.LogInformation(project.ToString());
                 foreach (var framework in project.SortedChildren)
                 {
-                    this.logger.LogInformation(CreatePrefix(frameworkIndentationLevel) + framework);
-                    if (!framework.HasChildren)
-                    {
-                        continue;
-                    }
-
+                    this.logger.LogInformation(FrameworkPrefix + framework);
                     this.WriteDependencies(framework.SortedChildren);
                 }
 
@@ -75,19 +78,17 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
         /// <param name="dependencies">The collection of dependencies.</param>
         private void WriteDependencies(IReadOnlyCollection<Dependency> dependencies)
         {
-            const int dependencyIndentationLevel = 2;
-
             foreach (var dependency in dependencies)
             {
                 if (dependency.IsTransitive)
                 {
                     this.logger.LogWarning(
-                        CreatePrefix(dependencyIndentationLevel) +
+                        DependencyPrefix +
                         string.Format(CultureInfo.CurrentCulture, Information.TransitiveDependency, dependency));
                 }
                 else
                 {
-                    this.logger.LogDebug(CreatePrefix(dependencyIndentationLevel) + dependency);
+                    this.logger.LogDebug(DependencyPrefix + dependency);
                 }
             }
         }

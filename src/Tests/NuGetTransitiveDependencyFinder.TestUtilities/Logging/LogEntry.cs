@@ -3,12 +3,12 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities
+namespace NuGetTransitiveDependencyFinder.TestUtilities.Logging
 {
     using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// A record representing an entry added to an <see cref="Microsoft.Extensions.Logging.ILogger"/> object.
     /// </summary>
-    internal record LogEntry(LogLevel LogLevel, EventId EventId, string Message);
+    public record LogEntry(LogLevel LogLevel, EventId EventId, string Message);
 }

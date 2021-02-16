@@ -11,8 +11,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
     using FluentAssertions;
     using NuGet.Common;
     using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
+    using NuGetTransitiveDependencyFinder.TestUtilities.Logging;
     using NuGetTransitiveDependencyFinder.Utilities;
-    using NuGetTransitiveDependencyFinder.UnitTests.TestUtilities;
     using Xunit;
     using ILogger = Microsoft.Extensions.Logging.ILogger;
     using LogLevel = Microsoft.Extensions.Logging.LogLevel;
