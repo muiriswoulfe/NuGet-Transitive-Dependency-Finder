@@ -7,7 +7,6 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using FluentAssertions;
     using NuGet.Versioning;
     using NuGetTransitiveDependencyFinder.Output;
@@ -459,9 +458,6 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         [MemberData(nameof(ToStringTestData))]
         public void ToString_WithDifferentObjects_ReturnsString(Dependency value, string expected)
         {
-            // Arrange
-            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
-
             // Act
             var result = value.ToString();
 

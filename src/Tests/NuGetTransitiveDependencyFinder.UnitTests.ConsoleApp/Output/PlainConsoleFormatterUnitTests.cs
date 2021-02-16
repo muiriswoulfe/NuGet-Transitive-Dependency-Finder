@@ -7,7 +7,6 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
 {
     using System;
     using System.ComponentModel;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
     using FluentAssertions;
@@ -54,7 +53,6 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
         public void Write_WithValidLevel_LogsCorrectString(LogLevel logLevel, string expectedPrefix)
         {
             // Arrange
-            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
             var plainConsoleFormatter = new PlainConsoleFormatter(OptionsMonitorMock.Object);
             using var result = new StringWriter();
 
@@ -87,7 +85,6 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
         public void Write_WithAllLevelsInEnumeration_DoesNotThrow()
         {
             // Arrange
-            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
             var plainConsoleFormatter = new PlainConsoleFormatter(OptionsMonitorMock.Object);
             var values = Enum.GetValues(typeof(LogLevel)).Cast<LogLevel>();
             using var result = new StringWriter();

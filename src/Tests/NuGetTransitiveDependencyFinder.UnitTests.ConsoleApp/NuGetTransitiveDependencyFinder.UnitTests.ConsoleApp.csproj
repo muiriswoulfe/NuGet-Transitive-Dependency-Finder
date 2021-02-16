@@ -14,4 +14,7 @@
     <ProjectReference Include="..\NuGetTransitiveDependencyFinder.TestUtilities\NuGetTransitiveDependencyFinder.TestUtilities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\Messages\" />
+  </ItemGroup>
 </Project>
