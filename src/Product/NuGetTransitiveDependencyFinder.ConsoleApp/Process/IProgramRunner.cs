@@ -3,7 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGetTransitiveDependencyFinder.ConsoleApp
+namespace NuGetTransitiveDependencyFinder.ConsoleApp.Process
 {
     /// <summary>
     /// The interface defining the flow of the main application logic.

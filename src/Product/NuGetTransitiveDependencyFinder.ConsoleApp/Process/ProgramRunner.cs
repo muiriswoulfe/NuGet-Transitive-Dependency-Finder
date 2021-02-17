@@ -3,7 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGetTransitiveDependencyFinder.ConsoleApp
+namespace NuGetTransitiveDependencyFinder.ConsoleApp.Process
 {
     using Microsoft.Extensions.Logging;
     using NuGetTransitiveDependencyFinder;

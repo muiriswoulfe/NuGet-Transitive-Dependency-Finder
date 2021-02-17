@@ -3,14 +3,14 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp
+namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
 {
     using FluentAssertions;
     using Microsoft.Extensions.Logging;
     using Moq;
-    using NuGetTransitiveDependencyFinder.ConsoleApp;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Input;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Output;
+    using NuGetTransitiveDependencyFinder.ConsoleApp.Process;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Resources.Messages;
     using NuGetTransitiveDependencyFinder.Output;
     using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
