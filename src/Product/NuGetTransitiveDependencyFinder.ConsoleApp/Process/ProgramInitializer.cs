@@ -34,9 +34,10 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Process
         /// Runs the main program logic.
         /// </summary>
         /// <param name="parameters">A collection of command-line parameters.</param>
-        /// <param name="program">The program logic to run against the <see cref="IProgramRunner"/> object.</param>
+        /// <param name="programAction">The program logic to run against the <see cref="IServiceProvider"/>
+        /// object.</param>
         /// <returns>A status code where 0 represents success and 1 represents failure.</returns>
-        public static int Run(string[] parameters, Action<IProgramRunner> program)
+        public static int Run(string[] parameters, Action<IServiceProvider> programAction)
         {
             const int success = 0;
             const int error = 1;
@@ -46,14 +47,22 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Process
                     commandLineOptions =>
                     {
                         using var serviceProvider = CreateServiceProvider(commandLineOptions);
-                        var programRunner = serviceProvider.GetService<IProgramRunner>()!;
-                        program(programRunner);
+                        programAction(serviceProvider);
 
                         return success;
                     },
                     _ =>
                         error);
         }
+
+        /// <summary>
+        /// Gets the <see cref="IProgramRunner"/> from the <see cref="IServiceProvider"/> dependency injection
+        /// container.
+        /// </summary>
+        /// <param name="serviceProvider">The dependency injection container.</param>
+        /// <returns>The <see cref="IProgramRunner"/> object.</returns>
+        public static IProgramRunner GetProgramRunner(IServiceProvider serviceProvider) =>
+            serviceProvider.GetService<IProgramRunner>()!;
 
         /// <summary>
         /// Creates the service provider, which initializes dependency injection for the application.

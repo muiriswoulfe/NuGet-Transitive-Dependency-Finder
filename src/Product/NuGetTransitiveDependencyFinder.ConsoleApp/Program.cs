@@ -18,6 +18,8 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
         /// <param name="parameters">A collection of command-line parameters.</param>
         /// <returns>A status code where 0 represents success and 1 represents failure.</returns>
         public static int Main(string[] parameters) =>
-            ProgramInitializer.Run(parameters, programRunner => programRunner.Run());
+            ProgramInitializer.Run(
+                parameters,
+                serviceProvider => ProgramInitializer.GetProgramRunner(serviceProvider).Run());
     }
 }
