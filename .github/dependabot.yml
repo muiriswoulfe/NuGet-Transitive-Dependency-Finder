@@ -6,9 +6,26 @@
 version: 2
 
 updates:
-  - directory: /
-    package-ecosystem: nuget
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
       interval: daily
+    labels:
+      - dependencies
+    assignees:
+      - muiriswoulfe
+    reviewers:
+      - muiriswoulfe
+
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: daily
+    labels:
+      - dependencies
+    assignees:
+      - muiriswoulfe
+    reviewers:
+      - muiriswoulfe
 
 ...
