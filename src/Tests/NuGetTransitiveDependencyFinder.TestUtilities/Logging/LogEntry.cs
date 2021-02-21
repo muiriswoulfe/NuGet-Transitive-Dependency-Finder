@@ -10,8 +10,5 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Logging
     /// <summary>
     /// A record representing an entry added to an <see cref="Microsoft.Extensions.Logging.ILogger"/> object.
     /// </summary>
-    /// <param name="LogLevel">The level of the log entry.</param>
-    /// <param name="EventId">The ID of the event resulting in the log entry.</param>
-    /// <param name="Message">The log entry message.</param>
     public record LogEntry(LogLevel LogLevel, EventId EventId, string Message);
 }
