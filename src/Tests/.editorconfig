@@ -4,5 +4,7 @@
 [*.cs]
 dotnet_diagnostic.CA1062.severity = none
 dotnet_diagnostic.CA1707.severity = none
+dotnet_diagnostic.CS1572.severity = none
+dotnet_diagnostic.CS1573.severity = none
 dotnet_diagnostic.CS1591.severity = none
 dotnet_diagnostic.RCS1141.severity = none
