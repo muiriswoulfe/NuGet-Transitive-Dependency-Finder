@@ -37,7 +37,7 @@ jobs:
       - name: RELEASE – Create Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        uses: actions/create-release@main
+        uses: actions/create-release@v1
         with:
           body: |-
             ## Release Notes
@@ -90,13 +90,13 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
 
       - name: INITIALIZATION – Get Tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: tag
-        uses: jossef/action-latest-release-info@master
+        uses: jossef/action-latest-release-info@v1.1.0
 
       - name: INITIALIZATION – Version Replace
         run: |-
@@ -105,7 +105,7 @@ jobs:
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@main
+        uses: actions/setup-dotnet@v1
 
       # Build
       - name: BUILD – Project Restore
@@ -156,7 +156,7 @@ jobs:
           Write-Output -InputObject "::set-output name=asset_path::$AssetPath"
 
       - name: UPLOAD – Upload Release Asset
-        uses: actions/upload-release-asset@main
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -174,7 +174,7 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
 
       - name: INITIALIZATION – Version Replace
         run: |-
@@ -183,7 +183,7 @@ jobs:
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@main
+        uses: actions/setup-dotnet@v1
 
       # Create Logo
       - name: CREATE LOGO – Install svgexport

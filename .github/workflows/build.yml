@@ -27,19 +27,19 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@main
+        uses: actions/setup-dotnet@v1
 
       # SonarCloud Initialization
       - if: ${{ matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' }}
         name: SONARCLOUD INITIALIZATION – Java Install
-        uses: actions/setup-java@main
+        uses: actions/setup-java@v1
         with:
-          java-version: 15.0.1
+          java-version: 15.0.2
 
       - if: ${{ matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' }}
         name: SONARCLOUD INITIALIZATION – SonarCloud Install
@@ -73,7 +73,7 @@ jobs:
 
       - if: ${{ matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' }}
         name: BUILD & TEST – Upload to Codecov
-        uses: codecov/codecov-action@master
+        uses: codecov/codecov-action@v1
         with:
           fail_ci_if_error: true
 
@@ -108,13 +108,13 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
 
       - name: INITIALIZATION – Get Tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: tag
-        uses: jossef/action-latest-release-info@master
+        uses: jossef/action-latest-release-info@v1.1.0
 
       - name: INITIALIZATION – Version Extract
         id: version
@@ -129,7 +129,7 @@ jobs:
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@main
+        uses: actions/setup-dotnet@v1
 
       # Build
       - name: BUILD – Project Restore
@@ -194,13 +194,13 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
 
       - name: INITIALIZATION – Get Tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: tag
-        uses: jossef/action-latest-release-info@master
+        uses: jossef/action-latest-release-info@v1.1.0
 
       - name: INITIALIZATION – Version Extract
         id: version
@@ -215,7 +215,7 @@ jobs:
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@main
+        uses: actions/setup-dotnet@v1
 
       # Create Logo
       - name: CREATE LOGO – Install svgexport
@@ -337,11 +337,11 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
 
       # Linter Validation
       - name: LINTER VALIDATION – Super Linter
-        uses: github/super-linter@master
+        uses: github/super-linter@v3
         env:
           EDITORCONFIG_FILE_NAME: ../../.editorconfig
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -350,13 +350,13 @@ jobs:
 
       # Markdown Validation
       - name: MARKDOWN VALIDATION – Validate Links
-        uses: gaurav-nelson/github-action-markdown-link-check@master
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
         with:
           config-file: .github/linters/markdown-link-check.json
 
       # JSON Validation
       - name: JSON VALIDATION – Validate .markdownlint.json
-        uses: Zingabopp/JsonValidate-Action@master
+        uses: Zingabopp/JsonValidate-Action@v1
         with:
           json-file: .markdownlint.json
           json-schema: >-
@@ -378,7 +378,7 @@ jobs:
           Set-Content -NoNewline -Path 'stylecop.schema.json' -Value $FileContent
 
       - name: JSON VALIDATION – Validate src/stylecop.json
-        uses: Zingabopp/JsonValidate-Action@master
+        uses: Zingabopp/JsonValidate-Action@v1
         with:
           json-file: src/stylecop.json
           json-schema: stylecop.schema.json
@@ -396,7 +396,7 @@ jobs:
           Set-Content -NoNewline -Path 'xunit.runner.schema.json' -Value $FileContent
 
       - name: JSON VALIDATION – Validate xunit.runner.json
-        uses: Zingabopp/JsonValidate-Action@master
+        uses: Zingabopp/JsonValidate-Action@v1
         with:
           json-file: src/xunit.runner.json
           json-schema: xunit.runner.schema.json
@@ -407,12 +407,12 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
 
       # INFER#
       - name: INFER# – Validation
         id: infersharp
-        uses: microsoft/infersharpaction@main
+        uses: microsoft/infersharpaction@v0.2
         with:
           binary-path: src
 
@@ -421,21 +421,21 @@ jobs:
 
       # Security Scan
       - name: SECURITY SCAN – Validate
-        uses: ShiftLeftSecurity/scan-action@master
+        uses: ShiftLeftSecurity/scan-action@v1.3.0
         with:
           type: credscan,depscan
 
       - name: SECURITY SCAN – Upload Report
-        uses: github/codeql-action/upload-sarif@main
+        uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: reports
 
       # Application Inspector
       - name: APPLICATION INSPECTOR – Run
-        uses: microsoft/ApplicationInspector-Action@main
+        uses: microsoft/ApplicationInspector-Action@v1
 
       - name: APPLICATION INSPECTOR – Upload Results
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@v2
         with:
           name: Application Inspector Results
           path: AppInspectorResults.json
@@ -446,18 +446,18 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
 
       # CodeQL
       - name: CODEQL – Initialize
-        uses: github/codeql-action/init@main
+        uses: github/codeql-action/init@v1
         with:
           queries: security-and-quality
 
       - name: CODEQL – Build
-        uses: github/codeql-action/autobuild@main
+        uses: github/codeql-action/autobuild@v1
 
       - name: CODEQL – Analyze
-        uses: github/codeql-action/analyze@main
+        uses: github/codeql-action/analyze@v1
 
 ...
