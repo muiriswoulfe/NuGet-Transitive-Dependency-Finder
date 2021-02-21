@@ -52,7 +52,8 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
                 this.logger.LogInformation(project.ToString());
                 foreach (var framework in project.SortedChildren)
                 {
-                    this.logger.LogInformation(FrameworkPrefix + framework.ToString());
+                    var frameworkString = framework.ToString();
+                    this.logger.LogInformation(FrameworkPrefix + frameworkString);
                     this.WriteDependencies(framework.SortedChildren);
                 }
 
@@ -88,7 +89,8 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
                 }
                 else
                 {
-                    this.logger.LogDebug(DependencyPrefix + dependency.ToString());
+                    var dependencyString = dependency.ToString();
+                    this.logger.LogDebug(DependencyPrefix + dependencyString);
                 }
             }
         }
