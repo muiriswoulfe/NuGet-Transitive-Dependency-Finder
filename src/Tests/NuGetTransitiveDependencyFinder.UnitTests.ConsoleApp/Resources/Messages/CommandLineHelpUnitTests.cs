@@ -24,8 +24,9 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Resources.Message
             var result = CommandLineHelp.All;
 
             // Assert
-            _ = result.Should().Be(
-                "Indicates that all NuGet dependencies, including non-transitive dependencies, should be listed.");
+            _ = result
+                .Should().Be(
+                    "Indicates that all NuGet dependencies, including non-transitive dependencies, should be listed.");
         }
 
         /// <summary>
@@ -38,7 +39,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Resources.Message
             var result = CommandLineHelp.ProjectOrSolution;
 
             // Assert
-            _ = result.Should().Be("The file name of the .NET project or solution to analyze.");
+            _ = result
+                .Should().Be("The file name of the .NET project or solution to analyze.");
         }
     }
 }

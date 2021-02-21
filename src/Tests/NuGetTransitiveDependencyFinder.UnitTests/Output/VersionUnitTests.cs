@@ -122,7 +122,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left == right;
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -140,7 +141,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left != right;
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -158,7 +160,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left < right;
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -176,7 +179,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left <= right;
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -194,7 +198,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left > right;
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -212,7 +217,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left >= right;
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -230,7 +236,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left.CompareTo(right);
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -248,7 +255,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left.CompareTo(right);
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -262,8 +270,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             Action action = () => DefaultValue.CompareTo("value");
 
             // Assert
-            _ = action.Should().Throw<ArgumentException>()
-                .WithMessage("Object must be of type Version.");
+            _ = action
+                .Should().Throw<ArgumentException>().WithMessage("Object must be of type Version.");
         }
 
         /// <summary>
@@ -281,7 +289,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left.Equals(right);
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -299,7 +308,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = left.Equals(right);
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -313,7 +323,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = DefaultValue.Equals("value");
 
             // Assert
-            _ = result.Should().Be(false);
+            _ = result
+                .Should().BeFalse();
         }
 
         /// <summary>
@@ -331,7 +342,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result2 = value2.GetHashCode();
 
             // Assert
-            _ = result1.Should().Be(result2);
+            _ = result1
+                .Should().Be(result2);
         }
 
         /// <summary>
@@ -346,7 +358,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result2 = LesserValue.GetHashCode();
 
             // Assert
-            _ = result1.Should().NotBe(result2);
+            _ = result1
+                .Should().NotBe(result2);
         }
     }
 }

@@ -70,9 +70,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
             programRunner.Run();
 
             // Arrange
-            _ = this.logger.Entries.Should().HaveCount(1);
-            _ = this.logger.Entries[0].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[0].Message.Should().Be(Information.CommencingAnalysis);
+            _ = this.logger.Entries
+                .Should().HaveCount(1);
+            _ = this.logger.Entries[0].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[0].Message
+                .Should().Be(Information.CommencingAnalysis);
             this.commandLineOptions.VerifyGet(mock => mock.ProjectOrSolution, Times.Once);
             this.commandLineOptions.VerifyGet(mock => mock.All, Times.Once);
             this.commandLineOptions.VerifyNoOtherCalls();

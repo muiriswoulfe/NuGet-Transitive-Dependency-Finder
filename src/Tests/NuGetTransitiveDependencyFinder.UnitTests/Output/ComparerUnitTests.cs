@@ -123,7 +123,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = Comparer.IsEqual(left, right, ComparisonFunction);
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -141,7 +142,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = Comparer.IsNotEqual(left, right, ComparisonFunction);
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -159,7 +161,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = Comparer.IsLess(left, right, ComparisonFunction);
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -177,7 +180,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = Comparer.IsLessOrEqual(left, right, ComparisonFunction);
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -195,7 +199,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = Comparer.IsGreater(left, right, ComparisonFunction);
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -213,7 +218,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = Comparer.IsGreaterOrEqual(left, right, ComparisonFunction);
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -231,7 +237,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = Comparer.CompareTo(left, right, ComparisonFunction);
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -249,7 +256,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = Comparer.CompareTo(left, right, ComparisonFunction, nameof(Version));
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -263,8 +271,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             Action action = () => Comparer.CompareTo(DefaultValue, "value", ComparisonFunction, nameof(Version));
 
             // Assert
-            _ = action.Should().Throw<ArgumentException>()
-                .WithMessage("Object must be of type Version. (Parameter 'obj')")
+            _ = action
+                .Should().Throw<ArgumentException>().WithMessage("Object must be of type Version. (Parameter 'obj')")
                 .And.ParamName.Should().Be("obj");
         }
 
@@ -283,7 +291,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = Comparer.Equals(left, right, ComparisonFunction);
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -301,7 +310,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = Comparer.Equals(left, right, ComparisonFunction);
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
 
         /// <summary>
@@ -315,7 +325,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = Comparer.Equals(DefaultValue, "value", ComparisonFunction);
 
             // Assert
-            _ = result.Should().Be(false);
+            _ = result
+                .Should().BeFalse();
         }
     }
 }

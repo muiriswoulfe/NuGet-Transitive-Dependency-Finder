@@ -107,9 +107,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
             dependencyWriter.Write(projects);
 
             // Arrange
-            _ = this.logger.Entries.Should().HaveCount(1);
-            _ = this.logger.Entries[0].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[0].Message.Should().Be(Information.NoDependencies);
+            _ = this.logger.Entries
+                .Should().HaveCount(1);
+            _ = this.logger.Entries[0].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[0].Message
+                .Should().Be(Information.NoDependencies);
         }
 
         /// <summary>
@@ -129,9 +132,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
             dependencyWriter.Write(projects);
 
             // Arrange
-            _ = this.logger.Entries.Should().HaveCount(1);
-            _ = this.logger.Entries[0].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[0].Message.Should().Be(Information.NoDependencies);
+            _ = this.logger.Entries
+                .Should().HaveCount(1);
+            _ = this.logger.Entries[0].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[0].Message
+                .Should().Be(Information.NoDependencies);
         }
 
         /// <summary>
@@ -153,9 +159,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
             dependencyWriter.Write(projects);
 
             // Arrange
-            _ = this.logger.Entries.Should().HaveCount(1);
-            _ = this.logger.Entries[0].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[0].Message.Should().Be(Information.NoDependencies);
+            _ = this.logger.Entries
+                .Should().HaveCount(1);
+            _ = this.logger.Entries[0].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[0].Message
+                .Should().Be(Information.NoDependencies);
         }
 
         /// <summary>
@@ -178,15 +187,24 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
             dependencyWriter.Write(projects);
 
             // Arrange
-            _ = this.logger.Entries.Should().HaveCount(4);
-            _ = this.logger.Entries[0].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[0].Message.Should().Be(ProjectNames[0]);
-            _ = this.logger.Entries[1].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[1].Message.Should().Be(ExpectedFrameworks[0]);
-            _ = this.logger.Entries[2].LogLevel.Should().Be(LogLevel.Debug);
-            _ = this.logger.Entries[2].Message.Should().Be(ExpectedDependencies[0]);
-            _ = this.logger.Entries[3].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[3].Message.Should().Be(string.Empty);
+            _ = this.logger.Entries
+                .Should().HaveCount(4);
+            _ = this.logger.Entries[0].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[0].Message
+                .Should().Be(ProjectNames[0]);
+            _ = this.logger.Entries[1].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[1].Message
+                .Should().Be(ExpectedFrameworks[0]);
+            _ = this.logger.Entries[2].LogLevel
+                .Should().Be(LogLevel.Debug);
+            _ = this.logger.Entries[2].Message
+                .Should().Be(ExpectedDependencies[0]);
+            _ = this.logger.Entries[3].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[3].Message
+                .Should().Be(string.Empty);
         }
 
         /// <summary>
@@ -210,16 +228,28 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
             dependencyWriter.Write(projects);
 
             // Arrange
-            _ = this.logger.Entries.Should().HaveCount(4);
-            _ = this.logger.Entries[0].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[0].Message.Should().Be(ProjectNames[0]);
-            _ = this.logger.Entries[1].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[1].Message.Should().Be(ExpectedFrameworks[0]);
-            _ = this.logger.Entries[2].LogLevel.Should().Be(LogLevel.Warning);
-            _ = this.logger.Entries[2].Message.Should().Be(
-                string.Format(CultureInfo.CurrentCulture, Information.TransitiveDependency, ExpectedDependencies[0]));
-            _ = this.logger.Entries[3].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[3].Message.Should().Be(string.Empty);
+            _ = this.logger.Entries
+                .Should().HaveCount(4);
+            _ = this.logger.Entries[0].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[0].Message
+                .Should().Be(ProjectNames[0]);
+            _ = this.logger.Entries[1].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[1].Message
+                .Should().Be(ExpectedFrameworks[0]);
+            _ = this.logger.Entries[2].LogLevel
+                .Should().Be(LogLevel.Warning);
+            _ = this.logger.Entries[2].Message
+                .Should().Be(
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        Information.TransitiveDependency,
+                        ExpectedDependencies[0]));
+            _ = this.logger.Entries[3].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[3].Message
+                .Should().Be(string.Empty);
         }
 
         /// <summary>
@@ -251,43 +281,88 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
             dependencyWriter.Write(projects);
 
             // Arrange
-            _ = this.logger.Entries.Should().HaveCount(16);
-            _ = this.logger.Entries[0].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[0].Message.Should().Be(ProjectNames[0]);
-            _ = this.logger.Entries[1].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[1].Message.Should().Be(ExpectedFrameworks[0]);
-            _ = this.logger.Entries[2].LogLevel.Should().Be(LogLevel.Debug);
-            _ = this.logger.Entries[2].Message.Should().Be(ExpectedDependencies[0]);
-            _ = this.logger.Entries[3].LogLevel.Should().Be(LogLevel.Warning);
-            _ = this.logger.Entries[3].Message.Should().Be(
-                string.Format(CultureInfo.CurrentCulture, Information.TransitiveDependency, ExpectedDependencies[1]));
-            _ = this.logger.Entries[4].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[4].Message.Should().Be(ExpectedFrameworks[1]);
-            _ = this.logger.Entries[5].LogLevel.Should().Be(LogLevel.Debug);
-            _ = this.logger.Entries[5].Message.Should().Be(ExpectedDependencies[0]);
-            _ = this.logger.Entries[6].LogLevel.Should().Be(LogLevel.Warning);
-            _ = this.logger.Entries[6].Message.Should().Be(
-                string.Format(CultureInfo.CurrentCulture, Information.TransitiveDependency, ExpectedDependencies[1]));
-            _ = this.logger.Entries[7].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[7].Message.Should().Be(string.Empty);
-            _ = this.logger.Entries[8].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[8].Message.Should().Be(ProjectNames[1]);
-            _ = this.logger.Entries[9].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[9].Message.Should().Be(ExpectedFrameworks[0]);
-            _ = this.logger.Entries[10].LogLevel.Should().Be(LogLevel.Debug);
-            _ = this.logger.Entries[10].Message.Should().Be(ExpectedDependencies[0]);
-            _ = this.logger.Entries[11].LogLevel.Should().Be(LogLevel.Warning);
-            _ = this.logger.Entries[11].Message.Should().Be(
-                string.Format(CultureInfo.CurrentCulture, Information.TransitiveDependency, ExpectedDependencies[1]));
-            _ = this.logger.Entries[12].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[12].Message.Should().Be(ExpectedFrameworks[1]);
-            _ = this.logger.Entries[13].LogLevel.Should().Be(LogLevel.Debug);
-            _ = this.logger.Entries[13].Message.Should().Be(ExpectedDependencies[0]);
-            _ = this.logger.Entries[14].LogLevel.Should().Be(LogLevel.Warning);
-            _ = this.logger.Entries[14].Message.Should().Be(
-                string.Format(CultureInfo.CurrentCulture, Information.TransitiveDependency, ExpectedDependencies[1]));
-            _ = this.logger.Entries[15].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.logger.Entries[15].Message.Should().Be(string.Empty);
+            _ = this.logger.Entries
+                .Should().HaveCount(16);
+            _ = this.logger.Entries[0].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[0].Message
+                .Should().Be(ProjectNames[0]);
+            _ = this.logger.Entries[1].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[1].Message
+                .Should().Be(ExpectedFrameworks[0]);
+            _ = this.logger.Entries[2].LogLevel
+                .Should().Be(LogLevel.Debug);
+            _ = this.logger.Entries[2].Message
+                .Should().Be(ExpectedDependencies[0]);
+            _ = this.logger.Entries[3].LogLevel
+                .Should().Be(LogLevel.Warning);
+            _ = this.logger.Entries[3].Message
+                .Should().Be(
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        Information.TransitiveDependency,
+                        ExpectedDependencies[1]));
+            _ = this.logger.Entries[4].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[4].Message
+                .Should().Be(ExpectedFrameworks[1]);
+            _ = this.logger.Entries[5].LogLevel
+                .Should().Be(LogLevel.Debug);
+            _ = this.logger.Entries[5].Message
+                .Should().Be(ExpectedDependencies[0]);
+            _ = this.logger.Entries[6].LogLevel
+                .Should().Be(LogLevel.Warning);
+            _ = this.logger.Entries[6].Message
+                .Should().Be(
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        Information.TransitiveDependency,
+                        ExpectedDependencies[1]));
+            _ = this.logger.Entries[7].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[7].Message
+                .Should().Be(string.Empty);
+            _ = this.logger.Entries[8].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[8].Message
+                .Should().Be(ProjectNames[1]);
+            _ = this.logger.Entries[9].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[9].Message
+                .Should().Be(ExpectedFrameworks[0]);
+            _ = this.logger.Entries[10].LogLevel
+                .Should().Be(LogLevel.Debug);
+            _ = this.logger.Entries[10].Message
+                .Should().Be(ExpectedDependencies[0]);
+            _ = this.logger.Entries[11].LogLevel
+                .Should().Be(LogLevel.Warning);
+            _ = this.logger.Entries[11].Message
+                .Should().Be(
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        Information.TransitiveDependency,
+                        ExpectedDependencies[1]));
+            _ = this.logger.Entries[12].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[12].Message
+                .Should().Be(ExpectedFrameworks[1]);
+            _ = this.logger.Entries[13].LogLevel
+                .Should().Be(LogLevel.Debug);
+            _ = this.logger.Entries[13].Message
+                .Should().Be(ExpectedDependencies[0]);
+            _ = this.logger.Entries[14].LogLevel
+                .Should().Be(LogLevel.Warning);
+            _ = this.logger.Entries[14].Message
+                .Should().Be(
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        Information.TransitiveDependency,
+                        ExpectedDependencies[1]));
+            _ = this.logger.Entries[15].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.logger.Entries[15].Message
+                .Should().Be(string.Empty);
         }
     }
 }

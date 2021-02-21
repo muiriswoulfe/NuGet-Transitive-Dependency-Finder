@@ -24,7 +24,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Resources.Message
             var result = Information.CommencingAnalysis;
 
             // Assert
-            _ = result.Should().Be("Commencing analysis...");
+            _ = result
+                .Should().Be("Commencing analysis...");
         }
 
         /// <summary>
@@ -37,7 +38,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Resources.Message
             var result = Information.NoDependencies;
 
             // Assert
-            _ = result.Should().Be("No NuGet dependencies found.");
+            _ = result
+                .Should().Be("No NuGet dependencies found.");
         }
 
         /// <summary>
@@ -50,7 +52,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Resources.Message
             var result = Information.TransitiveDependency;
 
             // Assert
-            _ = result.Should().Be("{0} (Transitive)");
+            _ = result
+                .Should().Be("{0} (Transitive)");
         }
     }
 }

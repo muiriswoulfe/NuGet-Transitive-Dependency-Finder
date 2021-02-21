@@ -44,7 +44,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Extensions
             var result = value.ToShortenedString();
 
             // Assert
-            _ = result.Should().Be(expected);
+            _ = result
+                .Should().Be(expected);
         }
     }
 }

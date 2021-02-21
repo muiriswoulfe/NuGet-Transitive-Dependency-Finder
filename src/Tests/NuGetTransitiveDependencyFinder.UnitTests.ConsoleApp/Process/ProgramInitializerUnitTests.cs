@@ -49,26 +49,35 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
                 },
                 serviceProvider =>
                 {
-                    _ = serviceProvider.GetService<ICommandLineOptions>().Should().BeOfType<CommandLineOptions>();
-                    _ = serviceProvider.GetService<IDependencyWriter>().Should().BeOfType<DependencyWriter>();
-                    _ = serviceProvider.GetService<IProgramRunner>().Should().BeOfType<ProgramRunner>();
+                    _ = serviceProvider.GetService<ICommandLineOptions>()
+                        .Should().BeOfType<CommandLineOptions>();
+                    _ = serviceProvider.GetService<IDependencyWriter>()
+                        .Should().BeOfType<DependencyWriter>();
+                    _ = serviceProvider.GetService<IProgramRunner>()
+                        .Should().BeOfType<ProgramRunner>();
 
-                    _ = serviceProvider.GetService<ITransitiveDependencyFinder>().Should().NotBeNull();
+                    _ = serviceProvider.GetService<ITransitiveDependencyFinder>()
+                        .Should().NotBeNull();
 
                     var logger = serviceProvider.GetService<ILogger<ProgramInitializerUnitTests>>()!;
-                    _ = logger.Should().BeOfType<Logger<ProgramInitializerUnitTests>>();
+                    _ = logger
+                        .Should().BeOfType<Logger<ProgramInitializerUnitTests>>();
                     foreach (var value in
                         Enum.GetValues(typeof(LogLevel)).Cast<LogLevel>().Where(logLevel => logLevel != LogLevel.None))
                     {
-                        _ = logger.IsEnabled(value).Should().BeTrue();
+                        _ = logger.IsEnabled(value)
+                            .Should().BeTrue();
                     }
 
-                    _ = serviceProvider.GetService<ConsoleFormatter>().Should().BeOfType<PlainConsoleFormatter>();
-                    _ = serviceProvider.GetService<ILoggerProvider>().Should().BeOfType<DebugLoggerProvider>();
+                    _ = serviceProvider.GetService<ConsoleFormatter>()
+                        .Should().BeOfType<PlainConsoleFormatter>();
+                    _ = serviceProvider.GetService<ILoggerProvider>()
+                        .Should().BeOfType<DebugLoggerProvider>();
                 });
 
             // Assert
-            _ = result.Should().Be(SuccessCode);
+            _ = result
+                .Should().Be(SuccessCode);
         }
 
         /// <summary>
@@ -89,7 +98,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
             var result = ProgramInitializer.Run(parameters.Split(' ', StringSplitOptions.RemoveEmptyEntries), _ => { });
 
             // Assert
-            _ = result.Should().Be(SuccessCode);
+            _ = result
+                .Should().Be(SuccessCode);
         }
 
         /// <summary>
@@ -121,7 +131,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
             var result = ProgramInitializer.Run(parameters.Split(' ', StringSplitOptions.RemoveEmptyEntries), _ => { });
 
             // Assert
-            _ = result.Should().Be(ErrorCode);
+            _ = result
+                .Should().Be(ErrorCode);
         }
 
         /// <summary>
@@ -139,10 +150,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
                     "Project.csproj",
                 },
                 serviceProvider =>
-                    ProgramInitializer.GetProgramRunner(serviceProvider).Should().BeOfType<ProgramRunner>());
+                    ProgramInitializer.GetProgramRunner(serviceProvider)
+                        .Should().BeOfType<ProgramRunner>());
 
             // Assert
-            _ = result.Should().Be(SuccessCode);
+            _ = result
+                .Should().Be(SuccessCode);
         }
     }
 }

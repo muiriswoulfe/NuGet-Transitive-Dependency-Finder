@@ -93,7 +93,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = DefaultValue.IsAddValid(new(DefaultIdentifier, 0));
 
             // Assert
-            _ = result.Should().BeFalse();
+            _ = result
+                .Should().BeFalse();
         }
 
         /// <summary>
@@ -107,7 +108,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = DefaultValue.IsAddValid(DefaultProject);
 
             // Assert
-            _ = result.Should().BeTrue();
+            _ = result
+                .Should().BeTrue();
         }
 
         /// <summary>
@@ -121,7 +123,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = DefaultValue.HasChildren;
 
             // Assert
-            _ = result.Should().BeFalse();
+            _ = result
+                .Should().BeFalse();
         }
 
         /// <summary>
@@ -139,7 +142,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = projects.HasChildren;
 
             // Assert
-            _ = result.Should().BeFalse();
+            _ = result
+                .Should().BeFalse();
         }
 
         /// <summary>
@@ -157,7 +161,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = projects.HasChildren;
 
             // Assert
-            _ = result.Should().BeTrue();
+            _ = result
+                .Should().BeTrue();
         }
 
         /// <summary>
@@ -176,7 +181,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = projects.HasChildren;
 
             // Assert
-            _ = result.Should().BeTrue();
+            _ = result
+                .Should().BeTrue();
         }
 
         /// <summary>
@@ -190,7 +196,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = DefaultValue.SortedChildren;
 
             // Assert
-            _ = result.Should().BeEmpty();
+            _ = result
+                .Should().BeEmpty();
         }
 
         /// <summary>
@@ -213,7 +220,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = projects.SortedChildren;
 
             // Assert
-            _ = result.Should().BeEmpty();
+            _ = result
+                .Should().BeEmpty();
         }
 
         /// <summary>
@@ -236,8 +244,9 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = projects.SortedChildren;
 
             // Assert
-            _ = result.Should().BeInAscendingOrder();
-            _ = result.Should().Equal(SortedChildrenTestData);
+            _ = result
+                .Should().BeInAscendingOrder()
+                .And.Equal(SortedChildrenTestData);
         }
 
         /// <summary>
@@ -260,11 +269,9 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = projects.SortedChildren;
 
             // Assert
-            _ = result.Should().BeInAscendingOrder();
-            _ = result.Should().Equal(
-                SortedChildrenTestData[0],
-                SortedChildrenTestData[3],
-                SortedChildrenTestData[5]);
+            _ = result
+                .Should().BeInAscendingOrder()
+                .And.Equal(SortedChildrenTestData[0], SortedChildrenTestData[3], SortedChildrenTestData[5]);
         }
 
         /// <summary>
@@ -289,8 +296,9 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             var result = projects.SortedChildren;
 
             // Assert
-            _ = result.Should().BeInAscendingOrder();
-            _ = result.Should().Equal(SortedChildrenTestData);
+            _ = result
+                .Should().BeInAscendingOrder()
+                .And.Equal(SortedChildrenTestData);
         }
     }
 }

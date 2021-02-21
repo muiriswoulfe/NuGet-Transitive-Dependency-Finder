@@ -92,9 +92,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
             this.nuGetLogger.Log(CreateLogMessage(inputLogLevel));
 
             // Assert
-            _ = this.loggerMock.Entries.Should().ContainSingle();
-            _ = this.loggerMock.Entries[0].LogLevel.Should().Be(expectedLogLevel);
-            _ = this.loggerMock.Entries[0].Message.Should().MatchRegex(ExpectedFullRegularExpression);
+            _ = this.loggerMock.Entries
+                .Should().ContainSingle();
+            _ = this.loggerMock.Entries[0].LogLevel
+                .Should().Be(expectedLogLevel);
+            _ = this.loggerMock.Entries[0].Message
+                .Should().MatchRegex(ExpectedFullRegularExpression);
         }
 
         /// <summary>
@@ -115,11 +118,14 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
             }
 
             // Assert
-            _ = this.loggerMock.Entries.Should().HaveCount(values.Count);
+            _ = this.loggerMock.Entries
+                .Should().HaveCount(values.Count);
             foreach (var entry in this.loggerMock.Entries)
             {
-                _ = entry.LogLevel.Should().NotBe(LogLevel.None);
-                _ = entry.Message.Should().MatchRegex(ExpectedFullRegularExpression);
+                _ = entry.LogLevel
+                    .Should().NotBe(LogLevel.None);
+                _ = entry.Message
+                    .Should().MatchRegex(ExpectedFullRegularExpression);
             }
         }
 
@@ -140,9 +146,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
             this.nuGetLogger.Log(inputLogLevel, TestMessage);
 
             // Assert
-            _ = this.loggerMock.Entries.Should().ContainSingle();
-            _ = this.loggerMock.Entries[0].LogLevel.Should().Be(expectedLogLevel);
-            _ = this.loggerMock.Entries[0].Message.Should().MatchRegex(ExpectedRegularExpression);
+            _ = this.loggerMock.Entries
+                .Should().ContainSingle();
+            _ = this.loggerMock.Entries[0].LogLevel
+                .Should().Be(expectedLogLevel);
+            _ = this.loggerMock.Entries[0].Message
+                .Should().MatchRegex(ExpectedRegularExpression);
         }
 
         /// <summary>
@@ -163,11 +172,14 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
             }
 
             // Assert
-            _ = this.loggerMock.Entries.Should().HaveCount(values.Count);
+            _ = this.loggerMock.Entries
+                .Should().HaveCount(values.Count);
             foreach (var entry in this.loggerMock.Entries)
             {
-                _ = entry.LogLevel.Should().NotBe(LogLevel.None);
-                _ = entry.Message.Should().MatchRegex(ExpectedRegularExpression);
+                _ = entry.LogLevel
+                    .Should().NotBe(LogLevel.None);
+                _ = entry.Message
+                    .Should().MatchRegex(ExpectedRegularExpression);
             }
         }
 
@@ -189,9 +201,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
             await this.nuGetLogger.LogAsync(CreateLogMessage(inputLogLevel)).ConfigureAwait(false);
 
             // Assert
-            _ = this.loggerMock.Entries.Should().ContainSingle();
-            _ = this.loggerMock.Entries[0].LogLevel.Should().Be(expectedLogLevel);
-            _ = this.loggerMock.Entries[0].Message.Should().MatchRegex(ExpectedFullRegularExpression);
+            _ = this.loggerMock.Entries
+                .Should().ContainSingle();
+            _ = this.loggerMock.Entries[0].LogLevel
+                .Should().Be(expectedLogLevel);
+            _ = this.loggerMock.Entries[0].Message
+                .Should().MatchRegex(ExpectedFullRegularExpression);
         }
 
         /// <summary>
@@ -213,11 +228,14 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
             }
 
             // Assert
-            _ = this.loggerMock.Entries.Should().HaveCount(values.Count);
+            _ = this.loggerMock.Entries
+                .Should().HaveCount(values.Count);
             foreach (var entry in this.loggerMock.Entries)
             {
-                _ = entry.LogLevel.Should().NotBe(LogLevel.None);
-                _ = entry.Message.Should().MatchRegex(ExpectedFullRegularExpression);
+                _ = entry.LogLevel
+                    .Should().NotBe(LogLevel.None);
+                _ = entry.Message
+                    .Should().MatchRegex(ExpectedFullRegularExpression);
             }
         }
 
@@ -239,9 +257,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
             await this.nuGetLogger.LogAsync(inputLogLevel, TestMessage).ConfigureAwait(false);
 
             // Assert
-            _ = this.loggerMock.Entries.Should().ContainSingle();
-            _ = this.loggerMock.Entries[0].LogLevel.Should().Be(expectedLogLevel);
-            _ = this.loggerMock.Entries[0].Message.Should().MatchRegex(ExpectedRegularExpression);
+            _ = this.loggerMock.Entries
+                .Should().ContainSingle();
+            _ = this.loggerMock.Entries[0].LogLevel
+                .Should().Be(expectedLogLevel);
+            _ = this.loggerMock.Entries[0].Message
+                .Should().MatchRegex(ExpectedRegularExpression);
         }
 
         /// <summary>
@@ -263,11 +284,14 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
             }
 
             // Assert
-            _ = this.loggerMock.Entries.Should().HaveCount(values.Count);
+            _ = this.loggerMock.Entries
+                .Should().HaveCount(values.Count);
             foreach (var entry in this.loggerMock.Entries)
             {
-                _ = entry.LogLevel.Should().NotBe(LogLevel.None);
-                _ = entry.Message.Should().MatchRegex(ExpectedRegularExpression);
+                _ = entry.LogLevel
+                    .Should().NotBe(LogLevel.None);
+                _ = entry.Message
+                    .Should().MatchRegex(ExpectedRegularExpression);
             }
         }
 
@@ -281,9 +305,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
             this.nuGetLogger.LogDebug(TestMessage);
 
             // Assert
-            _ = this.loggerMock.Entries.Should().ContainSingle();
-            _ = this.loggerMock.Entries[0].LogLevel.Should().Be(LogLevel.Debug);
-            _ = this.loggerMock.Entries[0].Message.Should().MatchRegex(ExpectedRegularExpression);
+            _ = this.loggerMock.Entries
+                .Should().ContainSingle();
+            _ = this.loggerMock.Entries[0].LogLevel
+                .Should().Be(LogLevel.Debug);
+            _ = this.loggerMock.Entries[0].Message
+                .Should().MatchRegex(ExpectedRegularExpression);
         }
 
         /// <summary>
@@ -296,9 +323,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
             this.nuGetLogger.LogVerbose(TestMessage);
 
             // Assert
-            _ = this.loggerMock.Entries.Should().ContainSingle();
-            _ = this.loggerMock.Entries[0].LogLevel.Should().Be(LogLevel.Debug);
-            _ = this.loggerMock.Entries[0].Message.Should().MatchRegex(ExpectedRegularExpression);
+            _ = this.loggerMock.Entries
+                .Should().ContainSingle();
+            _ = this.loggerMock.Entries[0].LogLevel
+                .Should().Be(LogLevel.Debug);
+            _ = this.loggerMock.Entries[0].Message
+                .Should().MatchRegex(ExpectedRegularExpression);
         }
 
         /// <summary>
@@ -312,9 +342,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
             this.nuGetLogger.LogInformation(TestMessage);
 
             // Assert
-            _ = this.loggerMock.Entries.Should().ContainSingle();
-            _ = this.loggerMock.Entries[0].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.loggerMock.Entries[0].Message.Should().MatchRegex(ExpectedRegularExpression);
+            _ = this.loggerMock.Entries
+                .Should().ContainSingle();
+            _ = this.loggerMock.Entries[0].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.loggerMock.Entries[0].Message
+                .Should().MatchRegex(ExpectedRegularExpression);
         }
 
         /// <summary>
@@ -328,9 +361,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
             this.nuGetLogger.LogInformationSummary(TestMessage);
 
             // Assert
-            _ = this.loggerMock.Entries.Should().ContainSingle();
-            _ = this.loggerMock.Entries[0].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.loggerMock.Entries[0].Message.Should().MatchRegex(ExpectedRegularExpression);
+            _ = this.loggerMock.Entries
+                .Should().ContainSingle();
+            _ = this.loggerMock.Entries[0].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.loggerMock.Entries[0].Message
+                .Should().MatchRegex(ExpectedRegularExpression);
         }
 
         /// <summary>
@@ -343,9 +379,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
             this.nuGetLogger.LogMinimal(TestMessage);
 
             // Assert
-            _ = this.loggerMock.Entries.Should().ContainSingle();
-            _ = this.loggerMock.Entries[0].LogLevel.Should().Be(LogLevel.Information);
-            _ = this.loggerMock.Entries[0].Message.Should().MatchRegex(ExpectedRegularExpression);
+            _ = this.loggerMock.Entries
+                .Should().ContainSingle();
+            _ = this.loggerMock.Entries[0].LogLevel
+                .Should().Be(LogLevel.Information);
+            _ = this.loggerMock.Entries[0].Message
+                .Should().MatchRegex(ExpectedRegularExpression);
         }
 
         /// <summary>
@@ -358,9 +397,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
             this.nuGetLogger.LogWarning(TestMessage);
 
             // Assert
-            _ = this.loggerMock.Entries.Should().ContainSingle();
-            _ = this.loggerMock.Entries[0].LogLevel.Should().Be(LogLevel.Warning);
-            _ = this.loggerMock.Entries[0].Message.Should().MatchRegex(ExpectedRegularExpression);
+            _ = this.loggerMock.Entries
+                .Should().ContainSingle();
+            _ = this.loggerMock.Entries[0].LogLevel
+                .Should().Be(LogLevel.Warning);
+            _ = this.loggerMock.Entries[0].Message
+                .Should().MatchRegex(ExpectedRegularExpression);
         }
 
         /// <summary>
@@ -373,9 +415,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
             this.nuGetLogger.LogError(TestMessage);
 
             // Assert
-            _ = this.loggerMock.Entries.Should().ContainSingle();
-            _ = this.loggerMock.Entries[0].LogLevel.Should().Be(LogLevel.Error);
-            _ = this.loggerMock.Entries[0].Message.Should().MatchRegex(ExpectedRegularExpression);
+            _ = this.loggerMock.Entries
+                .Should().ContainSingle();
+            _ = this.loggerMock.Entries[0].LogLevel
+                .Should().Be(LogLevel.Error);
+            _ = this.loggerMock.Entries[0].Message
+                .Should().MatchRegex(ExpectedRegularExpression);
         }
 
         /// <summary>

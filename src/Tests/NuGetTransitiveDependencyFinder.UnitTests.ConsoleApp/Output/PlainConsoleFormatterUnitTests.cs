@@ -69,8 +69,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
                 result);
 
             // Assert
-            _ = result.ToString().Should()
-                .Be(
+            _ = result.ToString()
+                .Should().Be(
                     Invariant($"{expectedPrefix}State System.NotSupportedException: ") +
                     Invariant($"Specified method is not supported.\x1B[39m\x1B[22m{Environment.NewLine}"));
         }
@@ -105,7 +105,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
             // Assert
             foreach (var action in actions)
             {
-                action.Should().NotThrow<InvalidEnumArgumentException>();
+                action
+                    .Should().NotThrow<InvalidEnumArgumentException>();
             }
         }
 
@@ -134,8 +135,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
                 result);
 
             // Assert
-            _ = action.Should().Throw<InvalidEnumArgumentException>()
-                .WithMessage(
+            _ = action
+                .Should().Throw<InvalidEnumArgumentException>().WithMessage(
                     "The value of argument 'logLevel' (100) is invalid for Enum type 'LogLevel'. " +
                     "(Parameter 'logLevel')")
                 .And.ParamName.Should().Be("logLevel");

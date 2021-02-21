@@ -40,8 +40,9 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Resources
             var result = AllResources.Select(resource => Strings.GetString(resource));
 
             // Assert
-            _ = result.Should().OnlyHaveUniqueItems();
-            _ = result.Should().NotContainNulls();
+            _ = result
+                .Should().OnlyHaveUniqueItems()
+                .And.NotContainNulls();
         }
 
         /// <summary>
@@ -55,7 +56,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Resources
             var result = Strings.GetString("Invalid");
 
             // Assert
-            _ = result.Should().BeNull();
+            _ = result
+                .Should().BeNull();
         }
     }
 }
