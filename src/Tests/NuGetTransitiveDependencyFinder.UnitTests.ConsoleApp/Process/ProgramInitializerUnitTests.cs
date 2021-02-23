@@ -81,7 +81,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
         }
 
         /// <summary>
-        /// Tests that when <see cref="ProgramInitializer.Run(string[], Action{IServiceProvider})"/> is called with a
+        /// Tests that when <see cref="ProgramInitializer.Run(string[], Action{IServiceProvider})"/> is called with
         /// valid command-line parameters, it returns the success code.
         /// </summary>
         /// <param name="parameters">The command-line parameters to test.</param>
@@ -103,7 +103,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
         }
 
         /// <summary>
-        /// Tests that when <see cref="ProgramInitializer.Run(string[], Action{IServiceProvider})"/> is called with a
+        /// Tests that when <see cref="ProgramInitializer.Run(string[], Action{IServiceProvider})"/> is called with
         /// failure case command-line parameters, it returns the error code.
         /// </summary>
         /// <param name="parameters">The command-line parameters to test.</param>
