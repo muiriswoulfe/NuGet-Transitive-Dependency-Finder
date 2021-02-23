@@ -23,11 +23,25 @@ namespace NuGetTransitiveDependencyFinder.Extensions
         /// action for both the current application and the NuGet Transitive Dependency Finder library.</param>
         /// <returns>The <see cref="IServiceCollection"/> passed to the method with the additional dependencies
         /// included.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="value"/> or <paramref name="loggingBuilderAction"/>
+        /// is <c>null</c>.</exception>
         public static IServiceCollection AddNuGetTransitiveDependencyFinder(
-            this IServiceCollection value,
-            Action<ILoggingBuilder> loggingBuilderAction) =>
-            value
+            this IServiceCollection? value,
+            Action<ILoggingBuilder>? loggingBuilderAction)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            if (loggingBuilderAction == null)
+            {
+                throw new ArgumentNullException(nameof(loggingBuilderAction));
+            }
+
+            return value
                 .AddTransient<ITransitiveDependencyFinder, TransitiveDependencyFinder>()
                 .AddSingleton(loggingBuilderAction);
+        }
     }
 }

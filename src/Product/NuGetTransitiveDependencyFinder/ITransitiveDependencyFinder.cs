@@ -21,6 +21,7 @@ namespace NuGetTransitiveDependencyFinder
         /// <param name="collateAllDependencies">A value indicating whether all dependencies, or merely those that are
         /// transitive, should be collated.</param>
         /// <returns>The transitive NuGet dependency information, which can be processed for display.</returns>
-        public Projects Run(string projectOrSolutionPath, bool collateAllDependencies);
+        /// <exception cref="ArgumentNullException"><paramref name="projectOrSolutionPath"/> is <c>null</c>.</exception>
+        public Projects Run(string? projectOrSolutionPath, bool collateAllDependencies);
     }
 }

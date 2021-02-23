@@ -26,6 +26,48 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Extensions
         /// <summary>
         /// Tests that when
         /// <see cref="ServiceCollectionExtensions.AddNuGetTransitiveDependencyFinder(IServiceCollection,
+        /// Action{ILoggingBuilder})"/> is called with a <c>null</c> <c>value</c> parameter, it throws an
+        /// <see cref="ArgumentNullException"/>.
+        /// </summary>
+        [AllCulturesFact]
+        public void AddNuGetTransitiveDependencyFinder_WithNullValue_ThrowsArgumentNullException()
+        {
+            // Arrange
+            IServiceCollection? serviceCollection = null;
+
+            // Act
+            Action action = () => serviceCollection.AddNuGetTransitiveDependencyFinder(LoggingBuilderAction);
+
+            // Assert
+            _ = action
+                .Should().Throw<ArgumentNullException>()
+                .And.ParamName.Should().Be("value");
+        }
+
+        /// <summary>
+        /// Tests that when
+        /// <see cref="ServiceCollectionExtensions.AddNuGetTransitiveDependencyFinder(IServiceCollection,
+        /// Action{ILoggingBuilder})"/> is called with a <c>null</c> <c>loggingBuilderAction</c> parameter, it throws an
+        /// <see cref="ArgumentNullException"/>.
+        /// </summary>
+        [AllCulturesFact]
+        public void AddNuGetTransitiveDependencyFinder_WithNullLoggingBuilderAction_ThrowsArgumentNullException()
+        {
+            // Arrange
+            var serviceCollection = new ServiceCollection();
+
+            // Act
+            Action action = () => serviceCollection.AddNuGetTransitiveDependencyFinder(null);
+
+            // Assert
+            _ = action
+                .Should().Throw<ArgumentNullException>()
+                .And.ParamName.Should().Be("loggingBuilderAction");
+        }
+
+        /// <summary>
+        /// Tests that when
+        /// <see cref="ServiceCollectionExtensions.AddNuGetTransitiveDependencyFinder(IServiceCollection,
         /// Action{ILoggingBuilder})"/> is called, it adds the expected dependencies.
         /// </summary>
         [AllCulturesFact]
@@ -35,13 +77,13 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Extensions
             var serviceCollection = new ServiceCollection();
 
             // Act
-            using var serviceProvider = serviceCollection.AddNuGetTransitiveDependencyFinder(LoggingBuilderAction)
+            using var result = serviceCollection.AddNuGetTransitiveDependencyFinder(LoggingBuilderAction)
                 .BuildServiceProvider();
 
             // Assert
-            _ = serviceProvider.GetService<ITransitiveDependencyFinder>()
+            _ = result.GetService<ITransitiveDependencyFinder>()
                 .Should().BeOfType<TransitiveDependencyFinder>();
-            _ = serviceProvider.GetService<Action<ILoggingBuilder>>()
+            _ = result.GetService<Action<ILoggingBuilder>>()
                 .Should().Be(LoggingBuilderAction);
         }
     }

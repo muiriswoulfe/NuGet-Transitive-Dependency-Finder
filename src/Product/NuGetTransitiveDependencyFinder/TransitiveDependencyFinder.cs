@@ -50,10 +50,17 @@ namespace NuGetTransitiveDependencyFinder
         }
 
         /// <inheritdoc/>
-        public Projects Run(string projectOrSolutionPath, bool collateAllDependencies) =>
-            this.serviceProvider
+        public Projects Run(string? projectOrSolutionPath, bool collateAllDependencies)
+        {
+            if (projectOrSolutionPath == null)
+            {
+                throw new ArgumentNullException(nameof(projectOrSolutionPath));
+            }
+
+            return this.serviceProvider
                 .GetService<IDependencyFinder>()!
                 .Run(projectOrSolutionPath, collateAllDependencies);
+        }
 
         /// <summary>
         /// Creates the service provider, which initializes dependency injection for the application.
