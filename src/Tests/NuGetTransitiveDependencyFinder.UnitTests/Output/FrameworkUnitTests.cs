@@ -119,56 +119,56 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             };
 
         /// <summary>
-        /// Gets the data for testing <see cref="Framework.operator =="/>.
+        /// Gets the data for testing <see cref="Framework.operator ==(Framework?, Framework?)"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
         public static TheoryData<Framework?, Framework?, bool> OperatorEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorEqualTestData(OperatorTestData);
 
         /// <summary>
-        /// Gets the data for testing <see cref="Framework.operator !="/>.
+        /// Gets the data for testing <see cref="Framework.operator !=(Framework?, Framework?)"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
         public static TheoryData<Framework?, Framework?, bool> OperatorNotEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorNotEqualTestData(OperatorTestData);
 
         /// <summary>
-        /// Gets the data for testing <see cref="Framework.operator &lt;"/>.
+        /// Gets the data for testing <see cref="Framework.operator &lt;(Framework?, Framework?)"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
         public static TheoryData<Framework?, Framework?, bool> OperatorLessThanTestData =>
             ComparisonDataGenerator.GenerateOperatorLessThanTestData(OperatorTestData);
 
         /// <summary>
-        /// Gets the data for testing <see cref="Framework.operator &lt;="/>.
+        /// Gets the data for testing <see cref="Framework.operator &lt;=(Framework?, Framework?)"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
         public static TheoryData<Framework?, Framework?, bool> OperatorLessThanOrEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorLessThanOrEqualTestData(OperatorTestData);
 
         /// <summary>
-        /// Gets the data for testing <see cref="Framework.operator &gt;"/>.
+        /// Gets the data for testing <see cref="Framework.operator &gt;(Framework?, Framework?)"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
         public static TheoryData<Framework?, Framework?, bool> OperatorGreaterThanTestData =>
             ComparisonDataGenerator.GenerateOperatorGreaterThanTestData(OperatorTestData);
 
         /// <summary>
-        /// Gets the data for testing <see cref="Framework.operator &gt;="/>.
+        /// Gets the data for testing <see cref="Framework.operator &gt;=(Framework?, Framework?)"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
         public static TheoryData<Framework?, Framework?, bool> OperatorGreaterThanOrEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorGreaterThanOrEqualTestData(OperatorTestData);
 
         /// <summary>
-        /// Gets the data for testing <see cref="IComparable{Framework}.CompareTo"/>.
+        /// Gets the data for testing <see cref="IComparable{Framework}.CompareTo(Framework)"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
         public static TheoryData<Framework, Framework?, int> CompareToTestData =>
             ComparisonDataGenerator.GenerateCompareToTestData(OperatorTestData);
 
         /// <summary>
-        /// Gets the data for testing <see cref="IEquatable{Framework}.Equals"/>.
+        /// Gets the data for testing <see cref="IEquatable{Framework}.Equals(Framework)"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
         public static TheoryData<Framework, Framework?, bool> EqualsTestData =>
@@ -220,8 +220,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             };
 
         /// <summary>
-        /// Tests that when <see cref="Framework.operator =="/> is called with different values, it returns the
-        /// expected value in each case.
+        /// Tests that when <see cref="Framework.operator ==(Framework?, Framework?)"/> is called with different values,
+        /// it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -239,8 +239,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Framework.operator !="/> is called with different values, it returns the
-        /// expected value in each case.
+        /// Tests that when <see cref="Framework.operator !=(Framework?, Framework?)"/> is called with different values,
+        /// it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -258,8 +258,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Framework.operator &lt;"/> is called with different values, it returns the
-        /// expected value in each case.
+        /// Tests that when <see cref="Framework.operator &lt;(Framework?, Framework?)"/> is called with different
+        /// values, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -277,8 +277,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Framework.operator &lt;="/> is called with different values, it returns the
-        /// expected value in each case.
+        /// Tests that when <see cref="Framework.operator &lt;=(Framework?, Framework?)"/> is called with different
+        /// values, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -296,8 +296,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Framework.operator &gt;"/> is called with different values, it returns the
-        /// expected value in each case.
+        /// Tests that when <see cref="Framework.operator &gt;(Framework?, Framework?)"/> is called with different
+        /// values, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -315,8 +315,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Framework.operator &gt;="/> is called with different values, it returns the
-        /// expected value in each case.
+        /// Tests that when <see cref="Framework.operator &gt;=(Framework?, Framework?)"/> is called with different
+        /// values, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -334,8 +334,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="IComparable{Framework}.CompareTo"/> is called with different values, it returns
-        /// the expected value in each case.
+        /// Tests that when <see cref="IComparable{Framework}.CompareTo(Framework)"/> is called with different values,
+        /// it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -353,7 +353,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="IComparable.CompareTo"/> is called with different values against an
+        /// Tests that when <see cref="IComparable.CompareTo(object?)"/> is called with different values against an
         /// <c>object</c>, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
@@ -372,8 +372,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="IComparable.CompareTo"/> is called with different object types, it throws an
-        /// <see cref="ArgumentException"/>.
+        /// Tests that when <see cref="IComparable.CompareTo(object?)"/> is called with different object types, it
+        /// throws an <see cref="ArgumentException"/>.
         /// </summary>
         [AllCulturesFact]
         public void CompareToObject_WithDifferentObjectTypes_ThrowsArgumentException()
@@ -388,8 +388,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="IEquatable{Framework}.Equals"/> is called with different values, it returns the
-        /// expected value in each case.
+        /// Tests that when <see cref="IEquatable{Framework}.Equals(Framework)"/> is called with different values, it
+        /// returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -407,8 +407,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="IEquatable{Framework}.Equals"/> is called with different values against an
-        /// <c>object</c>, it returns the expected value in each case.
+        /// Tests that when <see cref="IEquatable{Framework}.Equals(Framework)"/> is called with different values
+        /// against an <c>object</c>, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -426,8 +426,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="IEquatable{Framework}.Equals"/> is called with different object types, it returns
-        /// <c>false</c>.
+        /// Tests that when <see cref="IEquatable{Framework}.Equals(Framework)"/> is called with different object
+        /// types, it returns <c>false</c>.
         /// </summary>
         [AllCulturesFact]
         public void EqualsObject_WithDifferentObjectTypes_ReturnsFalse()

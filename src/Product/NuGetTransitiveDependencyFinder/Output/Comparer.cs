@@ -194,7 +194,8 @@ namespace NuGetTransitiveDependencyFinder.Output
 
         /// <summary>
         /// Maps a value returned from <see cref="StringComparer.Compare(string?, string?)"/>, which can span a
-        /// considerable range, to the range [-1, 1] expected from <see cref="IComparable{Dependency}.CompareTo"/>.
+        /// considerable range, to the range [-1, 1] expected from
+        /// <see cref="IComparable{Dependency}.CompareTo(Dependency)"/>.
         /// </summary>
         /// <param name="value">The value to map.</param>
         /// <returns>The mapped value, which will be in the range [-1, 1].</returns>

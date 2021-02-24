@@ -44,7 +44,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
             new Mock<ITransitiveDependencyFinder>();
 
         /// <summary>
-        /// Tests that when <see cref="ProgramRunner.Run"/> is called, it performs the expected actions.
+        /// Tests that when <see cref="ProgramRunner.Run()"/> is called, it performs the expected actions.
         /// </summary>
         [AllCulturesFact]
         public void Run_Called_PerformsExpectedActions()

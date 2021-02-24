@@ -52,42 +52,48 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
                 Array.Empty<ComparisonTestData<Version>>());
 
         /// <summary>
-        /// Gets the data for testing <see cref="Comparer.IsEqual"/>.
+        /// Gets the data for testing
+        /// <see cref="Comparer.IsEqual{TValue}(TValue, TValue, Func{TValue, TValue, int})"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
         public static TheoryData<Version?, Version?, bool> IsEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorEqualTestData(OperatorTestData);
 
         /// <summary>
-        /// Gets the data for testing <see cref="Comparer.IsNotEqual"/>.
+        /// Gets the data for testing
+        /// <see cref="Comparer.IsNotEqual{TValue}(TValue, TValue, Func{TValue, TValue, int})"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
         public static TheoryData<Version?, Version?, bool> IsNotEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorNotEqualTestData(OperatorTestData);
 
         /// <summary>
-        /// Gets the data for testing <see cref="Comparer.IsLess"/>.
+        /// Gets the data for testing
+        /// <see cref="Comparer.IsLess{TValue}(TValue, TValue, Func{TValue, TValue, int})"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
         public static TheoryData<Version?, Version?, bool> IsLessTestData =>
             ComparisonDataGenerator.GenerateOperatorLessThanTestData(OperatorTestData);
 
         /// <summary>
-        /// Gets the data for testing <see cref="Comparer.IsLessOrEqual"/>.
+        /// Gets the data for testing
+        /// <see cref="Comparer.IsLessOrEqual{TValue}(TValue, TValue, Func{TValue, TValue, int})"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
         public static TheoryData<Version?, Version?, bool> IsLessOrEqualTestData =>
             ComparisonDataGenerator.GenerateOperatorLessThanOrEqualTestData(OperatorTestData);
 
         /// <summary>
-        /// Gets the data for testing <see cref="Comparer.IsGreater"/>.
+        /// Gets the data for testing
+        /// <see cref="Comparer.IsGreater{TValue}(TValue, TValue, Func{TValue, TValue, int})"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
         public static TheoryData<Version?, Version?, bool> IsGreaterTestData =>
             ComparisonDataGenerator.GenerateOperatorGreaterThanTestData(OperatorTestData);
 
         /// <summary>
-        /// Gets the data for testing <see cref="Comparer.IsGreaterOrEqual"/>.
+        /// Gets the data for testing
+        /// <see cref="Comparer.IsGreaterOrEqual{TValue}(TValue, TValue, Func{TValue, TValue, int})"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
         public static TheoryData<Version?, Version?, bool> IsGreaterOrEqualTestData =>
@@ -102,15 +108,15 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
             ComparisonDataGenerator.GenerateCompareToTestData(OperatorTestData);
 
         /// <summary>
-        /// Gets the data for testing <see cref="IEquatable{Version}.Equals"/>.
+        /// Gets the data for testing <see cref="IEquatable{Version}.Equals(Version)"/>.
         /// </summary>
         /// <returns>The generated data.</returns>
         public static TheoryData<Version, Version?, bool> EqualsTestData =>
             ComparisonDataGenerator.GenerateEqualsTestData(OperatorTestData);
 
         /// <summary>
-        /// Tests that when <see cref="Comparer.IsEqual"/> is called with different values, it returns the expected
-        /// value in each case.
+        /// Tests that when <see cref="Comparer.IsEqual{TValue}(TValue, TValue, Func{TValue, TValue, int})"/> is called
+        /// with different values, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -128,8 +134,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Comparer.IsNotEqual"/> is called with different values, it returns the expected
-        /// value in each case.
+        /// Tests that when <see cref="Comparer.IsNotEqual{TValue}(TValue, TValue, Func{TValue, TValue, int})"/> is
+        /// called with different values, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -147,8 +153,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Comparer.IsLess"/> is called with different values, it returns the expected value
-        /// in each case.
+        /// Tests that when <see cref="Comparer.IsLess{TValue}(TValue, TValue, Func{TValue, TValue, int})"/> is called
+        /// with different values, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -166,8 +172,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Comparer.IsLessOrEqual"/> is called with different values, it returns the
-        /// expected value in each case.
+        /// Tests that when <see cref="Comparer.IsLessOrEqual{TValue}(TValue, TValue, Func{TValue, TValue, int})"/> is
+        /// called with different values, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -185,8 +191,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Comparer.IsGreater"/> is called with different values, it returns the expected
-        /// value in each case.
+        /// Tests that when <see cref="Comparer.IsGreater{TValue}(TValue, TValue, Func{TValue, TValue, int})"/> is
+        /// called with different values, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -204,8 +210,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         }
 
         /// <summary>
-        /// Tests that when <see cref="Comparer.IsGreaterOrEqual"/> is called with different values, it returns the
-        /// expected value in each case.
+        /// Tests that when <see cref="Comparer.IsGreaterOrEqual{TValue}(TValue, TValue, Func{TValue, TValue, int})"/>
+        /// is called with different values, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
