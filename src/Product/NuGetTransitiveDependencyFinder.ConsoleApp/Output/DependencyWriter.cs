@@ -17,12 +17,12 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
     internal class DependencyWriter : IDependencyWriter
     {
         /// <summary>
-        /// The string prefix for each framework, comprising one level of indentation.
+        /// The string prefix for each framework, which comprises one level of indentation.
         /// </summary>
         private static readonly string FrameworkPrefix = CreatePrefix(1);
 
         /// <summary>
-        /// The string prefix for each dependency, comprising two levels of indentation.
+        /// The string prefix for each dependency, which comprises two levels of indentation.
         /// </summary>
         private static readonly string DependencyPrefix = CreatePrefix(2);
 

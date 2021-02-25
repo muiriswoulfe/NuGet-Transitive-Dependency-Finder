@@ -18,7 +18,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Extensions
     public class ServiceCollectionExtensionsUnitTests
     {
         /// <summary>
-        /// The logging builder action for use within the tests.
+        /// The logging builder action for use within the unit tests.
         /// </summary>
         private static readonly Action<ILoggingBuilder> LoggingBuilderAction =
             configure => configure.SetMinimumLevel(LogLevel.Trace);
@@ -68,10 +68,10 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Extensions
         /// <summary>
         /// Tests that when
         /// <see cref="ServiceCollectionExtensions.AddNuGetTransitiveDependencyFinder(IServiceCollection,
-        /// Action{ILoggingBuilder})"/> is called, it adds the expected dependencies.
+        /// Action{ILoggingBuilder})"/> is called with valid parameters, it adds the expected dependencies.
         /// </summary>
         [AllCulturesFact]
-        public void AddNuGetTransitiveDependencyFinder_Called_AddsDependencies()
+        public void AddNuGetTransitiveDependencyFinder_WithValidParameters_AddsDependencies()
         {
             // Arrange
             var serviceCollection = new ServiceCollection();

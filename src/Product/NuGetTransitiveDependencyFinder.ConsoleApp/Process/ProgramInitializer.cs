@@ -15,7 +15,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Process
     using NuGetTransitiveDependencyFinder.Extensions;
 
     /// <summary>
-    /// The class internally defining the flow and initializing the main application logic.
+    /// The class internally defining the application logic flow and which initializes the main application logic.
     /// </summary>
     internal static class ProgramInitializer
     {
@@ -31,10 +31,10 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Process
                 .SetMinimumLevel(LogLevel.Trace);
 
         /// <summary>
-        /// Runs the main program logic.
+        /// Runs the main application logic.
         /// </summary>
         /// <param name="parameters">A collection of command-line parameters.</param>
-        /// <param name="programAction">The program logic to run against the <see cref="IServiceProvider"/>
+        /// <param name="programAction">The application logic to run against the <see cref="IServiceProvider"/>
         /// object.</param>
         /// <returns>A status code where 0 represents success and 1 represents failure.</returns>
         public static int Run(string[] parameters, Action<IServiceProvider> programAction)
