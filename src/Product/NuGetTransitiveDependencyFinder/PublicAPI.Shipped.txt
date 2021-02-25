@@ -2,7 +2,7 @@
 
 NuGetTransitiveDependencyFinder.Extensions.ServiceCollectionExtensions
 NuGetTransitiveDependencyFinder.ITransitiveDependencyFinder
-NuGetTransitiveDependencyFinder.ITransitiveDependencyFinder.Run(string! projectOrSolutionPath, bool collateAllDependencies) -> NuGetTransitiveDependencyFinder.Output.Projects!
+NuGetTransitiveDependencyFinder.ITransitiveDependencyFinder.Run(string? projectOrSolutionPath, bool collateAllDependencies) -> NuGetTransitiveDependencyFinder.Output.Projects!
 NuGetTransitiveDependencyFinder.Output.Base<TChild>
 NuGetTransitiveDependencyFinder.Output.Base<TChild>.Add(TChild child) -> void
 NuGetTransitiveDependencyFinder.Output.Base<TChild>.HasChildren.get -> bool
@@ -34,7 +34,7 @@ override NuGetTransitiveDependencyFinder.Output.Framework.ToString() -> string!
 override NuGetTransitiveDependencyFinder.Output.IdentifiedBase<TIdentifier, TChild>.ToString() -> string!
 override NuGetTransitiveDependencyFinder.Output.Project.Equals(object? obj) -> bool
 override NuGetTransitiveDependencyFinder.Output.Project.GetHashCode() -> int
-static NuGetTransitiveDependencyFinder.Extensions.ServiceCollectionExtensions.AddNuGetTransitiveDependencyFinder(this Microsoft.Extensions.DependencyInjection.IServiceCollection! value, System.Action<Microsoft.Extensions.Logging.ILoggingBuilder!>! loggingBuilderAction) -> Microsoft.Extensions.DependencyInjection.IServiceCollection!
+static NuGetTransitiveDependencyFinder.Extensions.ServiceCollectionExtensions.AddNuGetTransitiveDependencyFinder(this Microsoft.Extensions.DependencyInjection.IServiceCollection? value, System.Action<Microsoft.Extensions.Logging.ILoggingBuilder!>? loggingBuilderAction) -> Microsoft.Extensions.DependencyInjection.IServiceCollection!
 static NuGetTransitiveDependencyFinder.Output.Dependency.operator !=(NuGetTransitiveDependencyFinder.Output.Dependency? left, NuGetTransitiveDependencyFinder.Output.Dependency? right) -> bool
 static NuGetTransitiveDependencyFinder.Output.Dependency.operator <(NuGetTransitiveDependencyFinder.Output.Dependency? left, NuGetTransitiveDependencyFinder.Output.Dependency? right) -> bool
 static NuGetTransitiveDependencyFinder.Output.Dependency.operator <=(NuGetTransitiveDependencyFinder.Output.Dependency? left, NuGetTransitiveDependencyFinder.Output.Dependency? right) -> bool

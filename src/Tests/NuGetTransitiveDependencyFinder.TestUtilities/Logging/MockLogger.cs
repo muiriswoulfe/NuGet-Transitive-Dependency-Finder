@@ -3,7 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities
+namespace NuGetTransitiveDependencyFinder.TestUtilities.Logging
 {
     using System;
     using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.TestUtilities
     /// A mock implementation of <see cref="ILogger{TCategoryName}"/>.
     /// </summary>
     /// <typeparam name="TCategoryName">The log category name.</typeparam>
-    internal class MockLogger<TCategoryName> : ILogger<TCategoryName>
+    public class MockLogger<TCategoryName> : ILogger<TCategoryName>
     {
         /// <summary>
         /// The collection of log entries.

@@ -7,7 +7,6 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
 {
     using System;
     using System.ComponentModel;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
     using FluentAssertions;
@@ -54,7 +53,6 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
         public void Write_WithValidLevel_LogsCorrectString(LogLevel logLevel, string expectedPrefix)
         {
             // Arrange
-            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
             var plainConsoleFormatter = new PlainConsoleFormatter(OptionsMonitorMock.Object);
             using var result = new StringWriter();
 
@@ -71,8 +69,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
                 result);
 
             // Assert
-            _ = result.ToString().Should()
-                .Be(
+            _ = result.ToString()
+                .Should().Be(
                     Invariant($"{expectedPrefix}State System.NotSupportedException: ") +
                     Invariant($"Specified method is not supported.\x1B[39m\x1B[22m{Environment.NewLine}"));
         }
@@ -87,7 +85,6 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
         public void Write_WithAllLevelsInEnumeration_DoesNotThrow()
         {
             // Arrange
-            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
             var plainConsoleFormatter = new PlainConsoleFormatter(OptionsMonitorMock.Object);
             var values = Enum.GetValues(typeof(LogLevel)).Cast<LogLevel>();
             using var result = new StringWriter();
@@ -108,7 +105,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
             // Assert
             foreach (var action in actions)
             {
-                action.Should().NotThrow<InvalidEnumArgumentException>();
+                action
+                    .Should().NotThrow<InvalidEnumArgumentException>();
             }
         }
 
@@ -137,8 +135,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
                 result);
 
             // Assert
-            _ = action.Should().Throw<InvalidEnumArgumentException>()
-                .WithMessage(
+            _ = action
+                .Should().Throw<InvalidEnumArgumentException>().WithMessage(
                     "The value of argument 'logLevel' (100) is invalid for Enum type 'LogLevel'. " +
                     "(Parameter 'logLevel')")
                 .And.ParamName.Should().Be("logLevel");

@@ -5,14 +5,7 @@
 
 namespace NuGetTransitiveDependencyFinder.ConsoleApp
 {
-    using System;
-    using CommandLine;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-    using Microsoft.Extensions.Logging.Console;
-    using NuGetTransitiveDependencyFinder.ConsoleApp.Input;
-    using NuGetTransitiveDependencyFinder.ConsoleApp.Output;
-    using NuGetTransitiveDependencyFinder.Extensions;
+    using NuGetTransitiveDependencyFinder.ConsoleApp.Process;
 
     /// <summary>
     /// The main class of the application, defining the entry point and the basic operation of the application.
@@ -20,51 +13,13 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
     internal static class Program
     {
         /// <summary>
-        /// The <see cref="Action{ILoggerBuilder}"/>, which defines the logging action for both the current application
-        /// and the NuGet Transitive Dependency Finder library.
-        /// </summary>
-        private static readonly Action<ILoggingBuilder> LoggingBuilderAction =
-            configure => configure
-                .AddConsole(configure => configure.FormatterName = nameof(PlainConsoleFormatter))
-                .AddDebug()
-                .AddConsoleFormatter<PlainConsoleFormatter, ConsoleFormatterOptions>()
-                .SetMinimumLevel(LogLevel.Trace);
-
-        /// <summary>
         /// The entry point of the application.
         /// </summary>
         /// <param name="parameters">A collection of command-line parameters.</param>
         /// <returns>A status code where 0 represents success and 1 represents failure.</returns>
-        public static int Main(string[] parameters)
-        {
-            const int success = 0;
-            const int error = 1;
-
-            return Parser.Default.ParseArguments<CommandLineOptions>(parameters)
-                .MapResult(
-                    commandLineOptions =>
-                    {
-                        using var serviceProvider = CreateServiceProvider(commandLineOptions);
-                        serviceProvider.GetService<IProgramRunner>()!.Run();
-
-                        return success;
-                    },
-                    _ =>
-                        error);
-        }
-
-        /// <summary>
-        /// Creates the service provider, which initializes dependency injection for the application.
-        /// </summary>
-        /// <param name="commandLineOptions">The command-line options.</param>
-        /// <returns>The service provider, which specifies the project dependencies.</returns>
-        private static ServiceProvider CreateServiceProvider(ICommandLineOptions commandLineOptions) =>
-            new ServiceCollection()
-                .AddLogging(LoggingBuilderAction)
-                .AddScoped(_ => commandLineOptions)
-                .AddScoped<IDependencyWriter, DependencyWriter>()
-                .AddScoped<IProgramRunner, ProgramRunner>()
-                .AddNuGetTransitiveDependencyFinder(LoggingBuilderAction)
-                .BuildServiceProvider();
+        public static int Main(string[] parameters) =>
+            ProgramInitializer.Run(
+                parameters,
+                serviceProvider => ProgramInitializer.GetProgramRunner(serviceProvider).Run());
     }
 }

@@ -113,7 +113,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
             FilterData(operatorTestData, Comparisons.GreaterThan | Comparisons.Equal, true);
 
         /// <summary>
-        /// Generates the data for testing <see cref="IComparable{TValue}.CompareTo"/>.
+        /// Generates the data for testing <see cref="IComparable{TValue}.CompareTo(TValue)"/>.
         /// </summary>
         /// <typeparam name="TValue">The type to use for the comparisons.</typeparam>
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
@@ -136,7 +136,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
         }
 
         /// <summary>
-        /// Generates the data for testing <see cref="IEquatable{TValue}.Equals"/>.
+        /// Generates the data for testing <see cref="IEquatable{TValue}.Equals(TValue)"/>.
         /// </summary>
         /// <typeparam name="TValue">The type to use for the comparisons.</typeparam>
         /// <param name="operatorTestData">The operator test data to be filtered.</param>
@@ -209,7 +209,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
 
         /// <summary>
         /// Converts a <see cref="Comparisons"/> value to the equivalent result from a call to
-        /// <see cref="IComparable{TValue}.CompareTo"/>.
+        /// <see cref="IComparable{TValue}.CompareTo(TValue)"/>.
         /// </summary>
         /// <param name="value">The value to convert.</param>
         /// <returns>The converted value.</returns>

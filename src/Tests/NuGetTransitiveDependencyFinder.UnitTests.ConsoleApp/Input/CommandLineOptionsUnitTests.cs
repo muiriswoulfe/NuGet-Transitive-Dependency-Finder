@@ -32,7 +32,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Input
             };
 
             // Assert
-            _ = commandLineOptions.All.Should().Be(value);
+            _ = commandLineOptions.All
+                .Should().Be(value);
         }
 
         /// <summary>
@@ -52,7 +53,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Input
             };
 
             // Assert
-            _ = commandLineOptions.ProjectOrSolution.Should().Be(value);
+            _ = commandLineOptions.ProjectOrSolution
+                .Should().Be(value);
         }
     }
 }

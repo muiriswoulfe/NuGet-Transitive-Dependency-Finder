@@ -83,9 +83,8 @@ Before creating a new PR, please consult the following list.
    may not be approved for merging into the project.
 1. Ensure you adhere to the coding guidelines. These are not explicitly listed,
    but whenever you push to any branch of the repo, the automatically invoked
-   build process will validate compliance with the coding guidelines. If you
-   believe there is an implicit rule being adhered to but not enforced, please
-   file a [bug report][bugreport].
+   build process will validate compliance with the majority of the coding
+   guidelines.
 
 By contributing to the project, you agree to license your contribution under the
 [MIT License][license].
