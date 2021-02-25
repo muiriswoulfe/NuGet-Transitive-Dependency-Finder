@@ -10,6 +10,7 @@ on:
   pull_request: null
   schedule:
     - cron: 0 0 * * 1
+  workflow_dispatch: null
 
 defaults:
   run:
