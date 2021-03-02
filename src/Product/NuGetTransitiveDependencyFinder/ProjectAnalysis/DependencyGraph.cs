@@ -40,7 +40,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         {
             this.dotNetRunner = dotNetRunner;
 
-            this.filePath = Path.GetTempFileName();
+            this.filePath = Path.GetRandomFileName();
         }
 
         /// <summary>
