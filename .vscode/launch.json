@@ -74,11 +74,7 @@
         "test",
         "--configuration",
         "Debug",
-        "/property:CollectCoverage=true",
-        "/property:CoverletOutputFormat=lcov",
-        "/property:CoverletOutput=./lcov.info",
-        "/property:Exclude=[NuGetTransitiveDependencyFinder.TestUtilities]*",
-        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+        "--collect:\"XPlat Code Coverage\""
       ],
       "cwd": "${workspaceFolder}"
     },
@@ -91,11 +87,7 @@
         "test",
         "--configuration",
         "Release",
-        "/property:CollectCoverage=true",
-        "/property:CoverletOutputFormat=lcov",
-        "/property:CoverletOutput=./lcov.info",
-        "/property:Exclude=[NuGetTransitiveDependencyFinder.TestUtilities]*",
-        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+        "--collect:\"XPlat Code Coverage\""
       ],
       "cwd": "${workspaceFolder}"
     }

@@ -26,6 +26,10 @@
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
+    <RunSettingsFilePath>$(MSBuildThisFileDirectory)\Tests\coverlet.runsettings</RunSettingsFilePath>
+  </PropertyGroup>
+
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)\stylecop.json" />
     <Compile Include="$(MSBuildThisFileDirectory)\Shared\Properties\AssemblyInfo.cs" />
@@ -38,6 +42,7 @@
   <ItemGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
     <Content Include="$(MSBuildThisFileDirectory)\xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.5.1">
@@ -71,7 +76,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
-    <PackageReference Include="coverlet.msbuild" Version="3.0.3">
+    <PackageReference Include="coverlet.collector" Version="3.0.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

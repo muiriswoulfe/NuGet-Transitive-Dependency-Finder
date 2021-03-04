@@ -64,13 +64,7 @@ jobs:
         run: dotnet build --configuration ${{ matrix.configuration }} --no-restore /maxCpuCount
 
       - name: BUILD & TEST – Project Test
-        run: >-
-          dotnet test
-          --configuration ${{ matrix.configuration }}
-          --no-build
-          /property:CollectCoverage=true
-          /property:CoverletOutputFormat=opencover
-          /property:Exclude=[NuGetTransitiveDependencyFinder.TestUtilities]*
+        run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"XPlat Code Coverage"
 
       - if: ${{ matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' }}
         name: BUILD & TEST – Upload to Codecov

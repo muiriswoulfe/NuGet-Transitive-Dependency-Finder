@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<RunSettings>=
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat Code Coverage">
+        <Configuration>
+          <Format>lcov,opencover</Format>
+          <Exclude>[NuGetTransitiveDependencyFinder.TestUtilities]*</Exclude>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>
