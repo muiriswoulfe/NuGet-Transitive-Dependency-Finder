@@ -407,7 +407,7 @@ jobs:
       # INFER#
       - name: INFER# – Validation
         id: infersharp
-        uses: microsoft/infersharpaction@v0.2
+        uses: microsoft/infersharpaction@v1.0
         with:
           binary-path: src
 
