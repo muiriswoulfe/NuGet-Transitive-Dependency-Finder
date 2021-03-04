@@ -4,7 +4,7 @@
     <DataCollectors>
       <DataCollector friendlyName="XPlat Code Coverage">
         <Configuration>
-          <Format>lcov,opencover</Format>
+          <Format>cobertura,json,lcov,opencover,teamcity</Format>
           <Exclude>[NuGetTransitiveDependencyFinder.TestUtilities]*</Exclude>
         </Configuration>
       </DataCollector>
