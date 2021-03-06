@@ -6,7 +6,6 @@
 namespace NuGetTransitiveDependencyFinder
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using NuGetTransitiveDependencyFinder.Output;
@@ -51,7 +50,6 @@ namespace NuGetTransitiveDependencyFinder
         }
 
         /// <inheritdoc/>
-        [ExcludeFromCodeCoverage]
         public Projects Run(string? projectOrSolutionPath, bool collateAllDependencies)
         {
             if (projectOrSolutionPath == null)

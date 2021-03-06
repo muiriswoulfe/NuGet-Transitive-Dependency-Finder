@@ -5,13 +5,11 @@
 
 namespace NuGetTransitiveDependencyFinder.ConsoleApp
 {
-    using System.Diagnostics.CodeAnalysis;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Process;
 
     /// <summary>
     /// The main class of the application, defining the entry point and the basic operation of the application.
     /// </summary>
-    [ExcludeFromCodeCoverage]
     internal static class Program
     {
         /// <summary>

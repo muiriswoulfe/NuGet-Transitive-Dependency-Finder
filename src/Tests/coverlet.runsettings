@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<RunSettings>=
+<RunSettings>
   <DataCollectionRunSettings>
     <DataCollectors>
       <DataCollector friendlyName="XPlat Code Coverage">
         <Configuration>
           <Format>cobertura,json,lcov,opencover,teamcity</Format>
-          <Exclude>[NuGetTransitiveDependencyFinder.TestUtilities]*</Exclude>
+          <Exclude>
+            [NuGetTransitiveDependencyFinder.TestUtilities]*,
+            [*]NuGetTransitiveDependencyFinder.ConsoleApp.Program
+          </Exclude>
         </Configuration>
       </DataCollector>
     </DataCollectors>
