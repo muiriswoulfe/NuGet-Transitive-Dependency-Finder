@@ -3,7 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
+namespace NuGetTransitiveDependencyFinder.UnitTests
 {
     using System;
     using FluentAssertions;
