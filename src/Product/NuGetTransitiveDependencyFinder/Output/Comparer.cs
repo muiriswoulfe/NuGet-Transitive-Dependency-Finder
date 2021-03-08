@@ -114,7 +114,8 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// relationship.
         /// </summary>
         /// <typeparam name="TValue">The type to compare.</typeparam>
-        /// <param name="current">The object corresponding to <c>this</c>, from the context of the caller.</param>
+        /// <param name="current">The object corresponding to <see langword="this"/>, from the context of the
+        /// caller.</param>
         /// <param name="other">The object against which to compare <see paramref="current"/>.</param>
         /// <param name="function">The comparison logic specific to <c>TValue</c>, which takes two objects of type
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>
@@ -137,7 +138,8 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// relationship.
         /// </summary>
         /// <typeparam name="TValue">The type to compare.</typeparam>
-        /// <param name="current">The object corresponding to <c>this</c>, from the context of the caller.</param>
+        /// <param name="current">The object corresponding to <see langword="this"/>, from the context of the
+        /// caller.</param>
         /// <param name="obj">The object against which to compare <see paramref="current"/>.</param>
         /// <param name="function">The comparison logic specific to <c>TValue</c>, which takes two objects of type
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>
@@ -169,7 +171,8 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// Determines if <see paramref="current"/> is equal to <see paramref="other"/>.
         /// </summary>
         /// <typeparam name="TValue">The type to compare.</typeparam>
-        /// <param name="current">The object corresponding to <c>this</c>, from the context of the caller.</param>
+        /// <param name="current">The object corresponding to <see langword="this"/>, from the context of the
+        /// caller.</param>
         /// <param name="other">The object against which to compare <see paramref="current"/>.</param>
         /// <param name="function">The comparison logic specific to <c>TValue</c>, which takes two objects of type
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>
@@ -182,7 +185,8 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// Determines if <see paramref="current"/> is equal to <see paramref="obj"/>.
         /// </summary>
         /// <typeparam name="TValue">The type to compare.</typeparam>
-        /// <param name="current">The object corresponding to <c>this</c>, from the context of the caller.</param>
+        /// <param name="current">The object corresponding to <see langword="this"/>, from the context of the
+        /// caller.</param>
         /// <param name="obj">The object against which to compare <see paramref="current"/>.</param>
         /// <param name="function">The comparison logic specific to <c>TValue</c>, which takes two objects of type
         /// <c>TValue</c> and returns an <see cref="int"/>.</param>

@@ -305,7 +305,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="IComparable.CompareTo(object?)"/> is called with different values against an
-        /// <c>object</c>, it returns the expected value in each case.
+        /// <see langword="object"/>, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -359,7 +359,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="IEquatable{Project}.Equals(Project)"/> is called with different values against an
-        /// <c>object</c>, it returns the expected value in each case.
+        /// <see langword="object"/>, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>

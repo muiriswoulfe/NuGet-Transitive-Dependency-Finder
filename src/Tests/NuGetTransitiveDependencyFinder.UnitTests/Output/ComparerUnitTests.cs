@@ -249,7 +249,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="Comparer.CompareTo{TValue}(TValue, object, Func{TValue, TValue, int}, string)"/>
-        /// is called with different values against an <c>object</c>, it returns the expected value in each case.
+        /// is called with different values against an <see langword="object"/>, it returns the expected value in each
+        /// case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -303,7 +304,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="Comparer.Equals{TValue}(TValue, object, Func{TValue, TValue, int})"/> is called
-        /// with different values against an <c>object</c>, it returns the expected value in each case.
+        /// with different values against an <see langword="object"/>, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
