@@ -6,6 +6,7 @@
 namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 {
     using System.Diagnostics;
+    using System.Threading.Tasks;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
@@ -27,7 +28,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
             this.logger = logger;
 
         /// <inheritdoc/>
-        public void Run(string parameters, string workingDirectory)
+        public async Task RunAsync(string parameters, string workingDirectory)
         {
             using var process = new Process();
 
@@ -47,7 +48,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
             process.BeginErrorReadLine();
             process.BeginOutputReadLine();
 
-            process.WaitForExit();
+            await process.WaitForExitAsync().ConfigureAwait(false);
         }
 
         /// <summary>

@@ -314,7 +314,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="IEquatable{Version}.Equals(Version)"/> is called with different object types, it
-        /// returns <c>false</c>.
+        /// returns <see langword="false"/>.
         /// </summary>
         [AllCulturesFact]
         public void EqualsObject_WithDifferentObjectTypes_ReturnsFalse()

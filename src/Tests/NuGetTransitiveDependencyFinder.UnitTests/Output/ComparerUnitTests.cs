@@ -322,7 +322,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="Comparer.Equals{TValue}(TValue, object, Func{TValue, TValue, int})"/> is called
-        /// with different object types, it returns <c>false</c>.
+        /// with different object types, it returns <see langword="false"/>.
         /// </summary>
         [AllCulturesFact]
         public void EqualsObject_WithDifferentObjectTypes_ReturnsFalse()

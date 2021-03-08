@@ -31,7 +31,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Resources
 
         /// <summary>
         /// Tests that when <see cref="Strings.GetString(string)"/> is called with a valid resource name, it returns a
-        /// unique non-<c>null</c> string.
+        /// unique non-<see langword="null"/> string.
         /// </summary>
         [AllCulturesFact]
         public void GetString_CalledWithValidResourceName_ReturnsUniqueNonNullString()
@@ -47,7 +47,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Resources
 
         /// <summary>
         /// Tests that when <see cref="Strings.GetString(string)"/> is called with an invalid resource name, it returns
-        /// <c>null</c>.
+        /// <see langword="null"/>.
         /// </summary>
         [AllCulturesFact]
         public void GetString_CalledWithInvalidResourceName_ReturnsNull()
