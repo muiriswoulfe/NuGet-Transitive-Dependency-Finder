@@ -30,7 +30,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// Gets or sets the properties to pass to the <see cref="Start()"/> method.
         /// </summary>
         /// <exception cref="ArgumentNullException">The value that specifies the <see cref="StartInfo" /> is
-        /// <see langword="null" />.</exception>
+        /// <see langword="null"/>.</exception>
         /// <exception cref="InvalidOperationException">.NET Core only: The <see cref="Process.Start()" /> method was
         /// not used to start the process.</exception>
         /// <returns>The <see cref="ProcessStartInfo" /> that represents the data with which to start the process. These

@@ -10,6 +10,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Extensions
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using NuGetTransitiveDependencyFinder.Extensions;
+    using NuGetTransitiveDependencyFinder.ProjectAnalysis;
     using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
 
     /// <summary>
@@ -81,6 +82,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Extensions
                 .BuildServiceProvider();
 
             // Assert
+            _ = result.GetService<IProcessWrapper>()
+                .Should().BeOfType<ProcessWrapper>();
             _ = result.GetService<ITransitiveDependencyFinder>()
                 .Should().BeOfType<TransitiveDependencyFinder>();
             _ = result.GetService<Action<ILoggingBuilder>>()

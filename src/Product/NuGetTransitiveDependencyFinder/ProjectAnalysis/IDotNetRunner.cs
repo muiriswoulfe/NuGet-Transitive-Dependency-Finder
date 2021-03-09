@@ -5,6 +5,7 @@
 
 namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 {
+    using System;
     using System.Threading.Tasks;
 
     /// <summary>
