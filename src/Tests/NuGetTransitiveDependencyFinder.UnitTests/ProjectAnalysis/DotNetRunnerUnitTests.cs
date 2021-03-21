@@ -28,6 +28,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
             // Arrange
             var logger = new MockLogger<DotNetRunner>();
             var processWrapper = new Mock<IProcessWrapper>();
+            processWrapper.SetupProperty(obj => obj.StartInfo);
             var dotNetRunner = new DotNetRunner(logger, processWrapper.Object);
 
             // Act
@@ -36,6 +37,18 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
             // Assert
             _ = logger.Entries
                 .Should().BeEmpty();
+            _ = processWrapper.Object.StartInfo
+                .Should().NotBeNull();
+            _ = processWrapper.Object.StartInfo.FileName
+                .Should().Be("dotnet");
+            _ = processWrapper.Object.StartInfo.Arguments
+                .Should().Be("build");
+            _ = processWrapper.Object.StartInfo.RedirectStandardError
+                .Should().BeTrue();
+            _ = processWrapper.Object.StartInfo.RedirectStandardOutput
+                .Should().BeTrue();
+            _ = processWrapper.Object.StartInfo.WorkingDirectory
+                .Should().Equals(@"..\");
         }
     }
 }
