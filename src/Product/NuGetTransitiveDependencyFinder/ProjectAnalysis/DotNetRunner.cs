@@ -5,7 +5,6 @@
 
 namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 {
-    using System;
     using System.Diagnostics;
     using System.Threading.Tasks;
     using Microsoft.Extensions.Logging;
@@ -38,10 +37,8 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         }
 
         /// <inheritdoc/>
-        public async Task RunAsync(string parameters, string workingDirectory)
+        public Task RunAsync(string parameters, string workingDirectory)
         {
-            using var process = new Process();
-
             this.processWrapper.ErrorDataReceived += this.LogError!;
             this.processWrapper.OutputDataReceived += this.LogOutput!;
             this.processWrapper.StartInfo = new("dotnet", parameters)
@@ -58,8 +55,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
             this.processWrapper.BeginErrorReadLine();
             this.processWrapper.BeginOutputReadLine();
 
-            await this.processWrapper.WaitForExitAsync().ConfigureAwait(false);
-            return;
+            return this.processWrapper.WaitForExitAsync();
         }
 
         /// <summary>

@@ -18,91 +18,56 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// <summary>
         /// The underlying <see cref="Process"/> on which to run the class logic.
         /// </summary>
-        private readonly Process underlyingProcess;
-
-        /// <summary>
-        /// A value tracking whether <see cref="Dispose()"/> has been invoked.
-        /// </summary>
-        private bool disposedValue;
+        private readonly Process process;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessWrapper"/> class.
         /// </summary>
-        public ProcessWrapper() =>
-            this.underlyingProcess = new Process();
-
-        /// <summary>
-        /// Finalizes an instance of the <see cref="ProcessWrapper"/> class.
-        /// </summary>
-        ~ProcessWrapper() =>
-            this.Dispose(false);
+        /// <param name="process">The underlying <see cref="Process"/> on which to run the class logic.</param>
+        public ProcessWrapper(Process process) =>
+            this.process = process;
 
         /// <inheritdoc/>
         public event EventHandler<DataReceivedEventArgs> ErrorDataReceived
         {
             add =>
-                this.underlyingProcess.ErrorDataReceived += new DataReceivedEventHandler(value);
+                this.process.ErrorDataReceived += new DataReceivedEventHandler(value);
             remove =>
-                this.underlyingProcess.ErrorDataReceived -= new DataReceivedEventHandler(value);
+                this.process.ErrorDataReceived -= new DataReceivedEventHandler(value);
         }
 
         /// <inheritdoc/>
         public event EventHandler<DataReceivedEventArgs> OutputDataReceived
         {
             add =>
-                this.underlyingProcess.OutputDataReceived += new DataReceivedEventHandler(value);
+                this.process.OutputDataReceived += new DataReceivedEventHandler(value);
             remove =>
-                this.underlyingProcess.OutputDataReceived -= new DataReceivedEventHandler(value);
+                this.process.OutputDataReceived -= new DataReceivedEventHandler(value);
         }
 
         /// <inheritdoc/>
         public ProcessStartInfo StartInfo
         {
             get =>
-                this.underlyingProcess.StartInfo;
+                this.process.StartInfo;
             set =>
-                this.underlyingProcess.StartInfo = value;
-        }
-
-        /// <inheritdoc/>
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
+                this.process.StartInfo = value;
         }
 
         /// <inheritdoc/>
         public bool Start() =>
-            this.underlyingProcess.Start();
+            this.process.Start();
 
         /// <inheritdoc/>
         public void BeginErrorReadLine() =>
-            this.underlyingProcess.BeginErrorReadLine();
+            this.process.BeginErrorReadLine();
 
         /// <inheritdoc/>
         public void BeginOutputReadLine() =>
-            this.underlyingProcess.BeginOutputReadLine();
+            this.process.BeginOutputReadLine();
 
         /// <inheritdoc/>
         public Task WaitForExitAsync(CancellationToken cancellationToken = default) =>
-            this.underlyingProcess.WaitForExitAsync(cancellationToken);
-
-        /// <summary>
-        /// Disposes of the resources maintained by the current object.
-        /// </summary>
-        /// <param name="disposing">A value indicating whether disposal should be performed for managed as well as
-        /// unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposedValue)
-            {
-                if (disposing)
-                {
-                    this.underlyingProcess.Dispose();
-                }
-
-                this.disposedValue = true;
-            }
-        }
+            this.process.WaitForExitAsync(cancellationToken);
     }
 }

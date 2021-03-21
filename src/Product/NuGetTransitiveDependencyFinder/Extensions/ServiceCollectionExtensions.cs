@@ -6,6 +6,7 @@
 namespace NuGetTransitiveDependencyFinder.Extensions
 {
     using System;
+    using System.Diagnostics;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using NuGetTransitiveDependencyFinder.ProjectAnalysis;
@@ -43,6 +44,7 @@ namespace NuGetTransitiveDependencyFinder.Extensions
             return value
                 .AddTransient<IProcessWrapper, ProcessWrapper>()
                 .AddTransient<ITransitiveDependencyFinder, TransitiveDependencyFinder>()
+                .AddTransient<Process, Process>()
                 .AddSingleton(loggingBuilderAction);
         }
     }

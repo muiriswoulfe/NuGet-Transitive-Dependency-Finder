@@ -7,6 +7,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
 {
     using System.Threading.Tasks;
     using FluentAssertions;
+    using Moq;
     using NuGetTransitiveDependencyFinder.ProjectAnalysis;
     using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
     using NuGetTransitiveDependencyFinder.TestUtilities.Logging;
@@ -26,7 +27,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
         {
             // Arrange
             var logger = new MockLogger<DotNetRunner>();
-            var dotNetRunner = new DotNetRunner(logger);
+            var processWrapper = new Mock<IProcessWrapper>();
+            var dotNetRunner = new DotNetRunner(logger, processWrapper.Object);
 
             // Act
             await dotNetRunner.RunAsync("build", @"..\").ConfigureAwait(false);
