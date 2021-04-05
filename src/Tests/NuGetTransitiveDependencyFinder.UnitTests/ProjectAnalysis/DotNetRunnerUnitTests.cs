@@ -5,12 +5,14 @@
 
 namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
 {
+    using System.Threading;
     using System.Threading.Tasks;
     using FluentAssertions;
     using Moq;
     using NuGetTransitiveDependencyFinder.ProjectAnalysis;
     using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
     using NuGetTransitiveDependencyFinder.TestUtilities.Logging;
+    using Xunit;
 
     /// <summary>
     /// Unit tests for the <see cref="DotNetRunner"/> class.
@@ -21,14 +23,21 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
         /// Tests that when <see cref="DotNetRunner.RunAsync(string, string)"/> is called, it performs the expected
         /// actions.
         /// </summary>
+        /// <param name="startReturnValue">The return value from the <see cref="IProcessWrapper.Start()"/> method
+        /// call.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        [AllCulturesFact]
-        public async Task RunAsync_Called_PerformsExpectedActions()
+        [AllCulturesTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task RunAsync_CalledWithAnyStartReturnValue_PerformsExpectedActions(bool startReturnValue)
         {
             // Arrange
             var logger = new MockLogger<DotNetRunner>();
             var processWrapper = new Mock<IProcessWrapper>();
-            processWrapper.SetupProperty(obj => obj.StartInfo);
+            _ = processWrapper
+                .SetupProperty(obj => obj.StartInfo)
+                .Setup(obj => obj.Start())
+                .Returns(startReturnValue);
             var dotNetRunner = new DotNetRunner(logger, processWrapper.Object);
 
             // Act
@@ -49,6 +58,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
                 .Should().BeTrue();
             _ = processWrapper.Object.StartInfo.WorkingDirectory
                 .Should().Equals(@"..\");
+            processWrapper.Verify(obj => obj.StartInfo, Times.Exactly(6));
+            processWrapper.Verify(obj => obj.Start(), Times.Once());
+            processWrapper.Verify(obj => obj.BeginErrorReadLine(), Times.Once());
+            processWrapper.Verify(obj => obj.BeginOutputReadLine(), Times.Once());
+            processWrapper.Verify(obj => obj.WaitForExitAsync(It.IsAny<CancellationToken>()), Times.Once());
         }
     }
 }
