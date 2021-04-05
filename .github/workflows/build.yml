@@ -431,16 +431,6 @@ jobs:
         with:
           sarif_file: reports
 
-      # Application Inspector
-      - name: APPLICATION INSPECTOR – Run
-        uses: microsoft/ApplicationInspector-Action@v1
-
-      - name: APPLICATION INSPECTOR – Upload Results
-        uses: actions/upload-artifact@v2
-        with:
-          name: Application Inspector Results
-          path: AppInspectorResults.json
-
   validate-codeql:
     name: Validate – CodeQL
     runs-on: ubuntu-latest
