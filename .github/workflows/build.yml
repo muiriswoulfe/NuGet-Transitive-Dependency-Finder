@@ -6,7 +6,9 @@
 name: Build
 
 on:
-  push: null
+  push:
+    branches-ignore:
+      - dependabot/**
   pull_request: null
   schedule:
     - cron: 0 0 * * 1
@@ -38,9 +40,10 @@ jobs:
       # SonarCloud Initialization
       - if: ${{ matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' }}
         name: SONARCLOUD INITIALIZATION – Java Install
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
-          java-version: 15.0.2
+          distribution: zulu
+          java-version: 16.0.0
 
       - if: ${{ matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' }}
         name: SONARCLOUD INITIALIZATION – SonarCloud Install
@@ -418,7 +421,7 @@ jobs:
       - name: SECURITY SCAN – Validate
         uses: ShiftLeftSecurity/scan-action@v1.3.0
         with:
-          type: credscan,depscan
+          type: credscan,depscan,yaml
 
       - name: SECURITY SCAN – Upload Report
         uses: github/codeql-action/upload-sarif@v1
