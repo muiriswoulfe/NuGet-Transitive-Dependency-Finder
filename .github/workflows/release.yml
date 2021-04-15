@@ -262,6 +262,8 @@ jobs:
           /property:RepositoryCommit=${{ github.sha }}
 
       - name: UPLOAD – Upload Packages to NuGet.org
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: >-
           dotnet nuget push
           ${{ env.nuget-package-prefix }}.${{ github.event.inputs.version }}.nupkg
@@ -270,6 +272,8 @@ jobs:
           --source https://api.nuget.org/v3/index.json
 
       - name: UPLOAD – Upload Packages to GitHub
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: >-
           dotnet nuget push
           ${{ env.nuget-package-prefix }}.${{ github.event.inputs.version }}.nupkg
