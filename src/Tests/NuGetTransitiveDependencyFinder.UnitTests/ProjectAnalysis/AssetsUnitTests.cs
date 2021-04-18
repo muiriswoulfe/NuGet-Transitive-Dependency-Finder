@@ -19,8 +19,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
     public class AssetsUnitTests
     {
         /// <summary>
-        /// Tests that when <see cref="Assets.CreateAsync(string, string)"/> is called with different values,
-        /// it returns the correct value each time.
+        /// Tests that when <see cref="Assets.CreateAsync(string, string)"/> is called, it performs the expected
+        /// operations.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [AllCulturesFact]
@@ -37,35 +37,10 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
 
             // Assert
             _ = result
-                .Should().BeNull(); // to change
+                .Should().BeNull(); // TOxDO: to change
             _ = logger.Entries
                 .Should().BeEmpty();
             dotNetRunner.Verify(mock => mock.RunAsync(@"restore ""C:\a""", string.Empty), Times.Once);
-        }
-
-        /// <summary>
-        /// Tests that when <see cref="Assets.CreateAsync(string, string)"/> is called with different values,
-        /// it returns the correct value each time.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        [AllCulturesFact]
-        public async Task CreateAsync_WithDifferentValues_ReturnsCorrectValues2Async()
-        {
-            // Arrange
-            var dotNetRunner = new Mock<IDotNetRunner>();
-            var logger = new MockLogger<NuGetLogger>();
-            var nuGetLogger = new NuGetLogger(logger);
-            var assets = new Assets(dotNetRunner.Object, nuGetLogger);
-
-            // Act
-            var result = await assets.CreateAsync("../../../../../../NuGetTransitiveDependencyFinder.sln", "b2").ConfigureAwait(false);
-
-            // Assert
-            _ = result
-                .Should().BeNull(); // to change
-            _ = logger.Entries
-                .Should().BeEmpty();
-            dotNetRunner.Verify(mock => mock.RunAsync(@"restore ""../../../../../../NuGetTransitiveDependencyFinder.sln""", "../../../../../.."), Times.Once);
         }
     }
 }
