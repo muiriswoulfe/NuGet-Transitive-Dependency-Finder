@@ -5,6 +5,8 @@
 
 namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
 {
+    using System.Globalization;
+    using System.IO;
     using System.Threading.Tasks;
     using FluentAssertions;
     using Moq;
@@ -38,7 +40,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
             // Assert
             _ = result
                 .Should().Equals(lockFile);
-            dotNetRunner.Verify(mock => mock.RunAsync(@"restore ""/input""", "/"), Times.Once);
+            var pathSeparator = Path.PathSeparator.ToString(CultureInfo.InvariantCulture);
+            dotNetRunner.Verify(mock => mock.RunAsync(@"restore ""/input""", pathSeparator), Times.Once);
             lockFileUtilitiesWrapper.Verify(mock => mock.GetLockFile("/output/project.assets.json"), Times.Once);
         }
     }
