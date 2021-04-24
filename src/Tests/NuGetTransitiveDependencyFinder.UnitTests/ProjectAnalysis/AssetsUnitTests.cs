@@ -8,10 +8,9 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
     using System.Threading.Tasks;
     using FluentAssertions;
     using Moq;
+    using NuGet.ProjectModel;
     using NuGetTransitiveDependencyFinder.ProjectAnalysis;
     using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
-    using NuGetTransitiveDependencyFinder.TestUtilities.Logging;
-    using NuGetTransitiveDependencyFinder.Utilities;
 
     /// <summary>
     /// Unit tests for the <see cref="Assets"/> class.
@@ -28,19 +27,19 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
         {
             // Arrange
             var dotNetRunner = new Mock<IDotNetRunner>();
-            var logger = new MockLogger<NuGetLogger>();
-            var nuGetLogger = new NuGetLogger(logger);
-            var assets = new Assets(dotNetRunner.Object, nuGetLogger);
+            var lockFileUtilitiesWrapper = new Mock<ILockFileUtilitiesWrapper>();
+            var lockFile = new LockFile();
+            _ = lockFileUtilitiesWrapper.Setup(mock => mock.GetLockFile(It.IsAny<string>())).Returns(lockFile);
+            var assets = new Assets(dotNetRunner.Object, lockFileUtilitiesWrapper.Object);
 
             // Act
-            var result = await assets.CreateAsync(@"C:\a", "b").ConfigureAwait(false);
+            var result = await assets.CreateAsync("/input", "/output").ConfigureAwait(false);
 
             // Assert
             _ = result
-                .Should().BeNull(); // TOxDO: to change
-            _ = logger.Entries
-                .Should().BeEmpty();
-            dotNetRunner.Verify(mock => mock.RunAsync(@"restore ""C:\a""", string.Empty), Times.Once);
+                .Should().Equals(lockFile);
+            dotNetRunner.Verify(mock => mock.RunAsync(@"restore ""/input""", "/"), Times.Once);
+            lockFileUtilitiesWrapper.Verify(mock => mock.GetLockFile("/output/project.assets.json"), Times.Once);
         }
     }
 }

@@ -6,10 +6,8 @@
 namespace NuGetTransitiveDependencyFinder.Extensions
 {
     using System;
-    using System.Diagnostics;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using NuGetTransitiveDependencyFinder.ProjectAnalysis;
 
     /// <summary>
     /// A class containing extension methods for <see cref="IServiceCollection"/>.
@@ -42,9 +40,7 @@ namespace NuGetTransitiveDependencyFinder.Extensions
             }
 
             return value
-                .AddTransient<IProcessWrapper, ProcessWrapper>()
                 .AddTransient<ITransitiveDependencyFinder, TransitiveDependencyFinder>()
-                .AddTransient<Process, Process>()
                 .AddSingleton(loggingBuilderAction);
         }
     }

@@ -6,6 +6,7 @@
 namespace NuGetTransitiveDependencyFinder
 {
     using System;
+    using System.Diagnostics;
     using System.Threading.Tasks;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -75,7 +76,10 @@ namespace NuGetTransitiveDependencyFinder
                 .AddScoped<IAssets, Assets>()
                 .AddScoped<IDependencyFinder, DependencyFinder>()
                 .AddScoped<IDotNetRunner, DotNetRunner>()
+                .AddScoped<ILockFileUtilitiesWrapper, LockFileUtilitiesWrapper>()
                 .AddScoped<INuGetLogger, NuGetLogger>()
+                .AddScoped<IProcessWrapper, ProcessWrapper>()
+                .AddScoped<Process, Process>()
                 .AddTransient<IDependencyGraph, DependencyGraph>()
                 .BuildServiceProvider();
 
