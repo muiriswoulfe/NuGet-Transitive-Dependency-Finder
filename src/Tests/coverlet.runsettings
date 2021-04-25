@@ -8,7 +8,7 @@
           <Exclude>
             [NuGetTransitiveDependencyFinder.TestUtilities]*,
             [*]NuGetTransitiveDependencyFinder.ConsoleApp.Program,
-            [*]NuGetTransitiveDependencyFinder.Wrappers
+            [*]NuGetTransitiveDependencyFinder.Wrappers.*
           </Exclude>
         </Configuration>
       </DataCollector>
