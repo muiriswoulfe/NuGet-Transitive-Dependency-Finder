@@ -13,6 +13,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
     using NuGet.ProjectModel;
     using NuGetTransitiveDependencyFinder.ProjectAnalysis;
     using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
+    using NuGetTransitiveDependencyFinder.Wrappers;
     using static System.FormattableString;
 
     /// <summary>

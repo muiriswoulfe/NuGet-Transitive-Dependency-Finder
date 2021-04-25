@@ -12,6 +12,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
     using NuGetTransitiveDependencyFinder.ProjectAnalysis;
     using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
     using NuGetTransitiveDependencyFinder.TestUtilities.Logging;
+    using NuGetTransitiveDependencyFinder.Wrappers;
     using Xunit;
 
     /// <summary>

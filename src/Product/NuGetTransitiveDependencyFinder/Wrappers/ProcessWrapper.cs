@@ -3,7 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
+namespace NuGetTransitiveDependencyFinder.Wrappers
 {
     using System;
     using System.Diagnostics;

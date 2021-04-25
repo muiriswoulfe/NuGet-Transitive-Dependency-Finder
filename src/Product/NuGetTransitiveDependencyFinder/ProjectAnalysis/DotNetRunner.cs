@@ -8,6 +8,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
     using System.Diagnostics;
     using System.Threading.Tasks;
     using Microsoft.Extensions.Logging;
+    using NuGetTransitiveDependencyFinder.Wrappers;
 
     /// <summary>
     /// A class that manages the running of .NET commands on project and solution files.

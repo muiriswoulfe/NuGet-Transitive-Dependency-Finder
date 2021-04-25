@@ -13,6 +13,7 @@ namespace NuGetTransitiveDependencyFinder
     using NuGetTransitiveDependencyFinder.Output;
     using NuGetTransitiveDependencyFinder.ProjectAnalysis;
     using NuGetTransitiveDependencyFinder.Utilities;
+    using NuGetTransitiveDependencyFinder.Wrappers;
     using INuGetLogger = NuGet.Common.ILogger;
 
     /// <summary>

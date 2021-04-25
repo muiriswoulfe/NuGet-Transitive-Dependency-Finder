@@ -8,6 +8,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
     using System.IO;
     using System.Threading.Tasks;
     using NuGet.ProjectModel;
+    using NuGetTransitiveDependencyFinder.Wrappers;
     using static System.FormattableString;
 
     /// <summary>
