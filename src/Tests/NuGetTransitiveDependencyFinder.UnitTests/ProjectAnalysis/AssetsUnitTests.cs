@@ -13,6 +13,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
     using NuGet.ProjectModel;
     using NuGetTransitiveDependencyFinder.ProjectAnalysis;
     using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
+    using static System.FormattableString;
 
     /// <summary>
     /// Unit tests for the <see cref="Assets"/> class.
@@ -33,16 +34,22 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
             var lockFile = new LockFile();
             _ = lockFileUtilitiesWrapper.Setup(mock => mock.GetLockFile(It.IsAny<string>())).Returns(lockFile);
             var assets = new Assets(dotNetRunner.Object, lockFileUtilitiesWrapper.Object);
+            var directorySeparator = Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture);
+            var inputDirectory = Path.Join(directorySeparator, "input");
+            var outputDirectory = Path.Join(directorySeparator, "output");
 
             // Act
-            var result = await assets.CreateAsync("/input", "/output").ConfigureAwait(false);
+            var result = await assets.CreateAsync(inputDirectory, outputDirectory).ConfigureAwait(false);
 
             // Assert
             _ = result
                 .Should().Equals(lockFile);
-            var directorySeparator = Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture);
-            dotNetRunner.Verify(mock => mock.RunAsync(@"restore ""/input""", directorySeparator), Times.Once);
-            lockFileUtilitiesWrapper.Verify(mock => mock.GetLockFile("/output/project.assets.json"), Times.Once);
+            dotNetRunner
+                .Verify(
+                    mock => mock.RunAsync(Invariant($@"restore ""{inputDirectory}"""), directorySeparator),
+                    Times.Once);
+            var lockFilePath = Path.Join(outputDirectory, "project.assets.json");
+            lockFileUtilitiesWrapper.Verify(mock => mock.GetLockFile(lockFilePath), Times.Once);
         }
     }
 }
