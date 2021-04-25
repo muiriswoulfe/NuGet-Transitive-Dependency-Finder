@@ -7,8 +7,8 @@
           <Format>cobertura,json,lcov,opencover,teamcity</Format>
           <Exclude>
             [NuGetTransitiveDependencyFinder.TestUtilities]*,
-            [NuGetTransitiveDependencyFinder.Wrappers]*,
-            [*]NuGetTransitiveDependencyFinder.ConsoleApp.Program
+            [*]NuGetTransitiveDependencyFinder.ConsoleApp.Program,
+            [*]NuGetTransitiveDependencyFinder.Wrappers
           </Exclude>
         </Configuration>
       </DataCollector>
