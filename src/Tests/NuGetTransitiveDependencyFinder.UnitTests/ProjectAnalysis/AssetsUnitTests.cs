@@ -44,7 +44,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
 
             // Assert
             _ = result
-                .Should().Equals(lockFile);
+                .Should().Be(lockFile);
             dotNetRunner
                 .Verify(
                     mock => mock.RunAsync(Invariant($@"restore ""{inputDirectory}"""), directorySeparator),

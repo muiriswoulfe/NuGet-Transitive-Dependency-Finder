@@ -58,7 +58,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
             _ = processWrapper.Object.StartInfo.RedirectStandardOutput
                 .Should().BeTrue();
             _ = processWrapper.Object.StartInfo.WorkingDirectory
-                .Should().Equals(@"..\");
+                .Should().Be(@"..\");
             processWrapper.Verify(obj => obj.StartInfo, Times.Exactly(6));
             processWrapper.Verify(obj => obj.Start(), Times.Once());
             processWrapper.Verify(obj => obj.BeginErrorReadLine(), Times.Once());
