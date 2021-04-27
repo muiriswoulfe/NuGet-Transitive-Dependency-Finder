@@ -38,18 +38,18 @@ jobs:
         uses: actions/setup-dotnet@v1
 
       # SonarCloud Initialization
-      - if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' && !startsWith(github.ref, 'dependabot/')
+      - if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' && !startsWith(github.ref, 'refs/heads/dependabot/')
         name: SONARCLOUD INITIALIZATION – Java Install
         uses: actions/setup-java@v2
         with:
           distribution: zulu
-          java-version: 16.0.0
+          java-version: 16.0.1
 
-      - if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' && !startsWith(github.ref, 'dependabot/')
+      - if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' && !startsWith(github.ref, 'refs/heads/dependabot/')
         name: SONARCLOUD INITIALIZATION – SonarCloud Install
         run: dotnet tool install dotnet-sonarscanner --tool-path .sonarcloud
 
-      - if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' && !startsWith(github.ref, 'dependabot/')
+      - if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' && !startsWith(github.ref, 'refs/heads/dependabot/')
         name: SONARCLOUD INITIALIZATION – SonarCloud Initialize
         run: >-
           .sonarcloud/dotnet-sonarscanner begin
@@ -69,14 +69,14 @@ jobs:
       - name: BUILD & TEST – Project Test
         run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"XPlat Code Coverage"
 
-      - if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' && !startsWith(github.ref, 'dependabot/')
+      - if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' && !startsWith(github.ref, 'refs/heads/dependabot/')
         name: BUILD & TEST – Upload to Codecov
         uses: codecov/codecov-action@v1
         with:
           fail_ci_if_error: true
 
       # SonarCloud Finalization
-      - if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' && !startsWith(github.ref, 'dependabot/')
+      - if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' && !startsWith(github.ref, 'refs/heads/dependabot/')
         name: SONARCLOUD FINALIZATION – SonarCloud Analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

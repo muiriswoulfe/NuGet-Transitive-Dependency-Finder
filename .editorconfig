@@ -435,6 +435,9 @@ dotnet_diagnostic.SA1313.severity = none
 indent_size = unset
 trim_trailing_whitespace = true
 
+[*.runsettings]
+indent_size = 2
+
 [*.snk]
 charset = unset
 indent_style = unset
