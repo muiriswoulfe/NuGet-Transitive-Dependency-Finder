@@ -35,7 +35,7 @@ jobs:
           fetch-depth: 0
 
       - name: test
-        runs: Write-Output ${{ github.ref }}
+        run: Write-Output ${{ github.ref }}
 
       - name: INITIALIZATION – .NET Install
         uses: actions/setup-dotnet@v1
