@@ -34,6 +34,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: test
+        runs: Write-Output ${{ github.ref }}
+
       - name: INITIALIZATION – .NET Install
         uses: actions/setup-dotnet@v1
 
@@ -69,7 +72,7 @@ jobs:
       - name: BUILD & TEST – Project Test
         run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"XPlat Code Coverage"
 
-      - if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' && !startsWith(github.ref, 'refs/heads/dependabot/')
+      - if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest' && !contains(github.ref, 'refs/heads/dependabot/')
         name: BUILD & TEST – Upload to Codecov
         uses: codecov/codecov-action@v1
         with:
