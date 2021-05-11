@@ -35,7 +35,7 @@ jobs:
           fetch-depth: 0
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v1.8.0
 
       # SonarCloud Initialization
       - if: >-
@@ -78,7 +78,10 @@ jobs:
       - name: BUILD & TEST – Project Test
         run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"XPlat Code Coverage"
 
-      - if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest'
+      - if: >-
+          matrix.configuration == 'Release' &&
+          matrix.os == 'ubuntu-latest' &&
+          !startsWith(github.head_ref, 'dependabot/')
         name: BUILD & TEST – Upload to Codecov
         uses: codecov/codecov-action@v1
         with:
@@ -139,7 +142,7 @@ jobs:
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v1.8.0
 
       # Build
       - name: BUILD – Project Restore
@@ -225,7 +228,7 @@ jobs:
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v1.8.0
 
       # Create Logo
       - name: CREATE LOGO – Install svgexport
@@ -353,7 +356,7 @@ jobs:
 
       # Linter Validation
       - name: LINTER VALIDATION – Super Linter
-        uses: github/super-linter@v3.16.1
+        uses: github/super-linter@v3.17.0
         env:
           EDITORCONFIG_FILE_NAME: ../../.editorconfig
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
