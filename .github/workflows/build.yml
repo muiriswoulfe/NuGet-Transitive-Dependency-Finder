@@ -78,7 +78,10 @@ jobs:
       - name: BUILD & TEST – Project Test
         run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"XPlat Code Coverage"
 
-      - if: matrix.configuration == 'Release' && matrix.os == 'ubuntu-latest'
+      - if: >-
+          matrix.configuration == 'Release' &&
+          matrix.os == 'ubuntu-latest' &&
+          !startsWith(github.head_ref, 'dependabot/')
         name: BUILD & TEST – Upload to Codecov
         uses: codecov/codecov-action@v1
         with:
