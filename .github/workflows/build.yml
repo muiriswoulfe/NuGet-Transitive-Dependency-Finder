@@ -30,7 +30,7 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
         with:
           fetch-depth: 0
 
@@ -121,7 +121,7 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
 
       - name: INITIALIZATION – Get Tag
         env:
@@ -207,7 +207,7 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
 
       - name: INITIALIZATION – Get Tag
         env:
@@ -350,7 +350,7 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
         with:
           fetch-depth: 0
 
@@ -422,7 +422,7 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
 
       # INFER#
       - name: INFER# – Validation
@@ -451,7 +451,7 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
 
       # CodeQL
       - name: CODEQL – Initialize
