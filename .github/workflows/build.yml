@@ -83,7 +83,7 @@ jobs:
           matrix.os == 'ubuntu-latest' &&
           !startsWith(github.head_ref, 'dependabot/')
         name: BUILD & TEST – Upload to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v1.5.0
         with:
           fail_ci_if_error: true
 
