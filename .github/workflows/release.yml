@@ -37,7 +37,7 @@ jobs:
       - name: RELEASE – Create Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        uses: actions/create-release@v1
+        uses: actions/create-release@v1.1.4
         with:
           body: |-
             ## Release Notes
