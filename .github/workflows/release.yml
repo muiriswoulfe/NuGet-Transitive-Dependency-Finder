@@ -156,7 +156,7 @@ jobs:
           Write-Output -InputObject "::set-output name=asset_path::$AssetPath"
 
       - name: UPLOAD – Upload Release Asset
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
