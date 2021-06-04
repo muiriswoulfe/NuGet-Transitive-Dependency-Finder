@@ -55,7 +55,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Utilities
         /// The test data for validating <see cref="LogLevel"/> test scenarios.
         /// </summary>
         public static readonly TheoryData<NuGetLogLevel, LogLevel> LogLevelTestData =
-            new TheoryData<NuGetLogLevel, LogLevel>
+            new
             {
                 { NuGetLogLevel.Debug, LogLevel.Debug },
                 { NuGetLogLevel.Verbose, LogLevel.Debug },

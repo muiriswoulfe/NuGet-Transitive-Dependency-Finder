@@ -164,7 +164,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Gets the data for testing <see cref="object.ToString()"/>.
         /// </summary>
         public static TheoryData<Project, string> ToStringTestData =>
-            new TheoryData<Project, string>
+            new
             {
                 { DefaultValue, DefaultIdentifier },
                 { LesserValue, "ABC" },

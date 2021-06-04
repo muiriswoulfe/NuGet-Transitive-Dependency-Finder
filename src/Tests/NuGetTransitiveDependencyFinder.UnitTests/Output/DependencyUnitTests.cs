@@ -141,7 +141,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         /// Gets the data for testing <see cref="object.ToString()"/>.
         /// </summary>
         public static TheoryData<Dependency, string> ToStringTestData =>
-            new TheoryData<Dependency, string>
+            new
             {
                 { DefaultValue, "Identifier v1.0.0-alpha" },
                 { LesserValue, "Identifier v0.9.9-alpha" },
