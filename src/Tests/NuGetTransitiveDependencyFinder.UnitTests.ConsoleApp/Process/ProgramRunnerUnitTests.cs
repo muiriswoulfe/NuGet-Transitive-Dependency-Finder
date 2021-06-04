@@ -25,23 +25,22 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
         /// <summary>
         /// The mock <see cref="ICommandLineOptions"/> object.
         /// </summary>
-        private readonly Mock<ICommandLineOptions> commandLineOptions = new Mock<ICommandLineOptions>();
+        private readonly Mock<ICommandLineOptions> commandLineOptions = new();
 
         /// <summary>
         /// The mock <see cref="IDependencyWriter"/> object.
         /// </summary>
-        private readonly Mock<IDependencyWriter> dependencyWriter = new Mock<IDependencyWriter>();
+        private readonly Mock<IDependencyWriter> dependencyWriter = new();
 
         /// <summary>
         /// The mock <see cref="ILogger{ProgramRunner}"/> object.
         /// </summary>
-        private readonly MockLogger<ProgramRunner> logger = new MockLogger<ProgramRunner>();
+        private readonly MockLogger<ProgramRunner> logger = new();
 
         /// <summary>
         /// The mock <see cref="ITransitiveDependencyFinder"/> object.
         /// </summary>
-        private readonly Mock<ITransitiveDependencyFinder> transitiveDependencyFinder =
-            new Mock<ITransitiveDependencyFinder>();
+        private readonly Mock<ITransitiveDependencyFinder> transitiveDependencyFinder = new();
 
         /// <summary>
         /// Tests that when <see cref="ProgramRunner.Run()"/> is called, it performs the expected actions.

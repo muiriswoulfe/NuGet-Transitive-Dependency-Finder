@@ -90,7 +90,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
         /// <summary>
         /// The mock <see cref="ILogger{DependencyWriter}"/> object.
         /// </summary>
-        private readonly MockLogger<DependencyWriter> logger = new MockLogger<DependencyWriter>();
+        private readonly MockLogger<DependencyWriter> logger = new();
 
         /// <summary>
         /// Tests that when <see cref="DependencyWriter.Write(Projects)"/> is called with no dependencies, it writes
