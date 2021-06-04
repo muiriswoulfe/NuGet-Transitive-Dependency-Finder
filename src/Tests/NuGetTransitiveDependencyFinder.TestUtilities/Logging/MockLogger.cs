@@ -18,7 +18,7 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Logging
         /// <summary>
         /// The collection of log entries.
         /// </summary>
-        private readonly List<LogEntry> entries = new List<LogEntry>();
+        private readonly List<LogEntry> entries = new();
 
         /// <summary>
         /// Gets the collection of log entries.
