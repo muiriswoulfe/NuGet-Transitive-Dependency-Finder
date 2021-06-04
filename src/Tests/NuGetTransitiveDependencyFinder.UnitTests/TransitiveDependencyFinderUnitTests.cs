@@ -117,6 +117,6 @@ namespace NuGetTransitiveDependencyFinder.UnitTests
         /// <param name="factory">The factory to construct the object.</param>
         /// <returns>The object wrapped instead a <see cref="WeakReference"/>.</returns>
         private static WeakReference CreateWithWeakReference<TReference>(Func<TReference> factory) =>
-            new WeakReference(factory());
+            new(factory());
     }
 }
