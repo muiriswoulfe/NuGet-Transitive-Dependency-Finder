@@ -20,7 +20,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Extensions
         /// Gets the data for testing <see cref="VersionExtensions.ToShortenedString(Version)"/>.
         /// </summary>
         public static TheoryData<Version, string> ToShortenedStringTestData =>
-            new
+            new TheoryData<Version, string>
             {
                 { new Version(0, 0, 0, 0), "0.0" },
                 { new Version(1, 0, 0, 0), "1.0" },
