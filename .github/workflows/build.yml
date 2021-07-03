@@ -81,7 +81,7 @@ jobs:
           matrix.os == 'ubuntu-latest' &&
           !startsWith(github.head_ref, 'dependabot/')
         name: BUILD & TEST – Upload to Codecov
-        uses: codecov/codecov-action@v1.5.0
+        uses: codecov/codecov-action@v1.5.2
         with:
           fail_ci_if_error: true
 
@@ -125,7 +125,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: tag
-        uses: jossef/action-latest-release-info@v1.1.0
+        uses: jossef/action-latest-release-info@v1.2.0
 
       - name: INITIALIZATION – Version Extract
         id: version
@@ -211,7 +211,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: tag
-        uses: jossef/action-latest-release-info@v1.1.0
+        uses: jossef/action-latest-release-info@v1.2.0
 
       - name: INITIALIZATION – Version Extract
         id: version
