@@ -37,7 +37,7 @@ jobs:
           fetch-depth: 0
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@v1.8.0
+        uses: actions/setup-dotnet@v1.8.1
 
       # SonarCloud Initialization
       - if: >-
@@ -85,7 +85,7 @@ jobs:
           matrix.os == 'ubuntu-latest' &&
           !startsWith(github.head_ref, 'dependabot/')
         name: BUILD & TEST – Upload to Codecov
-        uses: codecov/codecov-action@v1.5.0
+        uses: codecov/codecov-action@v1.5.2
         with:
           fail_ci_if_error: true
 
@@ -129,7 +129,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: tag
-        uses: jossef/action-latest-release-info@v1.1.0
+        uses: jossef/action-latest-release-info@v1.2.0
 
       - name: INITIALIZATION – Version Extract
         id: version
@@ -144,7 +144,7 @@ jobs:
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@v1.8.0
+        uses: actions/setup-dotnet@v1.8.1
 
       # Build
       - name: BUILD – Project Restore
@@ -215,7 +215,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: tag
-        uses: jossef/action-latest-release-info@v1.1.0
+        uses: jossef/action-latest-release-info@v1.2.0
 
       - name: INITIALIZATION – Version Extract
         id: version
@@ -230,7 +230,7 @@ jobs:
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@v1.8.0
+        uses: actions/setup-dotnet@v1.8.1
 
       # Create Logo
       - name: CREATE LOGO – Install svgexport
@@ -358,7 +358,7 @@ jobs:
 
       # Linter Validation
       - name: LINTER VALIDATION – Super Linter
-        uses: github/super-linter@v4.1.0
+        uses: github/super-linter@v4.2.2
         env:
           EDITORCONFIG_FILE_NAME: ../../.editorconfig
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
