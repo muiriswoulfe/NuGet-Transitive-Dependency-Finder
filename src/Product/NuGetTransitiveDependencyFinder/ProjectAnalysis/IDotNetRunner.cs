@@ -5,6 +5,8 @@
 
 namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 {
+    using System.Threading.Tasks;
+
     /// <summary>
     /// An interface that manages the running of .NET commands on project and solution files.
     /// </summary>
@@ -17,6 +19,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// executable.</param>
         /// <param name="workingDirectory">The path of the directory in which to store the files created after running
         /// the "dotnet" command.</param>
-        public void Run(string parameters, string workingDirectory);
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        public Task RunAsync(string parameters, string workingDirectory);
     }
 }

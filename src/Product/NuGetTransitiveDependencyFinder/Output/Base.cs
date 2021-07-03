@@ -73,7 +73,7 @@ namespace NuGetTransitiveDependencyFinder.Output
 
         /// <summary>
         /// Adds a child element to the current collection, on the condition that <see cref="IsAddValid(TChild)"/>
-        /// returns <c>true</c>.
+        /// returns <see langword="true"/>.
         /// </summary>
         /// <param name="child">The child element to be added.</param>
         public void Add(TChild child)

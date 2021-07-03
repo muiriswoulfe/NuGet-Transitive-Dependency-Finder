@@ -7,6 +7,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 {
     using System;
     using System.IO;
+    using System.Threading.Tasks;
     using NuGet.ProjectModel;
     using static System.FormattableString;
 
@@ -57,13 +58,13 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         }
 
         /// <inheritdoc/>
-        public DependencyGraphSpec Create(string projectOrSolutionPath)
+        public async Task<DependencyGraphSpec> CreateAsync(string projectOrSolutionPath)
         {
             var projectOrSolutionDirectory = Path.GetDirectoryName(projectOrSolutionPath)!;
             var arguments =
                 Invariant($"msbuild \"{projectOrSolutionPath}\" /maxCpuCount /target:GenerateRestoreGraphFile ") +
                 Invariant($"/property:RestoreGraphOutputPath=\"{this.filePath}\"");
-            this.dotNetRunner.Run(arguments, projectOrSolutionDirectory);
+            await this.dotNetRunner.RunAsync(arguments, projectOrSolutionDirectory).ConfigureAwait(false);
 
             return DependencyGraphSpec.Load(this.filePath);
         }
@@ -75,17 +76,15 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// unmanaged resources.</param>
         private void Dispose(bool disposing)
         {
-            if (this.disposedValue)
+            if (!this.disposedValue)
             {
-                return;
-            }
+                if (disposing)
+                {
+                    File.Delete(this.filePath);
+                }
 
-            if (disposing)
-            {
-                File.Delete(this.filePath);
+                this.disposedValue = true;
             }
-
-            this.disposedValue = true;
         }
     }
 }

@@ -9,6 +9,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
+    using System.Threading.Tasks;
     using NuGet.ProjectModel;
     using NuGetTransitiveDependencyFinder.Output;
 
@@ -50,13 +51,13 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         }
 
         /// <inheritdoc/>
-        public Projects Run(string projectOrSolutionPath, bool collateAllDependencies)
+        public async Task<Projects> RunAsync(string projectOrSolutionPath, bool collateAllDependencies)
         {
-            var projects = this.CreateProjects(projectOrSolutionPath);
+            var projects = await this.CreateProjectsAsync(projectOrSolutionPath).ConfigureAwait(false);
             var result = new Projects(projects.Count);
             foreach (var project in projects)
             {
-                var assetsFiles = this.CreateAssetsFiles(project);
+                var assetsFiles = await this.CreateAssetsFilesAsync(project).ConfigureAwait(false);
                 if (assetsFiles is null)
                 {
                     continue;
@@ -88,8 +89,8 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
         /// name.</param>
         /// <returns>The collection of .NET projects.</returns>
-        private IReadOnlyCollection<PackageSpec> CreateProjects(string projectOrSolutionPath) =>
-            this.CreateProjectDependencyGraph(projectOrSolutionPath)
+        private async Task<IReadOnlyCollection<PackageSpec>> CreateProjectsAsync(string projectOrSolutionPath) =>
+            (await this.CreateProjectDependencyGraphAsync(projectOrSolutionPath).ConfigureAwait(false))
                 .Projects
                 .Where(project => project.RestoreMetadata.ProjectStyle == ProjectStyle.PackageReference)
                 .ToArray();
@@ -101,16 +102,22 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
         /// name.</param>
         /// <returns>The project dependency graph.</returns>
-        private DependencyGraphSpec CreateProjectDependencyGraph(string projectOrSolutionPath) =>
-            this.dependencyGraph.Create(projectOrSolutionPath);
+        private Task<DependencyGraphSpec> CreateProjectDependencyGraphAsync(string projectOrSolutionPath) =>
+            this.dependencyGraph.CreateAsync(projectOrSolutionPath);
 
         /// <summary>
         /// Creates the collection of assets files to be analyzed.
         /// </summary>
         /// <param name="project">The .NET project to analyze.</param>
         /// <returns>The collection of assets files.</returns>
-        private IReadOnlyCollection<LockFileTarget>? CreateAssetsFiles(PackageSpec project) =>
-            this.assets.Create(project.FilePath, project.RestoreMetadata.OutputPath)?.Targets?.ToArray();
+        private async Task<IReadOnlyCollection<LockFileTarget>?> CreateAssetsFilesAsync(PackageSpec project)
+        {
+            var createdAssets = await this.assets
+                .CreateAsync(project.FilePath, project.RestoreMetadata.OutputPath)
+                .ConfigureAwait(false);
+
+            return createdAssets?.Targets?.ToArray();
+        }
 
         /// <summary>
         /// Populates the collection of dependencies for a .NET project and framework combination.

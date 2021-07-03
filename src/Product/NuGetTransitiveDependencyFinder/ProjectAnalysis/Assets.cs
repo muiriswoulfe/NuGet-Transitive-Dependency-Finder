@@ -6,9 +6,10 @@
 namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 {
     using System.IO;
+    using System.Threading.Tasks;
     using NuGet.ProjectModel;
+    using NuGetTransitiveDependencyFinder.Wrappers;
     using static System.FormattableString;
-    using INuGetLogger = NuGet.Common.ILogger;
 
     /// <summary>
     /// A class representing the contents of a "project.assets.json" file.
@@ -21,31 +22,32 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         private readonly IDotNetRunner dotNetRunner;
 
         /// <summary>
-        /// The object managing logging from within the NuGet infrastructure.
+        /// The wrapper around <see cref="LockFileUtilities"/>.
         /// </summary>
-        private readonly INuGetLogger nuGetLogger;
+        private readonly ILockFileUtilitiesWrapper lockFileUtilitiesWrapper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Assets"/> class.
         /// </summary>
         /// <param name="dotNetRunner">The object managing the running of .NET commands on project and solution
         /// files.</param>
-        /// <param name="nuGetLogger">The object managing logging from within the NuGet infrastructure.</param>
-        public Assets(IDotNetRunner dotNetRunner, INuGetLogger nuGetLogger)
+        /// <param name="lockFileUtilitiesWrapper">The wrapper around <see cref="LockFileUtilities"/>.</param>
+        public Assets(IDotNetRunner dotNetRunner, ILockFileUtilitiesWrapper lockFileUtilitiesWrapper)
         {
             this.dotNetRunner = dotNetRunner;
-            this.nuGetLogger = nuGetLogger;
+            this.lockFileUtilitiesWrapper = lockFileUtilitiesWrapper;
         }
 
         /// <inheritdoc/>
-        public LockFile? Create(string projectPath, string outputDirectory)
+        public async Task<LockFile?> CreateAsync(string projectPath, string outputDirectory)
         {
             var parameters = Invariant($"restore \"{projectPath}\"");
             var projectDirectory = Path.GetDirectoryName(projectPath)!;
-            this.dotNetRunner.Run(parameters, projectDirectory);
+            var dotNetRunnerResult = this.dotNetRunner.RunAsync(parameters, projectDirectory);
 
             var projectAssetsFilePath = Path.Combine(outputDirectory, "project.assets.json");
-            return LockFileUtilities.GetLockFile(projectAssetsFilePath, this.nuGetLogger);
+            await dotNetRunnerResult.ConfigureAwait(false);
+            return this.lockFileUtilitiesWrapper.GetLockFile(projectAssetsFilePath);
         }
     }
 }

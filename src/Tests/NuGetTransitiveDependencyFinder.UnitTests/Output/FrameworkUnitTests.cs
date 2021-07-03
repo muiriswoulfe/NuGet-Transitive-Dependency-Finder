@@ -354,7 +354,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="IComparable.CompareTo(object?)"/> is called with different values against an
-        /// <c>object</c>, it returns the expected value in each case.
+        /// <see langword="object"/>, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -408,7 +408,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="IEquatable{Framework}.Equals(Framework)"/> is called with different values
-        /// against an <c>object</c>, it returns the expected value in each case.
+        /// against an <see langword="object"/>, it returns the expected value in each case.
         /// </summary>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
@@ -427,7 +427,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="IEquatable{Framework}.Equals(Framework)"/> is called with different object
-        /// types, it returns <c>false</c>.
+        /// types, it returns <see langword="false"/>.
         /// </summary>
         [AllCulturesFact]
         public void EqualsObject_WithDifferentObjectTypes_ReturnsFalse()
@@ -495,7 +495,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests than when <see cref="Framework.IsAddValid(Dependency?)"/> is called with any value, it returns
-        /// <c>true</c>.
+        /// <see langword="true"/>.
         /// </summary>
         [AllCulturesFact]
         public void IsAddValid_WithAnyValue_ReturnsTrue()
@@ -510,7 +510,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> object
-        /// not comprising children, it returns <c>false</c>.
+        /// not comprising children, it returns <see langword="false"/>.
         /// </summary>
         [AllCulturesFact]
         public void HasChildren_NotComprisingChildren_ReturnsFalse()
@@ -525,7 +525,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> object
-        /// comprising children added during construction, it returns <c>true</c>.
+        /// comprising children added during construction, it returns <see langword="true"/>.
         /// </summary>
         [AllCulturesFact]
         public void HasChildren_ComprisingChildrenAddedDuringConstruction_ReturnsTrue()
@@ -545,7 +545,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> object
-        /// comprising children added after construction, it returns <c>true</c>.
+        /// comprising children added after construction, it returns <see langword="true"/>.
         /// </summary>
         [AllCulturesFact]
         public void HasChildren_ComprisingChildrenAddedAfterConstruction_ReturnsTrue()

@@ -10,12 +10,12 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.TestUtilities
     using System.Runtime.CompilerServices;
 
     /// <summary>
-    /// A class for accessing <c>internal</c> functionality not visible to the current project.
+    /// A class for accessing <see langword="internal"/> functionality not visible to the current project.
     /// </summary>
-    /// <remarks>This functionality is required for accessing <c>internal</c> functionality within the
-    /// <c>NuGetTransitiveDependencyFinder</c> project. It is not possible to make that project's <c>internal</c>
-    /// functionality visible to the current project via <see cref="InternalsVisibleToAttribute"/> as doing so leads to
-    /// a class name duplication related to
+    /// <remarks>This functionality is required for accessing <see langword="internal"/> functionality within the
+    /// <c>NuGetTransitiveDependencyFinder</c> project. It is not possible to make that project's
+    /// <see langword="internal"/> functionality visible to the current project via
+    /// <see cref="InternalsVisibleToAttribute"/> as doing so leads to a class name duplication related to
     /// <c>NuGetTransitiveDependencyFinder.Properties.AssemblyAttributes</c>.</remarks>
     public static class InternalAccessor
     {

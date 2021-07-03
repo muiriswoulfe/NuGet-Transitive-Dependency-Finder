@@ -43,7 +43,7 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Logging
         /// <exception cref="NotSupportedException">Always thrown, as the method has not been implemented within the
         /// mock.</exception>
         /// <param name="logLevel">The level to be checked.</param>
-        /// <returns><c>true</c> if enabled; <c>false</c> otherwise.</returns>
+        /// <returns><see langword="true"/> if enabled; <see langword="false"/> otherwise.</returns>
         public bool IsEnabled(LogLevel logLevel) =>
             throw new NotSupportedException();
 
