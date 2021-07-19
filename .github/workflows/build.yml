@@ -454,6 +454,9 @@ jobs:
         uses: actions/checkout@v2
 
       # CodeQL
+      - name: INITIALIZATION – .NET Install
+        uses: actions/setup-dotnet@v1.8.1
+
       - name: CODEQL – Initialize
         uses: github/codeql-action/init@v1
         with:
