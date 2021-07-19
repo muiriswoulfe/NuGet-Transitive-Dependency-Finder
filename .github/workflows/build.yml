@@ -6,9 +6,7 @@
 name: Build
 
 on:
-  push:
-    branches:
-      - main
+  push: null
   pull_request: null
   schedule:
     - cron: 0 0 * * 1
