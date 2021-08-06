@@ -28,9 +28,10 @@ jobs:
       # Create
       - name: RELEASE – Create URLs
         id: urls
+        shell: pwsh
         run: |-
           $UrlPrefix = '${{ github.server_url }}/${{ github.repository }}'
-          $UrlSuffix = '+milestone%3A%22${{ steps.get_release.outputs.tag_name }}%22+is%3Aclosed'
+          $UrlSuffix = '+milestone%3A%22${{ github.event.inputs.version }}%22+is%3Aclosed'
           Write-Output -InputObject "::set-output name=url-prefix::$UrlPrefix"
           Write-Output -InputObject "::set-output name=url-suffix::$UrlSuffix"
 
