@@ -14,10 +14,6 @@ on:
     - cron: 0 0 * * 1
   workflow_dispatch: null
 
-defaults:
-  run:
-    shell: pwsh
-
 jobs:
   build:
     name: Build
@@ -116,11 +112,13 @@ jobs:
 
       - name: INITIALIZATION – Version Extract
         id: version
+        shell: pwsh
         run: |-
           $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
           Write-Output -InputObject "::set-output name=version::$Version"
 
       - name: INITIALIZATION – Version Replace
+        shell: pwsh
         run: |-
           $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
           $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
@@ -156,6 +154,7 @@ jobs:
       # Upload
       - name: UPLOAD – Get Platform
         id: platform
+        shell: pwsh
         run: |-
           $Platform = '${{ matrix.runtime }}'.Split('-')[0]
           Write-Output -InputObject "::set-output name=platform::$Platform"
@@ -169,6 +168,7 @@ jobs:
               "win": ".exe"
             }
         id: file-names
+        shell: pwsh
         run: |-
           $Extension = '${{ fromJson(env.extension)[steps.platform.outputs.platform] }}'
           $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
@@ -178,6 +178,7 @@ jobs:
           Write-Output -InputObject "::set-output name=asset_name::$AssetName"
 
       - name: UPLOAD – Print Details
+        shell: pwsh
         run: |-
           $AssetPathFileSize = (Get-Content -LiteralPath '${{ steps.file-names.outputs.asset_path }}').Length
           $AssetPathFileSize = "$AssetPathFileSize bytes"
@@ -202,11 +203,13 @@ jobs:
 
       - name: INITIALIZATION – Version Extract
         id: version
+        shell: pwsh
         run: |-
           $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
           Write-Output -InputObject "::set-output name=version::$Version"
 
       - name: INITIALIZATION – Version Replace
+        shell: pwsh
         run: |-
           $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
           $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
@@ -229,6 +232,7 @@ jobs:
           src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png
 
       - name: CREATE LOGO – Compress with block split threshold 0
+        shell: pwsh
         run: >-
           Start-Process
           -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b0','-q'
@@ -236,6 +240,7 @@ jobs:
           -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 128
+        shell: pwsh
         run: >-
           Start-Process
           -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b128','-q'
@@ -243,6 +248,7 @@ jobs:
           -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 192
+        shell: pwsh
         run: >-
           Start-Process
           -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b192','-q'
@@ -250,6 +256,7 @@ jobs:
           -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 256
+        shell: pwsh
         run: >-
           Start-Process
           -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b256','-q'
@@ -257,6 +264,7 @@ jobs:
           -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 512
+        shell: pwsh
         run: >-
           Start-Process
           -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b512','-q'
@@ -264,6 +272,7 @@ jobs:
           -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 1024
+        shell: pwsh
         run: >-
           Start-Process
           -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b1024','-q'
@@ -271,6 +280,7 @@ jobs:
           -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 2048
+        shell: pwsh
         run: >-
           Start-Process
           -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b2048','-q'
@@ -278,6 +288,7 @@ jobs:
           -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 4096
+        shell: pwsh
         run: >-
           Start-Process
           -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b4096','-q'
@@ -285,6 +296,7 @@ jobs:
           -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 8192
+        shell: pwsh
         run: >-
           Start-Process
           -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b8192','-q'
@@ -292,6 +304,7 @@ jobs:
           -Wait
 
       - name: CREATE LOGO – Delete SVG
+        shell: pwsh
         run: Remove-Item -Path 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.svg'
 
       # Build
@@ -307,6 +320,7 @@ jobs:
 
       # Upload
       - name: UPLOAD – Delete Documentation
+        shell: pwsh
         run: Remove-Item -Path 'src/Product/NuGetTransitiveDependencyFinder/bin/NuGetTransitiveDependencyFinder.xml'
 
       - name: UPLOAD – Pack
@@ -319,6 +333,7 @@ jobs:
           /property:RepositoryCommit=${{ github.sha }}
 
       - name: UPLOAD – Print Details
+        shell: pwsh
         run: |-
           $NuGetPackage = '${{ env.nuget-package-prefix }}.${{ steps.version.outputs.version }}.nupkg'
           $NuGetSymbolsPackage = '${{ env.nuget-package-prefix }}.${{ steps.version.outputs.version }}.snupkg'
@@ -366,12 +381,14 @@ jobs:
       - name: JSON VALIDATION – Validate src/stylecop.json – Download stylecop.schema.json
         env:
           project_url: https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master
+        shell: pwsh
         run: >-
           Invoke-WebRequest
           -Uri '${{ env.project_url }}/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json'
           -OutFile 'stylecop.schema.json'
 
       - name: JSON VALIDATION – Validate src/stylecop.json – Update stylecop.schema.json
+        shell: pwsh
         run: |-
           $FileContent = Get-Content -Path 'stylecop.schema.json' -Raw
           $FileContent = $FileContent -replace 'draft-04/schema#', 'draft-07/schema'
@@ -384,12 +401,14 @@ jobs:
           json-schema: stylecop.schema.json
 
       - name: JSON VALIDATION – Validate src/xunit.runner.json – Download xunit.runner.schema.json
+        shell: pwsh
         run: >-
           Invoke-WebRequest
           -Uri 'https://xunit.net/schema/current/xunit.runner.schema.json'
           -OutFile 'xunit.runner.schema.json'
 
       - name: JSON VALIDATION – Validate src/xunit.runner.json – Update xunit.runner.schema.json
+        shell: pwsh
         run: |-
           $FileContent = Get-Content -Path 'xunit.runner.schema.json' -Raw
           $FileContent = $FileContent -replace 'draft-04/schema', 'draft-07/schema'
@@ -417,6 +436,7 @@ jobs:
           binary-path: src
 
       - name: INFER# – Print Results
+        shell: pwsh
         run: Write-Output -InputObject '${{ steps.infersharp.outputs.results }}'
 
       # Security Scan

@@ -16,10 +16,6 @@ on:
         description: Release Notes
         required: true
 
-defaults:
-  run:
-    shell: pwsh
-
 jobs:
   create-release:
     name: Create Release
@@ -100,6 +96,7 @@ jobs:
         uses: jossef/action-latest-release-info@v1.2.0
 
       - name: INITIALIZATION – Version Replace
+        shell: pwsh
         run: |-
           $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
           $FileContent = $FileContent -replace '0.0.0', '${{ github.event.inputs.version }}'
@@ -135,6 +132,7 @@ jobs:
       # Upload
       - name: UPLOAD – Get Platform
         id: platform
+        shell: pwsh
         run: |-
           $Platform = '${{ matrix.runtime }}'.Split('-')[0]
           Write-Output -InputObject "::set-output name=platform::$Platform"
@@ -148,6 +146,7 @@ jobs:
               "win": ".exe"
             }
         id: file-names
+        shell: pwsh
         run: |-
           $Extension = '${{ fromJson(env.extension)[steps.platform.outputs.platform] }}'
           $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
@@ -178,6 +177,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: INITIALIZATION – Version Replace
+        shell: pwsh
         run: |-
           $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
           $FileContent = $FileContent -replace '0.0.0', '${{ github.event.inputs.version }}'
@@ -200,42 +200,79 @@ jobs:
           src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png
 
       - name: CREATE LOGO – Compress with block split threshold 0
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b0 -q
+        shell: pwsh
+        run: >-
+          Start-Process
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b0','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 128
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b128 -q
+        shell: pwsh
+        run: >-
+          Start-Process
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b128','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 192
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b192 -q
+        shell: pwsh
+        run: >-
+          Start-Process
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b192','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 256
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b256 -q
+        shell: pwsh
+        run: >-
+          Start-Process
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b256','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 512
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b512 -q
+        shell: pwsh
+        run: >-
+          Start-Process
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b512','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 1024
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b1024 -q
+        shell: pwsh
+        run: >-
+          Start-Process
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b1024','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 2048
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b2048 -q
+        shell: pwsh
+        run: >-
+          Start-Process
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b2048','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 4096
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b4096 -q
+        shell: pwsh
+        run: >-
+          Start-Process
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b4096','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Compress with block split threshold 8192
-        continue-on-error: true
-        run: node_modules/.bin/pngout src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png -b8192 -q
+        shell: pwsh
+        run: >-
+          Start-Process
+          -ArgumentList 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.png','-b8192','-q'
+          -FilePath 'node_modules/.bin/pngout'
+          -Wait
 
       - name: CREATE LOGO – Delete SVG
+        shell: pwsh
         run: Remove-Item -Path 'src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.svg'
 
       # Build
@@ -251,6 +288,7 @@ jobs:
 
       # Upload
       - name: UPLOAD – Delete Documentation
+        shell: pwsh
         run: Remove-Item -Path 'src/Product/NuGetTransitiveDependencyFinder/bin/NuGetTransitiveDependencyFinder.xml'
 
       - name: UPLOAD – Pack
