@@ -84,7 +84,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests than when <see cref="Projects.IsAddValid(Project?)"/> is called with a <see cref="Project"/> not
-        /// comprising children, it returns <c>false</c>.
+        /// comprising children, it returns <see langword="false"/>.
         /// </summary>
         [AllCulturesFact]
         public void IsAddValid_WithProjectNotComprisingChildren_ReturnsFalse()
@@ -99,7 +99,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests than when <see cref="Projects.IsAddValid(Project?)"/> is called with a <see cref="Project"/>
-        /// comprising children, it returns <c>true</c>.
+        /// comprising children, it returns <see langword="true"/>.
         /// </summary>
         [AllCulturesFact]
         public void IsAddValid_WithProjectComprisingChildren_ReturnsTrue()
@@ -114,7 +114,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="Base{Project}.HasChildren"/> is called for a <see cref="Projects"/> object not
-        /// comprising children, it returns <c>false</c>.
+        /// comprising children, it returns <see langword="false"/>.
         /// </summary>
         [AllCulturesFact]
         public void HasChildren_NotComprisingChildren_ReturnsFalse()
@@ -129,7 +129,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="Base{Project}.HasChildren"/> is called for a <see cref="Projects"/> object
-        /// comprising children without children, it returns <c>false</c>.
+        /// comprising children without children, it returns <see langword="false"/>.
         /// </summary>
         [AllCulturesFact]
         public void HasChildren_ComprisingChildrenWithoutChildren_ReturnsFalse()
@@ -148,7 +148,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="Base{Project}.HasChildren"/> is called for a <see cref="Projects"/> object
-        /// comprising children with children, it returns <c>true</c>.
+        /// comprising children with children, it returns <see langword="true"/>.
         /// </summary>
         [AllCulturesFact]
         public void HasChildren_ComprisingChildrenWithChildren_ReturnsTrue()
@@ -167,7 +167,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
 
         /// <summary>
         /// Tests that when <see cref="Base{Project}.HasChildren"/> is called for a <see cref="Projects"/> object
-        /// comprising children for which a subset have children, it returns <c>true</c>.
+        /// comprising children for which a subset have children, it returns <see langword="true"/>.
         /// </summary>
         [AllCulturesFact]
         public void HasChildren_ComprisingChildrenWithSubsetHavingChildren_ReturnsTrue()

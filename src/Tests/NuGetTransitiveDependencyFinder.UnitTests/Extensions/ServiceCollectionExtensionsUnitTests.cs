@@ -26,7 +26,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Extensions
         /// <summary>
         /// Tests that when
         /// <see cref="ServiceCollectionExtensions.AddNuGetTransitiveDependencyFinder(IServiceCollection,
-        /// Action{ILoggingBuilder})"/> is called with a <c>null</c> <c>value</c> parameter, it throws an
+        /// Action{ILoggingBuilder})"/> is called with a <see langword="null"/> <c>value</c> parameter, it throws an
         /// <see cref="ArgumentNullException"/>.
         /// </summary>
         [AllCulturesFact]
@@ -47,8 +47,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Extensions
         /// <summary>
         /// Tests that when
         /// <see cref="ServiceCollectionExtensions.AddNuGetTransitiveDependencyFinder(IServiceCollection,
-        /// Action{ILoggingBuilder})"/> is called with a <c>null</c> <c>loggingBuilderAction</c> parameter, it throws an
-        /// <see cref="ArgumentNullException"/>.
+        /// Action{ILoggingBuilder})"/> is called with a <see langword="null"/> <c>loggingBuilderAction</c> parameter,
+        /// it throws an <see cref="ArgumentNullException"/>.
         /// </summary>
         [AllCulturesFact]
         public void AddNuGetTransitiveDependencyFinder_WithNullLoggingBuilderAction_ThrowsArgumentNullException()

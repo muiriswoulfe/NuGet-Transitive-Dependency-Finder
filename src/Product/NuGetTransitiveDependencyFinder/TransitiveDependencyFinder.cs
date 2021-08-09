@@ -6,11 +6,14 @@
 namespace NuGetTransitiveDependencyFinder
 {
     using System;
+    using System.Diagnostics;
+    using System.Threading.Tasks;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using NuGetTransitiveDependencyFinder.Output;
     using NuGetTransitiveDependencyFinder.ProjectAnalysis;
     using NuGetTransitiveDependencyFinder.Utilities;
+    using NuGetTransitiveDependencyFinder.Wrappers;
     using INuGetLogger = NuGet.Common.ILogger;
 
     /// <summary>
@@ -50,7 +53,7 @@ namespace NuGetTransitiveDependencyFinder
         }
 
         /// <inheritdoc/>
-        public Projects Run(string? projectOrSolutionPath, bool collateAllDependencies)
+        public Task<Projects> RunAsync(string? projectOrSolutionPath, bool collateAllDependencies)
         {
             if (projectOrSolutionPath == null)
             {
@@ -59,7 +62,7 @@ namespace NuGetTransitiveDependencyFinder
 
             return this.serviceProvider
                 .GetService<IDependencyFinder>()!
-                .Run(projectOrSolutionPath, collateAllDependencies);
+                .RunAsync(projectOrSolutionPath, collateAllDependencies);
         }
 
         /// <summary>
@@ -74,7 +77,10 @@ namespace NuGetTransitiveDependencyFinder
                 .AddScoped<IAssets, Assets>()
                 .AddScoped<IDependencyFinder, DependencyFinder>()
                 .AddScoped<IDotNetRunner, DotNetRunner>()
+                .AddScoped<ILockFileUtilitiesWrapper, LockFileUtilitiesWrapper>()
                 .AddScoped<INuGetLogger, NuGetLogger>()
+                .AddScoped<IProcessWrapper, ProcessWrapper>()
+                .AddScoped<Process, Process>()
                 .AddTransient<IDependencyGraph, DependencyGraph>()
                 .BuildServiceProvider();
 
@@ -85,17 +91,15 @@ namespace NuGetTransitiveDependencyFinder
         /// unmanaged resources.</param>
         private void Dispose(bool disposing)
         {
-            if (this.disposedValue)
+            if (!this.disposedValue)
             {
-                return;
-            }
+                if (disposing)
+                {
+                    this.serviceProvider.Dispose();
+                }
 
-            if (disposing)
-            {
-                this.serviceProvider.Dispose();
+                this.disposedValue = true;
             }
-
-            this.disposedValue = true;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
     using Xunit;
 
     /// <summary>
-    /// A class encapsulating <c>static</c> methods for unit testing comparison methods.
+    /// A class encapsulating <see langword="static"/> methods for unit testing comparison methods.
     /// </summary>
     internal static class ComparisonDataGenerator
     {

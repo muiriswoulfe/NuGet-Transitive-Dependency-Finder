@@ -35,8 +35,8 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <returns><c>true</c> if <see paramref="left"/> is equal to <see paramref="right"/>; otherwise,
-        /// <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if <see paramref="left"/> is equal to <see paramref="right"/>; otherwise,
+        /// <see langword="false"/>.</returns>
         public static bool operator ==(Project? left, Project? right) =>
             Comparer.IsEqual(left, right, ComparisonFunction);
 
@@ -47,8 +47,8 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <returns><c>true</c> if <see paramref="left"/> is not equal to <see paramref="right"/>; otherwise,
-        /// <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if <see paramref="left"/> is not equal to <see paramref="right"/>;
+        /// otherwise, <see langword="false"/>.</returns>
         public static bool operator !=(Project? left, Project? right) =>
             Comparer.IsNotEqual(left, right, ComparisonFunction);
 
@@ -59,8 +59,8 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <returns><c>true</c> if <see paramref="left"/> is less than <see paramref="right"/>; otherwise,
-        /// <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if <see paramref="left"/> is less than <see paramref="right"/>; otherwise,
+        /// <see langword="false"/>.</returns>
         public static bool operator <(Project? left, Project? right) =>
             Comparer.IsLess(left, right, ComparisonFunction);
 
@@ -71,8 +71,8 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <returns><c>true</c> if <see paramref="left"/> is less than or equal to <see paramref="right"/>; otherwise,
-        /// <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if <see paramref="left"/> is less than or equal to <see paramref="right"/>;
+        /// otherwise, <see langword="false"/>.</returns>
         public static bool operator <=(Project? left, Project? right) =>
             Comparer.IsLessOrEqual(left, right, ComparisonFunction);
 
@@ -83,8 +83,8 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <returns><c>true</c> if <see paramref="left"/> is greater than <see paramref="right"/>; otherwise,
-        /// <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if <see paramref="left"/> is greater than <see paramref="right"/>;
+        /// otherwise, <see langword="false"/>.</returns>
         public static bool operator >(Project? left, Project? right) =>
             Comparer.IsGreater(left, right, ComparisonFunction);
 
@@ -95,8 +95,8 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// <see cref="IdentifiedBase{TIdentifier, TChild}.Identifier"/>.</remarks>
         /// <param name="left">The left operand to compare.</param>
         /// <param name="right">The right operand to compare.</param>
-        /// <returns><c>true</c> if <see paramref="left"/> is greater than or equal to <see paramref="right"/>;
-        /// otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true"/> if <see paramref="left"/> is greater than or equal to
+        /// <see paramref="right"/>; otherwise, <see langword="false"/>.</returns>
         public static bool operator >=(Project? left, Project? right) =>
             Comparer.IsGreaterOrEqual(left, right, ComparisonFunction);
 

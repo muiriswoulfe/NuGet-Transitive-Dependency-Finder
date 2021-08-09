@@ -20,6 +20,9 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp
         public static int Main(string[] parameters) =>
             ProgramInitializer.Run(
                 parameters,
-                serviceProvider => ProgramInitializer.GetProgramRunner(serviceProvider).Run());
+#pragma warning disable AsyncFixer03 // Fire-and-forget async-void methods or delegates
+                async serviceProvider =>
+                    await ProgramInitializer.GetProgramRunner(serviceProvider).RunAsync().ConfigureAwait(false));
+#pragma warning restore AsyncFixer03 // Fire-and-forget async-void methods or delegates
     }
 }

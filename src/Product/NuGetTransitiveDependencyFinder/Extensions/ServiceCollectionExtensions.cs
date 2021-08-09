@@ -24,7 +24,7 @@ namespace NuGetTransitiveDependencyFinder.Extensions
         /// <returns>The <see cref="IServiceCollection"/> passed to the method with the additional dependencies
         /// included.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="value"/> or <paramref name="loggingBuilderAction"/>
-        /// is <c>null</c>.</exception>
+        /// is <see langword="null"/>.</exception>
         public static IServiceCollection AddNuGetTransitiveDependencyFinder(
             this IServiceCollection? value,
             Action<ILoggingBuilder>? loggingBuilderAction)

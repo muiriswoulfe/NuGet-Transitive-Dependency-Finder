@@ -6,7 +6,9 @@
 namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 {
     using System.Diagnostics;
+    using System.Threading.Tasks;
     using Microsoft.Extensions.Logging;
+    using NuGetTransitiveDependencyFinder.Wrappers;
 
     /// <summary>
     /// A class that manages the running of .NET commands on project and solution files.
@@ -19,21 +21,28 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         private readonly ILogger<DotNetRunner> logger;
 
         /// <summary>
+        /// The wrapper around <see cref="Process"/>.
+        /// </summary>
+        private readonly IProcessWrapper processWrapper;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DotNetRunner"/> class.
         /// </summary>
         /// <param name="logger">The logger for asynchronous messages that have been created by external
         /// processes.</param>
-        public DotNetRunner(ILogger<DotNetRunner> logger) =>
+        /// <param name="processWrapper">The wrapper around <see cref="Process"/>.</param>
+        public DotNetRunner(ILogger<DotNetRunner> logger, IProcessWrapper processWrapper)
+        {
             this.logger = logger;
+            this.processWrapper = processWrapper;
+        }
 
         /// <inheritdoc/>
-        public void Run(string parameters, string workingDirectory)
+        public Task RunAsync(string parameters, string workingDirectory)
         {
-            using var process = new Process();
-
-            process.ErrorDataReceived += this.LogError;
-            process.OutputDataReceived += this.LogOutput;
-            process.StartInfo = new("dotnet", parameters)
+            this.processWrapper.ErrorDataReceived += this.LogError!;
+            this.processWrapper.OutputDataReceived += this.LogOutput!;
+            this.processWrapper.StartInfo = new("dotnet", parameters)
             {
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,
@@ -42,12 +51,12 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 
             // Start() will return a Boolean value indicating whether a new process was started. A false return value
             // indicates that an existing process was reused and is not indicative of failure.
-            _ = process.Start();
+            _ = this.processWrapper.Start();
 
-            process.BeginErrorReadLine();
-            process.BeginOutputReadLine();
+            this.processWrapper.BeginErrorReadLine();
+            this.processWrapper.BeginOutputReadLine();
 
-            process.WaitForExit();
+            return this.processWrapper.WaitForExitAsync();
         }
 
         /// <summary>
