@@ -28,7 +28,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests
         /// <see cref="ArgumentNullException"/>.
         /// </summary>
         [AllCulturesFact]
-        public void RunAsync_WithNullProjectOrSolutionPath_ThrowsArgumentNullException()
+        public async Task RunAsync_WithNullProjectOrSolutionPath_ThrowsArgumentNullException()
         {
             // Arrange
             using var transitiveDependencyFinder = new TransitiveDependencyFinder(LoggingBuilderAction);
@@ -37,9 +37,10 @@ namespace NuGetTransitiveDependencyFinder.UnitTests
             Func<Task> function = transitiveDependencyFinder.Awaiting(current => current.RunAsync(null, true));
 
             // Assert
-            _ = function
-                .Should().Throw<ArgumentNullException>()
-                .And.ParamName.Should().Be("projectOrSolutionPath");
+            _ = await function
+                .Should().ThrowAsync<ArgumentNullException>()
+                .WithParameterName("projectOrSolutionPath")
+                .ConfigureAwait(false);
         }
 
         /// <summary>
