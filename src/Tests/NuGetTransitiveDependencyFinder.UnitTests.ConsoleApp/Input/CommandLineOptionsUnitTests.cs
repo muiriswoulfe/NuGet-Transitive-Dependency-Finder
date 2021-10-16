@@ -5,6 +5,7 @@
 
 namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Input
 {
+    using System.Text.RegularExpressions;
     using FluentAssertions;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Input;
     using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
@@ -55,6 +56,28 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Input
             // Assert
             _ = commandLineOptions.ProjectOrSolution
                 .Should().Be(value);
+        }
+
+        /// <summary>
+        /// Tests that when <see cref="CommandLineOptions.Filter"/> is called after being set, it returns the
+        /// value specified.
+        /// </summary>
+        /// <param name="value">The value of <see cref="CommandLineOptions.Filter"/>.</param>
+        [AllCulturesTheory]
+        [InlineData(null)]
+        [InlineData("Filter")]
+        public void Filter_AfterSetting_ReturnsValue(string value)
+        {
+            // Arrange & Act
+            var filter = value is not null ? new Regex(value) : null;
+            var commandLineOptions = new CommandLineOptions
+            {
+                Filter = filter,
+            };
+
+            // Assert
+            _ = commandLineOptions.Filter
+                .Should().Be(filter);
         }
     }
 }
