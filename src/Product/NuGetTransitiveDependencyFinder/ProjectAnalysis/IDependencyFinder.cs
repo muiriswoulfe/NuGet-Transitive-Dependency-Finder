@@ -5,6 +5,7 @@
 
 namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 {
+    using System.Text.RegularExpressions;
     using NuGetTransitiveDependencyFinder.Output;
 
     /// <summary>
@@ -20,7 +21,10 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// name.</param>
         /// <param name="collateAllDependencies">A value indicating whether all dependencies, or merely those that are
         /// transitive, should be collated.</param>
+        /// <param name="filter">An optional regular expression, to match certain dependencies. It will filter
+        /// non-transitive dependencies as well, if <paramref name="collateAllDependencies"/> is
+        /// <see langword="true"/>.</param>
         /// <returns>The transitive NuGet dependency information, which can be processed for display.</returns>
-        public Projects Run(string projectOrSolutionPath, bool collateAllDependencies);
+        public Projects Run(string projectOrSolutionPath, bool collateAllDependencies, Regex? filter);
     }
 }

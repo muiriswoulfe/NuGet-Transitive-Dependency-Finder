@@ -27,6 +27,13 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Resources.Messages
             GetString(nameof(ProjectOrSolution));
 
         /// <summary>
+        /// Gets a localized string corresponding to the description of the  "--filter" parameter, which is
+        /// displayed as part of the help message.
+        /// </summary>
+        public static string Filter =>
+            GetString(nameof(Filter));
+
+        /// <summary>
         /// Gets the localized string.
         /// </summary>
         /// <param name="name">The name of the localized string to be accessed.</param>

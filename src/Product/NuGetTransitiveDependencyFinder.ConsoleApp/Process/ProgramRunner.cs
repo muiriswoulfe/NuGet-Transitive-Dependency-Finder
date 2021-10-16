@@ -64,7 +64,8 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Process
             var projects =
                 this.transitiveDependencyFinder.Run(
                     this.commandLineOptions.ProjectOrSolution!,
-                    this.commandLineOptions.All);
+                    this.commandLineOptions.All,
+                    this.commandLineOptions.Filter);
 
             this.dependencyWriter.Write(projects);
         }

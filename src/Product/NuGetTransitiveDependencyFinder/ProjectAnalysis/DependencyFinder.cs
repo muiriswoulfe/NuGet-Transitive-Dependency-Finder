@@ -9,6 +9,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using NuGet.ProjectModel;
     using NuGetTransitiveDependencyFinder.Output;
 
@@ -50,7 +51,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         }
 
         /// <inheritdoc/>
-        public Projects Run(string projectOrSolutionPath, bool collateAllDependencies)
+        public Projects Run(string projectOrSolutionPath, bool collateAllDependencies, Regex? filter)
         {
             var projects = this.CreateProjects(projectOrSolutionPath);
             var result = new Projects(projects.Count);
@@ -71,7 +72,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
                         .Libraries
                         .ToImmutableDictionary(library => library.Name, StringComparer.OrdinalIgnoreCase);
                     this.PopulateDependencies(framework, libraries);
-                    var resultFramework = this.FindTransitiveDependencies(framework, collateAllDependencies);
+                    var resultFramework = this.FindTransitiveDependencies(framework, collateAllDependencies, filter);
 
                     resultProject.Add(resultFramework);
                 }
@@ -171,8 +172,12 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// <param name="framework">The .NET project and framework combination to analyze.</param>
         /// <param name="collateAllDependencies">A value indicating whether all dependencies, or merely those that are
         /// transitive, should be collated.</param>
+        /// <param name="filter">An optional regular expression, to match certain dependencies. It will filter
+        /// non-transitive dependencies as well, if <paramref name="collateAllDependencies"/> is
+        /// <see langword="true"/>.</param>
         /// <returns>The transitive NuGet dependency information, which can be processed for display.</returns>
-        private Framework FindTransitiveDependencies(TargetFrameworkInformation framework, bool collateAllDependencies)
+        private Framework FindTransitiveDependencies(
+            TargetFrameworkInformation framework, bool collateAllDependencies, Regex? filter)
         {
             foreach (var dependency in framework
                 .Dependencies
@@ -187,6 +192,12 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
             var frameworkDependencies = collateAllDependencies
                 ? this.dependencies.Values
                 : this.dependencies.Values.Where(dependency => dependency.IsTransitive);
+
+            if (filter is not null)
+            {
+                frameworkDependencies = frameworkDependencies
+                    .Where(dependency => filter.Match(dependency.Identifier).Success);
+            }
 
             return new(framework.FrameworkName, frameworkDependencies.ToList());
         }
