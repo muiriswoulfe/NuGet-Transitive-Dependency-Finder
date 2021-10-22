@@ -63,16 +63,16 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// Logs messages sent to the Standard Error stream.
         /// </summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event parameters.</param>
-        private void LogError(object sender, DataReceivedEventArgs e) =>
-            this.logger.LogError(e.Data ?? string.Empty);
+        /// <param name="eventParameters">The event parameters.</param>
+        private void LogError(object sender, DataReceivedEventArgs eventParameters) =>
+            this.logger.LogError(eventParameters.Data ?? string.Empty);
 
         /// <summary>
         /// Logs messages sent to the Standard Output stream.
         /// </summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event parameters.</param>
-        private void LogOutput(object sender, DataReceivedEventArgs e) =>
-            this.logger.LogTrace(e.Data ?? string.Empty);
+        /// <param name="eventParameters">The event parameters.</param>
+        private void LogOutput(object sender, DataReceivedEventArgs eventParameters) =>
+            this.logger.LogTrace(eventParameters.Data ?? string.Empty);
     }
 }
