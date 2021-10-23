@@ -3,6 +3,7 @@
 <Project>
 
   <PropertyGroup>
+    <AdditionalFileItemNames>$(AdditionalFileItemNames);CodeAnalysisDictionary</AdditionalFileItemNames>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\key.snk</AssemblyOriginatorKeyFile>
     <Deterministic>true</Deterministic>
@@ -33,6 +34,7 @@
 
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)\stylecop.json" />
+    <CodeAnalysisDictionary Include="$(MSBuildThisFileDirectory)\CodeAnalysisDictionary.xml" />
     <Compile Include="$(MSBuildThisFileDirectory)\Shared\Properties\AssemblyInfo.cs" />
   </ItemGroup>
 
@@ -69,7 +71,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Text.Analyzers" Version="3.3.1">
+    <PackageReference Include="Text.Analyzers" Version="3.3.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
