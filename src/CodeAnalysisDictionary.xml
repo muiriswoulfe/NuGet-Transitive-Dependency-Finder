@@ -5,9 +5,11 @@
 <Dictionary>
   <Words>
     <Recognized>
+      <Word>Accessor</Word>
       <Word>Async</Word>
       <Word>Comparer</Word>
       <Word>Deserialize</Word>
+      <Word>Enum</Word>
       <Word>Finalizer</Word>
       <Word>formatter</Word>
       <Word>Initializer</Word>
