@@ -484,9 +484,17 @@ jobs:
         with:
           queries: security-and-quality
 
-      - name: CODEQL – Build
-        uses: github/codeql-action/autobuild@v1
+      # Build & Test
+      - name: BUILD & TEST – Project Restore
+        run: dotnet restore
 
+      - name: BUILD & TEST – Project Build
+        run: dotnet build --configuration ${{ matrix.configuration }} --no-restore /maxCpuCount
+
+      - name: BUILD & TEST – Project Test
+        run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"XPlat Code Coverage"
+
+      # CodeQL
       - name: CODEQL – Analyze
         uses: github/codeql-action/analyze@v1
 
