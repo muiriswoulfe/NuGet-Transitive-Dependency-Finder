@@ -3,6 +3,7 @@
 <Project>
 
   <PropertyGroup>
+    <AdditionalFileItemNames>$(AdditionalFileItemNames);CodeAnalysisDictionary</AdditionalFileItemNames>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\key.snk</AssemblyOriginatorKeyFile>
     <Deterministic>true</Deterministic>
@@ -33,6 +34,7 @@
 
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)\stylecop.json" />
+    <CodeAnalysisDictionary Include="$(MSBuildThisFileDirectory)\CodeAnalysisDictionary.xml" />
     <Compile Include="$(MSBuildThisFileDirectory)\Shared\Properties\AssemblyInfo.cs" />
   </ItemGroup>
 

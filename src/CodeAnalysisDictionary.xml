@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- © Muiris Woulfe. Licensed under the MIT License. -->
+
+<Dictionary>
+  <Words>
+    <Recognized>
+      <Word>Async</Word>
+      <Word>Comparer</Word>
+      <Word>Deserialize</Word>
+      <Word>Finalizer</Word>
+      <Word>formatter</Word>
+      <Word>Initializer</Word>
+    </Recognized>
+  </Words>
+</Dictionary>

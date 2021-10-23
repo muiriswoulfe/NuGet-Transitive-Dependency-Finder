@@ -155,7 +155,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Output
         [AllCulturesTheory]
         [InlineData("Identifier 1")]
         [InlineData("Identifier 2")]
-        public void Identifer_AfterConstruction_ReturnsValue(string value)
+        public void Identifier_AfterConstruction_ReturnsValue(string value)
         {
             // Arrange & Act
             var dependency = new Dependency(value, DefaultVersion);
