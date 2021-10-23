@@ -489,10 +489,10 @@ jobs:
         run: dotnet restore
 
       - name: BUILD & TEST – Project Build
-        run: dotnet build --configuration ${{ matrix.configuration }} --no-restore /maxCpuCount
+        run: dotnet build --configuration Release --no-restore /maxCpuCount
 
       - name: BUILD & TEST – Project Test
-        run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"XPlat Code Coverage"
+        run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage"
 
       # CodeQL
       - name: CODEQL – Analyze
