@@ -75,11 +75,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests
             Action action3 = () => transitiveDependencyFinder.Dispose();
 
             // Assert
-            action1
+            _ = action1
                 .Should().NotThrow();
-            action2
+            _ = action2
                 .Should().NotThrow();
-            action3
+            _ = action3
                 .Should().NotThrow();
         }
 

@@ -105,7 +105,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
             // Assert
             foreach (var action in actions)
             {
-                action
+                _ = action
                     .Should().NotThrow<InvalidEnumArgumentException>();
             }
         }
