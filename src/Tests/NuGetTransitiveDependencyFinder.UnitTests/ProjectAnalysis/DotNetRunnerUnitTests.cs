@@ -6,8 +6,6 @@
 namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
 {
     using System.Diagnostics;
-    using System.Threading;
-    using System.Threading.Tasks;
     using FluentAssertions;
     using Moq;
     using NuGetTransitiveDependencyFinder.ProjectAnalysis;
@@ -21,12 +19,10 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
     public class DotNetRunnerUnitTests
     {
         /// <summary>
-        /// Tests that when <see cref="DotNetRunner.RunAsync(string, string)"/> is called, it performs the expected
-        /// actions.
+        /// Tests that when <see cref="DotNetRunner.Run(string, string)"/> is called, it performs the expected actions.
         /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [AllCulturesFact]
-        public async Task RunAsync_CalledWithAnyStartReturnValue_PerformsExpectedActions()
+        public void Run_CalledWithAnyStartReturnValue_PerformsExpectedActions()
         {
             // Arrange
             var logger = new MockLogger<DotNetRunner>();
@@ -40,7 +36,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
             var dotNetRunner = new DotNetRunner(logger, processWrapper.Object);
 
             // Act
-            await dotNetRunner.RunAsync("build", @"..\").ConfigureAwait(false);
+            dotNetRunner.Run("build", @"..\");
 
             // Assert
             _ = logger.Entries
@@ -53,7 +49,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
                 Times.Once());
             processWrapper.Verify(obj => obj.BeginErrorReadLine(), Times.Once());
             processWrapper.Verify(obj => obj.BeginOutputReadLine(), Times.Once());
-            processWrapper.Verify(obj => obj.WaitForExitAsync(It.IsAny<CancellationToken>()), Times.Once());
+            processWrapper.Verify(obj => obj.WaitForExit(), Times.Once());
         }
     }
 }

@@ -5,7 +5,6 @@
 
 namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
 {
-    using System.Threading.Tasks;
     using FluentAssertions;
     using Microsoft.Extensions.Logging;
     using Moq;
@@ -44,11 +43,10 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
         private readonly Mock<ITransitiveDependencyFinder> transitiveDependencyFinder = new();
 
         /// <summary>
-        /// Tests that when <see cref="ProgramRunner.RunAsync()"/> is called, it performs the expected actions.
+        /// Tests that when <see cref="ProgramRunner.Run()"/> is called, it performs the expected actions.
         /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [AllCulturesFact]
-        public async Task RunAsync_Called_PerformsExpectedActions()
+        public void Run_Called_PerformsExpectedActions()
         {
             // Arrange
             var projects = InternalAccessor.Construct<Projects>(0);
@@ -59,8 +57,8 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
                 .SetupGet(mock => mock.All)
                 .Returns(true);
             _ = this.transitiveDependencyFinder
-                .Setup(mock => mock.RunAsync("ProjectOrSolution", true))
-                .Returns(Task.FromResult(projects));
+                .Setup(mock => mock.Run("ProjectOrSolution", true))
+                .Returns(projects);
             var programRunner = new ProgramRunner(
                 this.commandLineOptions.Object,
                 this.dependencyWriter.Object,
@@ -68,7 +66,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
                 this.transitiveDependencyFinder.Object);
 
             // Act
-            await programRunner.RunAsync().ConfigureAwait(false);
+            programRunner.Run();
 
             // Arrange
             _ = this.logger.Entries
@@ -80,7 +78,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
             this.commandLineOptions.VerifyGet(mock => mock.ProjectOrSolution, Times.Once);
             this.commandLineOptions.VerifyGet(mock => mock.All, Times.Once);
             this.commandLineOptions.VerifyNoOtherCalls();
-            this.transitiveDependencyFinder.Verify(mock => mock.RunAsync("ProjectOrSolution", true), Times.Once);
+            this.transitiveDependencyFinder.Verify(mock => mock.Run("ProjectOrSolution", true), Times.Once);
             this.transitiveDependencyFinder.VerifyNoOtherCalls();
             this.dependencyWriter.Verify(mock => mock.Write(projects), Times.Once);
             this.dependencyWriter.VerifyNoOtherCalls();
