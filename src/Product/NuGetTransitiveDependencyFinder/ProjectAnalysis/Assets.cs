@@ -6,7 +6,6 @@
 namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 {
     using System.IO;
-    using System.Threading.Tasks;
     using NuGet.ProjectModel;
     using NuGetTransitiveDependencyFinder.Wrappers;
     using static System.FormattableString;
@@ -39,14 +38,13 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         }
 
         /// <inheritdoc/>
-        public async Task<LockFile?> CreateAsync(string projectPath, string outputDirectory)
+        public LockFile? Create(string projectPath, string outputDirectory)
         {
             var parameters = Invariant($"restore \"{projectPath}\"");
             var projectDirectory = Path.GetDirectoryName(projectPath)!;
-            var dotNetRunnerResult = this.dotNetRunner.RunAsync(parameters, projectDirectory);
+            this.dotNetRunner.Run(parameters, projectDirectory);
 
             var projectAssetsFilePath = Path.Combine(outputDirectory, "project.assets.json");
-            await dotNetRunnerResult.ConfigureAwait(false);
             return this.lockFileUtilitiesWrapper.GetLockFile(projectAssetsFilePath);
         }
     }

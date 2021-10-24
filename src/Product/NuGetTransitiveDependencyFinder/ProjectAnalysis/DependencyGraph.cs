@@ -7,7 +7,6 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 {
     using System;
     using System.IO;
-    using System.Threading.Tasks;
     using NuGet.ProjectModel;
     using static System.FormattableString;
 
@@ -58,13 +57,13 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         }
 
         /// <inheritdoc/>
-        public async Task<DependencyGraphSpec> CreateAsync(string projectOrSolutionPath)
+        public DependencyGraphSpec Create(string projectOrSolutionPath)
         {
             var projectOrSolutionDirectory = Path.GetDirectoryName(projectOrSolutionPath)!;
             var arguments =
                 Invariant($"msbuild \"{projectOrSolutionPath}\" /maxCpuCount /target:GenerateRestoreGraphFile ") +
                 Invariant($"/property:RestoreGraphOutputPath=\"{this.filePath}\"");
-            await this.dotNetRunner.RunAsync(arguments, projectOrSolutionDirectory).ConfigureAwait(false);
+            this.dotNetRunner.Run(arguments, projectOrSolutionDirectory);
 
             return DependencyGraphSpec.Load(this.filePath);
         }
