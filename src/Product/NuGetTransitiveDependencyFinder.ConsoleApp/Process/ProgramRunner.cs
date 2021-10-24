@@ -5,7 +5,6 @@
 
 namespace NuGetTransitiveDependencyFinder.ConsoleApp.Process
 {
-    using System.Threading.Tasks;
     using Microsoft.Extensions.Logging;
     using NuGetTransitiveDependencyFinder;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Input;
@@ -58,14 +57,14 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Process
         }
 
         /// <inheritdoc/>
-        public async Task RunAsync()
+        public void Run()
         {
             this.logger.LogInformation(Information.CommencingAnalysis);
 
             var projects =
-                await this.transitiveDependencyFinder.RunAsync(
+                this.transitiveDependencyFinder.Run(
                     this.commandLineOptions.ProjectOrSolution!,
-                    this.commandLineOptions.All).ConfigureAwait(false);
+                    this.commandLineOptions.All);
 
             this.dependencyWriter.Write(projects);
         }

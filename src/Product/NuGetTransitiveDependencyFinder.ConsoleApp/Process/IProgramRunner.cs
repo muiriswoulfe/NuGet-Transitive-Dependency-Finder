@@ -5,8 +5,6 @@
 
 namespace NuGetTransitiveDependencyFinder.ConsoleApp.Process
 {
-    using System.Threading.Tasks;
-
     /// <summary>
     /// The interface defining the flow of the main application logic.
     /// </summary>
@@ -15,7 +13,6 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Process
         /// <summary>
         /// Runs the main application logic.
         /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public Task RunAsync();
+        public void Run();
     }
 }

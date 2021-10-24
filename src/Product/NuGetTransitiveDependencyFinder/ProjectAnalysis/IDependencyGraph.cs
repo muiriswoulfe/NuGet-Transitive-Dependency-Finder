@@ -6,7 +6,6 @@
 namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 {
     using System;
-    using System.Threading.Tasks;
     using NuGet.ProjectModel;
 
     /// <summary>
@@ -20,6 +19,6 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
         /// name.</param>
         /// <returns>The <see cref="DependencyGraphSpec"/> object.</returns>
-        public Task<DependencyGraphSpec> CreateAsync(string projectOrSolutionPath);
+        public DependencyGraphSpec Create(string projectOrSolutionPath);
     }
 }

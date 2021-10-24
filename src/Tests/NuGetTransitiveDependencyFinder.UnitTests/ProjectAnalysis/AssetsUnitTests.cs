@@ -7,7 +7,6 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
 {
     using System.Globalization;
     using System.IO;
-    using System.Threading.Tasks;
     using FluentAssertions;
     using Moq;
     using NuGet.ProjectModel;
@@ -22,12 +21,10 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
     public class AssetsUnitTests
     {
         /// <summary>
-        /// Tests that when <see cref="Assets.CreateAsync(string, string)"/> is called, it performs the expected
-        /// operations.
+        /// Tests that when <see cref="Assets.Create(string, string)"/> is called, it performs the expected operations.
         /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [AllCulturesFact]
-        public async Task CreateAsync_WithDifferentValues_ReturnsCorrectValues()
+        public void Create_WithDifferentValues_ReturnsCorrectValues()
         {
             // Arrange
             var dotNetRunner = new Mock<IDotNetRunner>();
@@ -40,14 +37,14 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis
             var outputDirectory = Path.Join(directorySeparator, "output");
 
             // Act
-            var result = await assets.CreateAsync(inputDirectory, outputDirectory).ConfigureAwait(false);
+            var result = assets.Create(inputDirectory, outputDirectory);
 
             // Assert
             _ = result
                 .Should().Be(lockFile);
             dotNetRunner
                 .Verify(
-                    mock => mock.RunAsync(Invariant($@"restore ""{inputDirectory}"""), directorySeparator),
+                    mock => mock.Run(Invariant($@"restore ""{inputDirectory}"""), directorySeparator),
                     Times.Once);
             var lockFilePath = Path.Join(outputDirectory, "project.assets.json");
             lockFileUtilitiesWrapper.Verify(mock => mock.GetLockFile(lockFilePath), Times.Once);

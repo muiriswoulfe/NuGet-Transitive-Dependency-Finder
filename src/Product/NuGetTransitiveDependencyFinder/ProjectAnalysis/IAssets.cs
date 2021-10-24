@@ -5,7 +5,6 @@
 
 namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 {
-    using System.Threading.Tasks;
     using NuGet.ProjectModel;
 
     /// <summary>
@@ -20,6 +19,6 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         /// <param name="outputDirectory">The path of the directory in which to store the project restore
         /// outputs.</param>
         /// <returns>The <see cref="LockFile"/> object.</returns>
-        public Task<LockFile?> CreateAsync(string projectPath, string outputDirectory);
+        public LockFile? Create(string projectPath, string outputDirectory);
     }
 }

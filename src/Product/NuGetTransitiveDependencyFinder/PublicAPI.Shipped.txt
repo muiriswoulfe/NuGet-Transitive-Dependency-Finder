@@ -2,7 +2,7 @@
 
 NuGetTransitiveDependencyFinder.Extensions.ServiceCollectionExtensions
 NuGetTransitiveDependencyFinder.ITransitiveDependencyFinder
-NuGetTransitiveDependencyFinder.ITransitiveDependencyFinder.RunAsync(string? projectOrSolutionPath, bool collateAllDependencies) -> System.Threading.Tasks.Task<NuGetTransitiveDependencyFinder.Output.Projects!>!
+NuGetTransitiveDependencyFinder.ITransitiveDependencyFinder.Run(string? projectOrSolutionPath, bool collateAllDependencies) -> NuGetTransitiveDependencyFinder.Output.Projects!
 NuGetTransitiveDependencyFinder.Output.Base<TChild>
 NuGetTransitiveDependencyFinder.Output.Base<TChild>.Add(TChild child) -> void
 NuGetTransitiveDependencyFinder.Output.Base<TChild>.HasChildren.get -> bool

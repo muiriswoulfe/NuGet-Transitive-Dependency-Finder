@@ -6,7 +6,6 @@
 namespace NuGetTransitiveDependencyFinder.UnitTests
 {
     using System;
-    using System.Threading.Tasks;
     using FluentAssertions;
     using Microsoft.Extensions.Logging;
     using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
@@ -23,24 +22,23 @@ namespace NuGetTransitiveDependencyFinder.UnitTests
             configure => configure.SetMinimumLevel(LogLevel.Trace);
 
         /// <summary>
-        /// Tests that when <see cref="TransitiveDependencyFinder.RunAsync(string?, bool)"/> is called with a
+        /// Tests that when <see cref="TransitiveDependencyFinder.Run(string?, bool)"/> is called with a
         /// <see langword="null"/> <c>projectOrSolutionPath</c> parameter, it throws an
         /// <see cref="ArgumentNullException"/>.
         /// </summary>
         [AllCulturesFact]
-        public async Task RunAsync_WithNullProjectOrSolutionPath_ThrowsArgumentNullException()
+        public void Run_WithNullProjectOrSolutionPath_ThrowsArgumentNullException()
         {
             // Arrange
             using var transitiveDependencyFinder = new TransitiveDependencyFinder(LoggingBuilderAction);
 
             // Act
-            Func<Task> function = transitiveDependencyFinder.Awaiting(current => current.RunAsync(null, true));
+            Action action = () => transitiveDependencyFinder.Run(null, true);
 
             // Assert
-            _ = await function
-                .Should().ThrowAsync<ArgumentNullException>()
-                .WithParameterName("projectOrSolutionPath")
-                .ConfigureAwait(false);
+            _ = action
+                .Should().Throw<ArgumentNullException>()
+                .WithParameterName("projectOrSolutionPath");
         }
 
         /// <summary>
@@ -57,7 +55,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests
             Action action = () => transitiveDependencyFinder.Dispose();
 
             // Assert
-            action
+            _ = action
                 .Should().NotThrow();
         }
 
@@ -77,11 +75,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests
             Action action3 = () => transitiveDependencyFinder.Dispose();
 
             // Assert
-            action1
+            _ = action1
                 .Should().NotThrow();
-            action2
+            _ = action2
                 .Should().NotThrow();
-            action3
+            _ = action3
                 .Should().NotThrow();
         }
 

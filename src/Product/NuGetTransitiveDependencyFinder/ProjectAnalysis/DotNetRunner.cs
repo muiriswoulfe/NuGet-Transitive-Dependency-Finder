@@ -6,7 +6,6 @@
 namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
 {
     using System.Diagnostics;
-    using System.Threading.Tasks;
     using Microsoft.Extensions.Logging;
     using NuGetTransitiveDependencyFinder.Wrappers;
 
@@ -38,25 +37,21 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         }
 
         /// <inheritdoc/>
-        public Task RunAsync(string parameters, string workingDirectory)
+        public void Run(string parameters, string workingDirectory)
         {
-            this.processWrapper.ErrorDataReceived += this.LogError!;
-            this.processWrapper.OutputDataReceived += this.LogOutput!;
-            this.processWrapper.StartInfo = new("dotnet", parameters)
+            var startInfo = new ProcessStartInfo("dotnet", parameters)
             {
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,
                 WorkingDirectory = workingDirectory,
             };
 
-            // Start() will return a Boolean value indicating whether a new process was started. A false return value
-            // indicates that an existing process was reused and is not indicative of failure.
-            _ = this.processWrapper.Start();
+            this.processWrapper.Start(startInfo, this.LogOutput!, this.LogError!);
 
             this.processWrapper.BeginErrorReadLine();
             this.processWrapper.BeginOutputReadLine();
 
-            return this.processWrapper.WaitForExitAsync();
+            this.processWrapper.WaitForExit();
         }
 
         /// <summary>

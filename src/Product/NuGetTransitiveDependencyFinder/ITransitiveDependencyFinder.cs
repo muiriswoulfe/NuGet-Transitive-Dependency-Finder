@@ -6,7 +6,6 @@
 namespace NuGetTransitiveDependencyFinder
 {
     using System;
-    using System.Threading.Tasks;
     using NuGetTransitiveDependencyFinder.Output;
 
     /// <summary>
@@ -24,6 +23,6 @@ namespace NuGetTransitiveDependencyFinder
         /// <returns>The transitive NuGet dependency information, which can be processed for display.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="projectOrSolutionPath"/> is
         /// <see langword="null"/>.</exception>
-        public Task<Projects> RunAsync(string? projectOrSolutionPath, bool collateAllDependencies);
+        public Projects Run(string? projectOrSolutionPath, bool collateAllDependencies);
     }
 }
