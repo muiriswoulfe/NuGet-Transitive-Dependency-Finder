@@ -145,36 +145,36 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
         {
             foreach (var library in libraries.Values)
             {
-                this.RecordDependency(true, library!, libraries);
+                this.RecordDependency(library, null, libraries);
             }
         }
 
         /// <summary>
         /// Records a dependency for a .NET project and framework combination.
         /// </summary>
-        /// <param name="isTopLevel">A value indicating whether the current library is a top-level library, i.e. one
-        /// that is referenced within a .NET project file.</param>
         /// <param name="library">The current library.</param>
+        /// <param name="parent">The dependency that depends on <paramref name="library"/>, or <see langword="null"/>
+        /// if <paramref name="library" /> is a direct project dependency.</param>
         /// <param name="libraries">The collection of all libraries associated with the .NET project and framework
         /// combination.</param>
         private void RecordDependency(
-            bool isTopLevel,
             LockFileTargetLibrary library,
+            Dependency? parent,
             IReadOnlyDictionary<string, LockFileTargetLibrary> libraries)
         {
-            if (this.dependencies.ContainsKey(library.Name))
-            {
-                return;
-            }
-
-            if (!isTopLevel)
+            if (!this.dependencies.ContainsKey(library.Name))
             {
                 this.dependencies.Add(library.Name, new(library.Name, library.Version));
             }
 
+            if (parent is not null)
+            {
+                _ = this.dependencies[library.Name].Via.Add(parent);
+            }
+
             foreach (var libraryDependencies in library.Dependencies)
             {
-                this.RecordDependency(false, libraries[libraryDependencies.Id], libraries);
+                this.RecordDependency(libraries[libraryDependencies.Id], this.dependencies[library.Name], libraries);
             }
         }
 
@@ -199,7 +199,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis
                 .Select(dependency =>
                     !string.Equals(dependency.Name, "NETStandard.Library", StringComparison.OrdinalIgnoreCase) &&
                     this.dependencies.TryGetValue(dependency.Name, out var value) ? value : null)
-                .Where(dependency => dependency is not null))
+                .Where(dependency => dependency is not null && dependency!.Via.Count > 0))
             {
                 dependency!.IsTransitive = true;
             }

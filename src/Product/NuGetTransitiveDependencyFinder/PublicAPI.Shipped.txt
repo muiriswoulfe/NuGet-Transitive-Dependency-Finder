@@ -14,6 +14,7 @@ NuGetTransitiveDependencyFinder.Output.Dependency.Equals(NuGetTransitiveDependen
 NuGetTransitiveDependencyFinder.Output.Dependency.Identifier.get -> string!
 NuGetTransitiveDependencyFinder.Output.Dependency.IsTransitive.get -> bool
 NuGetTransitiveDependencyFinder.Output.Dependency.Version.get -> NuGet.Versioning.NuGetVersion!
+NuGetTransitiveDependencyFinder.Output.Dependency.Via.get -> System.Collections.Generic.ISet<NuGetTransitiveDependencyFinder.Output.Dependency!>!
 NuGetTransitiveDependencyFinder.Output.Framework
 NuGetTransitiveDependencyFinder.Output.Framework.CompareTo(NuGetTransitiveDependencyFinder.Output.Framework? other) -> int
 NuGetTransitiveDependencyFinder.Output.Framework.CompareTo(object? obj) -> int

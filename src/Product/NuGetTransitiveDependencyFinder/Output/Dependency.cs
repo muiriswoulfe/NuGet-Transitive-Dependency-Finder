@@ -6,6 +6,7 @@
 namespace NuGetTransitiveDependencyFinder.Output
 {
     using System;
+    using System.Collections.Generic;
     using NuGet.Versioning;
 
     /// <summary>
@@ -38,6 +39,7 @@ namespace NuGetTransitiveDependencyFinder.Output
         {
             this.Identifier = identifier;
             this.Version = version;
+            this.Via = new HashSet<Dependency>();
         }
 
         /// <summary>
@@ -49,6 +51,11 @@ namespace NuGetTransitiveDependencyFinder.Output
         /// Gets the dependency version.
         /// </summary>
         public NuGetVersion Version { get; }
+
+        /// <summary>
+        /// Gets the set of dependencies that provide this dependency.
+        /// </summary>
+        public ISet<Dependency> Via { get; }
 
         /// <summary>
         /// Gets a value indicating whether the dependency is a transitive dependency.
