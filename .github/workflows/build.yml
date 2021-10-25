@@ -36,27 +36,33 @@ jobs:
         uses: actions/setup-dotnet@v1.8.2
 
       # SonarCloud Initialization
-      - if: >-
+      - env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        if: >-
           ${{ matrix.configuration == 'Release'
           && matrix.os == 'ubuntu-latest'
-          && secrets.SONAR_TOKEN != '' }}
+          && env.SONAR_TOKEN != '' }}
         name: SONARCLOUD INITIALIZATION – Java Install
         uses: actions/setup-java@v2
         with:
           distribution: zulu
           java-version: 16.0.2
 
-      - if: >-
+      - env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        if: >-
           ${{ matrix.configuration == 'Release'
           && matrix.os == 'ubuntu-latest'
-          && secrets.SONAR_TOKEN != '' }}
+          && env.SONAR_TOKEN != '' }}
         name: SONARCLOUD INITIALIZATION – SonarCloud Install
         run: dotnet tool install dotnet-sonarscanner --tool-path .sonarcloud
 
-      - if: >-
+      - env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        if: >-
           ${{ matrix.configuration == 'Release'
           && matrix.os == 'ubuntu-latest'
-          && secrets.SONAR_TOKEN != '' }}
+          && env.SONAR_TOKEN != '' }}
         name: SONARCLOUD INITIALIZATION – SonarCloud Initialize
         run: >-
           .sonarcloud/dotnet-sonarscanner begin
@@ -76,24 +82,26 @@ jobs:
       - name: BUILD & TEST – Project Test
         run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"XPlat Code Coverage"
 
-      - if: >-
+      - env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        if: >-
           ${{ matrix.configuration == 'Release'
           && matrix.os == 'ubuntu-latest'
-          && secrets.SONAR_TOKEN != '' }}
+          && env.SONAR_TOKEN != '' }}
         name: BUILD & TEST – Upload to Codecov
         uses: codecov/codecov-action@v2.1.0
         with:
           fail_ci_if_error: true
 
       # SonarCloud Finalization
-      - if: >-
-          ${{ matrix.configuration == 'Release'
-          && matrix.os == 'ubuntu-latest'
-          && secrets.SONAR_TOKEN != '' }}
-        name: SONARCLOUD FINALIZATION – SonarCloud Analyze
-        env:
+      - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        if: >-
+          ${{ matrix.configuration == 'Release'
+          && matrix.os == 'ubuntu-latest'
+          && env.SONAR_TOKEN != '' }}
+        name: SONARCLOUD FINALIZATION – SonarCloud Analyze
         run: .sonarcloud/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
   create-asset:
