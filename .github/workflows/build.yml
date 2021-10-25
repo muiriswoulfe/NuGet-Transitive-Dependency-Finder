@@ -39,7 +39,7 @@ jobs:
       - if: >-
           ${{ matrix.configuration == 'Release'
           && matrix.os == 'ubuntu-latest'
-          && !startsWith(github.head_ref, 'dependabot/') }}
+          && secrets.SONAR_TOKEN != '' }}
         name: SONARCLOUD INITIALIZATION – Java Install
         uses: actions/setup-java@v2
         with:
@@ -49,14 +49,14 @@ jobs:
       - if: >-
           ${{ matrix.configuration == 'Release'
           && matrix.os == 'ubuntu-latest'
-          && !startsWith(github.head_ref, 'dependabot/') }}
+          && secrets.SONAR_TOKEN != '' }}
         name: SONARCLOUD INITIALIZATION – SonarCloud Install
         run: dotnet tool install dotnet-sonarscanner --tool-path .sonarcloud
 
       - if: >-
           ${{ matrix.configuration == 'Release'
           && matrix.os == 'ubuntu-latest'
-          && !startsWith(github.head_ref, 'dependabot/') }}
+          && secrets.SONAR_TOKEN != '' }}
         name: SONARCLOUD INITIALIZATION – SonarCloud Initialize
         run: >-
           .sonarcloud/dotnet-sonarscanner begin
@@ -79,7 +79,7 @@ jobs:
       - if: >-
           ${{ matrix.configuration == 'Release'
           && matrix.os == 'ubuntu-latest'
-          && !startsWith(github.head_ref, 'dependabot/') }}
+          && secrets.SONAR_TOKEN != '' }}
         name: BUILD & TEST – Upload to Codecov
         uses: codecov/codecov-action@v2.1.0
         with:
@@ -89,7 +89,7 @@ jobs:
       - if: >-
           ${{ matrix.configuration == 'Release'
           && matrix.os == 'ubuntu-latest'
-          && !startsWith(github.head_ref, 'dependabot/') }}
+          && secrets.SONAR_TOKEN != '' }}
         name: SONARCLOUD FINALIZATION – SonarCloud Analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
