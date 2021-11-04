@@ -33,6 +33,10 @@
     <comment>The description of the "--projectOrSolution" parameter, which is displayed as part of the help
     message.</comment>
   </data>
+  <data name="CommandLineHelp_Filter" xml:space="preserve">
+    <value>An optional dependency filter, to only show dependencies that start with the provided filter.</value>
+    <comment>The description of the "--filter" parameter, which is displayed as part of the help message.</comment>
+  </data>
   <data name="Information_CommencingAnalysis" xml:space="preserve">
     <value>Commencing analysis...</value>
     <comment>The message displayed when analysis is about to commence.</comment>

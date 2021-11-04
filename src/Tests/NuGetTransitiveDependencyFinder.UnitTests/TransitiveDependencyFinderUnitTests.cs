@@ -6,6 +6,7 @@
 namespace NuGetTransitiveDependencyFinder.UnitTests
 {
     using System;
+    using System.Text.RegularExpressions;
     using FluentAssertions;
     using Microsoft.Extensions.Logging;
     using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
@@ -22,7 +23,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests
             configure => configure.SetMinimumLevel(LogLevel.Trace);
 
         /// <summary>
-        /// Tests that when <see cref="TransitiveDependencyFinder.Run(string?, bool)"/> is called with a
+        /// Tests that when <see cref="TransitiveDependencyFinder.Run(string?, bool, Regex?)"/> is called with a
         /// <see langword="null"/> <c>projectOrSolutionPath</c> parameter, it throws an
         /// <see cref="ArgumentNullException"/>.
         /// </summary>
@@ -33,7 +34,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests
             using var transitiveDependencyFinder = new TransitiveDependencyFinder(LoggingBuilderAction);
 
             // Act
-            Action action = () => transitiveDependencyFinder.Run(null, true);
+            Action action = () => transitiveDependencyFinder.Run(null, true, null);
 
             // Assert
             _ = action

@@ -5,6 +5,7 @@
 
 namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
 {
+    using System.Text.RegularExpressions;
     using FluentAssertions;
     using Microsoft.Extensions.Logging;
     using Moq;
@@ -49,6 +50,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
         public void Run_Called_PerformsExpectedActions()
         {
             // Arrange
+            var filter = new Regex("Filter");
             var projects = InternalAccessor.Construct<Projects>(0);
             _ = this.commandLineOptions
                 .SetupGet(mock => mock.ProjectOrSolution)
@@ -56,8 +58,11 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
             _ = this.commandLineOptions
                 .SetupGet(mock => mock.All)
                 .Returns(true);
+            _ = this.commandLineOptions
+                .SetupGet(mock => mock.Filter)
+                .Returns(filter);
             _ = this.transitiveDependencyFinder
-                .Setup(mock => mock.Run("ProjectOrSolution", true))
+                .Setup(mock => mock.Run("ProjectOrSolution", true, filter))
                 .Returns(projects);
             var programRunner = new ProgramRunner(
                 this.commandLineOptions.Object,
@@ -77,8 +82,9 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Process
                 .Should().Be(Information.CommencingAnalysis);
             this.commandLineOptions.VerifyGet(mock => mock.ProjectOrSolution, Times.Once);
             this.commandLineOptions.VerifyGet(mock => mock.All, Times.Once);
+            this.commandLineOptions.VerifyGet(mock => mock.Filter, Times.Once);
             this.commandLineOptions.VerifyNoOtherCalls();
-            this.transitiveDependencyFinder.Verify(mock => mock.Run("ProjectOrSolution", true), Times.Once);
+            this.transitiveDependencyFinder.Verify(mock => mock.Run("ProjectOrSolution", true, filter), Times.Once);
             this.transitiveDependencyFinder.VerifyNoOtherCalls();
             this.dependencyWriter.Verify(mock => mock.Write(projects), Times.Once);
             this.dependencyWriter.VerifyNoOtherCalls();

@@ -5,6 +5,7 @@
 
 namespace NuGetTransitiveDependencyFinder.ConsoleApp.Input
 {
+    using System.Text.RegularExpressions;
     using CommandLine;
     using NuGetTransitiveDependencyFinder.ConsoleApp.Resources.Messages;
 
@@ -25,5 +26,13 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Input
             HelpText = nameof(ProjectOrSolution),
             ResourceType = typeof(CommandLineHelp))]
         public string? ProjectOrSolution { get; init; }
+
+        /// <inheritdoc/>
+        [Option(
+            'f',
+            "filter",
+            HelpText = nameof(Filter),
+            ResourceType = typeof(CommandLineHelp))]
+        public Regex? Filter { get; init; }
     }
 }

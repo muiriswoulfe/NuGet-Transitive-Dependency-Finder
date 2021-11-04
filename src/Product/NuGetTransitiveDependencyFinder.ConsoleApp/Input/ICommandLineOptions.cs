@@ -5,6 +5,8 @@
 
 namespace NuGetTransitiveDependencyFinder.ConsoleApp.Input
 {
+    using System.Text.RegularExpressions;
+
     /// <summary>
     /// An interface specifying the application's command-line parameters.
     /// </summary>
@@ -20,5 +22,10 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Input
         /// Gets the file name of the .NET project or solution to analyze.
         /// </summary>
         public string? ProjectOrSolution { get; init; }
+
+        /// <summary>
+        /// Gets the optional regular expression, to match certain dependencies.
+        /// </summary>
+        public Regex? Filter { get; init; }
     }
 }
