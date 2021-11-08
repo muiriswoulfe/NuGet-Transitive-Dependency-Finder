@@ -74,7 +74,7 @@ namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
             textWriter.WriteLine(
                 "{0}{1}{2}",
                 GetColorAndFormatting(logEntry.LogLevel),
-                logEntry.Formatter(logEntry.State, logEntry.Exception),
+                logEntry.Formatter!(logEntry.State, logEntry.Exception),
                 resetColorAndFormatting);
         }
 
