@@ -64,7 +64,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
                     new(0),
                     "State",
                     new NotSupportedException(),
-                    (string state, Exception exception) => Invariant($"{state} {exception}")),
+                    (string state, Exception? exception) => Invariant($"{state} {exception}")),
                 ExternalScopeProviderMock.Object,
                 result);
 
@@ -98,7 +98,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
                         new(0),
                         "State",
                         new NotSupportedException(),
-                        (string state, Exception exception) => Invariant($"{state} {exception}")),
+                        (string state, Exception? exception) => Invariant($"{state} {exception}")),
                     ExternalScopeProviderMock.Object,
                     result)));
 
@@ -130,7 +130,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output
                     new(0),
                     "State",
                     new NotSupportedException(),
-                    (string state, Exception exception) => Invariant($"{state} {exception}")),
+                    (string state, Exception? exception) => Invariant($"{state} {exception}")),
                 ExternalScopeProviderMock.Object,
                 result);
 
