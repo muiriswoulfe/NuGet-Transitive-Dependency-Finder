@@ -61,8 +61,8 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Logging
             LogLevel logLevel,
             EventId eventId,
             TState state,
-            Exception exception,
-            Func<TState, Exception, string> formatter) =>
+            Exception? exception,
+            Func<TState, Exception?, string> formatter) =>
             this.entries.Add(new(logLevel, eventId, formatter(state, exception)));
     }
 }
