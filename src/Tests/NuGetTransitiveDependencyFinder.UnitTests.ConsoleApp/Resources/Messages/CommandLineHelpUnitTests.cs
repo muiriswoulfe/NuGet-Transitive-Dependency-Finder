@@ -3,44 +3,43 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Resources.Messages
+namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Resources.Messages;
+
+using FluentAssertions;
+using NuGetTransitiveDependencyFinder.ConsoleApp.Resources.Messages;
+using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
+
+/// <summary>
+/// Unit tests for the <see cref="CommandLineHelp"/> class.
+/// </summary>
+public class CommandLineHelpUnitTests
 {
-    using FluentAssertions;
-    using NuGetTransitiveDependencyFinder.ConsoleApp.Resources.Messages;
-    using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
+    /// <summary>
+    /// Tests that when <see cref="CommandLineHelp.All"/> is called, it returns the expected string.
+    /// </summary>
+    [AllCulturesFact]
+    public void All_Called_ReturnsExpectedString()
+    {
+        // Act
+        var result = CommandLineHelp.All;
+
+        // Assert
+        _ = result
+            .Should().Be(
+                "Indicates that all NuGet dependencies, including non-transitive dependencies, should be listed.");
+    }
 
     /// <summary>
-    /// Unit tests for the <see cref="CommandLineHelp"/> class.
+    /// Tests that when <see cref="CommandLineHelp.ProjectOrSolution"/> is called, it returns the expected string.
     /// </summary>
-    public class CommandLineHelpUnitTests
+    [AllCulturesFact]
+    public void ProjectOrSolution_Called_ReturnsExpectedString()
     {
-        /// <summary>
-        /// Tests that when <see cref="CommandLineHelp.All"/> is called, it returns the expected string.
-        /// </summary>
-        [AllCulturesFact]
-        public void All_Called_ReturnsExpectedString()
-        {
-            // Act
-            var result = CommandLineHelp.All;
+        // Act
+        var result = CommandLineHelp.ProjectOrSolution;
 
-            // Assert
-            _ = result
-                .Should().Be(
-                    "Indicates that all NuGet dependencies, including non-transitive dependencies, should be listed.");
-        }
-
-        /// <summary>
-        /// Tests that when <see cref="CommandLineHelp.ProjectOrSolution"/> is called, it returns the expected string.
-        /// </summary>
-        [AllCulturesFact]
-        public void ProjectOrSolution_Called_ReturnsExpectedString()
-        {
-            // Act
-            var result = CommandLineHelp.ProjectOrSolution;
-
-            // Assert
-            _ = result
-                .Should().Be("The file name of the .NET project or solution to analyze.");
-        }
+        // Assert
+        _ = result
+            .Should().Be("The file name of the .NET project or solution to analyze.");
     }
 }
