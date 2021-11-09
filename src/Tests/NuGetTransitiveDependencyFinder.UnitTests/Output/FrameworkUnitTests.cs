@@ -314,8 +314,8 @@ public class FrameworkUnitTests
     }
 
     /// <summary>
-    /// Tests that when <see cref="Framework.operator &gt;=(Framework?, Framework?)"/> is called with different
-    /// values, it returns the expected value in each case.
+    /// Tests that when <see cref="Framework.operator &gt;=(Framework?, Framework?)"/> is called with different values,
+    /// it returns the expected value in each case.
     /// </summary>
     /// <param name="left">The left operand to compare.</param>
     /// <param name="right">The right operand to compare.</param>
@@ -333,8 +333,8 @@ public class FrameworkUnitTests
     }
 
     /// <summary>
-    /// Tests that when <see cref="IComparable{Framework}.CompareTo(Framework)"/> is called with different values,
-    /// it returns the expected value in each case.
+    /// Tests that when <see cref="IComparable{Framework}.CompareTo(Framework)"/> is called with different values, it
+    /// returns the expected value in each case.
     /// </summary>
     /// <param name="left">The left operand to compare.</param>
     /// <param name="right">The right operand to compare.</param>
@@ -371,8 +371,8 @@ public class FrameworkUnitTests
     }
 
     /// <summary>
-    /// Tests that when <see cref="IComparable.CompareTo(object?)"/> is called with different object types, it
-    /// throws an <see cref="ArgumentException"/>.
+    /// Tests that when <see cref="IComparable.CompareTo(object?)"/> is called with different object types, it throws an
+    /// <see cref="ArgumentException"/>.
     /// </summary>
     [AllCulturesFact]
     public void CompareToObject_WithDifferentObjectTypes_ThrowsArgumentException()
@@ -406,8 +406,8 @@ public class FrameworkUnitTests
     }
 
     /// <summary>
-    /// Tests that when <see cref="IEquatable{Framework}.Equals(Framework)"/> is called with different values
-    /// against an <see langword="object"/>, it returns the expected value in each case.
+    /// Tests that when <see cref="IEquatable{Framework}.Equals(Framework)"/> is called with different values against an
+    /// <see langword="object"/>, it returns the expected value in each case.
     /// </summary>
     /// <param name="left">The left operand to compare.</param>
     /// <param name="right">The right operand to compare.</param>
@@ -425,8 +425,8 @@ public class FrameworkUnitTests
     }
 
     /// <summary>
-    /// Tests that when <see cref="IEquatable{Framework}.Equals(Framework)"/> is called with different object
-    /// types, it returns <see langword="false"/>.
+    /// Tests that when <see cref="IEquatable{Framework}.Equals(Framework)"/> is called with different object types, it
+    /// returns <see langword="false"/>.
     /// </summary>
     [AllCulturesFact]
     public void EqualsObject_WithDifferentObjectTypes_ReturnsFalse()
@@ -475,8 +475,8 @@ public class FrameworkUnitTests
     }
 
     /// <summary>
-    /// Tests that when <see cref="object.ToString()"/> is called with different objects, it returns different
-    /// strings for each object.
+    /// Tests that when <see cref="object.ToString()"/> is called with different objects, it returns different strings
+    /// for each object.
     /// </summary>
     /// <param name="value">The value to be converted to a string.</param>
     /// <param name="expected">The expected result.</param>
@@ -508,8 +508,8 @@ public class FrameworkUnitTests
     }
 
     /// <summary>
-    /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> object
-    /// not comprising children, it returns <see langword="false"/>.
+    /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> object not
+    /// comprising children, it returns <see langword="false"/>.
     /// </summary>
     [AllCulturesFact]
     public void HasChildren_NotComprisingChildren_ReturnsFalse()
@@ -562,8 +562,8 @@ public class FrameworkUnitTests
     }
 
     /// <summary>
-    /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/> object
-    /// not comprising children, it returns the empty collection.
+    /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/> object not
+    /// comprising children, it returns the empty collection.
     /// </summary>
     [AllCulturesFact]
     public void SortedChildren_NotComprisingChildren_ReturnsEmptyCollection()
@@ -661,8 +661,8 @@ public class FrameworkUnitTests
 
     /// <summary>
     /// Tests that when <see cref="Base{Dependency}.SortedChildren"/> is called for a <see cref="Framework"/> object
-    /// comprising children added after an initial call to <see cref="Base{Dependency}.SortedChildren"/>, it returns
-    /// the sorted collection of children.
+    /// comprising children added after an initial call to <see cref="Base{Dependency}.SortedChildren"/>, it returns the
+    /// sorted collection of children.
     /// </summary>
     [AllCulturesFact]
     public void SortedChildren_ComprisingChildrenAddedAfterInitialSortedChildrenCall_ReturnsSortedChildren()
