@@ -115,6 +115,7 @@ jobs:
           --configuration Release
           --no-restore
           --runtime ${{ matrix.runtime }}
+          --self-contained true
           /property:PublishSingleFile=true
           /maxCpuCount
 
