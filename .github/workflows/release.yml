@@ -127,7 +127,6 @@ jobs:
           --runtime ${{ matrix.runtime }}
           --self-contained true
           /property:PublishSingleFile=true
-          /property:PublishTrimmed=true
 
       # Upload
       - name: UPLOAD – Get Platform
