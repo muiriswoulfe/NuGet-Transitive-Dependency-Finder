@@ -35,6 +35,17 @@ jobs:
       - name: INITIALIZATION – .NET Install
         uses: actions/setup-dotnet@v1.8.2
 
+      - env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        if: >-
+          ${{ matrix.configuration == 'Release'
+          && matrix.os == 'ubuntu-latest'
+          && env.SONAR_TOKEN != '' }}
+        name: INITIALIZATION – .NET Install v5.0
+        uses: actions/setup-dotnet@v1.8.2
+        with:
+          dotnet-version: 5.0.403
+
       # SonarCloud Initialization
       - env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -46,7 +57,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: zulu
-          java-version: 16.0.2
+          java-version: 17.0.1
 
       - env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -162,6 +173,7 @@ jobs:
           --configuration Release
           --no-restore
           --runtime ${{ matrix.runtime }}
+          --self-contained true
           /property:PublishSingleFile=true
           /maxCpuCount
 
@@ -174,7 +186,6 @@ jobs:
           --runtime ${{ matrix.runtime }}
           --self-contained true
           /property:PublishSingleFile=true
-          /property:PublishTrimmed=true
 
       # Upload
       - name: UPLOAD – Get Platform
@@ -197,7 +208,7 @@ jobs:
         run: |-
           $Extension = '${{ fromJson(env.extension)[steps.platform.outputs.platform] }}'
           $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
-          $AssetPath = '${{ github.workspace }}/src/Product/${{ env.project }}/bin/Release/net5.0/'
+          $AssetPath = '${{ github.workspace }}/src/Product/${{ env.project }}/bin/Release/net6.0/'
           $AssetPath += "${{ matrix.runtime }}/publish/${{ env.project }}$Extension"
           Write-Output -InputObject "::set-output name=asset_path::$AssetPath"
           Write-Output -InputObject "::set-output name=asset_name::$AssetName"
