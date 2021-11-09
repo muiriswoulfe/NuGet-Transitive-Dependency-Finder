@@ -3,10 +3,9 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities
-{
-    /// <summary>
-    /// A class encapsulating data for unit testing comparison methods.
-    /// </summary>
-    internal record ComparisonTestData<TValue>(TValue? Left, TValue? Right, Comparisons Comparison);
-}
+namespace NuGetTransitiveDependencyFinder.UnitTests.Output.TestUtilities;
+
+/// <summary>
+/// A record encapsulating data for unit testing comparison methods.
+/// </summary>
+internal record ComparisonTestData<TValue>(TValue? Left, TValue? Right, Comparisons Comparison);

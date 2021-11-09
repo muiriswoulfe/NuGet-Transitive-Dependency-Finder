@@ -3,19 +3,18 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output
-{
-    using NuGetTransitiveDependencyFinder.Output;
+namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output;
 
+using NuGetTransitiveDependencyFinder.Output;
+
+/// <summary>
+/// An interface for writing NuGet dependency information.
+/// </summary>
+internal interface IDependencyWriter
+{
     /// <summary>
-    /// An interface for writing NuGet dependency information.
+    /// Writes the NuGet dependency information.
     /// </summary>
-    internal interface IDependencyWriter
-    {
-        /// <summary>
-        /// Writes the NuGet dependency information.
-        /// </summary>
-        /// <param name="projects">The details of the projects.</param>
-        public void Write(Projects projects);
-    }
+    /// <param name="projects">The details of the projects.</param>
+    public void Write(Projects projects);
 }

@@ -19,5 +19,5 @@ using NuGetTransitiveDependencyFinder.Properties;
 [assembly: AssemblyMetadata("RepositoryUrl", "https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder")]
 [assembly: AssemblyVersion(AssemblyAttributes.Version)]
 [assembly: ComVisible(false)]
-[assembly: TargetFramework(".NETCoreApp,Version=v5.0", FrameworkDisplayName = "")]
+[assembly: TargetFramework(".NETCoreApp,Version=v6.0", FrameworkDisplayName = "")]
 [assembly: NeutralResourcesLanguage("en-US")]

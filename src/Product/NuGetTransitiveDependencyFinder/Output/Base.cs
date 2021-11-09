@@ -3,94 +3,92 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGetTransitiveDependencyFinder.Output
+namespace NuGetTransitiveDependencyFinder.Output;
+
+using System.Collections.Generic;
+
+/// <summary>
+/// A base class representing outputted information.
+/// </summary>
+/// <typeparam name="TChild">The type of the collection elements, which comprise the child elements of the current
+/// object.</typeparam>
+public abstract class Base<TChild>
+    where TChild : notnull
 {
-    using System.Collections.Generic;
+    /// <summary>
+    /// The collection of child elements.
+    /// </summary>
+    private readonly List<TChild> children;
 
     /// <summary>
-    /// A base class representing outputted information.
+    /// A value indicating whether the collection of child elements is sorted.
     /// </summary>
-    /// <typeparam name="TChild">The type of the collection elements, which comprise the child elements of the current
-    /// object.</typeparam>
-    public abstract class Base<TChild>
-        where TChild : notnull
+    private bool areChildrenSorted;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Base{TChild}"/> class.
+    /// </summary>
+    /// <param name="capacity">The quantity of child elements for which the collection has adequate initial
+    /// capacity.</param>
+    internal Base(int capacity)
     {
-        /// <summary>
-        /// The collection of child elements.
-        /// </summary>
-        private readonly List<TChild> children;
+        this.children = new(capacity);
+        this.areChildrenSorted = true;
+    }
 
-        /// <summary>
-        /// A value indicating whether the collection of child elements is sorted.
-        /// </summary>
-        private bool areChildrenSorted;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Base{TChild}"/> class.
+    /// </summary>
+    /// <param name="children">The child elements with which to initialize the collection.</param>
+    internal Base(IReadOnlyCollection<TChild> children)
+    {
+        this.children = new(children);
+        this.areChildrenSorted = false;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Base{TChild}"/> class.
-        /// </summary>
-        /// <param name="capacity">The quantity of child elements for which the collection has adequate initial
-        /// capacity.</param>
-        internal Base(int capacity)
+    /// <summary>
+    /// Gets a value indicating whether the object has child elements.
+    /// </summary>
+    public bool HasChildren =>
+        this.children.Count != 0;
+
+    /// <summary>
+    /// Gets the sorted collection of child elements.
+    /// </summary>
+    /// <remarks>Invoking this property may involve sorting the collection, which involves an O(n log n) operation,
+    /// where n is the count of the child elements in the collection.</remarks>
+    public IReadOnlyCollection<TChild> SortedChildren
+    {
+        get
         {
-            this.children = new(capacity);
-            this.areChildrenSorted = true;
+            if (!this.areChildrenSorted)
+            {
+                this.children.Sort();
+                this.areChildrenSorted = true;
+            }
+
+            return this.children;
         }
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Base{TChild}"/> class.
-        /// </summary>
-        /// <param name="children">The child elements with which to initialize the collection.</param>
-        internal Base(IReadOnlyCollection<TChild> children)
+    /// <summary>
+    /// Adds a child element to the current collection, on the condition that <see cref="IsAddValid(TChild)"/> returns
+    /// <see langword="true"/>.
+    /// </summary>
+    /// <param name="child">The child element to be added.</param>
+    public void Add(TChild child)
+    {
+        if (this.IsAddValid(child))
         {
-            this.children = new(children);
+            this.children.Add(child);
             this.areChildrenSorted = false;
         }
-
-        /// <summary>
-        /// Gets a value indicating whether the object has child elements.
-        /// </summary>
-        public bool HasChildren =>
-            this.children.Count != 0;
-
-        /// <summary>
-        /// Gets the sorted collection of child elements.
-        /// </summary>
-        /// <remarks>Invoking this property may involve sorting the collection, which involves an O(n log n) operation,
-        /// where n is the count of the child elements in the collection.</remarks>
-        public IReadOnlyCollection<TChild> SortedChildren
-        {
-            get
-            {
-                if (!this.areChildrenSorted)
-                {
-                    this.children.Sort();
-                    this.areChildrenSorted = true;
-                }
-
-                return this.children;
-            }
-        }
-
-        /// <summary>
-        /// Adds a child element to the current collection, on the condition that <see cref="IsAddValid(TChild)"/>
-        /// returns <see langword="true"/>.
-        /// </summary>
-        /// <param name="child">The child element to be added.</param>
-        public void Add(TChild child)
-        {
-            if (this.IsAddValid(child))
-            {
-                this.children.Add(child);
-                this.areChildrenSorted = false;
-            }
-        }
-
-        /// <summary>
-        /// Determines whether performing an <see cref="Add(TChild)"/> operation on the specified child element is
-        /// valid.
-        /// </summary>
-        /// <param name="child">The child element to check.</param>
-        /// <returns>A value indicating whether the child element should be added the collection.</returns>
-        internal abstract bool IsAddValid(TChild child);
     }
+
+    /// <summary>
+    /// Determines whether performing an <see cref="Add(TChild)"/> operation on the specified child element is valid.
+    /// </summary>
+    /// <param name="child">The child element to check.</param>
+    /// <returns>A value indicating whether the child element should be added the collection.</returns>
+    internal abstract bool IsAddValid(TChild child);
 }

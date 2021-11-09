@@ -38,7 +38,7 @@ errors or warnings into your build process.
 To build the NuGet Transitive Dependency Finder, you will need to install:
 
 - [Git][git]
-- [.NET Core SDK 5.0.101][netcoresdk] or later
+- [.NET Core SDK 6][netcoresdk] or later
 
 You can simplify the process by also installing one of the following:
 
@@ -216,7 +216,7 @@ be located [here][sonarcloud].
 [github]:
   https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder
 [netcoresdk]:
-  https://dotnet.microsoft.com/download/dotnet-core/5.0
+  https://dotnet.microsoft.com/download/dotnet-core/6.0
 [vs]:
   https://visualstudio.microsoft.com/
 [vscode]:
