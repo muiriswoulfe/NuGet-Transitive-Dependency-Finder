@@ -84,9 +84,9 @@ The easiest way to build the NuGet Transitive Dependency Finder is to open
 1. In the *Solution Explorer* window, right-click on the solution file and
    select *Build Solution*.
 
-#### Command Line
+#### Command-Line
 
-To build directly from the command line, enter the command appropriate to which
+To build directly from the command-line, enter the command appropriate to which
 configuration you wish to build:
 
 ```Batchfile
