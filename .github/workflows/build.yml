@@ -494,27 +494,27 @@ jobs:
       - name: INITIALIZATION – Checkout
         uses: actions/checkout@v2
 
-#      # CodeQL
-#      - name: INITIALIZATION – .NET Install
-#        uses: actions/setup-dotnet@v1.9.0
-#
-#      - name: CODEQL – Initialize
-#        uses: github/codeql-action/init@v1
-#        with:
-#          queries: security-and-quality
-#
-#      # Build & Test
-#      - name: BUILD & TEST – Project Restore
-#        run: dotnet restore
-#
-#      - name: BUILD & TEST – Project Build
-#        run: dotnet build --configuration Release --no-restore /maxCpuCount
-#
-#      - name: BUILD & TEST – Project Test
-#        run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage"
-#
-#      # CodeQL
-#      - name: CODEQL – Analyze
-#        uses: github/codeql-action/analyze@v1
+      # CodeQL
+      - name: INITIALIZATION – .NET Install
+        uses: actions/setup-dotnet@v1.9.0
+
+      - name: CODEQL – Initialize
+        uses: github/codeql-action/init@v1
+        with:
+          queries: security-and-quality
+
+      # Build & Test
+      - name: BUILD & TEST – Project Restore
+        run: dotnet restore
+
+      - name: BUILD & TEST – Project Build
+        run: dotnet build --configuration Release --no-restore /maxCpuCount
+
+      - name: BUILD & TEST – Project Test
+        run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage"
+
+      # CodeQL
+      - name: CODEQL – Analyze
+        uses: github/codeql-action/analyze@v1
 
 ...
