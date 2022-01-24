@@ -436,6 +436,8 @@ dotnet_diagnostic.S3903.severity = none
 dotnet_diagnostic.SA1000.severity = none
 dotnet_diagnostic.SA1009.severity = none
 dotnet_diagnostic.SA1313.severity = none
+roslynator_accessibility_modifiers = explicit
+roslynator_enum_has_flag_style = method
 
 [*.md]
 indent_size = unset
