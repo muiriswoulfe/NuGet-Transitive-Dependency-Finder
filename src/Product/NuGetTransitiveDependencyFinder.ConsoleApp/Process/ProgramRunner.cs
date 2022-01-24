@@ -63,7 +63,7 @@ internal class ProgramRunner : IProgramRunner
 
         var projects =
             this.transitiveDependencyFinder.Run(
-                this.commandLineOptions.ProjectOrSolution!,
+                this.commandLineOptions.ProjectOrSolution,
                 this.commandLineOptions.All,
                 this.commandLineOptions.Filter);
 
