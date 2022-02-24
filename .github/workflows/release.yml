@@ -103,7 +103,7 @@ jobs:
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@v1.9.0
+        uses: actions/setup-dotnet@v1.9.1
 
       # Build
       - name: BUILD – Project Restore
@@ -184,7 +184,7 @@ jobs:
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@v1.9.0
+        uses: actions/setup-dotnet@v1.9.1
 
       # Create Logo
       - name: CREATE LOGO – Install svgexport
