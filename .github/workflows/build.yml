@@ -35,17 +35,6 @@ jobs:
       - name: INITIALIZATION – .NET Install
         uses: actions/setup-dotnet@v2
 
-      - env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        if: >-
-          ${{ matrix.configuration == 'Release'
-          && matrix.os == 'ubuntu-latest'
-          && env.SONAR_TOKEN != '' }}
-        name: INITIALIZATION – .NET Install v5.0
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: 5.0.403
-
       # SonarCloud Initialization
       - env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -57,7 +46,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: zulu
-          java-version: 17.0.1
+          java-version: 17.0.2
 
       - env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
