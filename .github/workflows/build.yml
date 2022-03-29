@@ -445,36 +445,6 @@ jobs:
           json-file: src/xunit.runner.json
           json-schema: xunit.runner.schema.json
 
-  validate-security:
-    name: Validate – Security
-    runs-on: ubuntu-latest
-    steps:
-      # Initialization
-      - name: INITIALIZATION – Checkout
-        uses: actions/checkout@v3
-
-      # INFER#
-      - name: INFER# – Validation
-        id: infersharp
-        uses: microsoft/infersharpaction@v1.2
-        with:
-          binary-path: src
-
-      - name: INFER# – Print Results
-        shell: pwsh
-        run: Write-Output -InputObject '${{ steps.infersharp.outputs.results }}'
-
-      # Security Scan
-      - name: SECURITY SCAN – Validate
-        uses: ShiftLeftSecurity/scan-action@v1.3.0
-        with:
-          type: credscan,depscan,yaml
-
-      - name: SECURITY SCAN – Upload Report
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: reports
-
   validate-codeql:
     name: Validate – CodeQL
     runs-on: ubuntu-latest
