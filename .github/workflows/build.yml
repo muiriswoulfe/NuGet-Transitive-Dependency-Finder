@@ -19,6 +19,7 @@ on:
 jobs:
   initialization:
     name: Initialization
+    runs-on: ubuntu-latest
     steps:
       - name: PR Metrics
         uses: microsoft/PR-Metrics@v1.4.0
