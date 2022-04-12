@@ -17,6 +17,21 @@ on:
   workflow_dispatch: null
 
 jobs:
+  initialization:
+    name: Initialization
+    runs-on: ubuntu-latest
+    steps:
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: PR Metrics
+        uses: microsoft/PR-Metrics@v1.4.0
+        env:
+          SYSTEM_ACCESSTOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
   build:
     name: Build
     strategy:
