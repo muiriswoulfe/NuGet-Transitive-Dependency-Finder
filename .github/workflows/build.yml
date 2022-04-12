@@ -46,7 +46,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: zulu
-          java-version: 17.0.2
+          java-version: 18.0.0
 
       - env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
