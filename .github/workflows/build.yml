@@ -473,7 +473,7 @@ jobs:
         uses: actions/setup-dotnet@v2
 
       - name: CODEQL – Initialize
-        uses: github/codeql-action/init@v1
+        uses: github/codeql-action/init@v2
         with:
           queries: security-and-quality
 
@@ -489,6 +489,6 @@ jobs:
 
       # CodeQL
       - name: CODEQL – Analyze
-        uses: github/codeql-action/analyze@v1
+        uses: github/codeql-action/analyze@v2
 
 ...
