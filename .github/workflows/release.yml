@@ -93,7 +93,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: tag
-        uses: jossef/action-latest-release-info@v1.2.0
+        uses: jossef/action-latest-release-info@v1.2.1
 
       - name: INITIALIZATION – Version Replace
         shell: pwsh
