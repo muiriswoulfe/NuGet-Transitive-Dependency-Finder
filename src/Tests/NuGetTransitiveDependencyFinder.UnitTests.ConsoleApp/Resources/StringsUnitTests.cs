@@ -37,7 +37,7 @@ public class StringsUnitTests
     public void GetString_CalledWithValidResourceName_ReturnsUniqueNonNullString()
     {
         // Act
-        var result = AllResources.Select(resource => Strings.GetString(resource));
+        var result = AllResources.Select(Strings.GetString);
 
         // Assert
         _ = result

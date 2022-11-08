@@ -6,20 +6,19 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Debug",
-      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net6.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--projectOrSolution",
         "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
       ],
-      "cwd": "${workspaceFolder}",
-      "console": "externalTerminal"
+      "cwd": "${workspaceFolder}"
     },
     {
       "name": "Launch Debug – All",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Debug",
-      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net6.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--projectOrSolution",
         "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln",
@@ -33,7 +32,68 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Debug",
-      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net6.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "args": [
+        "--help"
+      ],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Launch Debug – Version",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Build Debug",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "args": [
+        "--version"
+      ],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Launch Release",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Build Release",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Release/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "args": [
+        "--projectOrSolution",
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+      ],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Launch Debug (External Terminal)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Build Debug",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "args": [
+        "--projectOrSolution",
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "externalTerminal"
+    },
+    {
+      "name": "Launch Debug – All (External Terminal)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Build Debug",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "args": [
+        "--projectOrSolution",
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln",
+        "--all"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "externalTerminal"
+    },
+    {
+      "name": "Launch Debug – Help (External Terminal)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Build Debug",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--help"
       ],
@@ -41,11 +101,11 @@
       "console": "externalTerminal"
     },
     {
-      "name": "Launch Debug – Version",
+      "name": "Launch Debug – Version (External Terminal)",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Debug",
-      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net6.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--version"
       ],
@@ -53,11 +113,11 @@
       "console": "externalTerminal"
     },
     {
-      "name": "Launch Release",
+      "name": "Launch Release (External Terminal)",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Release",
-      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Release/net6.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Release/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--projectOrSolution",
         "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
