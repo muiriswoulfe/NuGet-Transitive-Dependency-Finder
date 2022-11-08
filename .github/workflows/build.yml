@@ -99,15 +99,16 @@ jobs:
         run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"XPlat Code Coverage"
 
       - env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         if: >-
           ${{ matrix.configuration == 'Release'
           && matrix.os == 'ubuntu-latest'
-          && env.SONAR_TOKEN != '' }}
+          && env.CODECOV_TOKEN != '' }}
         name: BUILD & TEST – Upload to Codecov
         uses: codecov/codecov-action@v3
         with:
           fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       # SonarCloud Finalization
       - env:

@@ -66,7 +66,7 @@ internal class PlainConsoleFormatter : ConsoleFormatter
     /// <inheritdoc/>
     public override void Write<TState>(
         in LogEntry<TState> logEntry,
-        IExternalScopeProvider scopeProvider,
+        IExternalScopeProvider? scopeProvider,
         TextWriter textWriter)
     {
         const string resetColorAndFormatting = "\x1B[39m\x1B[22m";
