@@ -62,7 +62,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: zulu
-          java-version: 18.0.0
+          java-version: 19.0.1
 
       - env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -214,7 +214,7 @@ jobs:
         run: |-
           $Extension = '${{ fromJson(env.extension)[steps.platform.outputs.platform] }}'
           $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
-          $AssetPath = '${{ github.workspace }}/src/Product/${{ env.project }}/bin/Release/net6.0/'
+          $AssetPath = '${{ github.workspace }}/src/Product/${{ env.project }}/bin/Release/net7.0/'
           $AssetPath += "${{ matrix.runtime }}/publish/${{ env.project }}$Extension"
           Write-Output -InputObject "::set-output name=asset_path::$AssetPath"
           Write-Output -InputObject "::set-output name=asset_name::$AssetName"
