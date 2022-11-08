@@ -21,7 +21,7 @@ using NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.TestUtilities;
 /// <summary>
 /// Unit tests for the <see cref="ProgramRunner"/> class.
 /// </summary>
-public class ProgramRunnerUnitTests
+public partial class ProgramRunnerUnitTests
 {
     /// <summary>
     /// The mock <see cref="ICommandLineOptions"/> object.
@@ -50,7 +50,6 @@ public class ProgramRunnerUnitTests
     public void Run_Called_PerformsExpectedActions()
     {
         // Arrange
-        var filter = new Regex("Filter");
         var projects = InternalAccessor.Construct<Projects>(0);
         _ = this.commandLineOptions
             .SetupGet(mock => mock.ProjectOrSolution)
@@ -60,9 +59,9 @@ public class ProgramRunnerUnitTests
             .Returns(true);
         _ = this.commandLineOptions
             .SetupGet(mock => mock.Filter)
-            .Returns(filter);
+            .Returns(FilterRegex());
         _ = this.transitiveDependencyFinder
-            .Setup(mock => mock.Run("ProjectOrSolution", true, filter))
+            .Setup(mock => mock.Run("ProjectOrSolution", true, FilterRegex()))
             .Returns(projects);
         var programRunner = new ProgramRunner(
             this.commandLineOptions.Object,
@@ -84,9 +83,16 @@ public class ProgramRunnerUnitTests
         this.commandLineOptions.VerifyGet(mock => mock.All, Times.Once);
         this.commandLineOptions.VerifyGet(mock => mock.Filter, Times.Once);
         this.commandLineOptions.VerifyNoOtherCalls();
-        this.transitiveDependencyFinder.Verify(mock => mock.Run("ProjectOrSolution", true, filter), Times.Once);
+        this.transitiveDependencyFinder.Verify(mock => mock.Run("ProjectOrSolution", true, FilterRegex()), Times.Once);
         this.transitiveDependencyFinder.VerifyNoOtherCalls();
         this.dependencyWriter.Verify(mock => mock.Write(projects), Times.Once);
         this.dependencyWriter.VerifyNoOtherCalls();
     }
+
+    /// <summary>
+    /// The filter regular expression for use within the unit tests.
+    /// </summary>
+    /// <returns>The filter regular expression.</returns>
+    [GeneratedRegex("Filter")]
+    private static partial Regex FilterRegex();
 }
