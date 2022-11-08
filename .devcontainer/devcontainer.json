@@ -1,19 +1,9 @@
 {
   "name": "C# (.NET)",
-  "build": {
-    "dockerfile": "Dockerfile"
-  },
-  "extensions": [
-    "ms-dotnettools.csharp"
-  ],
-  "settings": {
-    "omnisharp.enableAsyncCompletion": true,
-    "omnisharp.enableDecompilationSupport": true,
-    "omnisharp.enableEditorConfigSupport": true,
-    "omnisharp.enableImportCompletion": true,
-    "omnisharp.enableMsBuildLoadProjectsOnDemand": true,
-    "omnisharp.enableRoslynAnalyzers": true,
-    "omnisharp.organizeImportsOnFormat": true
-  },
-  "remoteUser": "vscode"
+  "image": "mcr.microsoft.com/devcontainers/dotnet:0-6.0-bullseye",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "latest"
+    }
+  }
 }
