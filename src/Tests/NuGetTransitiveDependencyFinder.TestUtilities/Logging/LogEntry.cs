@@ -8,6 +8,6 @@ namespace NuGetTransitiveDependencyFinder.TestUtilities.Logging;
 using Microsoft.Extensions.Logging;
 
 /// <summary>
-/// A record representing an entry added to an <see cref="Microsoft.Extensions.Logging.ILogger"/> object.
+/// A record representing an entry added to an <see cref="ILogger"/> object.
 /// </summary>
 public record LogEntry(LogLevel LogLevel, EventId EventId, string Message);
