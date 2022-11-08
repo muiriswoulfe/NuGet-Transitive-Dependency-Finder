@@ -34,7 +34,7 @@ public class MockLogger<TCategoryName> : ILogger<TCategoryName>
     /// mock.</exception>
     /// <param name="state">The identifier of the scope.</param>
     /// <returns>A disposable object that ends the logical operation scope on disposal.</returns>
-    public IDisposable BeginScope<TState>(TState state) =>
+    public IDisposable BeginScope<TState>(TState? state) =>
         throw new NotSupportedException();
 
     /// <summary>
