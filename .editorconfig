@@ -431,6 +431,7 @@ max_line_length = unset
 [*.cs]
 dotnet_analyzer_diagnostic.severity = error
 dotnet_diagnostic.RCS1142.severity = none
+dotnet_diagnostic.RCS1256.severity = none
 dotnet_diagnostic.S3442.severity = none
 dotnet_diagnostic.S3903.severity = none
 dotnet_diagnostic.SA1000.severity = none
