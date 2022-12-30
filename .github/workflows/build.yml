@@ -17,6 +17,22 @@ on:
   workflow_dispatch: null
 
 jobs:
+  initialization:
+    name: Initialization
+    runs-on: ubuntu-latest
+    steps:
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - env:
+          PR_METRICS_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ env.PR_METRICS_ACCESS_TOKEN != '' }}
+        name: PR Metrics
+        uses: microsoft/PR-Metrics@v1.4.8
+        continue-on-error: true
+
   build:
     name: Build
     strategy:
@@ -28,23 +44,12 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@v1.8.2
-
-      - env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        if: >-
-          ${{ matrix.configuration == 'Release'
-          && matrix.os == 'ubuntu-latest'
-          && env.SONAR_TOKEN != '' }}
-        name: INITIALIZATION – .NET Install v5.0
-        uses: actions/setup-dotnet@v1.8.2
-        with:
-          dotnet-version: 5.0.403
+        uses: actions/setup-dotnet@v3.0.3
 
       # SonarCloud Initialization
       - env:
@@ -54,10 +59,10 @@ jobs:
           && matrix.os == 'ubuntu-latest'
           && env.SONAR_TOKEN != '' }}
         name: SONARCLOUD INITIALIZATION – Java Install
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: zulu
-          java-version: 17.0.1
+          java-version: 19.0.1
 
       - env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -94,15 +99,16 @@ jobs:
         run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"XPlat Code Coverage"
 
       - env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         if: >-
           ${{ matrix.configuration == 'Release'
           && matrix.os == 'ubuntu-latest'
-          && env.SONAR_TOKEN != '' }}
+          && env.CODECOV_TOKEN != '' }}
         name: BUILD & TEST – Upload to Codecov
-        uses: codecov/codecov-action@v2.1.0
+        uses: codecov/codecov-action@v3
         with:
           fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       # SonarCloud Finalization
       - env:
@@ -138,13 +144,13 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: INITIALIZATION – Get Tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: tag
-        uses: jossef/action-latest-release-info@v1.2.0
+        uses: jossef/action-latest-release-info@v1.2.1
 
       - name: INITIALIZATION – Version Extract
         id: version
@@ -161,7 +167,7 @@ jobs:
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@v1.8.2
+        uses: actions/setup-dotnet@v3.0.3
 
       # Build
       - name: BUILD – Project Restore
@@ -208,7 +214,7 @@ jobs:
         run: |-
           $Extension = '${{ fromJson(env.extension)[steps.platform.outputs.platform] }}'
           $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
-          $AssetPath = '${{ github.workspace }}/src/Product/${{ env.project }}/bin/Release/net6.0/'
+          $AssetPath = '${{ github.workspace }}/src/Product/${{ env.project }}/bin/Release/net7.0/'
           $AssetPath += "${{ matrix.runtime }}/publish/${{ env.project }}$Extension"
           Write-Output -InputObject "::set-output name=asset_path::$AssetPath"
           Write-Output -InputObject "::set-output name=asset_name::$AssetName"
@@ -229,13 +235,13 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: INITIALIZATION – Get Tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: tag
-        uses: jossef/action-latest-release-info@v1.2.0
+        uses: jossef/action-latest-release-info@v1.2.1
 
       - name: INITIALIZATION – Version Extract
         id: version
@@ -252,7 +258,7 @@ jobs:
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@v1.8.2
+        uses: actions/setup-dotnet@v3.0.3
 
       # Create Logo
       - name: CREATE LOGO – Install svgexport
@@ -386,13 +392,13 @@ jobs:
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       # Linter Validation
       - name: LINTER VALIDATION – Super Linter
-        uses: github/super-linter@v4.8.4
+        uses: github/super-linter@v4.9.7
         env:
           EDITORCONFIG_FILE_NAME: ../../.editorconfig
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -456,50 +462,20 @@ jobs:
           json-file: src/xunit.runner.json
           json-schema: xunit.runner.schema.json
 
-  validate-security:
-    name: Validate – Security
-    runs-on: ubuntu-latest
-    steps:
-      # Initialization
-      - name: INITIALIZATION – Checkout
-        uses: actions/checkout@v2
-
-      # INFER#
-      - name: INFER# – Validation
-        id: infersharp
-        uses: microsoft/infersharpaction@v1.2
-        with:
-          binary-path: src
-
-      - name: INFER# – Print Results
-        shell: pwsh
-        run: Write-Output -InputObject '${{ steps.infersharp.outputs.results }}'
-
-      # Security Scan
-      - name: SECURITY SCAN – Validate
-        uses: ShiftLeftSecurity/scan-action@v1.3.0
-        with:
-          type: credscan,depscan,yaml
-
-      - name: SECURITY SCAN – Upload Report
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: reports
-
   validate-codeql:
     name: Validate – CodeQL
     runs-on: ubuntu-latest
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # CodeQL
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@v1.8.2
+        uses: actions/setup-dotnet@v3.0.3
 
       - name: CODEQL – Initialize
-        uses: github/codeql-action/init@v1
+        uses: github/codeql-action/init@v2
         with:
           queries: security-and-quality
 
@@ -515,6 +491,6 @@ jobs:
 
       # CodeQL
       - name: CODEQL – Analyze
-        uses: github/codeql-action/analyze@v1
+        uses: github/codeql-action/analyze@v2
 
 ...

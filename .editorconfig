@@ -431,11 +431,15 @@ max_line_length = unset
 [*.cs]
 dotnet_analyzer_diagnostic.severity = error
 dotnet_diagnostic.RCS1142.severity = none
+dotnet_diagnostic.RCS1256.severity = none
 dotnet_diagnostic.S3442.severity = none
 dotnet_diagnostic.S3903.severity = none
 dotnet_diagnostic.SA1000.severity = none
 dotnet_diagnostic.SA1009.severity = none
 dotnet_diagnostic.SA1313.severity = none
+roslynator_accessibility_modifiers = explicit
+roslynator_enum_has_flag_style = operator
+roslynator_object_creation_type_style = none
 
 [*.md]
 indent_size = unset

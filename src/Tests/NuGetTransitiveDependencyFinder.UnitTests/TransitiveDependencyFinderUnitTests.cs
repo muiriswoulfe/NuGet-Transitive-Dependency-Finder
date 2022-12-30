@@ -51,7 +51,7 @@ public class TransitiveDependencyFinderUnitTests
         using var transitiveDependencyFinder = new TransitiveDependencyFinder(LoggingBuilderAction);
 
         // Act
-        Action action = () => transitiveDependencyFinder.Dispose();
+        Action action = transitiveDependencyFinder.Dispose;
 
         // Assert
         _ = action
@@ -69,9 +69,9 @@ public class TransitiveDependencyFinderUnitTests
         using var transitiveDependencyFinder = new TransitiveDependencyFinder(LoggingBuilderAction);
 
         // Act
-        Action action1 = () => transitiveDependencyFinder.Dispose();
-        Action action2 = () => transitiveDependencyFinder.Dispose();
-        Action action3 = () => transitiveDependencyFinder.Dispose();
+        Action action1 = transitiveDependencyFinder.Dispose;
+        Action action2 = transitiveDependencyFinder.Dispose;
+        Action action3 = transitiveDependencyFinder.Dispose;
 
         // Assert
         _ = action1

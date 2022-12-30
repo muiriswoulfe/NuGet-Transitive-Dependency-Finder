@@ -216,7 +216,7 @@ be located [here][sonarcloud].
 [github]:
   https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder
 [netcoresdk]:
-  https://dotnet.microsoft.com/download/dotnet-core/6.0
+  https://dotnet.microsoft.com/download/dotnet-core/7.0
 [vs]:
   https://visualstudio.microsoft.com/
 [vscode]:
