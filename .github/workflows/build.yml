@@ -157,7 +157,7 @@ jobs:
         shell: pwsh
         run: |-
           $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
-          Write-Output -InputObject "::set-output name=version::$Version"
+          $Env:GITHUB_OUTPUT += "version=$Version`n"
 
       - name: INITIALIZATION – Version Replace
         shell: pwsh
@@ -199,7 +199,7 @@ jobs:
         shell: pwsh
         run: |-
           $Platform = '${{ matrix.runtime }}'.Split('-')[0]
-          Write-Output -InputObject "::set-output name=platform::$Platform"
+          $Env:GITHUB_OUTPUT += "platform=$Platform`n"
 
       - name: UPLOAD – Get File Names
         env:
@@ -216,8 +216,8 @@ jobs:
           $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
           $AssetPath = '${{ github.workspace }}/src/Product/${{ env.project }}/bin/Release/net7.0/'
           $AssetPath += "${{ matrix.runtime }}/publish/dotnet-transitive-dependency-finder$Extension"
-          Write-Output -InputObject "::set-output name=asset_path::$AssetPath"
-          Write-Output -InputObject "::set-output name=asset_name::$AssetName"
+          $Env:GITHUB_OUTPUT += "asset_path=$AssetPath`n"
+          $Env:GITHUB_OUTPUT += "asset_name=$AssetName`n"
 
       - name: UPLOAD – Print Details
         shell: pwsh
@@ -248,7 +248,7 @@ jobs:
         shell: pwsh
         run: |-
           $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
-          Write-Output -InputObject "::set-output name=version::$Version"
+          $Env:GITHUB_OUTPUT += "version=$Version`n"
 
       - name: INITIALIZATION – Version Replace
         shell: pwsh

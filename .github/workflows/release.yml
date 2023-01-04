@@ -28,8 +28,8 @@ jobs:
         run: |-
           $UrlPrefix = '${{ github.server_url }}/${{ github.repository }}'
           $UrlSuffix = '+milestone%3A%22${{ github.event.inputs.version }}%22+is%3Aclosed'
-          Write-Output -InputObject "::set-output name=url-prefix::$UrlPrefix"
-          Write-Output -InputObject "::set-output name=url-suffix::$UrlSuffix"
+          $Env:GITHUB_OUTPUT += "url_prefix=$UrlPrefix`n"
+          $Env:GITHUB_OUTPUT += "url_suffix=$UrlSuffix`n"
 
       - name: RELEASE – Create Release
         env:
@@ -57,9 +57,9 @@ jobs:
             <!-- References -->
 
             [issues]:
-              ${{ steps.urls.outputs.url-prefix }}/issues?q=is%3Aissue${{ steps.urls.outputs.url-suffix }}
+              ${{ steps.urls.outputs.url_prefix }}/issues?q=is%3Aissue${{ steps.urls.outputs.url_suffix }}
             [prs]:
-              ${{ steps.urls.outputs.asset_name }}/pulls?q=is%3Apr${{ steps.urls.outputs.url-suffix }}
+              ${{ steps.urls.outputs.asset_name }}/pulls?q=is%3Apr${{ steps.urls.outputs.url_suffix }}
           release_name: Release v${{ github.event.inputs.version }}
           tag_name: v${{ github.event.inputs.version }}
 
@@ -135,7 +135,7 @@ jobs:
         shell: pwsh
         run: |-
           $Platform = '${{ matrix.runtime }}'.Split('-')[0]
-          Write-Output -InputObject "::set-output name=platform::$Platform"
+          $Env:GITHUB_OUTPUT += "platform=$Platform`n"
 
       - name: UPLOAD – Get File Names
         env:
@@ -152,8 +152,8 @@ jobs:
           $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
           $AssetPath = '${{ github.workspace }}/src/${{ env.project }}/bin/Release/net7.0/'
           $AssetPath += "${{ matrix.runtime }}/publish/${{ env.project }}$Extension"
-          Write-Output -InputObject "::set-output name=asset_name::$AssetName"
-          Write-Output -InputObject "::set-output name=asset_path::$AssetPath"
+          $Env:GITHUB_OUTPUT += "asset_name=$AssetName`n"
+          $Env:GITHUB_OUTPUT += "asset_path=$AssetPath`n"
 
       - name: UPLOAD – Upload Release Asset
         uses: actions/upload-release-asset@v1
