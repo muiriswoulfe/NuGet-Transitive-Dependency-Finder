@@ -28,8 +28,8 @@ jobs:
         run: |-
           $UrlPrefix = '${{ github.server_url }}/${{ github.repository }}'
           $UrlSuffix = '+milestone%3A%22${{ github.event.inputs.version }}%22+is%3Aclosed'
-          echo "URL_PREFIX=$UrlPrefix" >> $Env:GITHUB_OUTPUT
-          echo "URL_SUFFIX=$UrlSuffix" >> $Env:GITHUB_OUTPUT
+          Write-Output -InputObject "URL_PREFIX=$UrlPrefix" >> $Env:GITHUB_OUTPUT
+          Write-Output -InputObject "URL_SUFFIX=$UrlSuffix" >> $Env:GITHUB_OUTPUT
 
       - name: RELEASE – Create Release
         env:
@@ -135,7 +135,7 @@ jobs:
         shell: pwsh
         run: |-
           $Platform = '${{ matrix.runtime }}'.Split('-')[0]
-          echo "PLATFORM=$Platform" >> $Env:GITHUB_OUTPUT
+          Write-Output -InputObject "PLATFORM=$Platform" >> $Env:GITHUB_OUTPUT
 
       - name: UPLOAD – Get File Names
         env:
@@ -152,8 +152,8 @@ jobs:
           $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
           $AssetPath = '${{ github.workspace }}/src/${{ env.project }}/bin/Release/net7.0/'
           $AssetPath += "${{ matrix.runtime }}/publish/${{ env.project }}$Extension"
-          echo "ASSET_NAME=$AssetName" >> $Env:GITHUB_OUTPUT
-          echo "ASSET_PATH=$AssetPath" >> $Env:GITHUB_OUTPUT
+          Write-Output -InputObject "ASSET_NAME=$AssetName" >> $Env:GITHUB_OUTPUT
+          Write-Output -InputObject "ASSET_PATH=$AssetPath" >> $Env:GITHUB_OUTPUT
 
       - name: UPLOAD – Upload Release Asset
         uses: actions/upload-release-asset@v1
