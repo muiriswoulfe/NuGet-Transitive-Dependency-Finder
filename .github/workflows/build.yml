@@ -157,13 +157,13 @@ jobs:
         shell: pwsh
         run: |-
           $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
-          $Env:GITHUB_OUTPUT += "version=$Version`n"
+          echo "VERSION=$Version" >> $Env:GITHUB_OUTPUT
 
       - name: INITIALIZATION – Version Replace
         shell: pwsh
         run: |-
           $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
-          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.VERSION }}'
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
@@ -199,7 +199,7 @@ jobs:
         shell: pwsh
         run: |-
           $Platform = '${{ matrix.runtime }}'.Split('-')[0]
-          $Env:GITHUB_OUTPUT += "platform=$Platform`n"
+          echo "PLATFORM=$Platform"  >> $Env:GITHUB_OUTPUT
 
       - name: UPLOAD – Get File Names
         env:
@@ -212,20 +212,22 @@ jobs:
         id: file-names
         shell: pwsh
         run: |-
-          $Extension = '${{ fromJson(env.extension)[steps.platform.outputs.platform] }}'
+          $Extension = '${{ fromJson(env.extension)[steps.platform.outputs.PLATFORM] }}'
           $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
           $AssetPath = '${{ github.workspace }}/src/Product/${{ env.project }}/bin/Release/net7.0/'
           $AssetPath += "${{ matrix.runtime }}/publish/dotnet-transitive-dependency-finder$Extension"
-          $Env:GITHUB_OUTPUT += "asset_path=$AssetPath`n"
-          $Env:GITHUB_OUTPUT += "asset_name=$AssetName`n"
+          echo "ASSET_PATH=$AssetPath" >> $Env:GITHUB_OUTPUT
+          echo "ASSET_NAME=$AssetName" >> $Env:GITHUB_OUTPUT
+          echo $Env:GITHUB_OUTPUT
+          Write-Output $Env:GITHUB_OUTPUT
 
       - name: UPLOAD – Print Details
         shell: pwsh
         run: |-
-          $AssetPathFileSize = (Get-Content -LiteralPath '${{ steps.file-names.outputs.asset_path }}').Length
+          $AssetPathFileSize = (Get-Content -LiteralPath '${{ steps.file-names.outputs.ASSET_PATH }}').Length
           $AssetPathFileSize = "$AssetPathFileSize bytes"
-          Write-Output -InputObject 'Asset Name: ${{ steps.file-names.outputs.asset_name }}'
-          Write-Output -InputObject "Asset Path: ${{ steps.file-names.outputs.asset_path }} ($AssetPathFileSize)"
+          Write-Output -InputObject 'Asset Name: ${{ steps.file-names.outputs.ASSET_NAME }}'
+          Write-Output -InputObject "Asset Path: ${{ steps.file-names.outputs.ASSET_PATH }} ($AssetPathFileSize)"
 
   create-nuget:
     name: Create NuGet Package
@@ -248,13 +250,13 @@ jobs:
         shell: pwsh
         run: |-
           $Version = '${{ steps.tag.outputs.tag_name }}'.Substring(1)
-          $Env:GITHUB_OUTPUT += "version=$Version`n"
+          echo "VERSION=$Version" >> $Env:GITHUB_OUTPUT
 
       - name: INITIALIZATION – Version Replace
         shell: pwsh
         run: |-
           $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
-          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.version }}'
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.VERSION }}'
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
@@ -371,14 +373,14 @@ jobs:
           --configuration Release
           --no-build
           /property:PackageReleaseNotes="Release Notes"
-          /property:PackageVersion=${{ steps.version.outputs.version }}
+          /property:PackageVersion=${{ steps.version.outputs.VERSION }}
           /property:RepositoryCommit=${{ github.sha }}
 
       - name: UPLOAD – Print Details
         shell: pwsh
         run: |-
-          $NuGetPackage = '${{ env.nuget-package-prefix }}.${{ steps.version.outputs.version }}.nupkg'
-          $NuGetSymbolsPackage = '${{ env.nuget-package-prefix }}.${{ steps.version.outputs.version }}.snupkg'
+          $NuGetPackage = '${{ env.nuget-package-prefix }}.${{ steps.version.outputs.VERSION }}.nupkg'
+          $NuGetSymbolsPackage = '${{ env.nuget-package-prefix }}.${{ steps.version.outputs.VERSION }}.snupkg'
           $NuGetPackageSize = (Get-Content -LiteralPath $NuGetPackage).Length
           $NuGetPackageSize = "$NuGetPackageSize bytes"
           $NuGetSymbolsPackageSize = (Get-Content -LiteralPath $NuGetSymbolsPackage).Length

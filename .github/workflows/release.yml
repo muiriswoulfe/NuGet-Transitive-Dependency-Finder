@@ -28,8 +28,8 @@ jobs:
         run: |-
           $UrlPrefix = '${{ github.server_url }}/${{ github.repository }}'
           $UrlSuffix = '+milestone%3A%22${{ github.event.inputs.version }}%22+is%3Aclosed'
-          $Env:GITHUB_OUTPUT += "url_prefix=$UrlPrefix`n"
-          $Env:GITHUB_OUTPUT += "url_suffix=$UrlSuffix`n"
+          echo "URL_PREFIX=$UrlPrefix" >> $Env:GITHUB_OUTPUT
+          echo "URL_SUFFIX=$UrlSuffix" >> $Env:GITHUB_OUTPUT
 
       - name: RELEASE – Create Release
         env:
@@ -57,9 +57,9 @@ jobs:
             <!-- References -->
 
             [issues]:
-              ${{ steps.urls.outputs.url_prefix }}/issues?q=is%3Aissue${{ steps.urls.outputs.url_suffix }}
+              ${{ steps.urls.outputs.URL_PREFIX }}/issues?q=is%3Aissue${{ steps.urls.outputs.URL_SUFFIX }}
             [prs]:
-              ${{ steps.urls.outputs.asset_name }}/pulls?q=is%3Apr${{ steps.urls.outputs.url_suffix }}
+              ${{ steps.urls.outputs.ASSET_NAME }}/pulls?q=is%3Apr${{ steps.urls.outputs.URL_SUFFIX }}
           release_name: Release v${{ github.event.inputs.version }}
           tag_name: v${{ github.event.inputs.version }}
 
@@ -135,7 +135,7 @@ jobs:
         shell: pwsh
         run: |-
           $Platform = '${{ matrix.runtime }}'.Split('-')[0]
-          $Env:GITHUB_OUTPUT += "platform=$Platform`n"
+          echo "PLATFORM=$Platform" >> $Env:GITHUB_OUTPUT
 
       - name: UPLOAD – Get File Names
         env:
@@ -148,12 +148,12 @@ jobs:
         id: file-names
         shell: pwsh
         run: |-
-          $Extension = '${{ fromJson(env.extension)[steps.platform.outputs.platform] }}'
+          $Extension = '${{ fromJson(env.extension)[steps.platform.outputs.PLATFORM] }}'
           $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
           $AssetPath = '${{ github.workspace }}/src/${{ env.project }}/bin/Release/net7.0/'
           $AssetPath += "${{ matrix.runtime }}/publish/${{ env.project }}$Extension"
-          $Env:GITHUB_OUTPUT += "asset_name=$AssetName`n"
-          $Env:GITHUB_OUTPUT += "asset_path=$AssetPath`n"
+          echo "ASSET_NAME=$AssetName" >> $Env:GITHUB_OUTPUT
+          echo "ASSET_PATH=$AssetPath" >> $Env:GITHUB_OUTPUT
 
       - name: UPLOAD – Upload Release Asset
         uses: actions/upload-release-asset@v1
@@ -161,8 +161,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           asset_content_type: application/octet-stream
-          asset_name: ${{ steps.file-names.outputs.asset_name }}
-          asset_path: ${{ steps.file-names.outputs.asset_path }}
+          asset_name: ${{ steps.file-names.outputs.ASSET_NAME }}
+          asset_path: ${{ steps.file-names.outputs.ASSET_PATH }}
           upload_url: ${{ steps.tag.outputs.upload_url }}
 
   create-nuget:
