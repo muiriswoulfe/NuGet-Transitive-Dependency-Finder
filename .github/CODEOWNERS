@@ -1,4 +1,7 @@
 # © Muiris Woulfe
 # Licensed under the MIT License
 
-*   @muiriswoulfe
+*                   @muiriswoulfe
+*.csproj            @muiriswoulfe @dependabot-bot
+*.props             @muiriswoulfe @dependabot-bot
+.github/workflows/  @muiriswoulfe @dependabot-bot
