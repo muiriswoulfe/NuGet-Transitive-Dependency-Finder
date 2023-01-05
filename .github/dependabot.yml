@@ -11,6 +11,8 @@ updates:
     open-pull-requests-limit: 100
     schedule:
       interval: daily
+      time: 00:00
+      timezone: Universal
     labels:
       - dependencies
       - github-actions
@@ -24,6 +26,8 @@ updates:
     open-pull-requests-limit: 100
     schedule:
       interval: daily
+      time: 00:00
+      timezone: Universal
     labels:
       - dependencies
       - nuget
