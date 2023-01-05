@@ -13,6 +13,11 @@ updates:
       interval: daily
     labels:
       - dependencies
+      - github-actions
+    assignees:
+      - muiriswoulfe
+    reviewers:
+      - muiriswoulfe
 
   - package-ecosystem: nuget
     directory: /
@@ -21,5 +26,10 @@ updates:
       interval: daily
     labels:
       - dependencies
+      - nuget
+    assignees:
+      - muiriswoulfe
+    reviewers:
+      - muiriswoulfe
 
 ...
