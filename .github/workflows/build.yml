@@ -413,7 +413,7 @@ jobs:
       - name: VALIDATION – JSON
         uses: walbo/validate-json@v1.1.0
         with:
-          files: '*.json'
+          files: '**/*.json'
 
   validate-codeql:
     name: Validate – CodeQL
