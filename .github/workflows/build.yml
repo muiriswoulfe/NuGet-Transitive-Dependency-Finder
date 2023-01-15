@@ -416,17 +416,20 @@ jobs:
         uses: walbo/validate-json@v1.1.0
         with:
           files: .markdownlint.json
+          print-valid-files: true
 
       - name: JSON VALIDATION – src/stylecop.json
         uses: walbo/validate-json@v1.1.0
         with:
           files: src/stylecop.json
           strict: false
+          print-valid-files: true
 
       - name: JSON VALIDATION – src/xunit.runner.json
         uses: walbo/validate-json@v1.1.0
         with:
           files: src/xunit.runner.json
+          print-valid-files: true
 
   validate-codeql:
     name: Validate – CodeQL
