@@ -396,8 +396,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Validation
-      - name: VALIDATION – Super Linter
+      # Linter Validation
+      - name: LINTER VALIDATION – Super Linter
         uses: github/super-linter@v4.10.0
         env:
           EDITORCONFIG_FILE_NAME: ../../.editorconfig
@@ -405,17 +405,28 @@ jobs:
           MARKDOWN_CONFIG_FILE: ../../.markdownlint.json
           VALIDATE_CSHARP: false
 
-      - name: VALIDATION – Markdown Links
+      # Markdown Validation
+      - name: MARKDOWN VALIDATION – Validate Links
         uses: gaurav-nelson/github-action-markdown-link-check@v1
         with:
           config-file: .github/linters/markdown-link-check.json
 
-      - name: VALIDATION – JSON
+      # JSON Validation
+      - name: JSON VALIDATION – .markdownlint.json
         uses: walbo/validate-json@v1.1.0
         with:
-          files: '**/*.json'
-          print-valid-files: true
+          files: .markdownlint.json
+
+      - name: JSON VALIDATION – src/stylecop.json
+        uses: walbo/validate-json@v1.1.0
+        with:
+          files: src/stylecop.json
           strict: false
+
+      - name: JSON VALIDATION – src/xunit.runner.json
+        uses: walbo/validate-json@v1.1.0
+        with:
+          files: src/xunit.runner.json
 
   validate-codeql:
     name: Validate – CodeQL
