@@ -412,55 +412,24 @@ jobs:
           config-file: .github/linters/markdown-link-check.json
 
       # JSON Validation
-      - name: JSON VALIDATION – Validate .markdownlint.json
-        uses: Zingabopp/JsonValidate-Action@v1
+      - name: JSON VALIDATION – .markdownlint.json
+        uses: walbo/validate-json@v1.1.0
         with:
-          json-file: .markdownlint.json
-          json-schema: >-
-            https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
-          use-draft: draft-07
+          files: .markdownlint.json
+          print-valid-files: true
 
-      - name: JSON VALIDATION – Validate src/stylecop.json – Download stylecop.schema.json
-        env:
-          project_url: https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master
-        shell: pwsh
-        run: >-
-          Invoke-WebRequest
-          -Uri '${{ env.project_url }}/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json'
-          -OutFile 'stylecop.schema.json'
-
-      - name: JSON VALIDATION – Validate src/stylecop.json – Update stylecop.schema.json
-        shell: pwsh
-        run: |-
-          $FileContent = Get-Content -Path 'stylecop.schema.json' -Raw
-          $FileContent = $FileContent -replace 'draft-04/schema#', 'draft-07/schema'
-          Set-Content -NoNewline -Path 'stylecop.schema.json' -Value $FileContent
-
-      - name: JSON VALIDATION – Validate src/stylecop.json
-        uses: Zingabopp/JsonValidate-Action@v1
+      - name: JSON VALIDATION – src/stylecop.json
+        uses: walbo/validate-json@v1.1.0
         with:
-          json-file: src/stylecop.json
-          json-schema: stylecop.schema.json
+          files: src/stylecop.json
+          strict: false
+          print-valid-files: true
 
-      - name: JSON VALIDATION – Validate src/xunit.runner.json – Download xunit.runner.schema.json
-        shell: pwsh
-        run: >-
-          Invoke-WebRequest
-          -Uri 'https://xunit.net/schema/current/xunit.runner.schema.json'
-          -OutFile 'xunit.runner.schema.json'
-
-      - name: JSON VALIDATION – Validate src/xunit.runner.json – Update xunit.runner.schema.json
-        shell: pwsh
-        run: |-
-          $FileContent = Get-Content -Path 'xunit.runner.schema.json' -Raw
-          $FileContent = $FileContent -replace 'draft-04/schema', 'draft-07/schema'
-          Set-Content -NoNewline -Path 'xunit.runner.schema.json' -Value $FileContent
-
-      - name: JSON VALIDATION – Validate xunit.runner.json
-        uses: Zingabopp/JsonValidate-Action@v1
+      - name: JSON VALIDATION – src/xunit.runner.json
+        uses: walbo/validate-json@v1.1.0
         with:
-          json-file: src/xunit.runner.json
-          json-schema: xunit.runner.schema.json
+          files: src/xunit.runner.json
+          print-valid-files: true
 
   validate-codeql:
     name: Validate – CodeQL
