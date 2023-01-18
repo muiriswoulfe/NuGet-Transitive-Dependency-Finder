@@ -16,10 +16,6 @@ updates:
     labels:
       - dependencies
       - github-actions
-    assignees:
-      - muiriswoulfe
-    reviewers:
-      - muiriswoulfe
 
   - package-ecosystem: nuget
     directory: /
@@ -31,9 +27,5 @@ updates:
     labels:
       - dependencies
       - nuget
-    assignees:
-      - muiriswoulfe
-    reviewers:
-      - muiriswoulfe
 
 ...
