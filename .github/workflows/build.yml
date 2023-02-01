@@ -20,6 +20,7 @@ jobs:
   initialization:
     name: Initialization
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       - name: INITIALIZATION – Checkout
         uses: actions/checkout@v3
@@ -41,6 +42,7 @@ jobs:
         configuration: [Debug, Release]
         os: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    permissions: {}
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
@@ -71,6 +73,7 @@ jobs:
           && matrix.os == 'ubuntu-latest'
           && env.SONAR_TOKEN != '' }}
         name: SONARCLOUD INITIALIZATION – SonarCloud Install
+        shell: pwsh
         run: dotnet tool install dotnet-sonarscanner --tool-path .sonarcloud
 
       - env:
@@ -80,6 +83,7 @@ jobs:
           && matrix.os == 'ubuntu-latest'
           && env.SONAR_TOKEN != '' }}
         name: SONARCLOUD INITIALIZATION – SonarCloud Initialize
+        shell: pwsh
         run: >-
           .sonarcloud/dotnet-sonarscanner begin
           /k:"${{ github.repository_owner }}_${{ github.event.repository.name }}"
@@ -90,12 +94,15 @@ jobs:
 
       # Build & Test
       - name: BUILD & TEST – Project Restore
+        shell: pwsh
         run: dotnet restore
 
       - name: BUILD & TEST – Project Build
+        shell: pwsh
         run: dotnet build --configuration ${{ matrix.configuration }} --no-restore /maxCpuCount
 
       - name: BUILD & TEST – Project Test
+        shell: pwsh
         run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"XPlat Code Coverage"
 
       - env:
@@ -119,6 +126,7 @@ jobs:
           && matrix.os == 'ubuntu-latest'
           && env.SONAR_TOKEN != '' }}
         name: SONARCLOUD FINALIZATION – SonarCloud Analyze
+        shell: pwsh
         run: .sonarcloud/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
   create-asset:
@@ -141,6 +149,7 @@ jobs:
             win-x86
           ]
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
@@ -171,9 +180,11 @@ jobs:
 
       # Build
       - name: BUILD – Project Restore
+        shell: pwsh
         run: dotnet restore src/Product/${{ env.project }}/${{ env.project }}.csproj --runtime ${{ matrix.runtime }}
 
       - name: BUILD – Project Build
+        shell: pwsh
         run: >-
           dotnet build src/Product/${{ env.project }}/${{ env.project }}.csproj
           --configuration Release
@@ -185,6 +196,7 @@ jobs:
 
       # Publish
       - name: PUBLISH – Project Publish
+        shell: pwsh
         run: >-
           dotnet publish src/Product/${{ env.project }}/${{ env.project }}.csproj
           --configuration Release
@@ -232,6 +244,7 @@ jobs:
     env:
       nuget-package-prefix: src/Product/NuGetTransitiveDependencyFinder/bin/Release/NuGetTransitiveDependencyFinder
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
@@ -262,12 +275,15 @@ jobs:
 
       # Create Logo
       - name: CREATE LOGO – Install svgexport
+        shell: pwsh
         run: npm install svgexport
 
       - name: CREATE LOGO – Install pngout
+        shell: pwsh
         run: npm install pngout-bin
 
       - name: CREATE LOGO – Convert SVG
+        shell: pwsh
         run: >-
           node_modules/.bin/svgexport
           src/Product/NuGetTransitiveDependencyFinder/Assets/Logo.svg
@@ -351,9 +367,11 @@ jobs:
 
       # Build
       - name: BUILD – Project Restore
+        shell: pwsh
         run: dotnet restore src/Product/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
 
       - name: BUILD – Project Build
+        shell: pwsh
         run: >-
           dotnet build src/Product/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
           --configuration Release
@@ -366,6 +384,7 @@ jobs:
         run: Remove-Item -Path 'src/Product/NuGetTransitiveDependencyFinder/bin/NuGetTransitiveDependencyFinder.xml'
 
       - name: UPLOAD – Pack
+        shell: pwsh
         run: >-
           dotnet pack src/Product/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
           --configuration Release
@@ -389,6 +408,7 @@ jobs:
   validate-lint:
     name: Validate – Lint
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
@@ -434,6 +454,7 @@ jobs:
   validate-codeql:
     name: Validate – CodeQL
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
@@ -450,16 +471,40 @@ jobs:
 
       # Build & Test
       - name: BUILD & TEST – Project Restore
+        shell: pwsh
         run: dotnet restore
 
       - name: BUILD & TEST – Project Build
+        shell: pwsh
         run: dotnet build --configuration Release --no-restore /maxCpuCount
 
       - name: BUILD & TEST – Project Test
+        shell: pwsh
         run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage"
 
       # CodeQL
       - name: CODEQL – Analyze
         uses: github/codeql-action/analyze@v2
 
+  dependabot:
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    name: Dependabot
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: PR – Approve
+        shell: pwsh
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: PR – Auto-Merge
+        shell: pwsh
+        run: gh pr merge --auto --delete-branch --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ...
