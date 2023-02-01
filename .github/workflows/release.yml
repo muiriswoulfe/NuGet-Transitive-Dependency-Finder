@@ -12,9 +12,6 @@ on:
         description: Version
         required: true
         default: 1.0.0
-      release-notes:
-        description: Release Notes
-        required: true
 
 jobs:
   create-release:
@@ -33,35 +30,11 @@ jobs:
           Write-Output -InputObject "URL_SUFFIX=$UrlSuffix" >> $Env:GITHUB_OUTPUT
 
       - name: RELEASE – Create Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        uses: actions/create-release@v1.1.4 #TODO
+        uses: softprops/action-gh-release@v0.1.15
         with:
-          body: |-
-            ## Release Notes
-
-            ${{ github.event.inputs.release-notes }}
-
-            ## Changes
-
-            This release resolves the issues listed [here][issues] via the pull requests listed [here][prs].
-
-            ## Notes
-
-            - No dependencies are required for any platform.
-            - Under Linux and macOS, you will need to run `chmod +x <filename>` from the console prior to starting the
-              app.
-            - Under macOS, the first time you run the app, you will encounter a security error. Click *Cancel* and go to
-              *Apple* > *System Preferences...* > *Security & Privacy* and click *Allow Anyway*. The app should run
-              successfully on the subsequent invocation.
-
-            <!-- References -->
-
-            [issues]:
-              ${{ steps.urls.outputs.URL_PREFIX }}/issues?q=is%3Aissue${{ steps.urls.outputs.URL_SUFFIX }}
-            [prs]:
-              ${{ steps.urls.outputs.ASSET_NAME }}/pulls?q=is%3Apr${{ steps.urls.outputs.URL_SUFFIX }}
-          release_name: Release v${{ github.event.inputs.version }}
+          discussion_category_name: Releases
+          generate_release_notes: true
+          name: Release v${{ github.event.inputs.version }}
           tag_name: v${{ github.event.inputs.version }}
 
   create-asset:
