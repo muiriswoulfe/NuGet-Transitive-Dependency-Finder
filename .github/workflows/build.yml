@@ -454,7 +454,8 @@ jobs:
   validate-codeql:
     name: Validate – CodeQL
     runs-on: ubuntu-latest
-    permissions: {}
+    permissions:
+      security-events: write
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
