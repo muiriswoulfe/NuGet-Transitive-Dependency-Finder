@@ -20,7 +20,9 @@ jobs:
   initialization:
     name: Initialization
     runs-on: ubuntu-latest
-    permissions: {}
+    permissions:
+      pull-requests: write
+      statuses: write
     steps:
       - name: INITIALIZATION – Checkout
         uses: actions/checkout@v3
@@ -454,7 +456,8 @@ jobs:
   validate-codeql:
     name: Validate – CodeQL
     runs-on: ubuntu-latest
-    permissions: {}
+    permissions:
+      security-events: write
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
