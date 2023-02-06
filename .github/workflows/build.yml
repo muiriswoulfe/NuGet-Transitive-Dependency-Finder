@@ -20,7 +20,9 @@ jobs:
   initialization:
     name: Initialization
     runs-on: ubuntu-latest
-    permissions: {}
+    permissions:
+      pull-requests: write
+      statuses: write
     steps:
       - name: INITIALIZATION – Checkout
         uses: actions/checkout@v3
