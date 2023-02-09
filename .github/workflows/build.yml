@@ -151,7 +151,6 @@ jobs:
             win-x86
           ]
     runs-on: ubuntu-latest
-    permissions: {}
     steps:
       # Initialization
       - name: INITIALIZATION – Checkout
@@ -497,6 +496,11 @@ jobs:
       contents: write
       pull-requests: write
     steps:
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@v3
+
+      # PR
       - name: PR – Approve
         shell: pwsh
         run: gh pr review --approve "$PR_URL"
