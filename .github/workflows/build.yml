@@ -497,9 +497,11 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      # Initialization
-      - name: INITIALIZATION – Checkout
-        uses: actions/checkout@v3
+      # Dependabot
+      - name: Dependabot – Get Metadata
+        uses: dependabot/fetch-metadata@v1.3.6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       # PR
       - name: PR – Approve
