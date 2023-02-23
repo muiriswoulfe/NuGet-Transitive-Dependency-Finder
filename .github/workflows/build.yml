@@ -494,14 +494,11 @@ jobs:
     name: Dependabot
     runs-on: ubuntu-latest
     permissions:
-      contents: write
       pull-requests: write
     steps:
-      # Dependabot
-      - name: Dependabot – Get Metadata
-        uses: dependabot/fetch-metadata@v1.3.6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      # Initialization
+      - name: INITIALIZATION – Checkout
+        uses: actions/checkout@v3
 
       # PR
       - name: PR – Auto-Merge
