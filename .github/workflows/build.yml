@@ -489,22 +489,4 @@ jobs:
       - name: CODEQL – Analyze
         uses: github/codeql-action/analyze@v2
 
-  dependabot:
-    if: ${{ github.actor == 'dependabot[bot]' }}
-    name: Dependabot
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-    steps:
-      # Initialization
-      - name: INITIALIZATION – Checkout
-        uses: actions/checkout@v3
-
-      # PR
-      - name: PR – Auto-Merge
-        shell: pwsh
-        run: gh pr merge --auto --delete-branch --squash "$PR_URL"
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ...
