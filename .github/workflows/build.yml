@@ -500,7 +500,7 @@ jobs:
         uses: actions/setup-dotnet@aa983c550dfda0d1722b6ac6aed55724ffacc6d3 # v3.1.0
 
       - name: CODEQL – Initialize
-        uses: github/codeql-action/init@f0e3dfb30302f8a0881bb509b044e0de4f6ef589 # v2.3.4
+        uses: github/codeql-action/init@0225834cc549ee0ca93cb085b92954821a145866 # v2.3.5
         with:
           queries: security-and-quality
 
@@ -519,7 +519,7 @@ jobs:
 
       # CodeQL
       - name: CODEQL – Analyze
-        uses: github/codeql-action/analyze@f0e3dfb30302f8a0881bb509b044e0de4f6ef589 # v2.3.4
+        uses: github/codeql-action/analyze@0225834cc549ee0ca93cb085b92954821a145866 # v2.3.5
 
   dependabot:
     if: ${{ github.actor == 'dependabot[bot]' }}
