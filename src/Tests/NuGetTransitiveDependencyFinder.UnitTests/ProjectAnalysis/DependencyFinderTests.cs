@@ -5,9 +5,12 @@
 
 namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis;
 
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using FluentAssertions;
 using Moq;
+using NuGet.Frameworks;
 using NuGet.ProjectModel;
 using NuGetTransitiveDependencyFinder.ProjectAnalysis;
 using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
@@ -63,23 +66,77 @@ public class DependencyFinderTests
 
     /// <summary>
     /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called and matching dependencies are
-    /// found, a valid collection is returned.
+    /// found but a <see langword="null"/> lock file is provided, an empty collection is returned.
     /// </summary>
     [AllCulturesFact]
-    public void Run_WithMatchingDependencies_ReturnsProjects()
+    public void Run_WithEmptyLockFile_ReturnsEmptyProjects()
     {
         // Arrange
-        const string projectOrSolutionPath = "C:\\solution.sln";
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string outputPath = "C:\\project\\bin";
         var dependencyGraphSpec = new DependencyGraphSpec();
         dependencyGraphSpec.AddProject(
             new PackageSpec(new[] { new TargetFrameworkInformation() })
             {
                 RestoreMetadata = new ProjectRestoreMetadata()
                 {
-                    ProjectStyle = ProjectStyle.PackageReference
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath
                 }
             });
-        _ = this.dependencyGraphMock.Setup(x => x.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+        _ = this.assetsMock.Setup(mock => mock.Create(projectOrSolutionPath, outputPath)).Returns(null as LockFile);
+
+        // Act
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, null);
+
+        // Assert
+        _ = result.HasChildren
+            .Should().BeFalse();
+    }
+
+    /// <summary>
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called and matching dependencies are
+    /// found but a <see langword="null"/> lock file is provided, an empty collection is returned.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithEmptyLockFile_ReturnsEmptyProjects2()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string outputPath = "C:\\project\\bin";
+        const string projectName = "Project 1";
+        const string frameworkName = ".NETCoreApp,Version=v3.1";
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(
+                new[]
+                {
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = new NuGetFramework(frameworkName)
+                    }
+                })
+            {
+                Name = projectName,
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath
+                }
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+        var lockFile = new LockFile()
+        {
+            Targets = new List<LockFileTarget>(1)
+            {
+                new LockFileTarget
+                {
+                    TargetFramework = new NuGetFramework(frameworkName)
+                }
+            }
+        };
+        _ = this.assetsMock.Setup(mock => mock.Create(projectOrSolutionPath, outputPath)).Returns(lockFile);
 
         // Act
         var result = this.dependencyFinder.Run(projectOrSolutionPath, false, null);
@@ -87,6 +144,10 @@ public class DependencyFinderTests
         // Assert
         _ = result.HasChildren
             .Should().BeTrue();
+        _ = result.SortedChildren.Count
+            .Should().Be(1);
+        _ = result.SortedChildren.ElementAt(0).Identifier
+            .Should().Be(projectName);
     }
 
     //// [Fact]
