@@ -60,6 +60,35 @@ public class DependencyFinderTests
         _ = result.HasChildren
             .Should().BeFalse();
     }
+
+    /// <summary>
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called and matching dependencies are
+    /// found, a valid collection is returned.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithMatchingDependencies_ReturnsProjects()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\solution.sln";
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(new[] { new TargetFrameworkInformation() })
+            {
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference
+                }
+            });
+        _ = this.dependencyGraphMock.Setup(x => x.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+
+        // Act
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, null);
+
+        // Assert
+        _ = result.HasChildren
+            .Should().BeTrue();
+    }
+
     //// [Fact]
     //// public void Run_WithAssetsFile_ReturnsProjects()
     //// {
