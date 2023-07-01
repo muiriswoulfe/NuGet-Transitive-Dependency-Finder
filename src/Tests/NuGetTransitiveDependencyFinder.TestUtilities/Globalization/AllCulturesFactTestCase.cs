@@ -46,20 +46,13 @@ internal class AllCulturesFactTestCase : XunitTestCase
     /// has been performed.</param>
     /// <param name="testMethod">The test method to which the current test case belongs.</param>
     /// <param name="culture">The culture for which to run the current test.</param>
-    /// <param name="testMethodArguments">The arguments for the test method.</param>
     public AllCulturesFactTestCase(
         IMessageSink diagnosticMessageSink,
         TestMethodDisplay defaultMethodDisplay,
         TestMethodDisplayOptions defaultMethodDisplayOptions,
         ITestMethod testMethod,
-        CultureInfo culture,
-        object[]? testMethodArguments = null)
-        : base(
-            diagnosticMessageSink,
-            defaultMethodDisplay,
-            defaultMethodDisplayOptions,
-            testMethod,
-            testMethodArguments) =>
+        CultureInfo culture)
+        : base(diagnosticMessageSink, defaultMethodDisplay, defaultMethodDisplayOptions, testMethod) =>
         this.Initialize(culture);
 
     /// <summary>

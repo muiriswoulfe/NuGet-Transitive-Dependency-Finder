@@ -36,21 +36,18 @@ internal static class AllCulturesBaseAttributeDiscoverer
     /// <param name="diagnosticMessageSink">The message sink that receives the test result messages.</param>
     /// <param name="discoveryOptions">The discovery options to use.</param>
     /// <param name="testMethod">The test method to which the current test case belongs.</param>
-    /// <param name="dataRow">The row of data for the test case.</param>
     /// <returns>The full suite of test cases to run.</returns>
     public static IEnumerable<IXunitTestCase> CreateFactTestCases(
         IMessageSink diagnosticMessageSink,
         ITestFrameworkDiscoveryOptions discoveryOptions,
-        ITestMethod testMethod,
-        object[]? dataRow = null) =>
+        ITestMethod testMethod) =>
         AllCultures.Select(
             culture => new AllCulturesFactTestCase(
                 diagnosticMessageSink,
                 discoveryOptions.MethodDisplayOrDefault(),
                 discoveryOptions.MethodDisplayOptionsOrDefault(),
                 testMethod,
-                culture,
-                dataRow));
+                culture));
 
     /// <summary>
     /// Creates the full suite of test cases, where each test case validates a single culture, with each test case
