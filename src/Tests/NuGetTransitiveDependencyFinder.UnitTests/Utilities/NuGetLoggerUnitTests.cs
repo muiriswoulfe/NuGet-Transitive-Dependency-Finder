@@ -198,7 +198,7 @@ public class NuGetLoggerUnitTests
         LogLevel expectedLogLevel)
     {
         // Act
-        await this.nuGetLogger.LogAsync(CreateLogMessage(inputLogLevel)).ConfigureAwait(false);
+        await this.nuGetLogger.LogAsync(CreateLogMessage(inputLogLevel));
 
         // Assert
         _ = this.loggerMock.Entries
@@ -224,7 +224,7 @@ public class NuGetLoggerUnitTests
         // Act
         foreach (var value in values)
         {
-            await this.nuGetLogger.LogAsync(CreateLogMessage(value)).ConfigureAwait(false);
+            await this.nuGetLogger.LogAsync(CreateLogMessage(value));
         }
 
         // Assert
@@ -254,7 +254,7 @@ public class NuGetLoggerUnitTests
         LogLevel expectedLogLevel)
     {
         // Act
-        await this.nuGetLogger.LogAsync(inputLogLevel, TestMessage).ConfigureAwait(false);
+        await this.nuGetLogger.LogAsync(inputLogLevel, TestMessage);
 
         // Assert
         _ = this.loggerMock.Entries
@@ -280,7 +280,7 @@ public class NuGetLoggerUnitTests
         // Act
         foreach (var value in values)
         {
-            await this.nuGetLogger.LogAsync(value, TestMessage).ConfigureAwait(false);
+            await this.nuGetLogger.LogAsync(value, TestMessage);
         }
 
         // Assert

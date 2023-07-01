@@ -14,7 +14,7 @@ using Xunit.Sdk;
 /// within the system running the tests.
 /// </summary>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-[XunitTestCaseDiscoverer("Xunit.Sdk.TheoryDiscoverer", "xunit.execution.{Platform}")]
+[XunitTestCaseDiscoverer("Xunit.Sdk.FactDiscoverer", "xunit.execution.{Platform}")]
 public sealed class AllCulturesFactAttribute : FactAttribute
 {
 }
