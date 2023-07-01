@@ -3,7 +3,6 @@
 // Licensed under the MIT License
 // </copyright>
 
-using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 

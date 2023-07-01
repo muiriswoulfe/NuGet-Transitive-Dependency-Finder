@@ -3,7 +3,6 @@
 // Licensed under the MIT License
 // </copyright>
 
-using System;
 using System.Reflection;
 
 [assembly: AssemblyProduct("NuGet Transitive Dependency Finder Console App Unit Tests")]
