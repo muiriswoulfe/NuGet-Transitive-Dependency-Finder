@@ -44,7 +44,7 @@ internal static class AllCulturesBaseTestCase
     /// Asynchronously executes a test case, returning zero or more test result messages through the message sink.
     /// </summary>
     /// <param name="baseRunAsyncFunction">The underlying <see cref="XunitTestCase.RunAsync(IMessageSink,
-    /// IMessageBus, object[], ExceptionAggregator, System.Threading.CancellationTokenSource)"/> method to run.</param>
+    /// IMessageBus, object[], ExceptionAggregator, CancellationTokenSource)"/> method to run.</param>
     /// <param name="culture">The culture for which to run the test.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation, which contains the summary of the test
     /// case run.</returns>
