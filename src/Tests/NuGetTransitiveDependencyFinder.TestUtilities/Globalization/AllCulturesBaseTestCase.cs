@@ -58,7 +58,7 @@ internal static class AllCulturesBaseTestCase
             CultureInfo.CurrentCulture = culture;
             CultureInfo.CurrentUICulture = culture;
 
-            return await baseRunAsyncFunction().ConfigureAwait(false);
+            return await baseRunAsyncFunction();
         }
         finally
         {
