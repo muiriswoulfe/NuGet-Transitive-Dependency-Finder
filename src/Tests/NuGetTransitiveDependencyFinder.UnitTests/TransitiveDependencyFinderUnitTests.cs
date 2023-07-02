@@ -99,7 +99,9 @@ public class TransitiveDependencyFinderUnitTests
 
         // Act
         transitiveDependencyFinder = null;
+#pragma warning disable S1215 // "GC.Collect" should not be called
         GC.Collect();
+#pragma warning restore S1215 // "GC.Collect" should not be called
 
         // Assert
         _ = transitiveDependencyFinderReference.IsAlive
