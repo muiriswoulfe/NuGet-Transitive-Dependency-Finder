@@ -29,9 +29,7 @@ internal class AllCulturesTheoryTestCase : XunitTheoryTestCase
     /// <remarks>This constructor should never be explicitly called, as it is only provided to enable
     /// deserialization.</remarks>
     [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable S1133 // Deprecated code should be removed
     [Obsolete("Required for deserialization.")]
-#pragma warning restore S1133 // Deprecated code should be removed
     public AllCulturesTheoryTestCase()
     {
     }

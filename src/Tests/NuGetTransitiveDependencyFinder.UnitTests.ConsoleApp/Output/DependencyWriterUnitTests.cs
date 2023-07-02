@@ -176,9 +176,7 @@ public class DependencyWriterUnitTests
     {
         // Arrange
         var dependency = InternalAccessor.Construct<Dependency>(DependencyNames[0], DependencyVersions[0]);
-#pragma warning disable S3878 // Arrays should not be created for varargs parameters
         var framework = InternalAccessor.Construct<Framework>(FrameworkIdentifiers[0], new[] { dependency });
-#pragma warning restore S3878 // Arrays should not be created for varargs parameters
         var project = InternalAccessor.Construct<Project>(ProjectNames[0], 1);
         var projects = InternalAccessor.Construct<Projects>(1);
         project.Add(framework);
@@ -218,9 +216,7 @@ public class DependencyWriterUnitTests
     {
         // Arrange
         var dependency = InternalAccessor.Construct<Dependency>(DependencyNames[0], DependencyVersions[0]);
-#pragma warning disable S3878 // Arrays should not be created for varargs parameters
         var framework = InternalAccessor.Construct<Framework>(FrameworkIdentifiers[0], new[] { dependency });
-#pragma warning restore S3878 // Arrays should not be created for varargs parameters
         var project = InternalAccessor.Construct<Project>(ProjectNames[0], 1);
         var projects = InternalAccessor.Construct<Projects>(1);
         dependency.SetProperty(nameof(dependency.IsTransitive), true);

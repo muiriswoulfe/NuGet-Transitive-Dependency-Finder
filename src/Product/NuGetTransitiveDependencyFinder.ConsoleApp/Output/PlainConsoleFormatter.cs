@@ -51,9 +51,7 @@ internal class PlainConsoleFormatter : ConsoleFormatter
     /// Initializes a new instance of the <see cref="PlainConsoleFormatter"/> class.
     /// </summary>
     /// <param name="_">The unused set of formatting options.</param>
-#pragma warning disable CA1704 // Identifiers should be spelled correctly
     public PlainConsoleFormatter(IOptionsMonitor<ConsoleFormatterOptions> _)
-#pragma warning restore CA1704 // Identifiers should be spelled correctly
         : base(nameof(PlainConsoleFormatter))
     {
     }
