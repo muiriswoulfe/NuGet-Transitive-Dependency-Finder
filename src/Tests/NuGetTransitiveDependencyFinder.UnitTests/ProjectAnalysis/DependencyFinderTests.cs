@@ -14,6 +14,7 @@ using NuGet.Frameworks;
 using NuGet.ProjectModel;
 using NuGetTransitiveDependencyFinder.ProjectAnalysis;
 using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
+using Xunit;
 
 /// <summary>
 /// Unit tests for the <see cref="DependencyFinder"/> class.
@@ -136,6 +137,74 @@ public class DependencyFinderTests
                 {
                     TargetFramework = new NuGetFramework(frameworkName)
                 }
+            }
+        };
+        _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
+
+        // Act
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, null);
+
+        // Assert
+        _ = result.HasChildren
+            .Should().BeTrue();
+        _ = result.SortedChildren.Count
+            .Should().Be(1);
+        _ = result.SortedChildren.ElementAt(0).Identifier
+            .Should().Be(projectName);
+    }
+
+    /// <summary>
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called and matching dependencies are
+    /// found but a <see langword="null"/> lock file is provided, an empty collection is returned.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithEmptyLockFile_ReturnsEmptyProjects3()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string filePath = "C:\\project\\project.csproj";
+        const string outputPath = "C:\\project\\bin";
+        const string projectName = "Project 1";
+        const string frameworkName = ".NETCoreApp,Version=v3.1";
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(
+                new[]
+                {
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = new NuGetFramework(frameworkName)
+                    }
+                })
+            {
+                FilePath = filePath,
+                Name = projectName,
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath
+                }
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+        var lockFile = new LockFile()
+        {
+            Targets = new List<LockFileTarget>(1)
+            {
+                new LockFileTarget
+                {
+                    TargetFramework = new NuGetFramework(frameworkName),
+                    Libraries = new List<LockFileTargetLibrary>(1)
+                    {
+                        new LockFileTargetLibrary
+                        {
+                            Name = "Dependency 1"
+                        }
+                    }
+                }
+            },
+            ProjectFileDependencyGroups = new List<ProjectFileDependencyGroup>(1)
+            {
+                new ProjectFileDependencyGroup(frameworkName, new List<string>(1) { "Dependency 1" })
             }
         };
         _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
