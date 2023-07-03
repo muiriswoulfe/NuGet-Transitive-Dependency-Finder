@@ -6,7 +6,6 @@
 namespace NuGetTransitiveDependencyFinder.ConsoleApp.Output;
 
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -16,10 +15,6 @@ using Microsoft.Extensions.Options;
 /// <summary>
 /// A class for formatting logging messages for plain console display.
 /// </summary>
-[SuppressMessage(
-    "Microsoft.Performance",
-    "CA1812",
-    Justification = "This class is constructed via the LoggerFactory.")]
 internal class PlainConsoleFormatter : ConsoleFormatter
 {
     /// <summary>
