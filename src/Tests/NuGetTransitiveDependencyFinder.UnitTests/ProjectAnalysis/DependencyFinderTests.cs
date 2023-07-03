@@ -104,6 +104,7 @@ public class DependencyFinderTests
     {
         // Arrange
         const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string filePath = "C:\\project\\project.csproj";
         const string outputPath = "C:\\project\\bin";
         const string projectName = "Project 1";
         const string frameworkName = ".NETCoreApp,Version=v3.1";
@@ -118,6 +119,7 @@ public class DependencyFinderTests
                     }
                 })
             {
+                FilePath = filePath,
                 Name = projectName,
                 RestoreMetadata = new ProjectRestoreMetadata()
                 {
@@ -136,7 +138,7 @@ public class DependencyFinderTests
                 }
             }
         };
-        _ = this.assetsMock.Setup(mock => mock.Create(projectOrSolutionPath, outputPath)).Returns(lockFile);
+        _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
 
         // Act
         var result = this.dependencyFinder.Run(projectOrSolutionPath, false, null);
