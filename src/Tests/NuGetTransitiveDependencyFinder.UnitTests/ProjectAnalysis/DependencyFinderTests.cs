@@ -14,7 +14,6 @@ using NuGet.Frameworks;
 using NuGet.ProjectModel;
 using NuGetTransitiveDependencyFinder.ProjectAnalysis;
 using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
-using Xunit;
 
 /// <summary>
 /// Unit tests for the <see cref="DependencyFinder"/> class.
