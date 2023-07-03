@@ -183,6 +183,50 @@ public class DependencyUnitTests
     }
 
     /// <summary>
+    /// Tests that when <see cref="Dependency.Via"/> is called after construction, it returns an empty set.
+    /// </summary>
+    [AllCulturesFact]
+    public void Via_AfterConstruction_ReturnsEmptySet()
+    {
+        // Arrange & Act
+        var dependency = new Dependency(DefaultIdentifier, new("1.0.0"));
+
+        // Assert
+        _ = 0
+            .Should().Be(dependency.Via.Count);
+    }
+
+    /// <summary>
+    /// Tests that when <see cref="Dependency.Via"/> is called after elements are added, it returns the updated set.
+    /// </summary>
+    [AllCulturesFact]
+    public void Via_AfterAdditions_ReturnsUpdatedSet()
+    {
+        // Arrange
+        const string identifier1 = "Identifier 1";
+        const string identifier2 = "Identifier 2";
+        NuGetVersion version1 = new("0.0.1");
+        NuGetVersion version2 = new("0.0.2");
+        var dependency = new Dependency(DefaultIdentifier, new("1.0.0"));
+
+        // Act
+        _ = dependency.Via.Add(new Dependency(identifier1, version1));
+        _ = dependency.Via.Add(new Dependency(identifier2, version2));
+
+        // Assert
+        _ = 2
+            .Should().Be(dependency.Via.Count);
+        _ = identifier1
+            .Should().Be(dependency.Via.ElementAt(0).Identifier);
+        _ = version1
+            .Should().Be(dependency.Via.ElementAt(0).Version);
+        _ = identifier2
+            .Should().Be(dependency.Via.ElementAt(1).Identifier);
+        _ = version2
+            .Should().Be(dependency.Via.ElementAt(1).Version);
+    }
+
+    /// <summary>
     /// Tests that when <see cref="Dependency.IsTransitive"/> is called after being set, it returns the value specified.
     /// </summary>
     /// <param name="value">The value of <see cref="Dependency.IsTransitive"/>.</param>
