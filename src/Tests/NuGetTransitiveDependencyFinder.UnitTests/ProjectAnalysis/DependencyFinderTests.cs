@@ -11,13 +11,14 @@ using FluentAssertions;
 using Moq;
 using NuGet.Frameworks;
 using NuGet.ProjectModel;
+using NuGet.Versioning;
 using NuGetTransitiveDependencyFinder.ProjectAnalysis;
 using NuGetTransitiveDependencyFinder.TestUtilities.Globalization;
 
 /// <summary>
 /// Unit tests for the <see cref="DependencyFinder"/> class.
 /// </summary>
-public class DependencyFinderTests
+public partial class DependencyFinderTests
 {
     /// <summary>
     /// The mock object for <see cref="IAssets"/>.
@@ -211,4 +212,77 @@ public class DependencyFinderTests
         _ = result.HasChildren
             .Should().BeFalse();
     }
+
+    /// <summary>
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called and a matching project is
+    /// found, that project is returned.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithMatchingProject_ReturnsProject()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string filePath = "C:\\project\\project.csproj";
+        const string outputPath = "C:\\project\\bin";
+        const string projectName = "Project 1";
+        const string frameworkName = ".NETCoreApp,Version=v3.1";
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(
+                new[]
+                {
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = new NuGetFramework(frameworkName)
+                    }
+                })
+            {
+                FilePath = filePath,
+                Name = projectName,
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath
+                }
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+        var lockFile = new LockFile()
+        {
+            Targets = new List<LockFileTarget>(1)
+            {
+                new LockFileTarget
+                {
+                    TargetFramework = new NuGetFramework(frameworkName),
+                    Libraries = new List<LockFileTargetLibrary>
+                    {
+                        new LockFileTargetLibrary
+                        {
+                            Name = "Newtonsoft.Json",
+                            Version = NuGetVersion.Parse("12.0.3")
+                        }
+                    }
+                }
+            }
+        };
+        _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
+
+        // Act
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, MatchingProjectsRegex());
+
+        // Assert
+        _ = result.HasChildren
+            .Should().BeTrue();
+        _ = result.SortedChildren.Count
+            .Should().Be(1);
+        _ = result.SortedChildren.First().Identifier
+            .Should().Be("Newtonsoft.Json");
+    }
+
+    /// <summary>
+    /// A regular expression representing the package <c>Newtonsoft.Json</c>, which is used by the unit tests.
+    /// </summary>
+    /// <returns>The regular expression.</returns>
+    // TODO: Update this to Newtonsoft\\.Json
+    [GeneratedRegex("Newtonsoft.*")]
+    private static partial Regex MatchingProjectsRegex();
 }
