@@ -278,6 +278,6 @@ public partial class DependencyFinderTests
     /// A regular expression representing the package <c>Newtonsoft.Json</c>, which is used by the unit tests.
     /// </summary>
     /// <returns>The regular expression.</returns>
-    [GeneratedRegex("Newtonsoft.*")]
+    [GeneratedRegex("Newtonsoft\\.Json")]
     private static partial Regex MatchingProjectsRegex();
 }
