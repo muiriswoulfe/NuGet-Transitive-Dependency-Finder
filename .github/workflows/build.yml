@@ -534,9 +534,16 @@ jobs:
         with:
           egress-policy: audit
 
+      - name: Approve PR
+        run: gh pr review --approve "${{ github.event.pull_request.html_url }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Enable Auto-Merge
         run: gh pr merge --auto --delete-branch --squash "${{ github.event.pull_request.html_url }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
 
 ...
