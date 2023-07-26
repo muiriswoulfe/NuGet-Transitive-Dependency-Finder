@@ -73,6 +73,7 @@ public class DependencyFinderTests
         // Arrange
         const string projectOrSolutionPath = "C:\\project\\solution.sln";
         const string outputPath = "C:\\project\\bin";
+        LockFile lockFile = null;
         var dependencyGraphSpec = new DependencyGraphSpec();
         dependencyGraphSpec.AddProject(
             new PackageSpec(new[] { new TargetFrameworkInformation() })
@@ -84,7 +85,7 @@ public class DependencyFinderTests
                 }
             });
         _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
-        _ = this.assetsMock.Setup(mock => mock.Create(projectOrSolutionPath, outputPath)).Returns(null);
+        _ = this.assetsMock.Setup(mock => mock.Create(projectOrSolutionPath, outputPath)).Returns(lockFile);
 
         // Act
         var result = this.dependencyFinder.Run(projectOrSolutionPath, false, null);
