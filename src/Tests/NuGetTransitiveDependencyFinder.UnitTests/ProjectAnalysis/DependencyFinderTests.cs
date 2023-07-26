@@ -270,19 +270,14 @@ public partial class DependencyFinderTests
         var result = this.dependencyFinder.Run(projectOrSolutionPath, false, MatchingProjectsRegex());
 
         // Assert
-        // _ = result.HasChildren
-        //     .Should().BeTrue();
-        // _ = result.SortedChildren.Count
-        //     .Should().Be(1);
-        // _ = result.SortedChildren.First().Identifier
-        //     .Should().Be("Newtonsoft.Json");
+        _ = result.HasChildren
+            .Should().BeFalse();
     }
 
     /// <summary>
     /// A regular expression representing the package <c>Newtonsoft.Json</c>, which is used by the unit tests.
     /// </summary>
     /// <returns>The regular expression.</returns>
-    // TODO: Update this to Newtonsoft\\.Json
     [GeneratedRegex("Newtonsoft.*")]
     private static partial Regex MatchingProjectsRegex();
 }
