@@ -218,7 +218,7 @@ public partial class DependencyFinderTests
     /// found, that project is returned.
     /// </summary>
     [AllCulturesFact]
-    public void Run_WithMatchingProject_ReturnsProject()
+    public void ToDo()
     {
         // Arrange
         const string projectOrSolutionPath = "C:\\project\\solution.sln";
