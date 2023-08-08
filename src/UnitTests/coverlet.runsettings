@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- © Muiris Woulfe. Licensed under the MIT License. -->
+
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat Code Coverage">
+        <Configuration>
+          <Format>cobertura,json,lcov,opencover,teamcity</Format>
+          <Exclude>
+            [NuGetTransitiveDependencyFinder.UnitTests.Utilities]*,
+            [*]NuGetTransitiveDependencyFinder.ConsoleApp.Program,
+            [*]NuGetTransitiveDependencyFinder.Wrappers.*
+          </Exclude>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>

@@ -1,0 +1,12 @@
+<!-- © Muiris Woulfe. Licensed under the MIT License. -->
+
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference
+      Include="..\..\Product\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj" />
+    <ProjectReference
+      Include="..\NuGetTransitiveDependencyFinder.UnitTests.Utilities\NuGetTransitiveDependencyFinder.UnitTests.Utilities.csproj" />
+  </ItemGroup>
+
+</Project>
