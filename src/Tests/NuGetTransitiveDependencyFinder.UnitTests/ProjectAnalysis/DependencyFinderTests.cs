@@ -108,7 +108,7 @@ public partial class DependencyFinderTests
         const string filePath = "C:\\project\\project.csproj";
         const string outputPath = "C:\\project\\bin";
         const string projectName = "Project 1";
-        const string frameworkName = ".NETCoreApp,Version=v3.1";
+        const string frameworkName = ".NETCoreApp";
         var dependencyGraphSpec = new DependencyGraphSpec();
         dependencyGraphSpec.AddProject(
             new PackageSpec(
@@ -161,7 +161,7 @@ public partial class DependencyFinderTests
         const string filePath = "C:\\project\\project.csproj";
         const string outputPath = "C:\\project\\bin";
         const string projectName = "Project 1";
-        const string frameworkName = ".NETCoreApp,Version=v3.1";
+        const string frameworkName = ".NETCoreApp";
         var dependencyGraphSpec = new DependencyGraphSpec();
         dependencyGraphSpec.AddProject(
             new PackageSpec(
@@ -214,18 +214,18 @@ public partial class DependencyFinderTests
     }
 
     /// <summary>
-    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called and a matching project is
-    /// found, that project is returned.
+    /// To do.
     /// </summary>
     [AllCulturesFact]
-    public void ToDo()
+    public void Run_WithNoMatchingProjectDependencies_ReturnsEmptyProjects()
     {
         // Arrange
         const string projectOrSolutionPath = "C:\\project\\solution.sln";
         const string filePath = "C:\\project\\project.csproj";
         const string outputPath = "C:\\project\\bin";
         const string projectName = "Project 1";
-        const string frameworkName = ".NETCoreApp,Version=v3.1";
+        const string frameworkName = ".NETCoreApp";
+        Version frameworkVersion = new(7, 0);
         var dependencyGraphSpec = new DependencyGraphSpec();
         dependencyGraphSpec.AddProject(
             new PackageSpec(
@@ -233,7 +233,7 @@ public partial class DependencyFinderTests
                 {
                     new TargetFrameworkInformation
                     {
-                        FrameworkName = new NuGetFramework(frameworkName)
+                        FrameworkName = new NuGetFramework(frameworkName, frameworkVersion)
                     }
                 })
             {
@@ -248,11 +248,151 @@ public partial class DependencyFinderTests
         _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
         var lockFile = new LockFile()
         {
+            ProjectFileDependencyGroups = new[]
+            {
+                new ProjectFileDependencyGroup($"{frameworkName},Version=v{frameworkVersion}", new string[] { })
+            },
             Targets = new List<LockFileTarget>(1)
             {
                 new LockFileTarget
                 {
-                    TargetFramework = new NuGetFramework(frameworkName),
+                    TargetFramework = new NuGetFramework(frameworkName, frameworkVersion),
+                    Libraries = new List<LockFileTargetLibrary>
+                    {
+                        new LockFileTargetLibrary
+                        {
+                            Name = "Newtonsoft.Json",
+                            Version = NuGetVersion.Parse("12.0.3")
+                        }
+                    }
+                }
+            }
+        };
+        _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
+
+        // Act
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, MatchingProjectsRegex());
+
+        // Assert
+        _ = result.HasChildren
+            .Should().BeFalse();
+    }
+
+    /// <summary>
+    /// To do.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithMatchingProjectDependenciesButNoTransitiveDependencies_ReturnsEmptyProjects()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string filePath = "C:\\project\\project.csproj";
+        const string outputPath = "C:\\project\\bin";
+        const string projectName = "Project 1";
+        const string frameworkName = ".NETCoreApp";
+        Version frameworkVersion = new(7, 0);
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(
+                new[]
+                {
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = new NuGetFramework(frameworkName, frameworkVersion)
+                    }
+                })
+            {
+                FilePath = filePath,
+                Name = projectName,
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath
+                }
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+        var lockFile = new LockFile()
+        {
+            ProjectFileDependencyGroups = new[]
+            {
+                new ProjectFileDependencyGroup($"{frameworkName},Version=v{frameworkVersion}", new string[]
+                {
+                    "Newtonsoft.Json,Version=v12.0.3"
+                })
+            },
+            Targets = new List<LockFileTarget>(1)
+            {
+                new LockFileTarget
+                {
+                    TargetFramework = new NuGetFramework(frameworkName, frameworkVersion),
+                    Libraries = new List<LockFileTargetLibrary>
+                    {
+                        new LockFileTargetLibrary
+                        {
+                            Name = "Newtonsoft.Json",
+                            Version = NuGetVersion.Parse("12.0.3")
+                        }
+                    }
+                }
+            }
+        };
+        _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
+
+        // Act
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, MatchingProjectsRegex());
+
+        // Assert
+        _ = result.HasChildren
+            .Should().BeFalse();
+    }
+
+    /// <summary>
+    /// To do.
+    /// </summary>
+    [AllCulturesFact]
+    public void Todo()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string filePath = "C:\\project\\project.csproj";
+        const string outputPath = "C:\\project\\bin";
+        const string projectName = "Project 1";
+        const string frameworkName = ".NETCoreApp";
+        Version frameworkVersion = new(6, 0);
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(
+                new[]
+                {
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = new NuGetFramework(frameworkName, frameworkVersion)
+                    }
+                })
+            {
+                FilePath = filePath,
+                Name = projectName,
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath
+                }
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+        var lockFile = new LockFile()
+        {
+            ProjectFileDependencyGroups = new[]
+            {
+                new ProjectFileDependencyGroup($"{frameworkName},Version=v{frameworkVersion}", new string[]
+                {
+                    "Newtonsoft.Json,Version=v12.0.3"
+                })
+            },
+            Targets = new List<LockFileTarget>(1)
+            {
+                new LockFileTarget
+                {
+                    TargetFramework = new NuGetFramework(frameworkName, frameworkVersion),
                     Libraries = new List<LockFileTargetLibrary>
                     {
                         new LockFileTargetLibrary
