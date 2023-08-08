@@ -5,6 +5,8 @@
 
 namespace NuGetTransitiveDependencyFinder.SystemTests.TransitiveDependencies;
 
+using System;
+
 /// <summary>
 /// The main class of the application, defining the entry point and the basic operation of the application.
 /// </summary>
