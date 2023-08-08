@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder.SystemTests", "SystemTests\NuGetTransitiveDependencyFinder.SystemTests.csproj", "{34AFA861-7F40-46E2-AFEB-CB4B23AFDAC2}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder.SystemTests.NoTransitiveDependencies", "NoTransitiveDependencies\NuGetTransitiveDependencyFinder.SystemTests.NoTransitiveDependencies.csproj", "{FFA5AC84-564B-4342-BC67-BDF54822B134}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder.SystemTests.TransitiveDependencies", "TransitiveDependencies\NuGetTransitiveDependencyFinder.SystemTests.TransitiveDependencies.csproj", "{B2C0C050-C01C-4E87-A117-F94A486DC43B}"
@@ -16,6 +18,10 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{34AFA861-7F40-46E2-AFEB-CB4B23AFDAC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34AFA861-7F40-46E2-AFEB-CB4B23AFDAC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34AFA861-7F40-46E2-AFEB-CB4B23AFDAC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34AFA861-7F40-46E2-AFEB-CB4B23AFDAC2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FFA5AC84-564B-4342-BC67-BDF54822B134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FFA5AC84-564B-4342-BC67-BDF54822B134}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFA5AC84-564B-4342-BC67-BDF54822B134}.Release|Any CPU.ActiveCfg = Release|Any CPU
