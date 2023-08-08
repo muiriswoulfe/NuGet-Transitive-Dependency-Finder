@@ -90,8 +90,8 @@ To build directly from the command-line, enter the command appropriate to which
 configuration you wish to build:
 
 ```Batchfile
-dotnet build --configuration NuGetTransitiveDependencyFinder.sln Debug
-dotnet build --configuration NuGetTransitiveDependencyFinder.sln Release
+dotnet build NuGetTransitiveDependencyFinder.sln --configuration Debug
+dotnet build NuGetTransitiveDependencyFinder.sln --configuration Release
 ```
 
 Most consumers should use the Release configuration.
