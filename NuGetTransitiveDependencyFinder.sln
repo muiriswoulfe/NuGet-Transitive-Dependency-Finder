@@ -1,8 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-
 # © Muiris Woulfe
-# Licensed under the MIT License
-
 VisualStudioVersion = 16.0.28701.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Product", "Product", "{13D4008F-3C47-4651-9F3A-B8033A7D516F}"
@@ -18,6 +15,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp", "src\UnitTests\NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp\NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.csproj", "{62A6B208-7688-4975-86A7-E2673F6B3432}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder.UnitTests.Utilities", "src\UnitTests\NuGetTransitiveDependencyFinder.UnitTests.Utilities\NuGetTransitiveDependencyFinder.UnitTests.Utilities.csproj", "{09319B49-261D-4AA9-88C2-9EA74124B9D4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SystemTests", "SystemTests", "{6A54ABDC-7679-4DF8-9A3F-95DBBDFDEDD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder.SystemTests", "src\SystemTests\NuGetTransitiveDependencyFinder.SystemTests.csproj", "{ABA65A6C-A405-43D2-8C59-32DFBBE7745A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +46,10 @@ Global
 		{09319B49-261D-4AA9-88C2-9EA74124B9D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09319B49-261D-4AA9-88C2-9EA74124B9D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09319B49-261D-4AA9-88C2-9EA74124B9D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABA65A6C-A405-43D2-8C59-32DFBBE7745A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABA65A6C-A405-43D2-8C59-32DFBBE7745A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABA65A6C-A405-43D2-8C59-32DFBBE7745A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABA65A6C-A405-43D2-8C59-32DFBBE7745A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,5 +63,6 @@ Global
 		{49D32528-1A50-4094-AA62-32A190438BBD} = {BACFCDE2-F6A1-4D4E-82D2-FBAC345C5919}
 		{62A6B208-7688-4975-86A7-E2673F6B3432} = {BACFCDE2-F6A1-4D4E-82D2-FBAC345C5919}
 		{09319B49-261D-4AA9-88C2-9EA74124B9D4} = {BACFCDE2-F6A1-4D4E-82D2-FBAC345C5919}
+		{ABA65A6C-A405-43D2-8C59-32DFBBE7745A} = {6A54ABDC-7679-4DF8-9A3F-95DBBDFDEDD0}
 	EndGlobalSection
 EndGlobal

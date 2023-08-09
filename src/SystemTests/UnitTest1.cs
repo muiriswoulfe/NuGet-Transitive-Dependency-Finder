@@ -5,6 +5,7 @@ using Xunit;
 
 public class UnitTest1
 {
+
     [Fact]
     public void NoTransitiveDependencies()
     {
@@ -18,15 +19,16 @@ public class UnitTest1
         var startInfo = new ProcessStartInfo
         {
             FileName = "dotnet",
-            Arguments = $"../../src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/{configuration}/net7.0/dotnet-transitive-dependency-finder " +
-                "--projectOrSolution ../NoTransitiveDependencies/NuGetTransitiveDependencyFinder.SystemTests.NoTransitiveDependencies.csproj",
+            Arguments = $"dotnet-transitive-dependency-finder " +
+                "--projectOrSolution ../../../../../../SystemTests/NoTransitiveDependencies/NuGetTransitiveDependencyFinder.SystemTests.NoTransitiveDependencies.csproj",
+            WorkingDirectory = $"../../../../../src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/{configuration}/net7.0/",
             RedirectStandardOutput = true,
             UseShellExecute = false
         };
 
         // Start the process
         var process = new Process { StartInfo = startInfo };
-        process.Start();
+        var result = process.Start();
 
         // Read the output
         var output = process.StandardOutput.ReadToEnd();
@@ -35,6 +37,7 @@ public class UnitTest1
         process.WaitForExit();
 
         // Assert that the output is what we expect
+        Assert.True(result);
         Assert.Equal("expected output", output);
     }
 
@@ -51,15 +54,16 @@ public class UnitTest1
         var startInfo = new ProcessStartInfo
         {
             FileName = "dotnet",
-            Arguments = $"../../src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/{configuration}/net7.0/dotnet-transitive-dependency-finder " +
-                "--projectOrSolution ../TransitiveDependencies/NuGetTransitiveDependencyFinder.SystemTests.TransitiveDependencies.csproj",
+            Arguments = $"dotnet-transitive-dependency-finder " +
+                "--projectOrSolution ../../../../../../SystemTests/TransitiveDependencies/NuGetTransitiveDependencyFinder.SystemTests.TransitiveDependencies.csproj",
+            WorkingDirectory = $"../../../../../src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/{configuration}/net7.0/",
             RedirectStandardOutput = true,
             UseShellExecute = false
         };
 
         // Start the process
         var process = new Process { StartInfo = startInfo };
-        process.Start();
+        var result = process.Start();
 
         // Read the output
         var output = process.StandardOutput.ReadToEnd();
@@ -68,6 +72,7 @@ public class UnitTest1
         process.WaitForExit();
 
         // Assert that the output is what we expect
+        Assert.True(result);
         Assert.Equal("expected output", output);
     }
 }

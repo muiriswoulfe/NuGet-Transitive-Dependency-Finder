@@ -10,10 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference
-      Include="..\..\Product\NuGetTransitiveDependencyFinder.ConsoleApp\NuGetTransitiveDependencyFinder.ConsoleApp.csproj" />
-    <ProjectReference
-      Include="..\NuGetTransitiveDependencyFinder.UnitTests.Utilities\NuGetTransitiveDependencyFinder.UnitTests.Utilities.csproj" />
+    <ProjectReference Include="..\..\Product\NuGetTransitiveDependencyFinder.ConsoleApp\NuGetTransitiveDependencyFinder.ConsoleApp.csproj" />
+    <ProjectReference Include="..\NuGetTransitiveDependencyFinder.UnitTests.Utilities\NuGetTransitiveDependencyFinder.UnitTests.Utilities.csproj" />
   </ItemGroup>
 
 </Project>
