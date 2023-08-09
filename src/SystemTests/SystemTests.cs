@@ -29,7 +29,7 @@ public class SystemTests
     [InlineData("Debug")]
     [InlineData("Release")]
     public Task TestSolution(string configuration) =>
-        this.Test("../../../../../../../TestCollateral.sln", configuration);
+        this.Test("../../../../../TestCollateral/TestCollateral.sln", configuration);
 
     /// <summary>
     /// Tests the console app using a project with no transitive dependencies.
@@ -40,7 +40,7 @@ public class SystemTests
     [InlineData("Debug")]
     [InlineData("Release")]
     public Task TestProjectWithNoTransitiveDependencies(string configuration) =>
-        this.Test("../../../../../../../NoTransitiveDependencies/NoTransitiveDependencies.csproj", configuration);
+        this.Test("../../../../../TestCollateral/NoTransitiveDependencies/NoTransitiveDependencies.csproj", configuration);
 
     /// <summary>
     /// Tests the console app using a project with no transitive dependencies.
@@ -51,7 +51,7 @@ public class SystemTests
     [InlineData("Debug")]
     [InlineData("Release")]
     public Task TestProjectWithTransitiveDependencies(string configuration) =>
-        this.Test("../../../../../../../TransitiveDependencies/TransitiveDependencies.csproj", configuration);
+        this.Test("../../../../../TestCollateral/TransitiveDependencies/TransitiveDependencies.csproj", configuration);
 
     /// <summary>
     /// Tests the console app using the specified project or solution.
