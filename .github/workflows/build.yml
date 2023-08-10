@@ -95,7 +95,7 @@ jobs:
         if: >-
           ${{ matrix.configuration == 'Release'
           && matrix.os == 'ubuntu-latest'
-          && secrets.SONAR_TOKEN != '' }}
+          && env.SONAR_TOKEN != '' }}
         name: SONARCLOUD INITIALIZATION – SonarCloud Initialize
         shell: pwsh
         run: >-
@@ -138,7 +138,7 @@ jobs:
         if: >-
           ${{ matrix.configuration == 'Release'
           && matrix.os == 'ubuntu-latest'
-          && secrets.SONAR_TOKEN != '' }}
+          && env.SONAR_TOKEN != '' }}
         name: SONARCLOUD FINALIZATION – SonarCloud Analyze
         shell: pwsh
         run: .sonarcloud/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
