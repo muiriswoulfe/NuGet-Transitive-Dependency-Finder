@@ -124,7 +124,7 @@ jobs:
         if: >-
           ${{ matrix.configuration == 'Release'
           && matrix.os == 'ubuntu-latest'
-          && secrets.CODECOV_TOKEN != '' }}
+          && env.CODECOV_TOKEN != '' }}
         name: BUILD & TEST – Upload to Codecov
         uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d # v3.1.4
         with:
