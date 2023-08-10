@@ -7,7 +7,6 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis;
 
 using System;
 using System.IO;
-using System.Reflection;
 using NuGet.ProjectModel;
 using static System.FormattableString;
 
@@ -40,10 +39,7 @@ internal sealed class DependencyGraph : IDependencyGraph
     public DependencyGraph(IDotNetRunner dotNetRunner)
     {
         this.dotNetRunner = dotNetRunner;
-
-        var executable = Assembly.GetExecutingAssembly().Location;
-        var executablePath = Path.GetDirectoryName(executable);
-        this.filePath = Path.Join(executablePath, Path.GetRandomFileName());
+        this.filePath = Path.Join(AppContext.BaseDirectory, Path.GetRandomFileName());
     }
 
     /// <summary>
