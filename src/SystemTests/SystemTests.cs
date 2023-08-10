@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
+using static System.FormattableString;
 
 /// <summary>
 /// System tests for the NuGet Transitive Dependency Finder console app.
@@ -65,8 +66,8 @@ public class SystemTests
         var processStartInfo = new ProcessStartInfo
         {
             FileName = "dotnet",
-            Arguments = $"dotnet-transitive-dependency-finder.dll --projectOrSolution {path}",
-            WorkingDirectory = $"../../../../Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/{Configuration}/{DotNetVersion}/",
+            Arguments = Invariant($"dotnet-transitive-dependency-finder.dll --projectOrSolution {path}"),
+            WorkingDirectory = Invariant($"../../../../Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/{Configuration}/{DotNetVersion}/"),
             RedirectStandardError = true,
             RedirectStandardOutput = true,
             UseShellExecute = false,

@@ -32,7 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj" />
+    <ProjectReference
+      Include="..\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj" />
   </ItemGroup>
 
 </Project>

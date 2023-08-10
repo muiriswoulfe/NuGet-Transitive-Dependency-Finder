@@ -7,6 +7,7 @@ namespace NuGetTransitiveDependencyFinder.ProjectAnalysis;
 
 using System;
 using System.IO;
+using System.Reflection;
 using NuGet.ProjectModel;
 using static System.FormattableString;
 
@@ -40,7 +41,9 @@ internal sealed class DependencyGraph : IDependencyGraph
     {
         this.dotNetRunner = dotNetRunner;
 
-        this.filePath = Path.GetRandomFileName();
+        var executable = Assembly.GetExecutingAssembly().Location;
+        var executablePath = Path.GetDirectoryName(executable);
+        this.filePath = Path.Join(executablePath, Path.GetRandomFileName());
     }
 
     /// <summary>
@@ -61,7 +64,7 @@ internal sealed class DependencyGraph : IDependencyGraph
     {
         var projectOrSolutionDirectory = Path.GetDirectoryName(projectOrSolutionPath)!;
         var arguments =
-            Invariant($"msbuild \"{projectOrSolutionPath}\" /maxCpuCount /target:GenerateRestoreGraphFile ") +
+            Invariant($"dotnet build \"{projectOrSolutionPath}\" /maxCpuCount /target:GenerateRestoreGraphFile ") +
             Invariant($"/property:RestoreGraphOutputPath=\"{this.filePath}\"");
         this.dotNetRunner.Run(arguments, projectOrSolutionDirectory);
 
