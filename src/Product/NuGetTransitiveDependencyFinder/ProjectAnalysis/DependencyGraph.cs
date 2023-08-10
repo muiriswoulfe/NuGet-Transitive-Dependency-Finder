@@ -60,7 +60,7 @@ internal sealed class DependencyGraph : IDependencyGraph
     {
         var projectOrSolutionDirectory = Path.GetDirectoryName(projectOrSolutionPath)!;
         var arguments =
-            Invariant($"dotnet build \"{projectOrSolutionPath}\" /maxCpuCount /target:GenerateRestoreGraphFile ") +
+            Invariant($"msbuild \"{projectOrSolutionPath}\" /maxCpuCount /target:GenerateRestoreGraphFile ") +
             Invariant($"/property:RestoreGraphOutputPath=\"{this.filePath}\"");
         this.dotNetRunner.Run(arguments, projectOrSolutionDirectory);
 
