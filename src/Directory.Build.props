@@ -30,7 +30,9 @@
   </PropertyGroup>
 
   <PropertyGroup
-    Condition="$(MSBuildProjectName.Contains('Tests')) And !$(MSBuildProjectName.Contains('SystemTests')) And !$(MSBuildProjectName.Contains('Utilities'))">
+    Condition="$(MSBuildProjectName.Contains('Tests')) And
+      !$(MSBuildProjectName.Contains('SystemTests')) And
+      !$(MSBuildProjectName.Contains('Utilities'))">
     <RunSettingsFilePath>$(MSBuildThisFileDirectory)\UnitTests\coverlet.runsettings</RunSettingsFilePath>
   </PropertyGroup>
 

@@ -67,7 +67,8 @@ public class SystemTests
         {
             FileName = "dotnet",
             Arguments = Invariant($"dotnet-transitive-dependency-finder.dll --projectOrSolution {path}"),
-            WorkingDirectory = Invariant($"../../../../Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/{Configuration}/{DotNetVersion}/"),
+            WorkingDirectory = "../../../../Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/" +
+                Invariant($"{Configuration}/{DotNetVersion}/"),
             RedirectStandardError = true,
             RedirectStandardOutput = true,
             UseShellExecute = false,
