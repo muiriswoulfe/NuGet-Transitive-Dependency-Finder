@@ -21,52 +21,52 @@ public class SystemTests
     private const string DotNetVersion = "net7.0";
 
     /// <summary>
+    /// The current configuration.
+    /// </summary>
+    private const string Configuration =
+#if DEBUG
+        "Debug";
+#else
+        "Release";
+#endif
+
+    /// <summary>
     /// Tests the console app using a solution.
     /// </summary>
-    /// <param name="configuration">The app configuration, which should be either Debug or Release.</param>
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-    [Theory]
-    [InlineData("Debug")]
-    [InlineData("Release")]
-    public Task TestSolution(string configuration) =>
-        this.Test("../../../../../TestCollateral/TestCollateral.sln", configuration);
+    [Fact]
+    public Task TestSolution() =>
+        this.Test("../../../../../TestCollateral/TestCollateral.sln");
 
     /// <summary>
     /// Tests the console app using a project with no transitive dependencies.
     /// </summary>
-    /// <param name="configuration">The app configuration, which should be either Debug or Release.</param>
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-    [Theory]
-    [InlineData("Debug")]
-    [InlineData("Release")]
-    public Task TestProjectWithNoTransitiveDependencies(string configuration) =>
-        this.Test("../../../../../TestCollateral/NoTransitiveDependencies/NoTransitiveDependencies.csproj", configuration);
+    [Fact]
+    public Task TestProjectWithNoTransitiveDependencies() =>
+        this.Test("../../../../../TestCollateral/NoTransitiveDependencies/NoTransitiveDependencies.csproj");
 
     /// <summary>
     /// Tests the console app using a project with no transitive dependencies.
     /// </summary>
-    /// <param name="configuration">The app configuration, which should be either Debug or Release.</param>
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-    [Theory]
-    [InlineData("Debug")]
-    [InlineData("Release")]
-    public Task TestProjectWithTransitiveDependencies(string configuration) =>
-        this.Test("../../../../../TestCollateral/TransitiveDependencies/TransitiveDependencies.csproj", configuration);
+    [Fact]
+    public Task TestProjectWithTransitiveDependencies() =>
+        this.Test("../../../../../TestCollateral/TransitiveDependencies/TransitiveDependencies.csproj");
 
     /// <summary>
     /// Tests the console app using the specified project or solution.
     /// </summary>
     /// <param name="path">The path to the project or solution.</param>
-    /// <param name="configuration">The app configuration, which should be either Debug or Release.</param>
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-    private async Task Test(string path, string configuration)
+    private async Task Test(string path)
     {
         // Arrange
         var processStartInfo = new ProcessStartInfo
         {
             FileName = "dotnet",
             Arguments = $"dotnet-transitive-dependency-finder.dll --projectOrSolution {path}",
-            WorkingDirectory = $"../../../../Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/{configuration}/{DotNetVersion}/",
+            WorkingDirectory = $"../../../../Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/{Configuration}/{DotNetVersion}/",
             RedirectStandardError = true,
             RedirectStandardOutput = true,
             UseShellExecute = false,
