@@ -6,7 +6,6 @@
 namespace NuGetTransitiveDependencyFinder.SystemTests;
 
 using System.Diagnostics;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
 using static System.FormattableString;
@@ -34,33 +33,29 @@ public class SystemTests
     /// <summary>
     /// Tests the console app using a solution.
     /// </summary>
-    /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     [Fact]
-    public Task TestSolution() =>
+    public void TestSolution() =>
         this.Test("../../../../../TestCollateral/TestCollateral.sln");
 
     /// <summary>
     /// Tests the console app using a project with no transitive dependencies.
     /// </summary>
-    /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     [Fact]
-    public Task TestProjectWithNoTransitiveDependencies() =>
+    public void TestProjectWithNoTransitiveDependencies() =>
         this.Test("../../../../../TestCollateral/NoTransitiveDependencies/NoTransitiveDependencies.csproj");
 
     /// <summary>
     /// Tests the console app using a project with no transitive dependencies.
     /// </summary>
-    /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     [Fact]
-    public Task TestProjectWithTransitiveDependencies() =>
+    public void TestProjectWithTransitiveDependencies() =>
         this.Test("../../../../../TestCollateral/TransitiveDependencies/TransitiveDependencies.csproj");
 
     /// <summary>
     /// Tests the console app using the specified project or solution.
     /// </summary>
     /// <param name="path">The path to the project or solution.</param>
-    /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-    private async Task Test(string path)
+    private void Test(string path)
     {
         // Arrange
         var processStartInfo = new ProcessStartInfo
@@ -80,16 +75,16 @@ public class SystemTests
 
         // Act
         var result = process.Start();
-        await process.WaitForExitAsync();
-        var error = process.StandardError.ReadToEndAsync();
-        var output = process.StandardOutput.ReadToEndAsync();
+        var error = process.StandardError.ReadToEnd();
+        var output = process.StandardOutput.ReadToEnd();
+        process.WaitForExit();
 
         // Assert
         _ = result
             .Should().BeTrue();
-        _ = (await error)
+        _ = error
             .Should().BeEmpty();
-        _ = (await output)
+        _ = output
             .Should().BeEmpty();
     }
 }
