@@ -20,5 +20,5 @@ internal static class Program
     public static int Main(string[] parameters) =>
         ProgramInitializer.Run(
             parameters,
-            serviceProvider => ProgramInitializer.GetProgramRunner(serviceProvider).Run());
+            serviceProvider => ProgramInitializer.GetProgramRunner(serviceProvider).RunAsync());
 }

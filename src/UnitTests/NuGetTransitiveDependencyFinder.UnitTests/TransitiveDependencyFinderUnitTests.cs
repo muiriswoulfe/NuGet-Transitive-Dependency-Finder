@@ -23,17 +23,17 @@ public class TransitiveDependencyFinderUnitTests
         configure => configure.SetMinimumLevel(LogLevel.Trace);
 
     /// <summary>
-    /// Tests that when <see cref="TransitiveDependencyFinder.Run(string?, bool, Regex?)"/> is called with a
+    /// Tests that when <see cref="TransitiveDependencyFinder.RunAsync(string?, bool, Regex?)"/> is called with a
     /// <see langword="null"/> <c>projectOrSolutionPath</c> parameter, it throws an <see cref="ArgumentNullException"/>.
     /// </summary>
     [AllCulturesFact]
-    public void Run_WithNullProjectOrSolutionPath_ThrowsArgumentNullException()
+    public void RunAsync_WithNullProjectOrSolutionPath_ThrowsArgumentNullException()
     {
         // Arrange
         using var transitiveDependencyFinder = new TransitiveDependencyFinder(LoggingBuilderAction);
 
         // Act
-        Action action = () => transitiveDependencyFinder.Run(null, true, null);
+        Action action = () => transitiveDependencyFinder.RunAsync(null, true, null).Wait();
 
         // Assert
         _ = action

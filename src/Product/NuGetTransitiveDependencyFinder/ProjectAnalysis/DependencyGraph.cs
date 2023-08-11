@@ -6,6 +6,7 @@
 namespace NuGetTransitiveDependencyFinder.ProjectAnalysis;
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using NuGet.ProjectModel;
 using static System.FormattableString;
@@ -56,15 +57,43 @@ internal sealed class DependencyGraph : IDependencyGraph
     }
 
     /// <inheritdoc/>
-    public DependencyGraphSpec Create(string projectOrSolutionPath)
+    public async Task<DependencyGraphSpec> CreateAsync(string projectOrSolutionPath)
     {
+        var msBuildAvailable = this.IsMSBuildAvailableAsync();
+
         var projectOrSolutionDirectory = Path.GetDirectoryName(projectOrSolutionPath)!;
+        var buildCommand = await msBuildAvailable ? "msbuild" : "dotnet build";
         var arguments =
-            Invariant($"msbuild \"{projectOrSolutionPath}\" /maxCpuCount /target:GenerateRestoreGraphFile ") +
+            Invariant($"{buildCommand} \"{projectOrSolutionPath}\" /maxCpuCount /target:GenerateRestoreGraphFile ") +
             Invariant($"/property:RestoreGraphOutputPath=\"{this.filePath}\"");
         this.dotNetRunner.Run(arguments, projectOrSolutionDirectory);
 
         return DependencyGraphSpec.Load(this.filePath);
+    }
+
+    /// <summary>
+    /// Determines whether the msbuild command is available.
+    /// </summary>
+    /// <returns><c>true</c> is msbuild is available; <c>false</c> otherwise.</returns>
+    private async Task<bool> IsMSBuildAvailableAsync()
+    {
+        var processStartInfo = new ProcessStartInfo
+        {
+            FileName = Environment.OSVersion.Platform == PlatformID.Win32NT ? "where" : "which",
+            Arguments = "msbuild",
+            RedirectStandardOutput = true,
+            UseShellExecute = false,
+        };
+
+        var process = new Process
+        {
+            StartInfo = processStartInfo,
+        };
+        _ = process.Start();
+        var output = process.StandardOutput.ReadToEndAsync();
+        await process.WaitForExitAsync();
+
+        return !string.IsNullOrWhiteSpace(await output);
     }
 
     /// <summary>

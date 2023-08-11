@@ -52,7 +52,7 @@ internal sealed class TransitiveDependencyFinder : ITransitiveDependencyFinder
     }
 
     /// <inheritdoc/>
-    public Projects Run(string? projectOrSolutionPath, bool collateAllDependencies, Regex? filter)
+    public Task<Projects> RunAsync(string? projectOrSolutionPath, bool collateAllDependencies, Regex? filter)
     {
         if (projectOrSolutionPath == null)
         {
@@ -61,7 +61,7 @@ internal sealed class TransitiveDependencyFinder : ITransitiveDependencyFinder
 
         return this.serviceProvider
             .GetService<IDependencyFinder>()!
-            .Run(projectOrSolutionPath, collateAllDependencies, filter);
+            .RunAsync(projectOrSolutionPath, collateAllDependencies, filter);
     }
 
     /// <summary>

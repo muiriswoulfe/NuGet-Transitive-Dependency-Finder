@@ -25,5 +25,5 @@ internal interface IDependencyFinder
     /// non-transitive dependencies as well, if <paramref name="collateAllDependencies"/> is
     /// <see langword="true"/>.</param>
     /// <returns>The transitive NuGet dependency information, which can be processed for display.</returns>
-    public Projects Run(string projectOrSolutionPath, bool collateAllDependencies, Regex? filter);
+    public Task<Projects> RunAsync(string projectOrSolutionPath, bool collateAllDependencies, Regex? filter);
 }

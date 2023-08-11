@@ -19,5 +19,5 @@ internal interface IDependencyGraph : IDisposable
     /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
     /// name.</param>
     /// <returns>The <see cref="DependencyGraphSpec"/> object.</returns>
-    public DependencyGraphSpec Create(string projectOrSolutionPath);
+    public Task<DependencyGraphSpec> CreateAsync(string projectOrSolutionPath);
 }

@@ -2,6 +2,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # © Muiris Woulfe
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{300EC6CF-F939-44A3-BD91-9385703FBA0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder.IntegrationTests", "src\IntegrationTests\NuGetTransitiveDependencyFinder.IntegrationTests.csproj", "{8AC02F86-8E6F-41FD-8A10-988C68798CBE}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Product", "Product", "{13D4008F-3C47-4651-9F3A-B8033A7D516F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTransitiveDependencyFinder", "src\Product\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj", "{FAEC5437-7DF8-4DFB-872A-6BEBF216A3F4}"
@@ -26,6 +30,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8AC02F86-8E6F-41FD-8A10-988C68798CBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AC02F86-8E6F-41FD-8A10-988C68798CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AC02F86-8E6F-41FD-8A10-988C68798CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AC02F86-8E6F-41FD-8A10-988C68798CBE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FAEC5437-7DF8-4DFB-872A-6BEBF216A3F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FAEC5437-7DF8-4DFB-872A-6BEBF216A3F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAEC5437-7DF8-4DFB-872A-6BEBF216A3F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -58,6 +66,7 @@ Global
 		SolutionGuid = {B9342362-98E1-4CD7-8250-104A96E314CE}
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{8AC02F86-8E6F-41FD-8A10-988C68798CBE} = {300EC6CF-F939-44A3-BD91-9385703FBA0E}
 		{FAEC5437-7DF8-4DFB-872A-6BEBF216A3F4} = {13D4008F-3C47-4651-9F3A-B8033A7D516F}
 		{B128460D-E702-45EA-B6B4-FAF8C53E1456} = {13D4008F-3C47-4651-9F3A-B8033A7D516F}
 		{49D32528-1A50-4094-AA62-32A190438BBD} = {BACFCDE2-F6A1-4D4E-82D2-FBAC345C5919}

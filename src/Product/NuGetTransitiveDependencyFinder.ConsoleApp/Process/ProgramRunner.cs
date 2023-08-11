@@ -57,16 +57,16 @@ internal class ProgramRunner : IProgramRunner
     }
 
     /// <inheritdoc/>
-    public void Run()
+    public async Task RunAsync()
     {
         this.logger.LogInformation(Information.CommencingAnalysis);
 
         var projects =
-            this.transitiveDependencyFinder.Run(
+            this.transitiveDependencyFinder.RunAsync(
                 this.commandLineOptions.ProjectOrSolution,
                 this.commandLineOptions.All,
                 this.commandLineOptions.Filter);
 
-        this.dependencyWriter.Write(projects);
+        this.dependencyWriter.Write(await projects);
     }
 }
