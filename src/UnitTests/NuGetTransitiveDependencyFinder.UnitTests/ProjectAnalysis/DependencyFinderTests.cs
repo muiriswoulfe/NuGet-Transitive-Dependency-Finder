@@ -46,21 +46,20 @@ public partial class DependencyFinderTests
     }
 
     /// <summary>
-    /// Tests that when <see cref="DependencyFinder.RunAsync(string, bool, Regex?)"/> is called but no matching
-    /// dependencies are found, an empty collection is returned.
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called but no matching dependencies
+    /// are found, an empty collection is returned.
     /// </summary>
-    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [AllCulturesFact]
-    public async Task RunAsync_WithNoMatchingDependencies_ReturnsEmptyProjects()
+    public void Run_WithNoMatchingDependencies_ReturnsEmptyProjects()
     {
         // Arrange
         const string projectOrSolutionPath = "C:\\solution.sln";
         _ = this.dependencyGraphMock
-            .Setup(x => x.CreateAsync(projectOrSolutionPath))
-            .ReturnsAsync(new DependencyGraphSpec());
+            .Setup(x => x.Create(projectOrSolutionPath))
+            .Returns(new DependencyGraphSpec());
 
         // Act
-        var result = await this.dependencyFinder.RunAsync(projectOrSolutionPath, false, null);
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, null);
 
         // Assert
         _ = result.HasChildren
@@ -68,12 +67,11 @@ public partial class DependencyFinderTests
     }
 
     /// <summary>
-    /// Tests that when <see cref="DependencyFinder.RunAsync(string, bool, Regex?)"/> is called and matching
-    /// dependencies are found but a <see langword="null"/> lock file is provided, an empty collection is returned.
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called and matching dependencies are
+    /// found but a <see langword="null"/> lock file is provided, an empty collection is returned.
     /// </summary>
-    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [AllCulturesFact]
-    public async Task RunAsync_WithEmptyLockFile_ReturnsEmptyProjects()
+    public void Run_WithEmptyLockFile_ReturnsEmptyProjects()
     {
         // Arrange
         const string projectOrSolutionPath = "C:\\project\\solution.sln";
@@ -89,13 +87,11 @@ public partial class DependencyFinderTests
                     OutputPath = outputPath
                 }
             });
-        _ = this.dependencyGraphMock
-            .Setup(mock => mock.CreateAsync(projectOrSolutionPath))
-            .ReturnsAsync(dependencyGraphSpec);
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
         _ = this.assetsMock.Setup(mock => mock.Create(projectOrSolutionPath, outputPath)).Returns(lockFile);
 
         // Act
-        var result = await this.dependencyFinder.RunAsync(projectOrSolutionPath, false, null);
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, null);
 
         // Assert
         _ = result.HasChildren
@@ -103,12 +99,11 @@ public partial class DependencyFinderTests
     }
 
     /// <summary>
-    /// Tests that when <see cref="DependencyFinder.RunAsync(string, bool, Regex?)"/> is called and matching
-    /// dependencies are found but there are no matching target frameworks, an empty collection is returned.
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called and matching dependencies are
+    /// found but there are no matching target frameworks, an empty collection is returned.
     /// </summary>
-    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [AllCulturesFact]
-    public async Task RunAsync_WithNoMatchingTargetFrameworks_ReturnsEmptyProjects()
+    public void Run_WithNoMatchingTargetFrameworks_ReturnsEmptyProjects()
     {
         // Arrange
         const string projectOrSolutionPath = "C:\\project\\solution.sln";
@@ -135,9 +130,7 @@ public partial class DependencyFinderTests
                     OutputPath = outputPath
                 }
             });
-        _ = this.dependencyGraphMock
-            .Setup(mock => mock.CreateAsync(projectOrSolutionPath))
-            .ReturnsAsync(dependencyGraphSpec);
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
         var lockFile = new LockFile()
         {
             Targets = new List<LockFileTarget>(1)
@@ -151,7 +144,7 @@ public partial class DependencyFinderTests
         _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
 
         // Act
-        var result = await this.dependencyFinder.RunAsync(projectOrSolutionPath, false, null);
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, null);
 
         // Assert
         _ = result.HasChildren
@@ -159,13 +152,11 @@ public partial class DependencyFinderTests
     }
 
     /// <summary>
-    /// Tests that when <see cref="DependencyFinder.RunAsync(string, bool, Regex?)"/> is called and matching
-    /// dependencies are found but there are no matching project file dependency groups, an empty collection is
-    /// returned.
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called and matching dependencies are
+    /// found but there are no matching project file dependency groups, an empty collection is returned.
     /// </summary>
-    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [AllCulturesFact]
-    public async Task RunAsync_WithNoMatchingProjectFileDependencyGroups_ReturnsEmptyProjects()
+    public void Run_WithNoMatchingProjectFileDependencyGroups_ReturnsEmptyProjects()
     {
         // Arrange
         const string projectOrSolutionPath = "C:\\project\\solution.sln";
@@ -192,9 +183,7 @@ public partial class DependencyFinderTests
                     OutputPath = outputPath
                 }
             });
-        _ = this.dependencyGraphMock
-            .Setup(mock => mock.CreateAsync(projectOrSolutionPath))
-            .ReturnsAsync(dependencyGraphSpec);
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
         var lockFile = new LockFile()
         {
             Targets = new List<LockFileTarget>(1)
@@ -219,7 +208,7 @@ public partial class DependencyFinderTests
         _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
 
         // Act
-        var result = await this.dependencyFinder.RunAsync(projectOrSolutionPath, false, null);
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, null);
 
         // Assert
         _ = result.HasChildren
@@ -227,12 +216,11 @@ public partial class DependencyFinderTests
     }
 
     /// <summary>
-    /// Tests that when <see cref="DependencyFinder.RunAsync(string, bool, Regex?)"/> is called and no matching
-    /// dependencies are found, an empty collection is returned.
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called and no matching dependencies
+    /// are found, an empty collection is returned.
     /// </summary>
-    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [AllCulturesFact]
-    public async Task RunAsync_WithNoMatchingProjectDependencies_ReturnsEmptyProjects()
+    public void Run_WithNoMatchingProjectDependencies_ReturnsEmptyProjects()
     {
         // Arrange
         const string projectOrSolutionPath = "C:\\project\\solution.sln";
@@ -260,9 +248,7 @@ public partial class DependencyFinderTests
                     OutputPath = outputPath
                 }
             });
-        _ = this.dependencyGraphMock
-            .Setup(mock => mock.CreateAsync(projectOrSolutionPath))
-            .ReturnsAsync(dependencyGraphSpec);
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
         var lockFile = new LockFile()
         {
             ProjectFileDependencyGroups = new[]
@@ -288,7 +274,7 @@ public partial class DependencyFinderTests
         _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
 
         // Act
-        var result = await this.dependencyFinder.RunAsync(projectOrSolutionPath, false, MatchingProjectsRegex());
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, MatchingProjectsRegex());
 
         // Assert
         _ = result.HasChildren
@@ -296,12 +282,11 @@ public partial class DependencyFinderTests
     }
 
     /// <summary>
-    /// Tests that when <see cref="DependencyFinder.RunAsync(string, bool, Regex?)"/> is called and matching
-    /// dependencies are found but there are no transitive dependencies, an empty collection is returned.
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called and matching dependencies are
+    /// found but there are no transitive dependencies, an empty collection is returned.
     /// </summary>
-    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [AllCulturesFact]
-    public async Task RunAsync_WithMatchingProjectDependenciesButNoTransitiveDependencies_ReturnsEmptyProjects()
+    public void Run_WithMatchingProjectDependenciesButNoTransitiveDependencies_ReturnsEmptyProjects()
     {
         // Arrange
         const string projectOrSolutionPath = "C:\\project\\solution.sln";
@@ -329,9 +314,7 @@ public partial class DependencyFinderTests
                     OutputPath = outputPath
                 }
             });
-        _ = this.dependencyGraphMock
-            .Setup(mock => mock.CreateAsync(projectOrSolutionPath))
-            .ReturnsAsync(dependencyGraphSpec);
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
         var lockFile = new LockFile()
         {
             ProjectFileDependencyGroups = new[]
@@ -360,7 +343,7 @@ public partial class DependencyFinderTests
         _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
 
         // Act
-        var result = await this.dependencyFinder.RunAsync(projectOrSolutionPath, false, MatchingProjectsRegex());
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, MatchingProjectsRegex());
 
         // Assert
         _ = result.HasChildren

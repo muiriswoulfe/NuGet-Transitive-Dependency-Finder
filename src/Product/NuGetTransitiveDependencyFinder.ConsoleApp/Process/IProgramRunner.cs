@@ -13,6 +13,5 @@ internal interface IProgramRunner
     /// <summary>
     /// Runs the main application logic.
     /// </summary>
-    /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-    public Task RunAsync();
+    public void Run();
 }
