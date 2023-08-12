@@ -1,6 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+
 # © Muiris Woulfe
+# Licensed under the MIT License
+
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoTransitiveDependencies", "NoTransitiveDependencies\NoTransitiveDependencies.csproj", "{D2424D23-97ED-48FF-B19C-E96EB768AA0E}"

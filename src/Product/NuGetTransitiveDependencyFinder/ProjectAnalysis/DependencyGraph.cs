@@ -40,6 +40,7 @@ internal sealed class DependencyGraph : IDependencyGraph
     public DependencyGraph(IDotNetRunner dotNetRunner)
     {
         this.dotNetRunner = dotNetRunner;
+
         this.filePath = Path.Join(AppContext.BaseDirectory, Path.GetRandomFileName());
     }
 
