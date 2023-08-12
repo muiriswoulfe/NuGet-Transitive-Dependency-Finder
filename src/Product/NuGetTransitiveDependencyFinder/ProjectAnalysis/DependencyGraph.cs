@@ -95,6 +95,7 @@ internal sealed class DependencyGraph : IDependencyGraph
         {
             FileName = Environment.OSVersion.Platform == PlatformID.Win32NT ? "where" : "which",
             Arguments = "msbuild",
+            RedirectStandardError = true,
             RedirectStandardOutput = true,
             UseShellExecute = false,
         };
