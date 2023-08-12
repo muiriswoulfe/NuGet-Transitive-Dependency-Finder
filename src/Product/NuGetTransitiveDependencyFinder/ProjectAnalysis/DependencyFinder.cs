@@ -68,12 +68,6 @@ internal class DependencyFinder : IDependencyFinder
             {
                 this.dependencies.Clear();
 
-                var libraries = assetsFile
-                    .Targets
-                    .First(target => target.TargetFramework == framework.FrameworkName)
-                    .Libraries
-                    .ToImmutableDictionary(library => library.Name, StringComparer.OrdinalIgnoreCase);
-
                 var projectDependencyGroup = assetsFile
                     .ProjectFileDependencyGroups
                     .FirstOrDefault(target =>
@@ -84,6 +78,12 @@ internal class DependencyFinder : IDependencyFinder
                 {
                     continue;
                 }
+
+                var libraries = assetsFile
+                    .Targets
+                    .First(target => target.TargetFramework == framework.FrameworkName)
+                    .Libraries
+                    .ToImmutableDictionary(library => library.Name, StringComparer.OrdinalIgnoreCase);
 
                 var projectDependencies = projectDependencyGroup
                     .Dependencies
