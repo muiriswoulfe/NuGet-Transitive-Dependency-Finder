@@ -3,7 +3,7 @@
 // Licensed under the MIT License
 // </copyright>
 
-namespace NuGetTransitiveDependencyFinder.SystemTests.NoTransitiveDependencies;
+namespace NuGetTransitiveDependencyFinder.TestCollateral.NoTransitiveDependencies;
 
 using System;
 
