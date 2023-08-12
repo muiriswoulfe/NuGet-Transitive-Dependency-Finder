@@ -6,8 +6,10 @@
 namespace NuGetTransitiveDependencyFinder.ProjectAnalysis;
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using NuGet.ProjectModel;
+using NuGetTransitiveDependencyFinder.Wrappers;
 using static System.FormattableString;
 
 /// <summary>
@@ -21,10 +23,20 @@ internal sealed class DependencyGraph : IDependencyGraph
     private readonly IDotNetRunner dotNetRunner;
 
     /// <summary>
+    /// The wrapper around <see cref="Process"/>.
+    /// </summary>
+    private readonly IProcessWrapper processWrapper;
+
+    /// <summary>
     /// A temporary file for storing the dependency graph information.
     /// </summary>
     /// <remarks>This file will be deleted when <see cref="Dispose()"/> is invoked.</remarks>
     private readonly string filePath;
+
+    /// <summary>
+    /// The output from the command to check for the existence of MSBuild.
+    /// </summary>
+    private string msBuildCheckOutput = string.Empty;
 
     /// <summary>
     /// A value tracking whether <see cref="Dispose()"/> has been invoked.
@@ -36,11 +48,13 @@ internal sealed class DependencyGraph : IDependencyGraph
     /// </summary>
     /// <param name="dotNetRunner">The object managing the running of .NET commands on project and solution
     /// files.</param>
-    public DependencyGraph(IDotNetRunner dotNetRunner)
+    /// <param name="processWrapper">The wrapper around <see cref="Process"/>.</param>
+    public DependencyGraph(IDotNetRunner dotNetRunner, IProcessWrapper processWrapper)
     {
         this.dotNetRunner = dotNetRunner;
+        this.processWrapper = processWrapper;
 
-        this.filePath = Path.GetRandomFileName();
+        this.filePath = Path.Join(AppContext.BaseDirectory, Path.GetRandomFileName());
     }
 
     /// <summary>
@@ -59,13 +73,42 @@ internal sealed class DependencyGraph : IDependencyGraph
     /// <inheritdoc/>
     public DependencyGraphSpec Create(string projectOrSolutionPath)
     {
+        var msBuildAvailable = this.IsMSBuildAvailable();
+
         var projectOrSolutionDirectory = Path.GetDirectoryName(projectOrSolutionPath)!;
+        var buildCommand = msBuildAvailable ? "msbuild" : "dotnet build";
         var arguments =
-            Invariant($"msbuild \"{projectOrSolutionPath}\" /maxCpuCount /target:GenerateRestoreGraphFile ") +
+            Invariant($"{buildCommand} \"{projectOrSolutionPath}\" /maxCpuCount /target:GenerateRestoreGraphFile ") +
             Invariant($"/property:RestoreGraphOutputPath=\"{this.filePath}\"");
         this.dotNetRunner.Run(arguments, projectOrSolutionDirectory);
 
         return DependencyGraphSpec.Load(this.filePath);
+    }
+
+    /// <summary>
+    /// Determines whether the msbuild command is available.
+    /// </summary>
+    /// <returns><c>true</c> is msbuild is available; <c>false</c> otherwise.</returns>
+    private bool IsMSBuildAvailable()
+    {
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = Environment.OSVersion.Platform == PlatformID.Win32NT ? "where" : "which",
+            Arguments = "msbuild",
+            RedirectStandardOutput = true,
+            UseShellExecute = false,
+        };
+
+        this.msBuildCheckOutput = string.Empty;
+
+        this.processWrapper.Start(startInfo, this.LogOutput!, this.LogError!);
+
+        this.processWrapper.BeginErrorReadLine();
+        this.processWrapper.BeginOutputReadLine();
+
+        this.processWrapper.WaitForExit();
+
+        return !string.IsNullOrWhiteSpace(this.msBuildCheckOutput);
     }
 
     /// <summary>
@@ -83,6 +126,33 @@ internal sealed class DependencyGraph : IDependencyGraph
             }
 
             this.disposedValue = true;
+        }
+    }
+
+    /// <summary>
+    /// Handles messages sent to the Standard Error stream.
+    /// </summary>
+    /// <param name="sender">The event sender.</param>
+    /// <param name="eventParameters">The event parameters.</param>
+    /// <exception cref="InvalidOperationException">Thrown if an error occurs.</exception>
+    private void LogError(object sender, DataReceivedEventArgs eventParameters)
+    {
+        if (!string.IsNullOrWhiteSpace(eventParameters.Data))
+        {
+            throw new InvalidOperationException(eventParameters.Data);
+        }
+    }
+
+    /// <summary>
+    /// Records messages sent to the Standard Output stream.
+    /// </summary>
+    /// <param name="sender">The event sender.</param>
+    /// <param name="eventParameters">The event parameters.</param>
+    private void LogOutput(object sender, DataReceivedEventArgs eventParameters)
+    {
+        if (!string.IsNullOrWhiteSpace(eventParameters.Data))
+        {
+            this.msBuildCheckOutput += eventParameters.Data;
         }
     }
 }

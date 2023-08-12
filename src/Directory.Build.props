@@ -29,8 +29,9 @@
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
-    <RunSettingsFilePath>$(MSBuildThisFileDirectory)\Tests\coverlet.runsettings</RunSettingsFilePath>
+  <PropertyGroup
+    Condition="$(MSBuildProjectName.Contains('Tests')) And !$(MSBuildProjectName.Contains('Utilities'))">
+    <RunSettingsFilePath>$(MSBuildThisFileDirectory)\UnitTests\coverlet.runsettings</RunSettingsFilePath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,11 +40,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)\Shared\Properties\AssemblyInfo.cs" />
   </ItemGroup>
 
-  <ItemGroup Condition="!$(MSBuildProjectName.Contains('Tests'))">
+  <ItemGroup
+    Condition="!$(MSBuildProjectName.Contains('Tests')) Or $(MSBuildProjectName.Contains('Utilities'))">
     <Compile Include="$(MSBuildThisFileDirectory)\Shared\Properties\AssemblyAttributes.cs" />
   </ItemGroup>
 
-  <ItemGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
+  <ItemGroup
+    Condition="$(MSBuildProjectName.Contains('Tests')) And !$(MSBuildProjectName.Contains('Utilities'))">
     <Content Include="$(MSBuildThisFileDirectory)\xunit.runner.json"
       CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
@@ -79,7 +82,8 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
+  <ItemGroup
+    Condition="$(MSBuildProjectName.Contains('Tests')) And !$(MSBuildProjectName.Contains('Utilities'))">
     <PackageReference Include="coverlet.collector" Version="6.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

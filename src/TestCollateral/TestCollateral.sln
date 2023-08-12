@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+
+# © Muiris Woulfe
+# Licensed under the MIT License
+
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoTransitiveDependencies", "NoTransitiveDependencies\NoTransitiveDependencies.csproj", "{D2424D23-97ED-48FF-B19C-E96EB768AA0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransitiveDependencies", "TransitiveDependencies\TransitiveDependencies.csproj", "{436BAEC1-ACEC-4CAA-A0E6-D0D0904D9B7E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D2424D23-97ED-48FF-B19C-E96EB768AA0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2424D23-97ED-48FF-B19C-E96EB768AA0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2424D23-97ED-48FF-B19C-E96EB768AA0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2424D23-97ED-48FF-B19C-E96EB768AA0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{436BAEC1-ACEC-4CAA-A0E6-D0D0904D9B7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{436BAEC1-ACEC-4CAA-A0E6-D0D0904D9B7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{436BAEC1-ACEC-4CAA-A0E6-D0D0904D9B7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{436BAEC1-ACEC-4CAA-A0E6-D0D0904D9B7E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
