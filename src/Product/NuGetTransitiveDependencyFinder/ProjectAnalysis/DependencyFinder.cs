@@ -51,9 +51,9 @@ internal class DependencyFinder : IDependencyFinder
     }
 
     /// <inheritdoc/>
-    public async Task<Projects> RunAsync(string projectOrSolutionPath, bool collateAllDependencies, Regex? filter)
+    public Projects Run(string projectOrSolutionPath, bool collateAllDependencies, Regex? filter)
     {
-        var projects = await this.CreateProjectsAsync(projectOrSolutionPath);
+        var projects = this.CreateProjects(projectOrSolutionPath);
         var result = new Projects(projects.Count);
         foreach (var project in projects)
         {
@@ -68,12 +68,6 @@ internal class DependencyFinder : IDependencyFinder
             {
                 this.dependencies.Clear();
 
-                var libraries = assetsFile
-                    .Targets
-                    .First(target => target.TargetFramework == framework.FrameworkName)
-                    .Libraries
-                    .ToImmutableDictionary(library => library.Name, StringComparer.OrdinalIgnoreCase);
-
                 var projectDependencyGroup = assetsFile
                     .ProjectFileDependencyGroups
                     .FirstOrDefault(target =>
@@ -84,6 +78,12 @@ internal class DependencyFinder : IDependencyFinder
                 {
                     continue;
                 }
+
+                var libraries = assetsFile
+                    .Targets
+                    .First(target => target.TargetFramework == framework.FrameworkName)
+                    .Libraries
+                    .ToImmutableDictionary(library => library.Name, StringComparer.OrdinalIgnoreCase);
 
                 var projectDependencies = projectDependencyGroup
                     .Dependencies
@@ -111,8 +111,8 @@ internal class DependencyFinder : IDependencyFinder
     /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
     /// name.</param>
     /// <returns>The collection of .NET projects.</returns>
-    private async Task<IReadOnlyCollection<PackageSpec>> CreateProjectsAsync(string projectOrSolutionPath) =>
-        (await this.CreateProjectDependencyGraphAsync(projectOrSolutionPath))
+    private IReadOnlyCollection<PackageSpec> CreateProjects(string projectOrSolutionPath) =>
+        this.CreateProjectDependencyGraph(projectOrSolutionPath)
             .Projects
             .Where(project => project.RestoreMetadata.ProjectStyle == ProjectStyle.PackageReference)
             .ToArray();
@@ -124,8 +124,8 @@ internal class DependencyFinder : IDependencyFinder
     /// <param name="projectOrSolutionPath">The path of the .NET project or solution file, including the file
     /// name.</param>
     /// <returns>The project dependency graph.</returns>
-    private Task<DependencyGraphSpec> CreateProjectDependencyGraphAsync(string projectOrSolutionPath) =>
-        this.dependencyGraph.CreateAsync(projectOrSolutionPath);
+    private DependencyGraphSpec CreateProjectDependencyGraph(string projectOrSolutionPath) =>
+        this.dependencyGraph.Create(projectOrSolutionPath);
 
     /// <summary>
     /// Creates the assets file to be analyzed.

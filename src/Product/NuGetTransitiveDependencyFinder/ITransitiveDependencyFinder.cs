@@ -28,5 +28,5 @@ public interface ITransitiveDependencyFinder : IDisposable
     /// <exception cref="ArgumentNullException"><paramref name="projectOrSolutionPath"/> is
     /// <see langword="null"/>.</exception>
     /// <exception cref="ArgumentException"><paramref name="filter"/> is not a valid regular expression.</exception>
-    public Task<Projects> RunAsync(string? projectOrSolutionPath, bool collateAllDependencies, Regex? filter);
+    public Projects Run(string? projectOrSolutionPath, bool collateAllDependencies, Regex? filter);
 }

@@ -73,7 +73,7 @@ public class SystemTests
             RedirectStandardOutput = true,
             UseShellExecute = false,
         };
-        var process = new Process
+        using var process = new Process
         {
             StartInfo = processStartInfo,
         };

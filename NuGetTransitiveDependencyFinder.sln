@@ -1,5 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
+
 # © Muiris Woulfe
+# Licensed under the MIT License
+
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{300EC6CF-F939-44A3-BD91-9385703FBA0E}"
