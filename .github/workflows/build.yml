@@ -32,7 +32,7 @@ jobs:
           egress-policy: audit
 
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         with:
           fetch-depth: 0
 
@@ -60,7 +60,7 @@ jobs:
 
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         with:
           fetch-depth: 0
 
@@ -172,7 +172,7 @@ jobs:
 
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: INITIALIZATION – Get Tag
         env:
@@ -272,7 +272,7 @@ jobs:
 
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: INITIALIZATION – Get Tag
         env:
@@ -441,7 +441,7 @@ jobs:
 
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         with:
           fetch-depth: 0
 
@@ -493,7 +493,7 @@ jobs:
 
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       # CodeQL
       - name: INITIALIZATION – .NET Install
