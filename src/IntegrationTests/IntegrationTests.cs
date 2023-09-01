@@ -19,21 +19,21 @@ public class IntegrationTests
     /// </summary>
     [Fact]
     public void TestSolution() =>
-        this.Test("../../../../../TestCollateral/TestCollateral.sln");
+        this.Test("../../../../TestCollateral/TestCollateral.sln");
 
     /// <summary>
     /// Tests the app using a project with no transitive dependencies.
     /// </summary>
     [Fact]
     public void TestProjectWithNoTransitiveDependencies() =>
-        this.Test("../../../../../TestCollateral/NoTransitiveDependencies/NoTransitiveDependencies.csproj");
+        this.Test("../../../../TestCollateral/NoTransitiveDependencies/NoTransitiveDependencies.csproj");
 
     /// <summary>
     /// Tests the app using a project with no transitive dependencies.
     /// </summary>
     [Fact]
     public void TestProjectWithTransitiveDependencies() =>
-        this.Test("../../../../../TestCollateral/TransitiveDependencies/TransitiveDependencies.csproj");
+        this.Test("../../../../TestCollateral/TransitiveDependencies/TransitiveDependencies.csproj");
 
     /// <summary>
     /// Tests the app using the specified project or solution.
@@ -42,6 +42,7 @@ public class IntegrationTests
     private void Test(string path)
     {
         // Arrange
+        var fullPath = Path.GetFullPath(path);
         static void LoggingBuilderAction(ILoggingBuilder configure) =>
             configure
                 .AddConsole()
@@ -50,7 +51,7 @@ public class IntegrationTests
         var transitiveDependencyFinder = new TransitiveDependencyFinder(LoggingBuilderAction);
 
         // Act
-        var projects = transitiveDependencyFinder.Run(path, true, null);
+        var projects = transitiveDependencyFinder.Run(fullPath, true, null);
 
         // Assert
         _ = projects.HasChildren

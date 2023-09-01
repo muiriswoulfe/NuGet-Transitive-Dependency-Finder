@@ -37,7 +37,7 @@ public class SystemTests
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     [Fact]
     public Task TestSolution() =>
-        this.Test("../../../../../TestCollateral/TestCollateral.sln");
+        this.Test("../../../../TestCollateral/TestCollateral.sln");
 
     /// <summary>
     /// Tests the console app using a project with no transitive dependencies.
@@ -45,7 +45,7 @@ public class SystemTests
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     [Fact]
     public Task TestProjectWithNoTransitiveDependencies() =>
-        this.Test("../../../../../TestCollateral/NoTransitiveDependencies/NoTransitiveDependencies.csproj");
+        this.Test("../../../../TestCollateral/NoTransitiveDependencies/NoTransitiveDependencies.csproj");
 
     /// <summary>
     /// Tests the console app using a project with no transitive dependencies.
@@ -53,7 +53,7 @@ public class SystemTests
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     [Fact]
     public Task TestProjectWithTransitiveDependencies() =>
-        this.Test("../../../../../TestCollateral/TransitiveDependencies/TransitiveDependencies.csproj");
+        this.Test("../../../../TestCollateral/TransitiveDependencies/TransitiveDependencies.csproj");
 
     /// <summary>
     /// Tests the console app using the specified project or solution.
@@ -63,10 +63,11 @@ public class SystemTests
     private async Task Test(string path)
     {
         // Arrange
+        var fullPath = Path.GetFullPath(path);
         var processStartInfo = new ProcessStartInfo
         {
             FileName = "dotnet",
-            Arguments = Invariant($"dotnet-transitive-dependency-finder.dll --projectOrSolution {path}"),
+            Arguments = Invariant($"dotnet-transitive-dependency-finder.dll --projectOrSolution {fullPath}"),
             WorkingDirectory = "../../../../Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/" +
                 Invariant($"{Configuration}/{DotNetVersion}/"),
             RedirectStandardError = true,
