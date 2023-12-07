@@ -83,7 +83,7 @@ internal class DependencyFinder : IDependencyFinder
                     .Targets
                     .First(target => target.TargetFramework == framework.FrameworkName)
                     .Libraries
-                    .ToImmutableDictionary(library => library.Name, StringComparer.OrdinalIgnoreCase);
+                    .ToImmutableDictionary(library => library.Name!, StringComparer.OrdinalIgnoreCase);
 
                 var projectDependencies = projectDependencyGroup
                     .Dependencies
