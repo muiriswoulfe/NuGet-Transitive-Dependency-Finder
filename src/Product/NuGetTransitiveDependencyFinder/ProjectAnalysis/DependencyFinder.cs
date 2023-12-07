@@ -162,6 +162,11 @@ internal class DependencyFinder : IDependencyFinder
         Dependency? parent,
         IReadOnlyDictionary<string, LockFileTargetLibrary> libraries)
     {
+        if (library.Name == null || library.Version == null)
+        {
+            return;
+        }
+
         if (!this.dependencies.ContainsKey(library.Name))
         {
             this.dependencies.Add(library.Name, new(library.Name, library.Version));
@@ -198,7 +203,7 @@ internal class DependencyFinder : IDependencyFinder
         foreach (var dependency in dependencies
             .Select(dependency =>
                 !string.Equals(dependency.Name, "NETStandard.Library", StringComparison.OrdinalIgnoreCase) &&
-                this.dependencies.TryGetValue(dependency.Name, out var value) ? value : null)
+                this.dependencies.TryGetValue(dependency.Name!, out var value) ? value : null)
             .Where(dependency => dependency is not null && dependency!.Via.Count > 0))
         {
             dependency!.IsTransitive = true;
