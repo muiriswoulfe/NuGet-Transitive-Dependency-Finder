@@ -464,9 +464,13 @@ jobs:
       - name: JSON VALIDATION – Update .markdownlint.json
         shell: pwsh
         run: |-
-          Invoke-WebRequest -Uri https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json -OutFile markdownlint-config-schema.json
-          (Get-Content -Path markdownlint-config-schema.json) -replace 'http://json-schema.org/draft-07/schema#', 'http://json-schema.org/draft-07/schema' | Set-Content -Path markdownlint-config-schema.json
-          (Get-Content -Path .markdownlint.json) -replace 'https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json', 'markdownlint-config-schema.json' | Set-Content -Path .markdownlint.json
+          $Url = https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
+          Invoke-WebRequest -Uri $Url -OutFile markdownlint-config-schema.json
+          (Get-Content -Path markdownlint-config-schema.json) -replace `
+          'http://json-schema.org/draft-07/schema#', 'http://json-schema.org/draft-07/schema' | `
+          Set-Content -Path markdownlint-config-schema.json
+          (Get-Content -Path .markdownlint.json) -replace $Url, `
+          'markdownlint-config-schema.json' | Set-Content -Path .markdownlint.json
 
       - name: JSON VALIDATION – .markdownlint.json
         uses: walbo/validate-json@1c24a27a740a698944ff5b697cb8010a72c55c6b # v1.1.0
