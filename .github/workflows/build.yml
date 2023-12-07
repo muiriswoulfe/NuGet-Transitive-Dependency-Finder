@@ -464,7 +464,7 @@ jobs:
       - name: JSON VALIDATION – Update .markdownlint.json
         shell: pwsh
         run: |-
-          $Url = https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
+          $Url = 'https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json'
           Invoke-WebRequest -Uri $Url -OutFile markdownlint-config-schema.json
           (Get-Content -Path markdownlint-config-schema.json) -replace `
           'http://json-schema.org/draft-07/schema#', 'http://json-schema.org/draft-07/schema' | `
