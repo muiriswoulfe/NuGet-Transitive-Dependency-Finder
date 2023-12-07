@@ -117,7 +117,7 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(IsEqualTestData))]
-    public void IsEqual_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
+    public void IsEqual_WithAllCases_ReturnsValue(Version? left, Version? right, bool expected)
     {
         // Act
         var result = Comparer.IsEqual(left, right, ComparisonFunction);
@@ -136,7 +136,7 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(IsNotEqualTestData))]
-    public void IsNotEqual_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
+    public void IsNotEqual_WithAllCases_ReturnsValue(Version? left, Version? right, bool expected)
     {
         // Act
         var result = Comparer.IsNotEqual(left, right, ComparisonFunction);
@@ -155,7 +155,7 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(IsLessTestData))]
-    public void IsLess_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
+    public void IsLess_WithAllCases_ReturnsValue(Version? left, Version? right, bool expected)
     {
         // Act
         var result = Comparer.IsLess(left, right, ComparisonFunction);
@@ -174,7 +174,7 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(IsLessOrEqualTestData))]
-    public void IsLessOrEqual_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
+    public void IsLessOrEqual_WithAllCases_ReturnsValue(Version? left, Version? right, bool expected)
     {
         // Act
         var result = Comparer.IsLessOrEqual(left, right, ComparisonFunction);
@@ -193,7 +193,7 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(IsGreaterTestData))]
-    public void IsGreater_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
+    public void IsGreater_WithAllCases_ReturnsValue(Version? left, Version? right, bool expected)
     {
         // Act
         var result = Comparer.IsGreater(left, right, ComparisonFunction);
@@ -212,7 +212,7 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(IsGreaterOrEqualTestData))]
-    public void IsGreaterOrEqual_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
+    public void IsGreaterOrEqual_WithAllCases_ReturnsValue(Version? left, Version? right, bool expected)
     {
         // Act
         var result = Comparer.IsGreaterOrEqual(left, right, ComparisonFunction);
@@ -231,7 +231,7 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(CompareToTestData))]
-    public void CompareTo_WithAllCases_ReturnsValue(Version left, Version right, int expected)
+    public void CompareTo_WithAllCases_ReturnsValue(Version left, Version? right, int expected)
     {
         // Act
         var result = Comparer.CompareTo(left, right, ComparisonFunction);
@@ -250,7 +250,7 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(CompareToTestData))]
-    public void CompareToObject_WithAllCases_ReturnsValue(Version left, object right, int expected)
+    public void CompareToObject_WithAllCases_ReturnsValue(Version left, object? right, int expected)
     {
         // Act
         var result = Comparer.CompareTo(left, right, ComparisonFunction, nameof(Version));
@@ -285,7 +285,7 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(EqualsTestData))]
-    public void Equals_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
+    public void Equals_WithAllCases_ReturnsValue(Version left, Version? right, bool expected)
     {
         // Act
         var result = Comparer.Equals(left, right, ComparisonFunction);
@@ -304,7 +304,7 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(EqualsTestData))]
-    public void EqualsObject_WithAllCases_ReturnsValue(Version left, object right, bool expected)
+    public void EqualsObject_WithAllCases_ReturnsValue(Version left, object? right, bool expected)
     {
         // Act
         var result = Comparer.Equals(left, right, ComparisonFunction);
