@@ -255,7 +255,7 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorEqualTestData))]
-    public void OperatorEqual_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
+    public void OperatorEqual_WithAllCases_ReturnsValue(Dependency? left, Dependency? right, bool expected)
     {
         // Act
         var result = left == right;
@@ -274,7 +274,7 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorNotEqualTestData))]
-    public void OperatorNotEqual_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
+    public void OperatorNotEqual_WithAllCases_ReturnsValue(Dependency? left, Dependency? right, bool expected)
     {
         // Act
         var result = left != right;
@@ -293,7 +293,7 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorLessThanTestData))]
-    public void OperatorLessThan_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
+    public void OperatorLessThan_WithAllCases_ReturnsValue(Dependency? left, Dependency? right, bool expected)
     {
         // Act
         var result = left < right;
@@ -312,7 +312,7 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorLessThanOrEqualTestData))]
-    public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
+    public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(Dependency? left, Dependency? right, bool expected)
     {
         // Act
         var result = left <= right;
@@ -331,7 +331,7 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorGreaterThanTestData))]
-    public void OperatorGreaterThan_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
+    public void OperatorGreaterThan_WithAllCases_ReturnsValue(Dependency? left, Dependency? right, bool expected)
     {
         // Act
         var result = left > right;
@@ -351,8 +351,8 @@ public class DependencyUnitTests
     [AllCulturesTheory]
     [MemberData(nameof(OperatorGreaterThanOrEqualTestData))]
     public void OperatorGreaterThanOrEqual_WithAllCases_ReturnsValue(
-        Dependency left,
-        Dependency right,
+        Dependency? left,
+        Dependency? right,
         bool expected)
     {
         // Act
@@ -372,7 +372,7 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(CompareToTestData))]
-    public void CompareTo_WithAllCases_ReturnsValue(Dependency left, Dependency right, int expected)
+    public void CompareTo_WithAllCases_ReturnsValue(Dependency left, Dependency? right, int expected)
     {
         // Act
         var result = left.CompareTo(right);
@@ -391,7 +391,7 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(CompareToTestData))]
-    public void CompareToObject_WithAllCases_ReturnsValue(Dependency left, object right, int expected)
+    public void CompareToObject_WithAllCases_ReturnsValue(Dependency left, object? right, int expected)
     {
         // Act
         var result = left.CompareTo(right);
@@ -426,7 +426,7 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(EqualsTestData))]
-    public void Equals_WithAllCases_ReturnsValue(Dependency left, Dependency right, bool expected)
+    public void Equals_WithAllCases_ReturnsValue(Dependency left, Dependency? right, bool expected)
     {
         // Act
         var result = left.Equals(right);
@@ -445,7 +445,7 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(EqualsTestData))]
-    public void EqualsObject_WithAllCases_ReturnsValue(Dependency left, object right, bool expected)
+    public void EqualsObject_WithAllCases_ReturnsValue(Dependency left, object? right, bool expected)
     {
         // Act
         var result = left.Equals(right);
