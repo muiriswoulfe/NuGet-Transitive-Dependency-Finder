@@ -20,7 +20,8 @@ using INuGetLogger = NuGet.Common.ILogger;
 /// </summary>
 /// <param name="loggingBuilderAction">The logging builder action, which will be used for initializing the .NET
 /// logging infrastructure.</param>
-internal sealed class TransitiveDependencyFinder(Action<ILoggingBuilder> loggingBuilderAction) : ITransitiveDependencyFinder
+internal sealed class TransitiveDependencyFinder(
+    Action<ILoggingBuilder> loggingBuilderAction) : ITransitiveDependencyFinder
 {
     /// <summary>
     /// The service provider, which specifies the project dependencies.
