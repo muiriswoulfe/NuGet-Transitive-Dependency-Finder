@@ -13,17 +13,9 @@ using Xunit.Sdk;
 /// An attribute discoverer, for applying all cultures to xUnit.net tests marked with
 /// <see cref="AllCulturesTheoryAttribute"/>.
 /// </summary>
-internal class AllCulturesTheoryAttributeDiscoverer : TheoryDiscoverer
+/// <param name="diagnosticMessageSink">The message sink that receives the test result messages.</param>
+internal class AllCulturesTheoryAttributeDiscoverer(IMessageSink diagnosticMessageSink) : TheoryDiscoverer(diagnosticMessageSink)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="AllCulturesTheoryAttributeDiscoverer"/> class.
-    /// </summary>
-    /// <param name="diagnosticMessageSink">The message sink that receives the test result messages.</param>
-    public AllCulturesTheoryAttributeDiscoverer(IMessageSink diagnosticMessageSink)
-        : base(diagnosticMessageSink)
-    {
-    }
-
     /// <summary>
     /// Discovers the full suite of test cases, where each test case validates a single culture, corresponding to each
     /// test method marked with <see cref="AllCulturesTheoryAttribute"/>.
