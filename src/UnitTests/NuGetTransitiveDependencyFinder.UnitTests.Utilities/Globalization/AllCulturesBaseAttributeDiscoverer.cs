@@ -24,7 +24,7 @@ internal static class AllCulturesBaseAttributeDiscoverer
     /// iterative testing.</remarks>
     private static readonly CultureInfo[] AllCultures =
 #if DEBUG
-        { CultureInfo.GetCultureInfo("en-US") };
+        [CultureInfo.GetCultureInfo("en-US")];
 #else
         CultureInfo.GetCultures(CultureTypes.AllCultures);
 #endif

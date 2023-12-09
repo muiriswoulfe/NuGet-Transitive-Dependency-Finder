@@ -42,11 +42,10 @@ public class ProgramInitializerUnitTests
     {
         // Act
         var result = ProgramInitializer.Run(
-            new[]
-            {
+            [
                 "--projectOrSolution",
                 "Project.csproj",
-            },
+            ],
             serviceProvider =>
             {
                 _ = serviceProvider.GetService<ICommandLineOptions>()
@@ -144,11 +143,10 @@ public class ProgramInitializerUnitTests
     {
         // Act
         var result = ProgramInitializer.Run(
-            new[]
-            {
+            [
                 "--projectOrSolution",
                 "Project.csproj",
-            },
+            ],
             serviceProvider =>
                 ProgramInitializer.GetProgramRunner(serviceProvider)
                     .Should().BeOfType<ProgramRunner>());

@@ -89,5 +89,5 @@ internal static class AllCulturesBaseTestCase
     /// <param name="traits">The test traits to which the culture information are to be applied.</param>
     /// <param name="culture">The culture associated with the test.</param>
     public static void InitializeTraits(Dictionary<string, List<string>> traits, CultureInfo culture) =>
-        traits.Add(CultureFieldName, new List<string> { culture.Name });
+        traits.Add(CultureFieldName, [culture.Name]);
 }

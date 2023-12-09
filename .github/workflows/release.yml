@@ -91,7 +91,6 @@ jobs:
             linux-musl-x64,
             linux-x64,
             osx-x64,
-            win-arm,
             win-arm64,
             win-x64,
             win-x86
@@ -170,7 +169,7 @@ jobs:
         run: |-
           $Extension = '${{ fromJson(env.extension)[steps.platform.outputs.PLATFORM] }}'
           $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
-          $AssetPath = '${{ github.workspace }}/src/${{ env.project }}/bin/Release/net7.0/'
+          $AssetPath = '${{ github.workspace }}/src/${{ env.project }}/bin/Release/net8.0/'
           $AssetPath += "${{ matrix.runtime }}/publish/${{ env.project }}$Extension"
           Write-Output -InputObject "ASSET_NAME=$AssetName" >> $Env:GITHUB_OUTPUT
           Write-Output -InputObject "ASSET_PATH=$AssetPath" >> $Env:GITHUB_OUTPUT

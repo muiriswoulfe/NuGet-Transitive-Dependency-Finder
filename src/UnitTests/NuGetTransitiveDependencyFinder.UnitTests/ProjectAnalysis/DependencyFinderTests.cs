@@ -135,7 +135,7 @@ public partial class DependencyFinderTests
         {
             Targets = new List<LockFileTarget>(1)
             {
-                new LockFileTarget
+                new()
                 {
                     TargetFramework = new NuGetFramework(frameworkName)
                 }
@@ -188,12 +188,12 @@ public partial class DependencyFinderTests
         {
             Targets = new List<LockFileTarget>(1)
             {
-                new LockFileTarget
+                new()
                 {
                     TargetFramework = new NuGetFramework(frameworkName),
                     Libraries = new List<LockFileTargetLibrary>(1)
                     {
-                        new LockFileTargetLibrary
+                        new()
                         {
                             Name = "Dependency 1"
                         }
@@ -202,7 +202,7 @@ public partial class DependencyFinderTests
             },
             ProjectFileDependencyGroups = new List<ProjectFileDependencyGroup>(1)
             {
-                new ProjectFileDependencyGroup(frameworkName, new List<string>(1) { "Dependency 1" })
+                new(frameworkName, new List<string>(1) { "Dependency 1" })
             }
         };
         _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
@@ -257,12 +257,12 @@ public partial class DependencyFinderTests
             },
             Targets = new List<LockFileTarget>(1)
             {
-                new LockFileTarget
+                new()
                 {
                     TargetFramework = new NuGetFramework(frameworkName, frameworkVersion),
                     Libraries = new List<LockFileTargetLibrary>
                     {
-                        new LockFileTargetLibrary
+                        new()
                         {
                             Name = "Newtonsoft.Json",
                             Version = NuGetVersion.Parse("12.0.3")
@@ -326,12 +326,12 @@ public partial class DependencyFinderTests
             },
             Targets = new List<LockFileTarget>(1)
             {
-                new LockFileTarget
+                new()
                 {
                     TargetFramework = new NuGetFramework(frameworkName, frameworkVersion),
                     Libraries = new List<LockFileTargetLibrary>
                     {
-                        new LockFileTargetLibrary
+                        new()
                         {
                             Name = "Newtonsoft.Json",
                             Version = NuGetVersion.Parse("12.0.3")
