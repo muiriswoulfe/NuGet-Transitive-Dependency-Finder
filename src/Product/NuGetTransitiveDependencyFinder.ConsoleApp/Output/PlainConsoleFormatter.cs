@@ -15,7 +15,10 @@ using Microsoft.Extensions.Options;
 /// <summary>
 /// A class for formatting logging messages for plain console display.
 /// </summary>
-internal class PlainConsoleFormatter : ConsoleFormatter
+/// <param name="options">The unused set of formatting options.</param>
+#pragma warning disable CS9113 // Parameter is unread
+internal class PlainConsoleFormatter(IOptionsMonitor<ConsoleFormatterOptions> options) : ConsoleFormatter(nameof(PlainConsoleFormatter))
+#pragma warning restore CS9113 // Parameter is unread
 {
     /// <summary>
     /// The console formatting code indicating that the foreground should be bold.
@@ -46,17 +49,6 @@ internal class PlainConsoleFormatter : ConsoleFormatter
     /// The console formatting code indicating that the foreground should be yellow.
     /// </summary>
     private const string Yellow = "\x1B[33m";
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PlainConsoleFormatter"/> class.
-    /// </summary>
-    /// <param name="_">The unused set of formatting options.</param>
-#pragma warning disable CA1704 // Identifiers should be spelled correctly
-    public PlainConsoleFormatter(IOptionsMonitor<ConsoleFormatterOptions> _)
-#pragma warning restore CA1704 // Identifiers should be spelled correctly
-        : base(nameof(PlainConsoleFormatter))
-    {
-    }
 
     /// <inheritdoc/>
     public override void Write<TState>(

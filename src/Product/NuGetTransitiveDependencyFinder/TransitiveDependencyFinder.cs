@@ -18,25 +18,19 @@ using INuGetLogger = NuGet.Common.ILogger;
 /// <summary>
 /// A class that manages the overall process of finding transitive NuGet dependencies.
 /// </summary>
-internal sealed class TransitiveDependencyFinder : ITransitiveDependencyFinder
+/// <param name="loggingBuilderAction">The logging builder action, which will be used for initializing the .NET
+/// logging infrastructure.</param>
+internal sealed class TransitiveDependencyFinder(Action<ILoggingBuilder> loggingBuilderAction) : ITransitiveDependencyFinder
 {
     /// <summary>
     /// The service provider, which specifies the project dependencies.
     /// </summary>
-    private readonly ServiceProvider serviceProvider;
+    private readonly ServiceProvider serviceProvider = CreateServiceProvider(loggingBuilderAction);
 
     /// <summary>
     /// A value tracking whether <see cref="Dispose()"/> has been invoked.
     /// </summary>
     private bool disposedValue;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TransitiveDependencyFinder"/> class.
-    /// </summary>
-    /// <param name="loggingBuilderAction">The logging builder action, which will be used for initializing the .NET
-    /// logging infrastructure.</param>
-    public TransitiveDependencyFinder(Action<ILoggingBuilder> loggingBuilderAction) =>
-        this.serviceProvider = CreateServiceProvider(loggingBuilderAction);
 
     /// <summary>
     /// Finalizes an instance of the <see cref="TransitiveDependencyFinder"/> class.

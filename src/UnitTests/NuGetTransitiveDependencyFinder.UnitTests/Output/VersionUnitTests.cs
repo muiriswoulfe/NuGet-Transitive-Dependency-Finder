@@ -270,7 +270,7 @@ public class VersionUnitTests
 
         // Assert
         _ = action
-            .Should().Throw<ArgumentException>().WithMessage("Object must be of type Version.");
+            .Should().Throw<ArgumentException>().WithMessage("Object must be of type Version. (Parameter 'version')");
     }
 
     /// <summary>

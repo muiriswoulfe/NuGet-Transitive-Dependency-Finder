@@ -6,7 +6,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Debug",
-      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net8.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--projectOrSolution",
         "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
@@ -18,7 +18,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Debug",
-      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net8.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--projectOrSolution",
         "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln",
@@ -32,7 +32,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Debug",
-      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net8.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--help"
       ],
@@ -43,7 +43,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Debug",
-      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net8.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--version"
       ],
@@ -54,7 +54,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Release",
-      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Release/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Release/net8.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--projectOrSolution",
         "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
@@ -66,7 +66,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Debug",
-      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net8.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--projectOrSolution",
         "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
@@ -79,7 +79,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Debug",
-      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net8.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--projectOrSolution",
         "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln",
@@ -93,7 +93,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Debug",
-      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net8.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--help"
       ],
@@ -105,7 +105,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Debug",
-      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net8.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--version"
       ],
@@ -117,7 +117,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "Build Release",
-      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Release/net7.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
+      "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Release/net8.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--projectOrSolution",
         "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"

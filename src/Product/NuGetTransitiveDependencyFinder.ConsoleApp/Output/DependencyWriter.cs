@@ -14,7 +14,8 @@ using NuGetTransitiveDependencyFinder.Output;
 /// <summary>
 /// A class for writing NuGet dependency information.
 /// </summary>
-internal class DependencyWriter : IDependencyWriter
+/// <param name="logger">The logger object to which to write the output.</param>
+internal class DependencyWriter(ILogger<DependencyWriter> logger) : IDependencyWriter
 {
     /// <summary>
     /// The string prefix for each framework, which comprises one level of indentation.
@@ -31,38 +32,26 @@ internal class DependencyWriter : IDependencyWriter
     /// </summary>
     private static readonly string ViaPrefix = CreatePrefix(3);
 
-    /// <summary>
-    /// The logger object to which to write the output.
-    /// </summary>
-    private readonly ILogger<DependencyWriter> logger;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="DependencyWriter"/> class.
-    /// </summary>
-    /// <param name="logger">The logger object to which to write the output.</param>
-    public DependencyWriter(ILogger<DependencyWriter> logger) =>
-        this.logger = logger;
-
     /// <inheritdoc/>
     public void Write(Projects projects)
     {
         if (!projects.HasChildren)
         {
-            this.logger.LogInformation(Information.NoDependencies);
+            logger.LogInformation(Information.NoDependencies);
             return;
         }
 
         foreach (var project in projects.SortedChildren)
         {
-            this.logger.LogInformation(project.ToString());
+            logger.LogInformation(project.ToString());
             foreach (var framework in project.SortedChildren)
             {
                 var frameworkString = framework.ToString();
-                this.logger.LogInformation(FrameworkPrefix + frameworkString);
+                logger.LogInformation(FrameworkPrefix + frameworkString);
                 this.WriteDependencies(framework.SortedChildren);
             }
 
-            this.logger.LogInformation(string.Empty);
+            logger.LogInformation(string.Empty);
         }
     }
 
@@ -88,18 +77,18 @@ internal class DependencyWriter : IDependencyWriter
         {
             if (dependency.IsTransitive)
             {
-                this.logger.LogWarning(
+                logger.LogWarning(
                     DependencyPrefix +
                     string.Format(CultureInfo.CurrentCulture, Information.TransitiveDependency, dependency));
 
                 foreach (var via in dependency.Via)
                 {
-                    this.logger.LogDebug(ViaPrefix + via);
+                    logger.LogDebug(ViaPrefix + via);
                 }
             }
             else
             {
-                this.logger.LogDebug(DependencyPrefix + dependency);
+                logger.LogDebug(DependencyPrefix + dependency);
             }
         }
     }
