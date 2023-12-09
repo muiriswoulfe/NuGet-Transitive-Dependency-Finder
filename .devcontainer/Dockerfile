@@ -1,2 +1,2 @@
-ARG VARIANT=8.0-bookworm-slim
+ARG VARIANT=latest
 FROM mcr.microsoft.com/dotnet/sdk:${VARIANT}
