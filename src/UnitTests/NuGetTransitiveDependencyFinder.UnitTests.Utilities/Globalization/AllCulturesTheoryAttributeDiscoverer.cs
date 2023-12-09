@@ -14,7 +14,8 @@ using Xunit.Sdk;
 /// <see cref="AllCulturesTheoryAttribute"/>.
 /// </summary>
 /// <param name="diagnosticMessageSink">The message sink that receives the test result messages.</param>
-internal class AllCulturesTheoryAttributeDiscoverer(IMessageSink diagnosticMessageSink) : TheoryDiscoverer(diagnosticMessageSink)
+internal class AllCulturesTheoryAttributeDiscoverer(
+    IMessageSink diagnosticMessageSink) : TheoryDiscoverer(diagnosticMessageSink)
 {
     /// <summary>
     /// Discovers the full suite of test cases, where each test case validates a single culture, corresponding to each
