@@ -17,7 +17,8 @@ using Microsoft.Extensions.Options;
 /// </summary>
 /// <param name="options">The unused set of formatting options.</param>
 #pragma warning disable CS9113 // Parameter is unread
-internal class PlainConsoleFormatter(IOptionsMonitor<ConsoleFormatterOptions> options) : ConsoleFormatter(nameof(PlainConsoleFormatter))
+internal class PlainConsoleFormatter(
+    IOptionsMonitor<ConsoleFormatterOptions> options) : ConsoleFormatter(nameof(PlainConsoleFormatter))
 #pragma warning restore CS9113 // Parameter is unread
 {
     /// <summary>
