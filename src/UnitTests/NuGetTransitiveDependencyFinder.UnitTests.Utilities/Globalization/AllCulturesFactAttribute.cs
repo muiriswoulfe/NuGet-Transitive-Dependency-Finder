@@ -16,5 +16,3 @@ using Xunit.Sdk;
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 [XunitTestCaseDiscoverer("Xunit.Sdk.FactDiscoverer", "xunit.execution.{Platform}")]
 public sealed class AllCulturesFactAttribute : FactAttribute
-{
-}
