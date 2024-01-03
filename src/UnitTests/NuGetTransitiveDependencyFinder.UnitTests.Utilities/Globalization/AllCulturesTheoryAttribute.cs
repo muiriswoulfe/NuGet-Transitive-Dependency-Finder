@@ -15,4 +15,4 @@ using Xunit.Sdk;
 /// </summary>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 [XunitTestCaseDiscoverer("Xunit.Sdk.TheoryDiscoverer", "xunit.execution.{Platform}")]
-public sealed class AllCulturesTheoryAttribute : TheoryAttribute
+public sealed class AllCulturesTheoryAttribute : TheoryAttribute;
