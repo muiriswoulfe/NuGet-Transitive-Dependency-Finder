@@ -476,6 +476,7 @@ jobs:
         with:
           files: .markdownlint.json
           print-valid-files: true
+          strict: false
 
       - name: JSON VALIDATION – src/stylecop.json
         uses: walbo/validate-json@1c24a27a740a698944ff5b697cb8010a72c55c6b # v1.1.0
