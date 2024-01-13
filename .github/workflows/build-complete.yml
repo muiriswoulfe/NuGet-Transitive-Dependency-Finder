@@ -11,7 +11,6 @@ on:
       - completed
     workflows:
       - 'Continuous Integration'
-  workflow_dispatch: null
 
 permissions: {}
 
