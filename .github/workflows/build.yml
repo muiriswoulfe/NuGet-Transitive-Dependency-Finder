@@ -533,7 +533,6 @@ jobs:
         uses: github/codeql-action/analyze@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.13.4
 
   dependabot:
-    if: ${{ github.actor == 'dependabot[bot]' }}
     name: Dependabot
     runs-on: ubuntu-latest
     permissions:
@@ -545,7 +544,12 @@ jobs:
         with:
           egress-policy: audit
 
-      - name: Enable Auto-Merge
+      - name: Auto-Approve
+        uses: fastify/github-action-merge-dependabot@59fc8817458fac20df8884576cfe69dbb77c9a07 # v3.9.1
+        with:
+          approve-only: true
+
+      - name: Auto-Merge
         run: gh pr merge --auto --delete-branch --squash "${{ github.event.pull_request.html_url }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
