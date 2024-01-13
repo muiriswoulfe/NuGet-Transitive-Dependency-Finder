@@ -15,9 +15,9 @@ on:
 permissions: {}
 
 jobs:
-  dependabot:
-    if: ${{ github.actor == 'dependabot[bot]' && github.event.workflow_run.conclusion == 'success' }}
-    name: Dependabot
+  complete:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    name: Complete
     runs-on: ubuntu-latest
     permissions:
       contents: write
