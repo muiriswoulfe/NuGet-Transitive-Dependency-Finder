@@ -1,0 +1,37 @@
+# © Muiris Woulfe
+# Licensed under the MIT License
+
+---
+
+name: Build Complete
+
+on:
+  workflow_run:
+    types:
+      - completed
+    workflows:
+      - 'Continuous Integration'
+  workflow_dispatch: null
+
+permissions: {}
+
+jobs:
+  dependabot:
+    if: ${{ github.actor == 'dependabot[bot]' && github.event.workflow_run.conclusion == 'success' }}
+    name: Dependabot
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@eb238b55efaa70779f274895e782ed17c84f2895 # v2.6.1
+        with:
+          egress-policy: audit
+
+      - name: Merge
+        uses: ridedott/merge-me-action@e76902c79d0e0d6eff80df4f1f53d06c211a1287 # v2.10.64
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+...
