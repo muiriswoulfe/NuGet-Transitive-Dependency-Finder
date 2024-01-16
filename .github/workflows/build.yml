@@ -546,13 +546,14 @@ jobs:
           egress-policy: audit
 
       - name: Auto-Approve
-        uses: fastify/github-action-merge-dependabot@59fc8817458fac20df8884576cfe69dbb77c9a07 # v3.9.1
-        with:
-          approve-only: true
+        run: gh pr review --approve "${{github.event.pull_request.html_url}}"
+        env:
+          # Fine-grained token with Pull Requests Read & Write permissions.
+          GH_TOKEN: ${{ secrets.AUTO_APPROVE_TOKEN }}
 
       - name: Auto-Merge
         run: gh pr merge --auto --delete-branch --squash "${{ github.event.pull_request.html_url }}"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
 ...
