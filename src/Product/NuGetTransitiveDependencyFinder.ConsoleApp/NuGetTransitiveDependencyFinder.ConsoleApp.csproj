@@ -9,7 +9,9 @@
     <AssemblyName>dotnet-transitive-dependency-finder</AssemblyName>
     <Authors>Muiris Woulfe</Authors>
     <Copyright>Copyright (c) Muiris Woulfe</Copyright>
-    <Description>The NuGet Transitive Dependency Finder analyzes .NET projects and solutions to find superfluous dependencies that have been explicitly added to projects. The goal is to simplify dependency management.</Description>
+    <Description>The NuGet Transitive Dependency Finder analyzes .NET projects and solutions to find
+      superfluous dependencies that have been explicitly added to projects. The goal is to simplify
+      dependency management.</Description>
     <PackageId>dotnet-transitive-dependency-finder-tool</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder</PackageProjectUrl>
@@ -20,17 +22,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+    <PackageReference Include="CommandLineParser" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
+    <PackageReference Include="StyleCop.Analyzers">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj" />
+    <ProjectReference
+      Include="..\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj" />
   </ItemGroup>
 
 </Project>
