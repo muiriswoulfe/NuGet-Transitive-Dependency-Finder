@@ -42,7 +42,7 @@ public class VersionUnitTests
             DefaultValue,
             ClonedDefaultValue,
             LesserValue,
-            Array.Empty<ComparisonTestData<Version>>());
+            []);
 
     /// <summary>
     /// Gets the data for testing <see cref="Version.operator ==(Version?, Version?)"/>.

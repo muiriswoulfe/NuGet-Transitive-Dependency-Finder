@@ -29,7 +29,7 @@ public class ProjectsUnitTests
     /// The default test value for a <see cref="Framework"/> object.
     /// </summary>
     private static readonly Framework DefaultFramework =
-        new(new("Framework", new("1.0.0")), new Dependency[] { new("Dependency", new("1.0.0")) });
+        new(new("Framework", new("1.0.0")), [ new("Dependency", new("1.0.0")) ]);
 
     /// <summary>
     /// The default test value for a <see cref="Project"/> object.
@@ -64,15 +64,15 @@ public class ProjectsUnitTests
     /// <returns>The data for testing <see cref="Base{Project}.SortedChildren"/>.</returns>
     private static IReadOnlyList<Project> CreateSortedChildrenTestData()
     {
-        var result = new Project[]
-        {
+        var result =
+        [
             new("A", 1),
             new("A", 1),
             new("B", 1),
             new("C", 1),
             new("Y", 1),
             new("Z", 1),
-        };
+        ];
 
         foreach (var project in result)
         {

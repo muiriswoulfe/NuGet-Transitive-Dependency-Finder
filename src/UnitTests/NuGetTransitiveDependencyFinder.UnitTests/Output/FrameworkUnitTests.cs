@@ -38,7 +38,7 @@ public class FrameworkUnitTests
     /// <summary>
     /// The default collection of children.
     /// </summary>
-    private static readonly IReadOnlyCollection<Dependency> DefaultChildren = Array.Empty<Dependency>();
+    private static readonly IReadOnlyCollection<Dependency> DefaultChildren = [];
 
     /// <summary>
     /// The default test value.
@@ -63,8 +63,7 @@ public class FrameworkUnitTests
             DefaultValue,
             ClonedDefaultValue,
             LesserValue,
-            new ComparisonTestData<Framework>[]
-            {
+            [
                 new(
                     DefaultValue,
                     new(new(DefaultIdentifierFramework, DefaultIdentifierVersion), DefaultChildren),
@@ -101,21 +100,20 @@ public class FrameworkUnitTests
                     DefaultValue,
                     new(new(DefaultIdentifierFramework, new(0, 9)), DefaultChildren),
                     Comparisons.GreaterThan),
-            });
+            ]);
 
     /// <summary>
     /// The data for testing <see cref="Base{Dependency}.SortedChildren"/>.
     /// </summary>
     private static readonly IReadOnlyList<Dependency> SortedChildrenTestData =
-        new Dependency[]
-        {
+        [
             new("A", new("0.9.9")),
             new("A", new("1.0.0")),
             new("B", new("1.0.0")),
             new("C", new("1.0.0")),
             new("Y", new("1.0.0")),
             new("Z", new("1.0.0")),
-        };
+        ];
 
     /// <summary>
     /// Gets the data for testing <see cref="Framework.operator ==(Framework?, Framework?)"/>.
