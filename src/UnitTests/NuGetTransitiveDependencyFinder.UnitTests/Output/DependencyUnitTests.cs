@@ -52,8 +52,7 @@ public class DependencyUnitTests
             DefaultValue,
             ClonedDefaultValue,
             LesserValue,
-            new ComparisonTestData<Dependency>[]
-            {
+            [
                 new(DefaultValue, new("Identifier", DefaultVersion), Comparisons.Equal),
                 new(DefaultValue, new(DefaultIdentifier, new("1.0.0-alpha")), Comparisons.Equal),
                 new(DefaultValue, new("IDENTIFIER", DefaultVersion), Comparisons.Equal),
@@ -62,7 +61,7 @@ public class DependencyUnitTests
                 new(new(DefaultIdentifier, new("0.9.9-alpha")), DefaultValue, Comparisons.LessThan),
                 new(DefaultValue, new("ABC", DefaultVersion), Comparisons.GreaterThan),
                 new(DefaultValue, new(DefaultIdentifier, new("0.9.9-alpha")), Comparisons.GreaterThan),
-            });
+            ]);
 
     /// <summary>
     /// Gets the data for testing <see cref="Dependency.operator ==(Dependency?, Dependency?)"/>
