@@ -29,7 +29,7 @@ public class ProjectsUnitTests
     /// The default test value for a <see cref="Framework"/> object.
     /// </summary>
     private static readonly Framework DefaultFramework =
-        new(new("Framework", new("1.0.0")), new Dependency[] { new("Dependency", new("1.0.0")) });
+        new(new("Framework", new("1.0.0")), [new("Dependency", new("1.0.0"))]);
 
     /// <summary>
     /// The default test value for a <see cref="Project"/> object.
