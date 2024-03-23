@@ -77,7 +77,9 @@ internal class DependencyWriter(ILogger<DependencyWriter> logger) : IDependencyW
         {
             if (dependency.IsTransitive)
             {
-                var logMessage = DependencyPrefix + string.Format(CultureInfo.CurrentCulture, Information.TransitiveDependency, dependency);
+                var logMessage =
+                    DependencyPrefix +
+                    string.Format(CultureInfo.CurrentCulture, Information.TransitiveDependency, dependency);
                 logger.LogWarning(logMessage);
 
                 foreach (var via in dependency.Via)
