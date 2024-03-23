@@ -5,7 +5,6 @@
 
 namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output;
 
-using System;
 using System.Globalization;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -148,7 +147,7 @@ public class DependencyWriterUnitTests
     public void Write_WithFrameworkContainingNoChildren_WritesExpectedOutput()
     {
         // Arrange
-        var framework = InternalAccessor.Construct<Framework>(FrameworkIdentifiers[0], []);
+        var framework = InternalAccessor.Construct<Framework>(FrameworkIdentifiers[0], Array.Empty<Dependency>());
         var project = InternalAccessor.Construct<Project>(ProjectNames[0], 1);
         var projects = InternalAccessor.Construct<Projects>(1);
         project.Add(framework);

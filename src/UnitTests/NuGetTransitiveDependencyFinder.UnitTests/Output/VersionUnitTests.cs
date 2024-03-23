@@ -104,7 +104,7 @@ public class VersionUnitTests
     /// Gets the data for testing <see cref="Version.GetHashCode()"/>.
     /// </summary>
     public static TheoryData<Version, Version> GetHashCodeTestData =>
-        ComparisonDataGenerator.GenerateGetHashCodeTestData(DefaultValue, ClonedDefaultValue, LesserValue, new());
+        ComparisonDataGenerator.GenerateGetHashCodeTestData(DefaultValue, ClonedDefaultValue, LesserValue, []);
 
     /// <summary>
     /// Tests that when <see cref="Version.operator ==(Version?, Version?)"/> is called with different values, it

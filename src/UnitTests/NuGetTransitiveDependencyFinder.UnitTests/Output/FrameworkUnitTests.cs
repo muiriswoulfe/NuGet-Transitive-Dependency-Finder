@@ -82,7 +82,7 @@ public class FrameworkUnitTests
                     Comparisons.Equal),
                 new(
                     DefaultValue,
-                    new(DefaultIdentifier, new Dependency[] { new(DefaultIdentifierFramework, new("1.0.0")) }),
+                    new(DefaultIdentifier, [new(DefaultIdentifierFramework, new("1.0.0"))]),
                     Comparisons.Equal),
                 new(
                     new(new NuGetFramework("ABC", DefaultIdentifierVersion), DefaultChildren),
@@ -199,7 +199,7 @@ public class FrameworkUnitTests
                 },
                 {
                     DefaultValue,
-                    new(DefaultIdentifier, new Dependency[] { new(DefaultIdentifierFramework, new("1.0.0")) })
+                    new(DefaultIdentifier, [new(DefaultIdentifierFramework, new("1.0.0"))])
                 },
             });
 
@@ -530,7 +530,7 @@ public class FrameworkUnitTests
         // Arrange
         var framework = new Framework(
             DefaultIdentifier,
-            new Dependency[] { new(DefaultIdentifierFramework, new("1.0.0")) });
+            [new(DefaultIdentifierFramework, new("1.0.0"))]);
 
         // Act
         var result = framework.HasChildren;
@@ -584,15 +584,14 @@ public class FrameworkUnitTests
         // Arrange
         var framework = new Framework(
             DefaultIdentifier,
-            new Dependency[]
-            {
+            [
                 SortedChildrenTestData[5],
                 SortedChildrenTestData[4],
                 SortedChildrenTestData[1],
                 SortedChildrenTestData[3],
                 SortedChildrenTestData[2],
                 SortedChildrenTestData[0],
-            });
+            ]);
 
         // Act
         var result = framework.SortedChildren;
@@ -638,12 +637,11 @@ public class FrameworkUnitTests
         // Arrange
         var framework = new Framework(
             DefaultIdentifier,
-            new Dependency[]
-            {
+            [
                 SortedChildrenTestData[5],
                 SortedChildrenTestData[4],
                 SortedChildrenTestData[1],
-            });
+            ]);
         framework.Add(SortedChildrenTestData[3]);
         framework.Add(SortedChildrenTestData[2]);
         framework.Add(SortedChildrenTestData[0]);
@@ -668,12 +666,11 @@ public class FrameworkUnitTests
         // Arrange
         var framework = new Framework(
             DefaultIdentifier,
-            new Dependency[]
-            {
+            [
                 SortedChildrenTestData[5],
                 SortedChildrenTestData[4],
                 SortedChildrenTestData[1],
-            });
+            ]);
         _ = framework.SortedChildren;
         framework.Add(SortedChildrenTestData[3]);
         framework.Add(SortedChildrenTestData[2]);
