@@ -2,7 +2,6 @@
 # Licensed under the MIT License
 
 ---
-
 name: Build
 
 on:
@@ -141,7 +140,7 @@ jobs:
           && env.SONAR_TOKEN != '' }}
         name: SONARCLOUD FINALIZATION – SonarCloud Analyze
         shell: pwsh
-        run: .sonarcloud/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        run: .sonarcloud/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
   create-asset:
     name: Create Asset
@@ -159,7 +158,7 @@ jobs:
             osx-x64,
             win-arm64,
             win-x64,
-            win-x86
+            win-x86,
           ]
     runs-on: ubuntu-latest
     permissions: {}
@@ -555,5 +554,3 @@ jobs:
         run: gh pr merge --auto --delete-branch --squash "${{ github.event.pull_request.html_url }}"
         env:
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-...
