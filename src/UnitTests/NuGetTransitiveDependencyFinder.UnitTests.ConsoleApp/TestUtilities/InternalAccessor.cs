@@ -51,6 +51,6 @@ public static class InternalAccessor
             BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.SetProperty,
             null,
             obj,
-            new[] { value },
+            [value],
             CultureInfo.InvariantCulture);
 }

@@ -5,7 +5,6 @@
 
 namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output;
 
-using System;
 using System.Globalization;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;

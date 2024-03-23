@@ -48,7 +48,7 @@ public class ComparerUnitTests
             DefaultValue,
             ClonedDefaultValue,
             LesserValue,
-            Array.Empty<ComparisonTestData<Version>>());
+            []);
 
     /// <summary>
     /// Gets the data for testing <see cref="Comparer.IsEqual{TValue}(TValue, TValue, Func{TValue, TValue, int})"/>.
