@@ -46,8 +46,8 @@ internal class DependencyWriter(ILogger<DependencyWriter> logger) : IDependencyW
             logger.LogInformation(project.ToString());
             foreach (var framework in project.SortedChildren)
             {
-                var frameworkString = framework.ToString();
-                logger.LogInformation(FrameworkPrefix + frameworkString);
+                var logMessage = FrameworkPrefix + framework;
+                logger.LogInformation(logMessage);
                 this.WriteDependencies(framework.SortedChildren);
             }
 
@@ -77,18 +77,19 @@ internal class DependencyWriter(ILogger<DependencyWriter> logger) : IDependencyW
         {
             if (dependency.IsTransitive)
             {
-                logger.LogWarning(
-                    DependencyPrefix +
-                    string.Format(CultureInfo.CurrentCulture, Information.TransitiveDependency, dependency));
+                var logMessage = DependencyPrefix + string.Format(CultureInfo.CurrentCulture, Information.TransitiveDependency, dependency);
+                logger.LogWarning(logMessage);
 
                 foreach (var via in dependency.Via)
                 {
-                    logger.LogDebug(ViaPrefix + via);
+                    logMessage = ViaPrefix + via;
+                    logger.LogDebug(logMessage);
                 }
             }
             else
             {
-                logger.LogDebug(DependencyPrefix + dependency);
+                var logMessage = DependencyPrefix + dependency;
+                logger.LogDebug(logMessage);
             }
         }
     }
