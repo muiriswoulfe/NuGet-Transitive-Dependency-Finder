@@ -141,7 +141,7 @@ jobs:
           && env.SONAR_TOKEN != '' }}
         name: SONARCLOUD FINALIZATION – SonarCloud Analyze
         shell: pwsh
-        run: .sonarcloud/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        run: .sonarcloud/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
   create-asset:
     name: Create Asset
