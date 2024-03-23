@@ -46,16 +46,15 @@ public class ProjectUnitTests
     /// <summary>
     /// The test value for the collection of <see cref="Dependency"/> objects where no dependencies exist.
     /// </summary>
-    private static readonly IReadOnlyCollection<Dependency> NoDependencies = Array.Empty<Dependency>();
+    private static readonly IReadOnlyCollection<Dependency> NoDependencies = [];
 
     /// <summary>
     /// The default test value for the collection of <see cref="Dependency"/> objects.
     /// </summary>
     private static readonly IReadOnlyCollection<Dependency> DefaultDependencies =
-        new Dependency[]
-        {
+        [
             new("Dependency", new("1.0.0")),
-        };
+        ];
 
     /// <summary>
     /// The data for testing the operators.
@@ -65,28 +64,26 @@ public class ProjectUnitTests
             DefaultValue,
             ClonedDefaultValue,
             LesserValue,
-            new ComparisonTestData<Project>[]
-            {
+            [
                 new(DefaultValue, new(DefaultIdentifier, 0), Comparisons.Equal),
                 new(DefaultValue, new("IDENTIFIER", 0), Comparisons.Equal),
                 new(DefaultValue, new(DefaultIdentifier, 1), Comparisons.Equal),
                 new(new("ABC", 0), DefaultValue, Comparisons.LessThan),
                 new(DefaultValue, new("ABC", 0), Comparisons.GreaterThan),
-            });
+            ]);
 
     /// <summary>
     /// The data for testing <see cref="Base{Framework}.SortedChildren"/>.
     /// </summary>
     private static readonly IReadOnlyList<Framework> SortedChildrenTestData =
-        new Framework[]
-        {
+        [
             new(new("A", new(0, 9)), DefaultDependencies),
             new(new("A", DefaultVersion), DefaultDependencies),
             new(new("B", DefaultVersion), DefaultDependencies),
             new(new("C", DefaultVersion), DefaultDependencies),
             new(new("Y", DefaultVersion), DefaultDependencies),
             new(new("Z", DefaultVersion), DefaultDependencies),
-        };
+        ];
 
     /// <summary>
     /// Gets the data for testing <see cref="Project.operator ==(Project?, Project?)"/>.

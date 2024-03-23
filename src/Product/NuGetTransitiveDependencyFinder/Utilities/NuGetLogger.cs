@@ -44,7 +44,7 @@ internal class NuGetLogger(ILogger<NuGetLogger> logger) : LoggerBase
 
         logger.Log(
             level,
-            "[{time}] {warningLevel} – {message} ({projectPath})",
+            "[{Time}] {WarningLevel} – {Message} ({ProjectPath})",
             message.Time.ToString(
                 CultureInfo.InvariantCulture.DateTimeFormat.UniversalSortableDateTimePattern,
                 CultureInfo.InvariantCulture),
