@@ -255,7 +255,10 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorEqualTestData))]
-    public void OperatorEqual_WithAllCases_ReturnsValue(SerializedDependency? left, SerializedDependency? right, bool expected)
+    public void OperatorEqual_WithAllCases_ReturnsValue(
+        SerializedDependency? left,
+        SerializedDependency? right,
+        bool expected)
     {
         // Act
         var result = left?.Dependency == right?.Dependency;
@@ -274,7 +277,10 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorNotEqualTestData))]
-    public void OperatorNotEqual_WithAllCases_ReturnsValue(SerializedDependency? left, SerializedDependency? right, bool expected)
+    public void OperatorNotEqual_WithAllCases_ReturnsValue(
+        SerializedDependency? left,
+        SerializedDependency? right,
+        bool expected)
     {
         // Act
         var result = left?.Dependency != right?.Dependency;
@@ -293,7 +299,10 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorLessThanTestData))]
-    public void OperatorLessThan_WithAllCases_ReturnsValue(SerializedDependency? left, SerializedDependency? right, bool expected)
+    public void OperatorLessThan_WithAllCases_ReturnsValue(
+        SerializedDependency? left,
+        SerializedDependency? right,
+        bool expected)
     {
         // Act
         var result = left?.Dependency < right?.Dependency;
@@ -312,7 +321,10 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorLessThanOrEqualTestData))]
-    public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(SerializedDependency? left, SerializedDependency? right, bool expected)
+    public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(
+        SerializedDependency? left,
+        SerializedDependency? right,
+        bool expected)
     {
         // Act
         var result = left?.Dependency <= right?.Dependency;
@@ -331,7 +343,10 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorGreaterThanTestData))]
-    public void OperatorGreaterThan_WithAllCases_ReturnsValue(SerializedDependency? left, SerializedDependency? right, bool expected)
+    public void OperatorGreaterThan_WithAllCases_ReturnsValue(
+        SerializedDependency? left,
+        SerializedDependency? right,
+        bool expected)
     {
         // Act
         var result = left?.Dependency > right?.Dependency;
@@ -372,7 +387,10 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(CompareToTestData))]
-    public void CompareTo_WithAllCases_ReturnsValue(SerializedDependency left, SerializedDependency? right, int expected)
+    public void CompareTo_WithAllCases_ReturnsValue(
+        SerializedDependency left,
+        SerializedDependency? right,
+        int expected)
     {
         // Act
         var result = left.Dependency.CompareTo(right?.Dependency);
@@ -391,7 +409,10 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(CompareToTestData))]
-    public void CompareToObject_WithAllCases_ReturnsValue(SerializedDependency left, SerializedDependency? right, int expected)
+    public void CompareToObject_WithAllCases_ReturnsValue(
+        SerializedDependency left,
+        SerializedDependency? right,
+        int expected)
     {
         // Act
         var result = left.Dependency.CompareTo(right?.Dependency as object);
@@ -445,7 +466,10 @@ public class DependencyUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(EqualsTestData))]
-    public void EqualsObject_WithAllCases_ReturnsValue(SerializedDependency left, SerializedDependency? right, bool expected)
+    public void EqualsObject_WithAllCases_ReturnsValue(
+        SerializedDependency left,
+        SerializedDependency? right,
+        bool expected)
     {
         // Act
         var result = left.Dependency.Equals(right?.Dependency as object);
@@ -478,7 +502,9 @@ public class DependencyUnitTests
     /// <param name="value2">The second value for which to compute a hash code.</param>
     [AllCulturesTheory]
     [MemberData(nameof(GetHashCodeTestData))]
-    public void GetHashCode_WithIdenticalObjects_ReturnsSameValue(SerializedDependency value1, SerializedDependency value2)
+    public void GetHashCode_WithIdenticalObjects_ReturnsSameValue(
+        SerializedDependency value1,
+        SerializedDependency value2)
     {
         // Act
         var result1 = value1.Dependency.GetHashCode();

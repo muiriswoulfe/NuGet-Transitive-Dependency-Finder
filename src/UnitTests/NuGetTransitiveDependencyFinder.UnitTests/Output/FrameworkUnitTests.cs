@@ -54,7 +54,8 @@ public class FrameworkUnitTests
     /// <summary>
     /// The lesser test value, which occurs prior to <see cref="DefaultValue"/> according to an ordered sort.
     /// </summary>
-    private static readonly SerializedFramework LesserValue = new(new(new("ABC", DefaultIdentifierVersion), DefaultChildren));
+    private static readonly SerializedFramework LesserValue =
+        new(new(new("ABC", DefaultIdentifierVersion), DefaultChildren));
 
     /// <summary>
     /// The data for testing the operators.
@@ -226,7 +227,10 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorEqualTestData))]
-    public void OperatorEqual_WithAllCases_ReturnsValue(SerializedFramework? left, SerializedFramework? right, bool expected)
+    public void OperatorEqual_WithAllCases_ReturnsValue(
+        SerializedFramework? left,
+        SerializedFramework? right,
+        bool expected)
     {
         // Act
         var result = left?.Framework == right?.Framework;
@@ -245,7 +249,10 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorNotEqualTestData))]
-    public void OperatorNotEqual_WithAllCases_ReturnsValue(SerializedFramework? left, SerializedFramework? right, bool expected)
+    public void OperatorNotEqual_WithAllCases_ReturnsValue(
+        SerializedFramework? left,
+        SerializedFramework? right,
+        bool expected)
     {
         // Act
         var result = left?.Framework != right?.Framework;
@@ -264,7 +271,10 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorLessThanTestData))]
-    public void OperatorLessThan_WithAllCases_ReturnsValue(SerializedFramework? left, SerializedFramework? right, bool expected)
+    public void OperatorLessThan_WithAllCases_ReturnsValue(
+        SerializedFramework? left,
+        SerializedFramework? right,
+        bool expected)
     {
         // Act
         var result = left?.Framework < right?.Framework;
@@ -283,7 +293,10 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorLessThanOrEqualTestData))]
-    public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(SerializedFramework? left, SerializedFramework? right, bool expected)
+    public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(
+        SerializedFramework? left,
+        SerializedFramework? right,
+        bool expected)
     {
         // Act
         var result = left?.Framework <= right?.Framework;
@@ -302,7 +315,10 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorGreaterThanTestData))]
-    public void OperatorGreaterThan_WithAllCases_ReturnsValue(SerializedFramework? left, SerializedFramework? right, bool expected)
+    public void OperatorGreaterThan_WithAllCases_ReturnsValue(
+        SerializedFramework? left,
+        SerializedFramework? right,
+        bool expected)
     {
         // Act
         var result = left?.Framework > right?.Framework;
@@ -321,7 +337,10 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorGreaterThanOrEqualTestData))]
-    public void OperatorGreaterThanOrEqual_WithAllCases_ReturnsValue(SerializedFramework? left, SerializedFramework? right, bool expected)
+    public void OperatorGreaterThanOrEqual_WithAllCases_ReturnsValue(
+        SerializedFramework? left,
+        SerializedFramework? right,
+        bool expected)
     {
         // Act
         var result = left?.Framework >= right?.Framework;
@@ -359,7 +378,10 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(CompareToTestData))]
-    public void CompareToObject_WithAllCases_ReturnsValue(SerializedFramework left, SerializedFramework? right, int expected)
+    public void CompareToObject_WithAllCases_ReturnsValue(
+        SerializedFramework left,
+        SerializedFramework? right,
+        int expected)
     {
         // Act
         var result = left.Framework.CompareTo(right?.Framework as object);
@@ -413,7 +435,10 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(EqualsTestData))]
-    public void EqualsObject_WithAllCases_ReturnsValue(SerializedFramework left, SerializedFramework? right, bool expected)
+    public void EqualsObject_WithAllCases_ReturnsValue(
+        SerializedFramework left,
+        SerializedFramework? right,
+        bool expected)
     {
         // Act
         var result = left.Framework.Equals(right?.Framework as object);
@@ -446,7 +471,9 @@ public class FrameworkUnitTests
     /// <param name="value2">The second value for which to compute a hash code.</param>
     [AllCulturesTheory]
     [MemberData(nameof(GetHashCodeTestData))]
-    public void GetHashCode_WithIdenticalObjects_ReturnsSameValue(SerializedFramework value1, SerializedFramework value2)
+    public void GetHashCode_WithIdenticalObjects_ReturnsSameValue(
+        SerializedFramework value1,
+        SerializedFramework value2)
     {
         // Act
         var result1 = value1.Framework.GetHashCode();

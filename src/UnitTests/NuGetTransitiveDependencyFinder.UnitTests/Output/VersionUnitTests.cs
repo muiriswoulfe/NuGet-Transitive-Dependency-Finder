@@ -116,7 +116,10 @@ public class VersionUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorEqualTestData))]
-    public void OperatorEqual_WithAllCases_ReturnsValue(SerializedVersion? left, SerializedVersion? right, bool expected)
+    public void OperatorEqual_WithAllCases_ReturnsValue(
+        SerializedVersion? left,
+        SerializedVersion? right,
+        bool expected)
     {
         // Act
         var result = left?.Version == right?.Version;
@@ -135,7 +138,10 @@ public class VersionUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorNotEqualTestData))]
-    public void OperatorNotEqual_WithAllCases_ReturnsValue(SerializedVersion? left, SerializedVersion? right, bool expected)
+    public void OperatorNotEqual_WithAllCases_ReturnsValue(
+        SerializedVersion? left,
+        SerializedVersion? right,
+        bool expected)
     {
         // Act
         var result = left?.Version != right?.Version;
@@ -154,7 +160,10 @@ public class VersionUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorLessThanTestData))]
-    public void OperatorLessThan_WithAllCases_ReturnsValue(SerializedVersion? left, SerializedVersion? right, bool expected)
+    public void OperatorLessThan_WithAllCases_ReturnsValue(
+        SerializedVersion? left,
+        SerializedVersion? right,
+        bool expected)
     {
         // Act
         var result = left?.Version < right?.Version;
@@ -173,7 +182,10 @@ public class VersionUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorLessThanOrEqualTestData))]
-    public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(SerializedVersion? left, SerializedVersion? right, bool expected)
+    public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(
+        SerializedVersion? left,
+        SerializedVersion? right,
+        bool expected)
     {
         // Act
         var result = left?.Version <= right?.Version;
@@ -192,7 +204,10 @@ public class VersionUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorGreaterThanTestData))]
-    public void OperatorGreaterThan_WithAllCases_ReturnsValue(SerializedVersion? left, SerializedVersion? right, bool expected)
+    public void OperatorGreaterThan_WithAllCases_ReturnsValue(
+        SerializedVersion? left,
+        SerializedVersion? right,
+        bool expected)
     {
         // Act
         var result = left?.Version > right?.Version;
@@ -211,7 +226,10 @@ public class VersionUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorGreaterThanOrEqualTestData))]
-    public void OperatorGreaterThanOrEqual_WithAllCases_ReturnsValue(SerializedVersion? left, SerializedVersion? right, bool expected)
+    public void OperatorGreaterThanOrEqual_WithAllCases_ReturnsValue(
+        SerializedVersion? left,
+        SerializedVersion? right,
+        bool expected)
     {
         // Act
         var result = left?.Version >= right?.Version;
@@ -249,7 +267,10 @@ public class VersionUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(CompareToTestData))]
-    public void CompareToObject_WithAllCases_ReturnsValue(SerializedVersion left, SerializedVersion? right, int expected)
+    public void CompareToObject_WithAllCases_ReturnsValue(
+        SerializedVersion left,
+        SerializedVersion? right,
+        int expected)
     {
         // Act
         var result = left.Version.CompareTo(right?.Version as object);

@@ -175,7 +175,10 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(IsLessOrEqualTestData))]
-    public void IsLessOrEqual_WithAllCases_ReturnsValue(SerializedVersion? left, SerializedVersion? right, bool expected)
+    public void IsLessOrEqual_WithAllCases_ReturnsValue(
+        SerializedVersion? left,
+        SerializedVersion? right,
+        bool expected)
     {
         // Act
         var result = Comparer.IsLessOrEqual(left?.Version, right?.Version, ComparisonFunction);
@@ -213,7 +216,10 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(IsGreaterOrEqualTestData))]
-    public void IsGreaterOrEqual_WithAllCases_ReturnsValue(SerializedVersion? left, SerializedVersion? right, bool expected)
+    public void IsGreaterOrEqual_WithAllCases_ReturnsValue(
+        SerializedVersion? left,
+        SerializedVersion? right,
+        bool expected)
     {
         // Act
         var result = Comparer.IsGreaterOrEqual(left?.Version, right?.Version, ComparisonFunction);
@@ -251,7 +257,10 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(CompareToTestData))]
-    public void CompareToObject_WithAllCases_ReturnsValue(SerializedVersion left, SerializedVersion? right, int expected)
+    public void CompareToObject_WithAllCases_ReturnsValue(
+        SerializedVersion left,
+        SerializedVersion? right,
+        int expected)
     {
         // Act
         var result = Comparer.CompareTo(left.Version, right?.Version, ComparisonFunction, nameof(Version));
