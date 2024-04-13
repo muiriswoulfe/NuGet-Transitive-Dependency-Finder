@@ -9,8 +9,9 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using NuGetTransitiveDependencyFinder.Output;
-using NuGetTransitiveDependencyFinder.UnitTests.Utilities.Globalization;
+using NuGetTransitiveDependencyFinder.UnitTests.Output.Serialization;
 using NuGetTransitiveDependencyFinder.UnitTests.Output.UnitTests.Utilities;
+using NuGetTransitiveDependencyFinder.UnitTests.Utilities.Globalization;
 using Xunit;
 
 /// <summary>
@@ -26,17 +27,17 @@ public class ProjectUnitTests
     /// <summary>
     /// The default test value.
     /// </summary>
-    private static readonly Project DefaultValue = new(DefaultIdentifier, 0);
+    private static readonly SerializedProject DefaultValue = new(new(DefaultIdentifier, 0));
 
     /// <summary>
     /// A clone of <see cref="DefaultValue"/>, where the object content is identical, but the object reference is not.
     /// </summary>
-    private static readonly Project ClonedDefaultValue = new(DefaultIdentifier, 0);
+    private static readonly SerializedProject ClonedDefaultValue = new(new(DefaultIdentifier, 0));
 
     /// <summary>
     /// The lesser test value, which occurs prior to <see cref="DefaultValue"/> according to an ordered sort.
     /// </summary>
-    private static readonly Project LesserValue = new("ABC", 0);
+    private static readonly SerializedProject LesserValue = new(new("ABC", 0));
 
     /// <summary>
     /// The default test version.
@@ -59,17 +60,17 @@ public class ProjectUnitTests
     /// <summary>
     /// The data for testing the operators.
     /// </summary>
-    private static readonly IReadOnlyCollection<ComparisonTestData<Project>> OperatorTestData =
+    private static readonly IReadOnlyCollection<ComparisonTestData<SerializedProject>> OperatorTestData =
         ComparisonDataGenerator.GenerateOperatorTestData(
             DefaultValue,
             ClonedDefaultValue,
             LesserValue,
             [
-                new(DefaultValue, new(DefaultIdentifier, 0), Comparisons.Equal),
-                new(DefaultValue, new("IDENTIFIER", 0), Comparisons.Equal),
-                new(DefaultValue, new(DefaultIdentifier, 1), Comparisons.Equal),
-                new(new("ABC", 0), DefaultValue, Comparisons.LessThan),
-                new(DefaultValue, new("ABC", 0), Comparisons.GreaterThan),
+                new(DefaultValue, new(new(DefaultIdentifier, 0)), Comparisons.Equal),
+                new(DefaultValue, new(new("IDENTIFIER", 0)), Comparisons.Equal),
+                new(DefaultValue, new(new(DefaultIdentifier, 1)), Comparisons.Equal),
+                new(new(new("ABC", 0)), DefaultValue, Comparisons.LessThan),
+                new(DefaultValue, new(new("ABC", 0)), Comparisons.GreaterThan),
             ]);
 
     /// <summary>
@@ -89,77 +90,77 @@ public class ProjectUnitTests
     /// Gets the data for testing <see cref="Project.operator ==(Project?, Project?)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Project?, Project?, bool> OperatorEqualTestData =>
+    public static TheoryData<SerializedProject?, SerializedProject?, bool> OperatorEqualTestData =>
         ComparisonDataGenerator.GenerateOperatorEqualTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="Project.operator !=(Project?, Project?)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Project?, Project?, bool> OperatorNotEqualTestData =>
+    public static TheoryData<SerializedProject?, SerializedProject?, bool> OperatorNotEqualTestData =>
         ComparisonDataGenerator.GenerateOperatorNotEqualTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="Project.operator &lt;(Project?, Project?)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Project?, Project?, bool> OperatorLessThanTestData =>
+    public static TheoryData<SerializedProject?, SerializedProject?, bool> OperatorLessThanTestData =>
         ComparisonDataGenerator.GenerateOperatorLessThanTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="Project.operator &lt;=(Project?, Project?)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Project?, Project?, bool> OperatorLessThanOrEqualTestData =>
+    public static TheoryData<SerializedProject?, SerializedProject?, bool> OperatorLessThanOrEqualTestData =>
         ComparisonDataGenerator.GenerateOperatorLessThanOrEqualTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="Project.operator &gt;(Project?, Project?)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Project?, Project?, bool> OperatorGreaterThanTestData =>
+    public static TheoryData<SerializedProject?, SerializedProject?, bool> OperatorGreaterThanTestData =>
         ComparisonDataGenerator.GenerateOperatorGreaterThanTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="Project.operator &gt;=(Project?, Project?)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Project?, Project?, bool> OperatorGreaterThanOrEqualTestData =>
+    public static TheoryData<SerializedProject?, SerializedProject?, bool> OperatorGreaterThanOrEqualTestData =>
         ComparisonDataGenerator.GenerateOperatorGreaterThanOrEqualTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="IComparable{Project}.CompareTo(Project)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Project, Project?, int> CompareToTestData =>
+    public static TheoryData<SerializedProject, SerializedProject?, int> CompareToTestData =>
         ComparisonDataGenerator.GenerateCompareToTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="IEquatable{Project}.Equals(Project)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Project, Project?, bool> EqualsTestData =>
+    public static TheoryData<SerializedProject, SerializedProject?, bool> EqualsTestData =>
         ComparisonDataGenerator.GenerateEqualsTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="Project.GetHashCode()"/>.
     /// </summary>
-    public static TheoryData<Project, Project> GetHashCodeTestData =>
+    public static TheoryData<SerializedProject, SerializedProject> GetHashCodeTestData =>
         ComparisonDataGenerator.GenerateGetHashCodeTestData(
             DefaultValue,
             ClonedDefaultValue,
             LesserValue,
-            new TheoryData<Project, Project>
+            new TheoryData<SerializedProject, SerializedProject>
             {
-                { DefaultValue, new(DefaultIdentifier, 0) },
-                { DefaultValue, new("IDENTIFIER", 0) },
-                { DefaultValue, new(DefaultIdentifier, 1) },
+                { DefaultValue, new SerializedProject(new(DefaultIdentifier, 0)) },
+                { DefaultValue, new SerializedProject(new("IDENTIFIER", 0)) },
+                { DefaultValue, new SerializedProject(new(DefaultIdentifier, 1)) },
             });
 
     /// <summary>
     /// Gets the data for testing <see cref="object.ToString()"/>.
     /// </summary>
-    public static TheoryData<Project, string> ToStringTestData =>
+    public static TheoryData<SerializedProject, string> ToStringTestData =>
         new()
         {
             { DefaultValue, DefaultIdentifier },
@@ -175,10 +176,13 @@ public class ProjectUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorEqualTestData))]
-    public void OperatorEqual_WithAllCases_ReturnsValue(Project? left, Project? right, bool expected)
+    public void OperatorEqual_WithAllCases_ReturnsValue(
+        SerializedProject? left,
+        SerializedProject? right,
+        bool expected)
     {
         // Act
-        var result = left == right;
+        var result = left?.Project == right?.Project;
 
         // Assert
         _ = result
@@ -194,10 +198,13 @@ public class ProjectUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorNotEqualTestData))]
-    public void OperatorNotEqual_WithAllCases_ReturnsValue(Project? left, Project? right, bool expected)
+    public void OperatorNotEqual_WithAllCases_ReturnsValue(
+        SerializedProject? left,
+        SerializedProject? right,
+        bool expected)
     {
         // Act
-        var result = left != right;
+        var result = left?.Project != right?.Project;
 
         // Assert
         _ = result
@@ -213,10 +220,13 @@ public class ProjectUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorLessThanTestData))]
-    public void OperatorLessThan_WithAllCases_ReturnsValue(Project? left, Project? right, bool expected)
+    public void OperatorLessThan_WithAllCases_ReturnsValue(
+        SerializedProject? left,
+        SerializedProject? right,
+        bool expected)
     {
         // Act
-        var result = left < right;
+        var result = left?.Project < right?.Project;
 
         // Assert
         _ = result
@@ -232,10 +242,13 @@ public class ProjectUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorLessThanOrEqualTestData))]
-    public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(Project? left, Project? right, bool expected)
+    public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(
+        SerializedProject? left,
+        SerializedProject? right,
+        bool expected)
     {
         // Act
-        var result = left <= right;
+        var result = left?.Project <= right?.Project;
 
         // Assert
         _ = result
@@ -251,10 +264,13 @@ public class ProjectUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorGreaterThanTestData))]
-    public void OperatorGreaterThan_WithAllCases_ReturnsValue(Project? left, Project? right, bool expected)
+    public void OperatorGreaterThan_WithAllCases_ReturnsValue(
+        SerializedProject? left,
+        SerializedProject? right,
+        bool expected)
     {
         // Act
-        var result = left > right;
+        var result = left?.Project > right?.Project;
 
         // Assert
         _ = result
@@ -270,10 +286,13 @@ public class ProjectUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorGreaterThanOrEqualTestData))]
-    public void OperatorGreaterThanOrEqual_WithAllCases_ReturnsValue(Project? left, Project? right, bool expected)
+    public void OperatorGreaterThanOrEqual_WithAllCases_ReturnsValue(
+        SerializedProject? left,
+        SerializedProject? right,
+        bool expected)
     {
         // Act
-        var result = left >= right;
+        var result = left?.Project >= right?.Project;
 
         // Assert
         _ = result
@@ -289,10 +308,10 @@ public class ProjectUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(CompareToTestData))]
-    public void CompareTo_WithAllCases_ReturnsValue(Project left, Project? right, int expected)
+    public void CompareTo_WithAllCases_ReturnsValue(SerializedProject left, SerializedProject? right, int expected)
     {
         // Act
-        var result = left.CompareTo(right);
+        var result = left.Project.CompareTo(right?.Project);
 
         // Assert
         _ = result
@@ -308,10 +327,13 @@ public class ProjectUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(CompareToTestData))]
-    public void CompareToObject_WithAllCases_ReturnsValue(Project left, object? right, int expected)
+    public void CompareToObject_WithAllCases_ReturnsValue(
+        SerializedProject left,
+        SerializedProject? right,
+        int expected)
     {
         // Act
-        var result = left.CompareTo(right);
+        var result = left.Project.CompareTo(right?.Project as object);
 
         // Assert
         _ = result
@@ -326,7 +348,7 @@ public class ProjectUnitTests
     public void CompareToObject_WithDifferentObjectTypes_ThrowsArgumentException()
     {
         // Act
-        Action action = () => DefaultValue.CompareTo("value");
+        Action action = () => DefaultValue.Project.CompareTo("value");
 
         // Assert
         _ = action
@@ -343,10 +365,10 @@ public class ProjectUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(EqualsTestData))]
-    public void Equals_WithAllCases_ReturnsValue(Project left, Project? right, bool expected)
+    public void Equals_WithAllCases_ReturnsValue(SerializedProject left, SerializedProject? right, bool expected)
     {
         // Act
-        var result = left.Equals(right);
+        var result = left.Project.Equals(right?.Project);
 
         // Assert
         _ = result
@@ -362,10 +384,10 @@ public class ProjectUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(EqualsTestData))]
-    public void EqualsObject_WithAllCases_ReturnsValue(Project left, object? right, bool expected)
+    public void EqualsObject_WithAllCases_ReturnsValue(SerializedProject left, SerializedProject? right, bool expected)
     {
         // Act
-        var result = left.Equals(right);
+        var result = left.Project.Equals(right?.Project as object);
 
         // Assert
         _ = result
@@ -380,7 +402,7 @@ public class ProjectUnitTests
     public void EqualsObject_WithDifferentObjectTypes_ReturnsFalse()
     {
         // Act
-        var result = DefaultValue.Equals("value");
+        var result = DefaultValue.Project.Equals("value");
 
         // Assert
         _ = result
@@ -395,11 +417,11 @@ public class ProjectUnitTests
     /// <param name="value2">The second value for which to compute a hash code.</param>
     [AllCulturesTheory]
     [MemberData(nameof(GetHashCodeTestData))]
-    public void GetHashCode_WithIdenticalObjects_ReturnsSameValue(Project value1, Project value2)
+    public void GetHashCode_WithIdenticalObjects_ReturnsSameValue(SerializedProject value1, SerializedProject value2)
     {
         // Act
-        var result1 = value1.GetHashCode();
-        var result2 = value2.GetHashCode();
+        var result1 = value1.Project.GetHashCode();
+        var result2 = value2.Project.GetHashCode();
 
         // Assert
         _ = result1
@@ -414,8 +436,8 @@ public class ProjectUnitTests
     public void GetHashCode_WithDifferentObjects_ReturnsDifferentValues()
     {
         // Act
-        var result1 = DefaultValue.GetHashCode();
-        var result2 = LesserValue.GetHashCode();
+        var result1 = DefaultValue.Project.GetHashCode();
+        var result2 = LesserValue.Project.GetHashCode();
 
         // Assert
         _ = result1
@@ -430,10 +452,10 @@ public class ProjectUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(ToStringTestData))]
-    public void ToString_WithDifferentObjects_ReturnsString(Project value, string expected)
+    public void ToString_WithDifferentObjects_ReturnsString(SerializedProject value, string expected)
     {
         // Act
-        var result = value.ToString();
+        var result = value.Project.ToString();
 
         // Assert
         _ = result
@@ -448,7 +470,7 @@ public class ProjectUnitTests
     public void IsAddValid_WithFrameworkNotComprisingChildren_ReturnsFalse()
     {
         // Act
-        var result = DefaultValue.IsAddValid(new(new(DefaultIdentifier, DefaultVersion), NoDependencies));
+        var result = DefaultValue.Project.IsAddValid(new(new(DefaultIdentifier, DefaultVersion), NoDependencies));
 
         // Assert
         _ = result
@@ -463,7 +485,7 @@ public class ProjectUnitTests
     public void IsAddValid_WithFrameworkComprisingChildren_ReturnsTrue()
     {
         // Act
-        var result = DefaultValue.IsAddValid(new(new(DefaultIdentifier, DefaultVersion), DefaultDependencies));
+        var result = DefaultValue.Project.IsAddValid(new(new(DefaultIdentifier, DefaultVersion), DefaultDependencies));
 
         // Assert
         _ = result
@@ -478,7 +500,7 @@ public class ProjectUnitTests
     public void HasChildren_NotComprisingChildren_ReturnsFalse()
     {
         // Act
-        var result = DefaultValue.HasChildren;
+        var result = DefaultValue.Project.HasChildren;
 
         // Assert
         _ = result
@@ -551,7 +573,7 @@ public class ProjectUnitTests
     public void SortedChildren_NotComprisingChildren_ReturnsEmptyCollection()
     {
         // Act
-        var result = DefaultValue.SortedChildren;
+        var result = DefaultValue.Project.SortedChildren;
 
         // Assert
         _ = result

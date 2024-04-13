@@ -13,9 +13,9 @@ using NuGet.Versioning;
 using NuGetTransitiveDependencyFinder.ConsoleApp.Output;
 using NuGetTransitiveDependencyFinder.ConsoleApp.Resources.Messages;
 using NuGetTransitiveDependencyFinder.Output;
+using NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.TestUtilities;
 using NuGetTransitiveDependencyFinder.UnitTests.Utilities.Globalization;
 using NuGetTransitiveDependencyFinder.UnitTests.Utilities.Logging;
-using NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.TestUtilities;
 using static System.FormattableString;
 
 /// <summary>

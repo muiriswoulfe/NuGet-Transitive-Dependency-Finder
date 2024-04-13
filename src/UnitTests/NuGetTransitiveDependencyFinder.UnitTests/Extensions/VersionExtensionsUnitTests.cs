@@ -8,6 +8,7 @@ namespace NuGetTransitiveDependencyFinder.UnitTests.Extensions;
 using System;
 using FluentAssertions;
 using NuGetTransitiveDependencyFinder.Extensions;
+using NuGetTransitiveDependencyFinder.UnitTests.Output.Serialization;
 using NuGetTransitiveDependencyFinder.UnitTests.Utilities.Globalization;
 using Xunit;
 
@@ -19,15 +20,15 @@ public class VersionExtensionsUnitTests
     /// <summary>
     /// Gets the data for testing <see cref="VersionExtensions.ToShortenedString(Version)"/>.
     /// </summary>
-    public static TheoryData<Version, string> ToShortenedStringTestData =>
+    public static TheoryData<SerializedVersion, string> ToShortenedStringTestData =>
         new()
         {
-            { new Version(0, 0, 0, 0), "0.0" },
-            { new Version(1, 0, 0, 0), "1.0" },
-            { new Version(1, 1, 0, 0), "1.1" },
-            { new Version(1, 1, 1, 0), "1.1.1" },
-            { new Version(1, 1, 0, 1), "1.1.0.1" },
-            { new Version(1, 1, 1, 1), "1.1.1.1" },
+            { new(new Version(0, 0, 0, 0)), "0.0" },
+            { new(new Version(1, 0, 0, 0)), "1.0" },
+            { new(new Version(1, 1, 0, 0)), "1.1" },
+            { new(new Version(1, 1, 1, 0)), "1.1.1" },
+            { new(new Version(1, 1, 0, 1)), "1.1.0.1" },
+            { new(new Version(1, 1, 1, 1)), "1.1.1.1" },
         };
 
     /// <summary>
@@ -38,10 +39,10 @@ public class VersionExtensionsUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(ToShortenedStringTestData))]
-    public void ToShortenedString_WithDifferentValues_ReturnsCorrectValues(Version value, string expected)
+    public void ToShortenedString_WithDifferentValues_ReturnsCorrectValues(SerializedVersion value, string expected)
     {
         // Act
-        var result = value.ToShortenedString();
+        var result = value.Version.ToShortenedString();
 
         // Assert
         _ = result

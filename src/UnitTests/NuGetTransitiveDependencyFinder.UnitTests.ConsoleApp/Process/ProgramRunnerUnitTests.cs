@@ -14,9 +14,9 @@ using NuGetTransitiveDependencyFinder.ConsoleApp.Output;
 using NuGetTransitiveDependencyFinder.ConsoleApp.Process;
 using NuGetTransitiveDependencyFinder.ConsoleApp.Resources.Messages;
 using NuGetTransitiveDependencyFinder.Output;
+using NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.TestUtilities;
 using NuGetTransitiveDependencyFinder.UnitTests.Utilities.Globalization;
 using NuGetTransitiveDependencyFinder.UnitTests.Utilities.Logging;
-using NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.TestUtilities;
 
 /// <summary>
 /// Unit tests for the <see cref="ProgramRunner"/> class.
