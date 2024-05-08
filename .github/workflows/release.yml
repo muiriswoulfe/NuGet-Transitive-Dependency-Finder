@@ -49,7 +49,7 @@ jobs:
           Write-Output -InputObject "URL_SUFFIX=$UrlSuffix" >> $Env:GITHUB_OUTPUT
 
       - name: RELEASE – Create Release
-        uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564 # v0.1.15
+        uses: softprops/action-gh-release@69320dbe05506a9a39fc8ae11030b214ec2d1f87 # v0.1.15
         with:
           body: |-
             ## Release Notes
