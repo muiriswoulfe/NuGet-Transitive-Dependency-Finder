@@ -65,6 +65,33 @@ internal sealed class DependencyGraph(IDotNetRunner dotNetRunner, IProcessWrappe
     }
 
     /// <summary>
+    /// Handles messages sent to the Standard Error stream.
+    /// </summary>
+    /// <param name="sender">The event sender.</param>
+    /// <param name="eventParameters">The event parameters.</param>
+    /// <exception cref="InvalidOperationException">Thrown if an error occurs.</exception>
+    private static void LogError(object sender, DataReceivedEventArgs eventParameters)
+    {
+        if (!string.IsNullOrWhiteSpace(eventParameters.Data))
+        {
+            throw new InvalidOperationException(eventParameters.Data);
+        }
+    }
+
+    /// <summary>
+    /// Records messages sent to the Standard Output stream.
+    /// </summary>
+    /// <param name="sender">The event sender.</param>
+    /// <param name="eventParameters">The event parameters.</param>
+    private void LogOutput(object sender, DataReceivedEventArgs eventParameters)
+    {
+        if (!string.IsNullOrWhiteSpace(eventParameters.Data))
+        {
+            this.msBuildCheckOutput += eventParameters.Data;
+        }
+    }
+
+    /// <summary>
     /// Determines whether the msbuild command is available.
     /// </summary>
     /// <returns><c>true</c> is msbuild is available; <c>false</c> otherwise.</returns>
@@ -106,33 +133,6 @@ internal sealed class DependencyGraph(IDotNetRunner dotNetRunner, IProcessWrappe
             }
 
             this.disposedValue = true;
-        }
-    }
-
-    /// <summary>
-    /// Records messages sent to the Standard Output stream.
-    /// </summary>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="eventParameters">The event parameters.</param>
-    private void LogOutput(object sender, DataReceivedEventArgs eventParameters)
-    {
-        if (!string.IsNullOrWhiteSpace(eventParameters.Data))
-        {
-            this.msBuildCheckOutput += eventParameters.Data;
-        }
-    }
-
-    /// <summary>
-    /// Handles messages sent to the Standard Error stream.
-    /// </summary>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="eventParameters">The event parameters.</param>
-    /// <exception cref="InvalidOperationException">Thrown if an error occurs.</exception>
-    private static void LogError(object sender, DataReceivedEventArgs eventParameters)
-    {
-        if (!string.IsNullOrWhiteSpace(eventParameters.Data))
-        {
-            throw new InvalidOperationException(eventParameters.Data);
         }
     }
 }
