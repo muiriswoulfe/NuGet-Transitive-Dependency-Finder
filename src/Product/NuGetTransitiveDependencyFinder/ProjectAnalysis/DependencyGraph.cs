@@ -81,7 +81,7 @@ internal sealed class DependencyGraph(IDotNetRunner dotNetRunner, IProcessWrappe
 
         this.msBuildCheckOutput = string.Empty;
 
-        processWrapper.Start(startInfo, this.LogOutput!, this.LogError!);
+        processWrapper.Start(startInfo, this.LogOutput, LogError);
 
         processWrapper.BeginErrorReadLine();
         processWrapper.BeginOutputReadLine();
@@ -110,20 +110,6 @@ internal sealed class DependencyGraph(IDotNetRunner dotNetRunner, IProcessWrappe
     }
 
     /// <summary>
-    /// Handles messages sent to the Standard Error stream.
-    /// </summary>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="eventParameters">The event parameters.</param>
-    /// <exception cref="InvalidOperationException">Thrown if an error occurs.</exception>
-    private void LogError(object sender, DataReceivedEventArgs eventParameters)
-    {
-        if (!string.IsNullOrWhiteSpace(eventParameters.Data))
-        {
-            throw new InvalidOperationException(eventParameters.Data);
-        }
-    }
-
-    /// <summary>
     /// Records messages sent to the Standard Output stream.
     /// </summary>
     /// <param name="sender">The event sender.</param>
@@ -133,6 +119,20 @@ internal sealed class DependencyGraph(IDotNetRunner dotNetRunner, IProcessWrappe
         if (!string.IsNullOrWhiteSpace(eventParameters.Data))
         {
             this.msBuildCheckOutput += eventParameters.Data;
+        }
+    }
+
+    /// <summary>
+    /// Handles messages sent to the Standard Error stream.
+    /// </summary>
+    /// <param name="sender">The event sender.</param>
+    /// <param name="eventParameters">The event parameters.</param>
+    /// <exception cref="InvalidOperationException">Thrown if an error occurs.</exception>
+    private static void LogError(object sender, DataReceivedEventArgs eventParameters)
+    {
+        if (!string.IsNullOrWhiteSpace(eventParameters.Data))
+        {
+            throw new InvalidOperationException(eventParameters.Data);
         }
     }
 }
