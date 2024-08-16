@@ -40,7 +40,7 @@ jobs:
           PR_METRICS_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ env.PR_METRICS_ACCESS_TOKEN != '' }}
         name: PR Metrics
-        uses: microsoft/PR-Metrics@13ee66a60ad8f720fa53a98812d5b80549401a53 # v1.6.0
+        uses: microsoft/PR-Metrics@c054812cc4a0fef95d86154968d8779ce7882242 # v1.6.1
         continue-on-error: true
 
   build:
