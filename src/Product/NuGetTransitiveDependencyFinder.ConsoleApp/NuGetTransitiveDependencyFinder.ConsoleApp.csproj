@@ -27,11 +27,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="System.Text.Json" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference
-      Include="..\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj" />
+    <ProjectReference Include="..\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj" />
   </ItemGroup>
 
 </Project>
