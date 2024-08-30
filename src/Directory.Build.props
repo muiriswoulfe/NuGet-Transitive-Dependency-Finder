@@ -29,6 +29,11 @@
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup
+    Condition="$(MSBuildProjectName.Contains('Tests')) And !$(MSBuildProjectName.Contains('Utilities'))">
+    <RunSettingsFilePath>$(MSBuildThisFileDirectory)\UnitTests\coverlet.runsettings</RunSettingsFilePath>
+  </PropertyGroup>
+
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)\stylecop.json" />
     <CodeAnalysisDictionary Include="$(MSBuildThisFileDirectory)\CodeAnalysisDictionary.xml" />
@@ -79,6 +84,10 @@
 
   <ItemGroup
     Condition="$(MSBuildProjectName.Contains('Tests')) And !$(MSBuildProjectName.Contains('Utilities'))">
+    <PackageReference Include="coverlet.collector">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Moq" />
