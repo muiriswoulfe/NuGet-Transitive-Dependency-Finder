@@ -2,7 +2,6 @@
 # Licensed under the MIT License
 
 ---
-
 version: 2
 
 updates:
@@ -11,8 +10,8 @@ updates:
     open-pull-requests-limit: 100
     schedule:
       interval: daily
-      time: '00:00'                # yamllint disable-line rule:quoted-strings
-      timezone: Universal
+      time: "00:00" # yamllint disable-line rule:quoted-strings
+      timezone: Etc/UTC
     labels:
       - dependencies
       - github-actions
@@ -22,10 +21,8 @@ updates:
     open-pull-requests-limit: 100
     schedule:
       interval: daily
-      time: '00:00'                # yamllint disable-line rule:quoted-strings
-      timezone: Universal
+      time: "00:00" # yamllint disable-line rule:quoted-strings
+      timezone: Etc/UTC
     labels:
       - dependencies
       - nuget
-
-...

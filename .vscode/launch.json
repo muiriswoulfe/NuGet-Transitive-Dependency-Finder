@@ -33,9 +33,7 @@
       "request": "launch",
       "preLaunchTask": "Build Debug",
       "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net8.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
-      "args": [
-        "--help"
-      ],
+      "args": ["--help"],
       "cwd": "${workspaceFolder}"
     },
     {
@@ -44,9 +42,7 @@
       "request": "launch",
       "preLaunchTask": "Build Debug",
       "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net8.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
-      "args": [
-        "--version"
-      ],
+      "args": ["--version"],
       "cwd": "${workspaceFolder}"
     },
     {
@@ -94,9 +90,7 @@
       "request": "launch",
       "preLaunchTask": "Build Debug",
       "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net8.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
-      "args": [
-        "--help"
-      ],
+      "args": ["--help"],
       "cwd": "${workspaceFolder}",
       "console": "externalTerminal"
     },
@@ -106,9 +100,7 @@
       "request": "launch",
       "preLaunchTask": "Build Debug",
       "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net8.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
-      "args": [
-        "--version"
-      ],
+      "args": ["--version"],
       "cwd": "${workspaceFolder}",
       "console": "externalTerminal"
     },
@@ -134,7 +126,7 @@
         "test",
         "--configuration",
         "Debug",
-        "--collect:\"XPlat Code Coverage\""
+        "--collect \"XPlat Code Coverage\""
       ],
       "cwd": "${workspaceFolder}"
     },
@@ -147,7 +139,7 @@
         "test",
         "--configuration",
         "Release",
-        "--collect:\"XPlat Code Coverage\""
+        "--collect \"XPlat Code Coverage\""
       ],
       "cwd": "${workspaceFolder}"
     }

@@ -1,10 +1,9 @@
 ---
 name: Bug Report
 about: Report errors or unexpected behavior
-title: ''
+title: ""
 labels: bug
 assignees: muiriswoulfe
-
 ---
 
 <!-- Please provide as much detail as possible. Inapplicable sections may be

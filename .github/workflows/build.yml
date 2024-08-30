@@ -2,7 +2,6 @@
 # Licensed under the MIT License
 
 ---
-
 name: Build
 
 on:
@@ -117,7 +116,7 @@ jobs:
 
       - name: BUILD & TEST – Project Test
         shell: pwsh
-        run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"XPlat Code Coverage"
+        run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect "XPlat Code Coverage"
 
       - env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -159,7 +158,7 @@ jobs:
             osx-x64,
             win-arm64,
             win-x64,
-            win-x86
+            win-x86,
           ]
     runs-on: ubuntu-latest
     permissions: {}
@@ -446,12 +445,11 @@ jobs:
 
       # Linter Validation
       - name: LINTER VALIDATION – Super Linter
-        uses: github/super-linter@4e51915f4a812abf59fed160bb14595c0a38a9e7 # v6
+        uses: github/super-linter@b807e99ddd37e444d189cfd2c2ca1274d8ae8ef1 # v7
         env:
           EDITORCONFIG_FILE_NAME: ../../.editorconfig
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MARKDOWN_CONFIG_FILE: ../../.markdownlint.json
-          VALIDATE_CSHARP: false
 
       # Markdown Validation
       - name: MARKDOWN VALIDATION – Validate Links
@@ -526,7 +524,7 @@ jobs:
 
       - name: BUILD & TEST – Project Test
         shell: pwsh
-        run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage"
+        run: dotnet test --configuration Release --no-build --collect "XPlat Code Coverage"
 
       # CodeQL
       - name: CODEQL – Analyze
@@ -555,5 +553,3 @@ jobs:
         run: gh pr merge --auto --delete-branch --squash "${{ github.event.pull_request.html_url }}"
         env:
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-...

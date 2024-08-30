@@ -1,10 +1,9 @@
 ---
 name: Feature Request
 about: Suggest an idea
-title: ''
+title: ""
 labels: enhancement
 assignees: muiriswoulfe
-
 ---
 
 <!-- Please provide as much detail as possible. Inapplicable sections may be

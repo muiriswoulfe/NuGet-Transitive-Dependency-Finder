@@ -2,7 +2,6 @@
 # Licensed under the MIT License
 
 ---
-
 name: Release
 
 on:
@@ -380,5 +379,3 @@ jobs:
           --api-key ${{ secrets.GITHUB_TOKEN }}
           --skip-duplicate
           --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
-
-...

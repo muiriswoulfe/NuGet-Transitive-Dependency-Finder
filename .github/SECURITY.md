@@ -19,5 +19,4 @@ will be made to respond promptly and keep you informed throughout the process.
 
 <!-- References -->
 
-[email]:
-  mailto:mw.github@outlook.com?subject=SECURITY:%20NuGet%20Transitive%20Dependency%20Finder
+[email]: mailto:mw.github@outlook.com?subject=SECURITY:%20NuGet%20Transitive%20Dependency%20Finder

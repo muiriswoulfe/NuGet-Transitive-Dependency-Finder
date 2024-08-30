@@ -16,9 +16,7 @@
         "ms-dotnettools.csharp"
       ],
       "settings": {
-        "editor.rulers": [
-            120
-        ],
+        "editor.rulers": [120],
         "omnisharp.enableDecompilationSupport": true,
         "omnisharp.enableImportCompletion": true,
         "omnisharp.enableRoslynAnalyzers": true,
