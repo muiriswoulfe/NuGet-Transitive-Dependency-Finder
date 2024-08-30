@@ -451,7 +451,17 @@ jobs:
           EDITORCONFIG_FILE_NAME: ../../.editorconfig
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MARKDOWN_CONFIG_FILE: ../../.markdownlint.json
-          VALIDATE_CSHARP: false
+
+      - if: >-
+          github.event_name == 'pull_request' &&
+          github.ref_name != github.event.repository.default_branch
+        name: LINTER VALIDATION – Push Fixes
+        uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5.0.1
+        with:
+          branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
+          commit_message: 'chore: fix linting issues'
+          commit_user_name: super-linter
+          commit_user_email: super-linter@super-linter.dev
 
       # Markdown Validation
       - name: MARKDOWN VALIDATION – Validate Links
