@@ -453,6 +453,7 @@ jobs:
           MARKDOWN_CONFIG_FILE: ../../.markdownlint.json
 
       - if: >-
+          failure() &&
           github.event_name == 'pull_request' &&
           github.ref_name != github.event.repository.default_branch
         name: LINTER VALIDATION – Push Fixes
