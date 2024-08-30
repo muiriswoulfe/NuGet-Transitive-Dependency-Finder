@@ -2,7 +2,6 @@
 # Licensed under the MIT License
 
 ---
-
 version: 2
 
 updates:
@@ -27,5 +26,3 @@ updates:
     labels:
       - dependencies
       - nuget
-
-...

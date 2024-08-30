@@ -2,7 +2,6 @@
 # Licensed under the MIT License
 
 ---
-
 extends: default
 
 rules:
@@ -18,5 +17,3 @@ rules:
     required: only-when-needed
   truthy:
     check-keys: false
-
-...
