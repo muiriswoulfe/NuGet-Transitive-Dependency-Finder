@@ -116,7 +116,7 @@ jobs:
 
       - name: BUILD & TEST – Project Test
         shell: pwsh
-        run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"Code Coverage"
+        run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect "XPlat Code Coverage"
 
       - env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -524,7 +524,7 @@ jobs:
 
       - name: BUILD & TEST – Project Test
         shell: pwsh
-        run: dotnet test --configuration Release --no-build --collect:"Code Coverage"
+        run: dotnet test --configuration Release --no-build --collect "XPlat Code Coverage"
 
       # CodeQL
       - name: CODEQL – Analyze

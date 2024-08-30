@@ -10,7 +10,7 @@ updates:
     open-pull-requests-limit: 100
     schedule:
       interval: daily
-      time: '00:00'
+      time: "00:00"
       timezone: Etc/UTC
     labels:
       - dependencies
@@ -21,7 +21,7 @@ updates:
     open-pull-requests-limit: 100
     schedule:
       interval: daily
-      time: '00:00'
+      time: "00:00"
       timezone: Etc/UTC
     labels:
       - dependencies
