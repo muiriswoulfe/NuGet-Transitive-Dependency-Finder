@@ -450,7 +450,6 @@ jobs:
         env:
           EDITORCONFIG_FILE_NAME: ../../.editorconfig
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LOG_LEVEL: DEBUG
           MARKDOWN_CONFIG_FILE: ../../.markdownlint.json
 
       # Markdown Validation
@@ -526,7 +525,7 @@ jobs:
 
       - name: BUILD & TEST – Project Test
         shell: pwsh
-        run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage"
+        run: dotnet test --configuration Release --no-build --collect:"Code Coverage"
 
       # CodeQL
       - name: CODEQL – Analyze
