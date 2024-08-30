@@ -1,4 +1,4 @@
-// <copyright file="InternalAccessor.cs" company="Muiris Woulfe">
+// <copyright file="Program.cs" company="Muiris Woulfe">
 // © Muiris Woulfe
 // Licensed under the MIT License
 // </copyright>
