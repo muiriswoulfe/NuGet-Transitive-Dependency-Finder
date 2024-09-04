@@ -18,7 +18,7 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="7.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.0" />
-    <PackageVersion Include="Moq" Version="4.20.70" />
+    <PackageVersion Include="Moq" Version="4.20.71" />
     <PackageVersion Include="NuGet.ProjectModel" Version="6.11.0" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.12.4" />
     <PackageVersion Include="SecurityCodeScan.VS2019" Version="5.6.7" />
