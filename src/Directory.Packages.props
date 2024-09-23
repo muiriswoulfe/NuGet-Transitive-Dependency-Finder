@@ -28,7 +28,7 @@
     <PackageVersion Include="System.Text.Json" Version="8.0.4" />
     <PackageVersion Include="Text.Analyzers" Version="3.3.4" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
-    <PackageVersion Include="xunit" Version="2.9.0" />
+    <PackageVersion Include="xunit" Version="2.9.1" />
   </ItemGroup>
 
 </Project>
