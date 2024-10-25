@@ -64,7 +64,7 @@ jobs:
           fetch-depth: 0
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@6bd8b7f7774af54e05809fcc5431931b3eb1ddee # v4.0.1
+        uses: actions/setup-dotnet@3e891b0cb619bf60e2c25674b222b8940e2c1c25 # v4.1.0
 
       # SonarCloud Initialization
       - env:
@@ -193,7 +193,7 @@ jobs:
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@6bd8b7f7774af54e05809fcc5431931b3eb1ddee # v4.0.1
+        uses: actions/setup-dotnet@3e891b0cb619bf60e2c25674b222b8940e2c1c25 # v4.1.0
 
       # Build
       - name: BUILD – Project Restore
@@ -293,7 +293,7 @@ jobs:
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@6bd8b7f7774af54e05809fcc5431931b3eb1ddee # v4.0.1
+        uses: actions/setup-dotnet@3e891b0cb619bf60e2c25674b222b8940e2c1c25 # v4.1.0
 
       # Create Logo
       - name: CREATE LOGO – Install svgexport
@@ -509,7 +509,7 @@ jobs:
 
       # CodeQL
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@6bd8b7f7774af54e05809fcc5431931b3eb1ddee # v4.0.1
+        uses: actions/setup-dotnet@3e891b0cb619bf60e2c25674b222b8940e2c1c25 # v4.1.0
 
       - name: CODEQL – Initialize
         uses: github/codeql-action/init@662472033e021d55d94146f66f6058822b0b39fd # v3.27.0
