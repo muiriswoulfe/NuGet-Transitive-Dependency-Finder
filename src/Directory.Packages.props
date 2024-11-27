@@ -22,7 +22,7 @@
     <PackageVersion Include="NuGet.ProjectModel" Version="6.12.1" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.12.9" />
     <PackageVersion Include="SecurityCodeScan.VS2019" Version="5.6.7" />
-    <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.32.0.97167" />
+    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.3.0.106239" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.1.118" />
     <PackageVersion Include="System.Buffers" Version="4.5.1" />
     <PackageVersion Include="System.Text.Json" Version="9.0.0" />
