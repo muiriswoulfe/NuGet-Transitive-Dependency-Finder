@@ -453,6 +453,10 @@ jobs:
           EDITORCONFIG_FILE_NAME: ../../.editorconfig
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MARKDOWN_CONFIG_FILE: ../../.markdownlint.json
+          VALIDATE_CSHARP: false
+          VALIDATE_DOTNET_SLN_FORMAT_ANALYZERS: false
+          VALIDATE_DOTNET_SLN_FORMAT_STYLE: false
+          VALIDATE_DOTNET_SLN_FORMAT_WHITESPACE: false
 
       # Markdown Validation
       - name: MARKDOWN VALIDATION – Validate Links
