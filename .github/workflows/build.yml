@@ -446,6 +446,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: INITIALIZATION – .NET Install
+        uses: actions/setup-dotnet@3e891b0cb619bf60e2c25674b222b8940e2c1c25 # v4.1.0
+
       # Linter Validation
       - name: LINTER VALIDATION – Super Linter
         uses: github/super-linter@b807e99ddd37e444d189cfd2c2ca1274d8ae8ef1 # v7
