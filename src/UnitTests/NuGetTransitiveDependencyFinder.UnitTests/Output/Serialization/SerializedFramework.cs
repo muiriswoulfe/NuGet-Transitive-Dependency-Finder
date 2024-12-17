@@ -16,7 +16,7 @@ public sealed class SerializedFramework : IXunitSerializable
     /// <summary>
     /// Gets the framework object.
     /// </summary>
-    public Framework Framework { get; } = default!;
+    public Framework Framework { get; private set; } = default!;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SerializedFramework"/> class.
@@ -33,8 +33,12 @@ public sealed class SerializedFramework : IXunitSerializable
         this.Framework = framework;
 
     /// <inheritdoc/>
-    public void Deserialize(IXunitSerializationInfo info) =>
-        throw new NotImplementedException($"Deserialization is unavailable for ${nameof(SerializedFramework)}.");
+    public void Deserialize(IXunitSerializationInfo info)
+    {
+        var identifier = info.GetValue<string>(nameof(this.Framework.Identifier));
+
+        this.Framework = new(identifier);
+    }
 
     /// <inheritdoc/>
     public void Serialize(IXunitSerializationInfo info)

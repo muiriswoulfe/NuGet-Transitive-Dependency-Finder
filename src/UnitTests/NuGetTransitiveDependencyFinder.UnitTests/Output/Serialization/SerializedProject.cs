@@ -16,7 +16,7 @@ public sealed class SerializedProject : IXunitSerializable
     /// <summary>
     /// Gets the project object.
     /// </summary>
-    public Project Project { get; } = default!;
+    public Project Project { get; private set; } = default!;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SerializedProject"/> class.
@@ -33,8 +33,12 @@ public sealed class SerializedProject : IXunitSerializable
         this.Project = project;
 
     /// <inheritdoc/>
-    public void Deserialize(IXunitSerializationInfo info) =>
-        throw new NotImplementedException($"Deserialization is unavailable for ${nameof(SerializedProject)}.");
+    public void Deserialize(IXunitSerializationInfo info)
+    {
+        var identifier = info.GetValue<string>(nameof(this.Project.Identifier));
+
+        this.Project = new(identifier);
+    }
 
     /// <inheritdoc/>
     public void Serialize(IXunitSerializationInfo info)

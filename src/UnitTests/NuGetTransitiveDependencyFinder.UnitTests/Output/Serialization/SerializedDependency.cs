@@ -16,7 +16,7 @@ public sealed class SerializedDependency : IXunitSerializable
     /// <summary>
     /// Gets the dependency object.
     /// </summary>
-    public Dependency Dependency { get; } = default!;
+    public Dependency Dependency { get; private set; } = default!;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SerializedDependency"/> class.
@@ -33,8 +33,12 @@ public sealed class SerializedDependency : IXunitSerializable
         this.Dependency = dependency;
 
     /// <inheritdoc/>
-    public void Deserialize(IXunitSerializationInfo info) =>
-        throw new NotImplementedException($"Deserialization is unavailable for ${nameof(SerializedDependency)}.");
+    public void Deserialize(IXunitSerializationInfo info)
+    {
+        var identifier = info.GetValue<string>(nameof(this.Dependency.Identifier));
+
+        this.Dependency = new(identifier);
+    }
 
     /// <inheritdoc/>
     public void Serialize(IXunitSerializationInfo info)
