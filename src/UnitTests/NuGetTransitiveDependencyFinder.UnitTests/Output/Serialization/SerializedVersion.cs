@@ -15,7 +15,7 @@ public sealed class SerializedVersion : IXunitSerializable
     /// <summary>
     /// Gets the version object.
     /// </summary>
-    public Version Version { get; } = default!;
+    public Version Version { get; private set; } = default!;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SerializedVersion"/> class.
