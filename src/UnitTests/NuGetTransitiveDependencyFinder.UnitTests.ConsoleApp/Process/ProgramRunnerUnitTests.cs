@@ -44,6 +44,12 @@ public partial class ProgramRunnerUnitTests
     private readonly Mock<ITransitiveDependencyFinder> transitiveDependencyFinder = new();
 
     /// <summary>
+    /// Gets the filter regular expression for use within the unit tests.
+    /// </summary>
+    [GeneratedRegex("Filter")]
+    private static partial Regex FilterRegex { get; }
+
+    /// <summary>
     /// Tests that when <see cref="ProgramRunner.Run()"/> is called, it performs the expected actions.
     /// </summary>
     [AllCulturesFact]
@@ -59,9 +65,9 @@ public partial class ProgramRunnerUnitTests
             .Returns(true);
         _ = this.commandLineOptions
             .SetupGet(mock => mock.Filter)
-            .Returns(FilterRegex());
+            .Returns(FilterRegex);
         _ = this.transitiveDependencyFinder
-            .Setup(mock => mock.Run("ProjectOrSolution", true, FilterRegex()))
+            .Setup(mock => mock.Run("ProjectOrSolution", true, FilterRegex))
             .Returns(projects);
         var programRunner = new ProgramRunner(
             this.commandLineOptions.Object,
@@ -83,16 +89,9 @@ public partial class ProgramRunnerUnitTests
         this.commandLineOptions.VerifyGet(mock => mock.All, Times.Once);
         this.commandLineOptions.VerifyGet(mock => mock.Filter, Times.Once);
         this.commandLineOptions.VerifyNoOtherCalls();
-        this.transitiveDependencyFinder.Verify(mock => mock.Run("ProjectOrSolution", true, FilterRegex()), Times.Once);
+        this.transitiveDependencyFinder.Verify(mock => mock.Run("ProjectOrSolution", true, FilterRegex), Times.Once);
         this.transitiveDependencyFinder.VerifyNoOtherCalls();
         this.dependencyWriter.Verify(mock => mock.Write(projects), Times.Once);
         this.dependencyWriter.VerifyNoOtherCalls();
     }
-
-    /// <summary>
-    /// The filter regular expression for use within the unit tests.
-    /// </summary>
-    /// <returns>The filter regular expression.</returns>
-    [GeneratedRegex("Filter")]
-    private static partial Regex FilterRegex();
 }
