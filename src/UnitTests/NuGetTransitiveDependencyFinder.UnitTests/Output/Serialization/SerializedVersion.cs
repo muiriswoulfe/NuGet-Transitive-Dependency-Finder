@@ -32,8 +32,15 @@ public sealed class SerializedVersion : IXunitSerializable
         this.Version = version;
 
     /// <inheritdoc/>
-    public void Deserialize(IXunitSerializationInfo info) =>
-        throw new NotImplementedException($"Deserialization is unavailable for ${nameof(SerializedVersion)}.");
+    public void Deserialize(IXunitSerializationInfo info)
+    {
+        var major = info.GetValue<int>(nameof(this.Version.Major));
+        var minor = info.GetValue<int>(nameof(this.Version.Minor));
+        var build = info.GetValue<int>(nameof(this.Version.Build));
+        var revision = info.GetValue<int>(nameof(this.Version.Revision));
+
+        this.Version = new(major, minor, build, revision);
+    }
 
     /// <inheritdoc/>
     public void Serialize(IXunitSerializationInfo info)
