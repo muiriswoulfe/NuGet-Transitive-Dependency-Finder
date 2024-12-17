@@ -37,7 +37,7 @@ public sealed class SerializedDependency : IXunitSerializable
     {
         var identifier = info.GetValue<string>(nameof(this.Dependency.Identifier));
 
-        this.Dependency = new(identifier);
+        this.Dependency = new(identifier, new("1"));
     }
 
     /// <inheritdoc/>

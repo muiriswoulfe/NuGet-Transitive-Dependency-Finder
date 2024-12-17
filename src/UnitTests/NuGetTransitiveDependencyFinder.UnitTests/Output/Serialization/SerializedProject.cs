@@ -37,7 +37,7 @@ public sealed class SerializedProject : IXunitSerializable
     {
         var identifier = info.GetValue<string>(nameof(this.Project.Identifier));
 
-        this.Project = new(identifier);
+        this.Project = new(identifier, 0);
     }
 
     /// <inheritdoc/>

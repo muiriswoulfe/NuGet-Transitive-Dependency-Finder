@@ -37,7 +37,7 @@ public sealed class SerializedFramework : IXunitSerializable
     {
         var identifier = info.GetValue<string>(nameof(this.Framework.Identifier));
 
-        this.Framework = new(identifier);
+        this.Framework = new(new(identifier), []);
     }
 
     /// <inheritdoc/>
