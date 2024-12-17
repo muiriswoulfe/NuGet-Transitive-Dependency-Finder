@@ -270,7 +270,7 @@ public partial class DependencyFinderTests
         _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
 
         // Act
-        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, MatchingProjectsRegex());
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, MatchingProjectsRegex);
 
         // Assert
         _ = result.HasChildren
@@ -338,7 +338,7 @@ public partial class DependencyFinderTests
         _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
 
         // Act
-        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, MatchingProjectsRegex());
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, MatchingProjectsRegex);
 
         // Assert
         _ = result.HasChildren
@@ -346,9 +346,8 @@ public partial class DependencyFinderTests
     }
 
     /// <summary>
-    /// A regular expression representing the package <c>Newtonsoft.Json</c>, which is used by the unit tests.
+    /// Gets a regular expression representing the package <c>Newtonsoft.Json</c>, which is used by the unit tests.
     /// </summary>
-    /// <returns>The regular expression.</returns>
     [GeneratedRegex("Newtonsoft\\.Json")]
-    private static partial Regex MatchingProjectsRegex();
+    private static partial Regex MatchingProjectsRegex { get; }
 }
