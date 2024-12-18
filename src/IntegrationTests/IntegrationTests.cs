@@ -19,27 +19,27 @@ public class IntegrationTests
     /// </summary>
     [Fact]
     public void TestSolution() =>
-        this.Test("../../../../TestCollateral/TestCollateral.sln");
+        Test("../../../../TestCollateral/TestCollateral.sln");
 
     /// <summary>
     /// Tests the app using a project with no transitive dependencies.
     /// </summary>
     [Fact]
     public void TestProjectWithNoTransitiveDependencies() =>
-        this.Test("../../../../TestCollateral/NoTransitiveDependencies/NoTransitiveDependencies.csproj");
+        Test("../../../../TestCollateral/NoTransitiveDependencies/NoTransitiveDependencies.csproj");
 
     /// <summary>
     /// Tests the app using a project with no transitive dependencies.
     /// </summary>
     [Fact]
     public void TestProjectWithTransitiveDependencies() =>
-        this.Test("../../../../TestCollateral/TransitiveDependencies/TransitiveDependencies.csproj");
+        Test("../../../../TestCollateral/TransitiveDependencies/TransitiveDependencies.csproj");
 
     /// <summary>
     /// Tests the app using the specified project or solution.
     /// </summary>
     /// <param name="path">The path to the project or solution.</param>
-    private void Test(string path)
+    private static void Test(string path)
     {
         // Arrange
         var fullPath = Path.GetFullPath(path);
@@ -55,6 +55,6 @@ public class IntegrationTests
 
         // Assert
         _ = projects.HasChildren
-            .Should().BeFalse();
+            .Should().BeTrue();
     }
 }

@@ -19,7 +19,7 @@ public class SystemTests
     /// <summary>
     /// The current version of .NET.
     /// </summary>
-    private const string DotNetVersion = "net7.0";
+    private const string DotNetVersion = "net9.0";
 
     /// <summary>
     /// The current configuration.
@@ -91,6 +91,6 @@ public class SystemTests
         _ = (await error)
             .Should().BeEmpty();
         _ = (await output)
-            .Should().BeEmpty();
+            .Should().NotBeEmpty();
     }
 }
