@@ -2,7 +2,6 @@
 # Licensed under the MIT License
 
 ---
-
 name: Build
 
 on:
@@ -27,12 +26,12 @@ jobs:
       statuses: write
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
         with:
           egress-policy: audit
 
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
 
@@ -40,7 +39,7 @@ jobs:
           PR_METRICS_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ env.PR_METRICS_ACCESS_TOKEN != '' }}
         name: PR Metrics
-        uses: microsoft/PR-Metrics@9cfa3caf5b590fdd2d3179a47f18415808b8b699 # v1.5.6
+        uses: microsoft/PR-Metrics@372833f007b541d27a99ed840b6d5c68da527365 # v1.6.3
         continue-on-error: true
 
   build:
@@ -54,18 +53,18 @@ jobs:
     permissions: {}
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
         with:
           egress-policy: audit
 
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
+        uses: actions/setup-dotnet@3e891b0cb619bf60e2c25674b222b8940e2c1c25 # v4.1.0
 
       # SonarCloud Initialization
       - env:
@@ -75,10 +74,10 @@ jobs:
           && matrix.os == 'ubuntu-latest'
           && env.SONAR_TOKEN != '' }}
         name: SONARCLOUD INITIALIZATION – Java Install
-        uses: actions/setup-java@cd89f46ac9d01407894225f350157564c9c7cee2 # v3.12.0
+        uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
         with:
           distribution: zulu
-          java-version: 19.0.1
+          java-version: 23.0.1
 
       - env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -117,7 +116,7 @@ jobs:
 
       - name: BUILD & TEST – Project Test
         shell: pwsh
-        run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect:"XPlat Code Coverage"
+        run: dotnet test --configuration ${{ matrix.configuration }} --no-build --collect "XPlat Code Coverage"
 
       - env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -126,7 +125,7 @@ jobs:
           && matrix.os == 'ubuntu-latest'
           && env.CODECOV_TOKEN != '' }}
         name: BUILD & TEST – Upload to Codecov
-        uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d # v3.1.4
+        uses: codecov/codecov-action@7f8b4b4bde536c465e797be725718b88c5d95e0e # v5.1.1
         with:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -141,7 +140,7 @@ jobs:
           && env.SONAR_TOKEN != '' }}
         name: SONARCLOUD FINALIZATION – SonarCloud Analyze
         shell: pwsh
-        run: .sonarcloud/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        run: .sonarcloud/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
   create-asset:
     name: Create Asset
@@ -157,22 +156,21 @@ jobs:
             linux-musl-x64,
             linux-x64,
             osx-x64,
-            win-arm,
             win-arm64,
             win-x64,
-            win-x86
+            win-x86,
           ]
     runs-on: ubuntu-latest
     permissions: {}
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
         with:
           egress-policy: audit
 
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: INITIALIZATION – Get Tag
         env:
@@ -195,7 +193,7 @@ jobs:
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
+        uses: actions/setup-dotnet@3e891b0cb619bf60e2c25674b222b8940e2c1c25 # v4.1.0
 
       # Build
       - name: BUILD – Project Restore
@@ -245,7 +243,7 @@ jobs:
         run: |-
           $Extension = '${{ fromJson(env.extension)[steps.platform.outputs.PLATFORM] }}'
           $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
-          $AssetPath = '${{ github.workspace }}/src/Product/${{ env.project }}/bin/Release/net7.0/'
+          $AssetPath = '${{ github.workspace }}/src/Product/${{ env.project }}/bin/Release/net9.0/'
           $AssetPath += "${{ matrix.runtime }}/publish/dotnet-transitive-dependency-finder$Extension"
           Write-Output -InputObject "ASSET_PATH=$AssetPath" >> $Env:GITHUB_OUTPUT
           Write-Output -InputObject "ASSET_NAME=$AssetName" >> $Env:GITHUB_OUTPUT
@@ -266,13 +264,13 @@ jobs:
     permissions: {}
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
         with:
           egress-policy: audit
 
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: INITIALIZATION – Get Tag
         env:
@@ -295,7 +293,7 @@ jobs:
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
+        uses: actions/setup-dotnet@3e891b0cb619bf60e2c25674b222b8940e2c1c25 # v4.1.0
 
       # Create Logo
       - name: CREATE LOGO – Install svgexport
@@ -432,27 +430,33 @@ jobs:
   validate-lint:
     name: Validate – Lint
     runs-on: ubuntu-latest
-    permissions: {}
+    permissions:
+      contents: read
+      packages: read
+      statuses: write
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
         with:
           egress-policy: audit
 
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
 
       # Linter Validation
       - name: LINTER VALIDATION – Super Linter
-        uses: github/super-linter@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
+        uses: github/super-linter@b807e99ddd37e444d189cfd2c2ca1274d8ae8ef1 # v7
         env:
           EDITORCONFIG_FILE_NAME: ../../.editorconfig
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MARKDOWN_CONFIG_FILE: ../../.markdownlint.json
           VALIDATE_CSHARP: false
+          VALIDATE_DOTNET_SLN_FORMAT_ANALYZERS: false
+          VALIDATE_DOTNET_SLN_FORMAT_STYLE: false
+          VALIDATE_DOTNET_SLN_FORMAT_WHITESPACE: false
 
       # Markdown Validation
       - name: MARKDOWN VALIDATION – Validate Links
@@ -461,11 +465,23 @@ jobs:
           config-file: .github/linters/markdown-link-check.json
 
       # JSON Validation
+      - name: JSON VALIDATION – Update .markdownlint.json
+        shell: pwsh
+        run: |-
+          $Url = 'https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json'
+          Invoke-WebRequest -Uri $Url -OutFile markdownlint-config-schema.json
+          (Get-Content -Path markdownlint-config-schema.json) -replace `
+          'http://json-schema.org/draft-07/schema#', 'http://json-schema.org/draft-04/schema#' | `
+          Set-Content -Path markdownlint-config-schema.json
+          (Get-Content -Path .markdownlint.json) -replace $Url, `
+          'markdownlint-config-schema.json' | Set-Content -Path .markdownlint.json
+
       - name: JSON VALIDATION – .markdownlint.json
         uses: walbo/validate-json@1c24a27a740a698944ff5b697cb8010a72c55c6b # v1.1.0
         with:
           files: .markdownlint.json
           print-valid-files: true
+          strict: false
 
       - name: JSON VALIDATION – src/stylecop.json
         uses: walbo/validate-json@1c24a27a740a698944ff5b697cb8010a72c55c6b # v1.1.0
@@ -487,20 +503,20 @@ jobs:
       security-events: write
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
         with:
           egress-policy: audit
 
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       # CodeQL
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
+        uses: actions/setup-dotnet@3e891b0cb619bf60e2c25674b222b8940e2c1c25 # v4.1.0
 
       - name: CODEQL – Initialize
-        uses: github/codeql-action/init@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.13.4
+        uses: github/codeql-action/init@df409f7d9260372bd5f19e5b04e83cb3c43714ae # v3.27.9
         with:
           queries: security-and-quality
 
@@ -515,11 +531,11 @@ jobs:
 
       - name: BUILD & TEST – Project Test
         shell: pwsh
-        run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage"
+        run: dotnet test --configuration Release --no-build --collect "XPlat Code Coverage"
 
       # CodeQL
       - name: CODEQL – Analyze
-        uses: github/codeql-action/analyze@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.13.4
+        uses: github/codeql-action/analyze@df409f7d9260372bd5f19e5b04e83cb3c43714ae # v3.27.9
 
   dependabot:
     if: ${{ github.actor == 'dependabot[bot]' }}
@@ -530,12 +546,17 @@ jobs:
       pull-requests: write
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
         with:
           egress-policy: audit
 
-      - name: Enable Auto-Merge
+      - name: Auto-Approve
+        run: gh pr review --approve "${{github.event.pull_request.html_url}}"
+        env:
+          # Fine-grained token with Pull Requests Read & Write permissions.
+          GH_TOKEN: ${{ secrets.AUTO_APPROVE_TOKEN }}
+
+      - name: Auto-Merge
         run: gh pr merge --auto --delete-branch --squash "${{ github.event.pull_request.html_url }}"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-...
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}

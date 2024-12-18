@@ -10,8 +10,9 @@ using System.Collections.Generic;
 using FluentAssertions;
 using NuGet.Frameworks;
 using NuGetTransitiveDependencyFinder.Output;
-using NuGetTransitiveDependencyFinder.UnitTests.Utilities.Globalization;
+using NuGetTransitiveDependencyFinder.UnitTests.Output.Serialization;
 using NuGetTransitiveDependencyFinder.UnitTests.Output.UnitTests.Utilities;
+using NuGetTransitiveDependencyFinder.UnitTests.Utilities.Globalization;
 using Xunit;
 
 /// <summary>
@@ -38,184 +39,183 @@ public class FrameworkUnitTests
     /// <summary>
     /// The default collection of children.
     /// </summary>
-    private static readonly IReadOnlyCollection<Dependency> DefaultChildren = Array.Empty<Dependency>();
+    private static readonly IReadOnlyCollection<Dependency> DefaultChildren = [];
 
     /// <summary>
     /// The default test value.
     /// </summary>
-    private static readonly Framework DefaultValue = new(DefaultIdentifier, DefaultChildren);
+    private static readonly SerializedFramework DefaultValue = new(new(DefaultIdentifier, DefaultChildren));
 
     /// <summary>
     /// A clone of <see cref="DefaultValue"/>, where the object content is identical, but the object reference is not.
     /// </summary>
-    private static readonly Framework ClonedDefaultValue = new(DefaultIdentifier, DefaultChildren);
+    private static readonly SerializedFramework ClonedDefaultValue = new(new(DefaultIdentifier, DefaultChildren));
 
     /// <summary>
     /// The lesser test value, which occurs prior to <see cref="DefaultValue"/> according to an ordered sort.
     /// </summary>
-    private static readonly Framework LesserValue = new(new("ABC", DefaultIdentifierVersion), DefaultChildren);
+    private static readonly SerializedFramework LesserValue =
+        new(new(new("ABC", DefaultIdentifierVersion), DefaultChildren));
 
     /// <summary>
     /// The data for testing the operators.
     /// </summary>
-    private static readonly IReadOnlyCollection<ComparisonTestData<Framework>> OperatorTestData =
+    private static readonly IReadOnlyCollection<ComparisonTestData<SerializedFramework>> OperatorTestData =
         ComparisonDataGenerator.GenerateOperatorTestData(
             DefaultValue,
             ClonedDefaultValue,
             LesserValue,
-            new ComparisonTestData<Framework>[]
-            {
+            [
                 new(
                     DefaultValue,
-                    new(new(DefaultIdentifierFramework, DefaultIdentifierVersion), DefaultChildren),
+                    new(new(new(DefaultIdentifierFramework, DefaultIdentifierVersion), DefaultChildren)),
                     Comparisons.Equal),
                 new(
                     DefaultValue,
-                    new(new("Identifier", DefaultIdentifierVersion), DefaultChildren),
+                    new(new(new("Identifier", DefaultIdentifierVersion), DefaultChildren)),
                     Comparisons.Equal),
                 new(
                     DefaultValue,
-                    new(new(DefaultIdentifierFramework, new(1, 0)), DefaultChildren),
+                    new(new(new(DefaultIdentifierFramework, new(1, 0)), DefaultChildren)),
                     Comparisons.Equal),
                 new(
                     DefaultValue,
-                    new(new("IDENTIFIER", DefaultIdentifierVersion), DefaultChildren),
+                    new(new(new("IDENTIFIER", DefaultIdentifierVersion), DefaultChildren)),
                     Comparisons.Equal),
                 new(
                     DefaultValue,
-                    new(DefaultIdentifier, new Dependency[] { new(DefaultIdentifierFramework, new("1.0.0")) }),
+                    new(new(DefaultIdentifier, [new(DefaultIdentifierFramework, new("1.0.0"))])),
                     Comparisons.Equal),
                 new(
-                    new(new NuGetFramework("ABC", DefaultIdentifierVersion), DefaultChildren),
+                    new(new(new NuGetFramework("ABC", DefaultIdentifierVersion), DefaultChildren)),
                     DefaultValue,
                     Comparisons.LessThan),
                 new(
-                    new(new NuGetFramework(DefaultIdentifierFramework, new(0, 9)), DefaultChildren),
+                    new(new(new NuGetFramework(DefaultIdentifierFramework, new(0, 9)), DefaultChildren)),
                     DefaultValue,
                     Comparisons.LessThan),
                 new(
                     DefaultValue,
-                    new(new("ABC", DefaultIdentifierVersion), DefaultChildren),
+                    new(new(new("ABC", DefaultIdentifierVersion), DefaultChildren)),
                     Comparisons.GreaterThan),
                 new(
                     DefaultValue,
-                    new(new(DefaultIdentifierFramework, new(0, 9)), DefaultChildren),
+                    new(new(new(DefaultIdentifierFramework, new(0, 9)), DefaultChildren)),
                     Comparisons.GreaterThan),
-            });
+            ]);
 
     /// <summary>
     /// The data for testing <see cref="Base{Dependency}.SortedChildren"/>.
     /// </summary>
     private static readonly IReadOnlyList<Dependency> SortedChildrenTestData =
-        new Dependency[]
-        {
+        [
             new("A", new("0.9.9")),
             new("A", new("1.0.0")),
             new("B", new("1.0.0")),
             new("C", new("1.0.0")),
             new("Y", new("1.0.0")),
             new("Z", new("1.0.0")),
-        };
+        ];
 
     /// <summary>
     /// Gets the data for testing <see cref="Framework.operator ==(Framework?, Framework?)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Framework?, Framework?, bool> OperatorEqualTestData =>
+    public static TheoryData<SerializedFramework?, SerializedFramework?, bool> OperatorEqualTestData =>
         ComparisonDataGenerator.GenerateOperatorEqualTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="Framework.operator !=(Framework?, Framework?)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Framework?, Framework?, bool> OperatorNotEqualTestData =>
+    public static TheoryData<SerializedFramework?, SerializedFramework?, bool> OperatorNotEqualTestData =>
         ComparisonDataGenerator.GenerateOperatorNotEqualTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="Framework.operator &lt;(Framework?, Framework?)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Framework?, Framework?, bool> OperatorLessThanTestData =>
+    public static TheoryData<SerializedFramework?, SerializedFramework?, bool> OperatorLessThanTestData =>
         ComparisonDataGenerator.GenerateOperatorLessThanTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="Framework.operator &lt;=(Framework?, Framework?)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Framework?, Framework?, bool> OperatorLessThanOrEqualTestData =>
+    public static TheoryData<SerializedFramework?, SerializedFramework?, bool> OperatorLessThanOrEqualTestData =>
         ComparisonDataGenerator.GenerateOperatorLessThanOrEqualTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="Framework.operator &gt;(Framework?, Framework?)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Framework?, Framework?, bool> OperatorGreaterThanTestData =>
+    public static TheoryData<SerializedFramework?, SerializedFramework?, bool> OperatorGreaterThanTestData =>
         ComparisonDataGenerator.GenerateOperatorGreaterThanTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="Framework.operator &gt;=(Framework?, Framework?)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Framework?, Framework?, bool> OperatorGreaterThanOrEqualTestData =>
+    public static TheoryData<SerializedFramework?, SerializedFramework?, bool> OperatorGreaterThanOrEqualTestData =>
         ComparisonDataGenerator.GenerateOperatorGreaterThanOrEqualTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="IComparable{Framework}.CompareTo(Framework)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Framework, Framework?, int> CompareToTestData =>
+    public static TheoryData<SerializedFramework, SerializedFramework?, int> CompareToTestData =>
         ComparisonDataGenerator.GenerateCompareToTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="IEquatable{Framework}.Equals(Framework)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Framework, Framework?, bool> EqualsTestData =>
+    public static TheoryData<SerializedFramework, SerializedFramework?, bool> EqualsTestData =>
         ComparisonDataGenerator.GenerateEqualsTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="Framework.GetHashCode()"/>.
     /// </summary>
-    public static TheoryData<Framework, Framework> GetHashCodeTestData =>
+    public static TheoryData<SerializedFramework, SerializedFramework> GetHashCodeTestData =>
         ComparisonDataGenerator.GenerateGetHashCodeTestData(
             DefaultValue,
             ClonedDefaultValue,
             LesserValue,
-            new TheoryData<Framework, Framework>
+            new TheoryData<SerializedFramework, SerializedFramework>
             {
                 {
                     DefaultValue,
-                    new(new(DefaultIdentifierFramework, DefaultIdentifierVersion), DefaultChildren)
+                    new(new(new(DefaultIdentifierFramework, DefaultIdentifierVersion), DefaultChildren))
                 },
                 {
                     DefaultValue,
-                    new(new("Identifier", DefaultIdentifierVersion), DefaultChildren)
+                    new(new(new("Identifier", DefaultIdentifierVersion), DefaultChildren))
                 },
                 {
                     DefaultValue,
-                    new(new(DefaultIdentifierFramework, new(1, 0)), DefaultChildren)
+                    new(new(new(DefaultIdentifierFramework, new(1, 0)), DefaultChildren))
                 },
                 {
                     DefaultValue,
-                    new(new("IDENTIFIER", DefaultIdentifierVersion), DefaultChildren)
+                    new(new(new("IDENTIFIER", DefaultIdentifierVersion), DefaultChildren))
                 },
                 {
                     DefaultValue,
-                    new(DefaultIdentifier, new Dependency[] { new(DefaultIdentifierFramework, new("1.0.0")) })
+                    new(new(DefaultIdentifier, [new(DefaultIdentifierFramework, new("1.0.0"))]))
                 },
             });
 
     /// <summary>
     /// Gets the data for testing <see cref="object.ToString()"/>.
     /// </summary>
-    public static TheoryData<Framework, string> ToStringTestData =>
+    public static TheoryData<SerializedFramework, string> ToStringTestData =>
         new()
         {
             { DefaultValue, "Identifier v1.0" },
             { LesserValue, "ABC v1.0" },
-            { new(new(DefaultIdentifierFramework, new(1, 0, 1)), DefaultChildren), "Identifier v1.0.1" },
-            { new(new(DefaultIdentifierFramework, new(1, 0, 1, 1)), DefaultChildren), "Identifier v1.0.1.1" },
-            { new(new(DefaultIdentifierFramework, new(1, 0, 0, 1)), DefaultChildren), "Identifier v1.0.0.1" },
+            { new(new(new(DefaultIdentifierFramework, new(1, 0, 1)), DefaultChildren)), "Identifier v1.0.1" },
+            { new(new(new(DefaultIdentifierFramework, new(1, 0, 1, 1)), DefaultChildren)), "Identifier v1.0.1.1" },
+            { new(new(new(DefaultIdentifierFramework, new(1, 0, 0, 1)), DefaultChildren)), "Identifier v1.0.0.1" },
         };
 
     /// <summary>
@@ -227,10 +227,13 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorEqualTestData))]
-    public void OperatorEqual_WithAllCases_ReturnsValue(Framework left, Framework right, bool expected)
+    public void OperatorEqual_WithAllCases_ReturnsValue(
+        SerializedFramework? left,
+        SerializedFramework? right,
+        bool expected)
     {
         // Act
-        var result = left == right;
+        var result = left?.Framework == right?.Framework;
 
         // Assert
         _ = result
@@ -246,10 +249,13 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorNotEqualTestData))]
-    public void OperatorNotEqual_WithAllCases_ReturnsValue(Framework left, Framework right, bool expected)
+    public void OperatorNotEqual_WithAllCases_ReturnsValue(
+        SerializedFramework? left,
+        SerializedFramework? right,
+        bool expected)
     {
         // Act
-        var result = left != right;
+        var result = left?.Framework != right?.Framework;
 
         // Assert
         _ = result
@@ -265,10 +271,13 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorLessThanTestData))]
-    public void OperatorLessThan_WithAllCases_ReturnsValue(Framework left, Framework right, bool expected)
+    public void OperatorLessThan_WithAllCases_ReturnsValue(
+        SerializedFramework? left,
+        SerializedFramework? right,
+        bool expected)
     {
         // Act
-        var result = left < right;
+        var result = left?.Framework < right?.Framework;
 
         // Assert
         _ = result
@@ -284,10 +293,13 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorLessThanOrEqualTestData))]
-    public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(Framework left, Framework right, bool expected)
+    public void OperatorLessThanOrEqual_WithAllCases_ReturnsValue(
+        SerializedFramework? left,
+        SerializedFramework? right,
+        bool expected)
     {
         // Act
-        var result = left <= right;
+        var result = left?.Framework <= right?.Framework;
 
         // Assert
         _ = result
@@ -303,10 +315,13 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorGreaterThanTestData))]
-    public void OperatorGreaterThan_WithAllCases_ReturnsValue(Framework left, Framework right, bool expected)
+    public void OperatorGreaterThan_WithAllCases_ReturnsValue(
+        SerializedFramework? left,
+        SerializedFramework? right,
+        bool expected)
     {
         // Act
-        var result = left > right;
+        var result = left?.Framework > right?.Framework;
 
         // Assert
         _ = result
@@ -322,10 +337,13 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(OperatorGreaterThanOrEqualTestData))]
-    public void OperatorGreaterThanOrEqual_WithAllCases_ReturnsValue(Framework left, Framework right, bool expected)
+    public void OperatorGreaterThanOrEqual_WithAllCases_ReturnsValue(
+        SerializedFramework? left,
+        SerializedFramework? right,
+        bool expected)
     {
         // Act
-        var result = left >= right;
+        var result = left?.Framework >= right?.Framework;
 
         // Assert
         _ = result
@@ -341,10 +359,10 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(CompareToTestData))]
-    public void CompareTo_WithAllCases_ReturnsValue(Framework left, Framework right, int expected)
+    public void CompareTo_WithAllCases_ReturnsValue(SerializedFramework left, SerializedFramework? right, int expected)
     {
         // Act
-        var result = left.CompareTo(right);
+        var result = left.Framework.CompareTo(right?.Framework);
 
         // Assert
         _ = result
@@ -360,10 +378,13 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(CompareToTestData))]
-    public void CompareToObject_WithAllCases_ReturnsValue(Framework left, object right, int expected)
+    public void CompareToObject_WithAllCases_ReturnsValue(
+        SerializedFramework left,
+        SerializedFramework? right,
+        int expected)
     {
         // Act
-        var result = left.CompareTo(right);
+        var result = left.Framework.CompareTo(right?.Framework as object);
 
         // Assert
         _ = result
@@ -378,7 +399,7 @@ public class FrameworkUnitTests
     public void CompareToObject_WithDifferentObjectTypes_ThrowsArgumentException()
     {
         // Act
-        Action action = () => DefaultValue.CompareTo("value");
+        Action action = () => DefaultValue.Framework.CompareTo("value");
 
         // Assert
         _ = action
@@ -395,10 +416,10 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(EqualsTestData))]
-    public void Equals_WithAllCases_ReturnsValue(Framework left, Framework right, bool expected)
+    public void Equals_WithAllCases_ReturnsValue(SerializedFramework left, SerializedFramework? right, bool expected)
     {
         // Act
-        var result = left.Equals(right);
+        var result = left.Framework.Equals(right?.Framework);
 
         // Assert
         _ = result
@@ -414,10 +435,13 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(EqualsTestData))]
-    public void EqualsObject_WithAllCases_ReturnsValue(Framework left, object right, bool expected)
+    public void EqualsObject_WithAllCases_ReturnsValue(
+        SerializedFramework left,
+        SerializedFramework? right,
+        bool expected)
     {
         // Act
-        var result = left.Equals(right);
+        var result = left.Framework.Equals(right?.Framework as object);
 
         // Assert
         _ = result
@@ -432,7 +456,7 @@ public class FrameworkUnitTests
     public void EqualsObject_WithDifferentObjectTypes_ReturnsFalse()
     {
         // Act
-        var result = DefaultValue.Equals("value");
+        var result = DefaultValue.Framework.Equals("value");
 
         // Assert
         _ = result
@@ -447,11 +471,13 @@ public class FrameworkUnitTests
     /// <param name="value2">The second value for which to compute a hash code.</param>
     [AllCulturesTheory]
     [MemberData(nameof(GetHashCodeTestData))]
-    public void GetHashCode_WithIdenticalObjects_ReturnsSameValue(Framework value1, Framework value2)
+    public void GetHashCode_WithIdenticalObjects_ReturnsSameValue(
+        SerializedFramework value1,
+        SerializedFramework value2)
     {
         // Act
-        var result1 = value1.GetHashCode();
-        var result2 = value2.GetHashCode();
+        var result1 = value1.Framework.GetHashCode();
+        var result2 = value2.Framework.GetHashCode();
 
         // Assert
         _ = result1
@@ -466,8 +492,8 @@ public class FrameworkUnitTests
     public void GetHashCode_WithDifferentObjects_ReturnsDifferentValues()
     {
         // Act
-        var result1 = DefaultValue.GetHashCode();
-        var result2 = LesserValue.GetHashCode();
+        var result1 = DefaultValue.Framework.GetHashCode();
+        var result2 = LesserValue.Framework.GetHashCode();
 
         // Assert
         _ = result1
@@ -482,10 +508,10 @@ public class FrameworkUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(ToStringTestData))]
-    public void ToString_WithDifferentObjects_ReturnsString(Framework value, string expected)
+    public void ToString_WithDifferentObjects_ReturnsString(SerializedFramework value, string expected)
     {
         // Act
-        var result = value.ToString();
+        var result = value.Framework.ToString();
 
         // Assert
         _ = result
@@ -500,7 +526,7 @@ public class FrameworkUnitTests
     public void IsAddValid_WithAnyValue_ReturnsTrue()
     {
         // Act
-        var result = DefaultValue.IsAddValid(new(DefaultIdentifierFramework, new("1.0.0")));
+        var result = DefaultValue.Framework.IsAddValid(new(DefaultIdentifierFramework, new("1.0.0")));
 
         // Assert
         _ = result
@@ -515,7 +541,7 @@ public class FrameworkUnitTests
     public void HasChildren_NotComprisingChildren_ReturnsFalse()
     {
         // Act
-        var result = DefaultValue.HasChildren;
+        var result = DefaultValue.Framework.HasChildren;
 
         // Assert
         _ = result
@@ -532,7 +558,7 @@ public class FrameworkUnitTests
         // Arrange
         var framework = new Framework(
             DefaultIdentifier,
-            new Dependency[] { new(DefaultIdentifierFramework, new("1.0.0")) });
+            [new(DefaultIdentifierFramework, new("1.0.0"))]);
 
         // Act
         var result = framework.HasChildren;
@@ -569,7 +595,7 @@ public class FrameworkUnitTests
     public void SortedChildren_NotComprisingChildren_ReturnsEmptyCollection()
     {
         // Act
-        var result = DefaultValue.SortedChildren;
+        var result = DefaultValue.Framework.SortedChildren;
 
         // Assert
         _ = result
@@ -586,15 +612,14 @@ public class FrameworkUnitTests
         // Arrange
         var framework = new Framework(
             DefaultIdentifier,
-            new Dependency[]
-            {
+            [
                 SortedChildrenTestData[5],
                 SortedChildrenTestData[4],
                 SortedChildrenTestData[1],
                 SortedChildrenTestData[3],
                 SortedChildrenTestData[2],
                 SortedChildrenTestData[0],
-            });
+            ]);
 
         // Act
         var result = framework.SortedChildren;
@@ -640,12 +665,11 @@ public class FrameworkUnitTests
         // Arrange
         var framework = new Framework(
             DefaultIdentifier,
-            new Dependency[]
-            {
+            [
                 SortedChildrenTestData[5],
                 SortedChildrenTestData[4],
                 SortedChildrenTestData[1],
-            });
+            ]);
         framework.Add(SortedChildrenTestData[3]);
         framework.Add(SortedChildrenTestData[2]);
         framework.Add(SortedChildrenTestData[0]);
@@ -670,12 +694,11 @@ public class FrameworkUnitTests
         // Arrange
         var framework = new Framework(
             DefaultIdentifier,
-            new Dependency[]
-            {
+            [
                 SortedChildrenTestData[5],
                 SortedChildrenTestData[4],
                 SortedChildrenTestData[1],
-            });
+            ]);
         _ = framework.SortedChildren;
         framework.Add(SortedChildrenTestData[3]);
         framework.Add(SortedChildrenTestData[2]);

@@ -32,9 +32,6 @@ You should also consider:
 
 <!-- References -->
 
-[discussion]:
-  https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/discussions
-[rubberduckdebugging]:
-  https://wikipedia.org/wiki/Rubber_duck_debugging
-[xyproblem]:
-  https://wikipedia.org/wiki/XY_problem
+[discussion]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/discussions
+[rubberduckdebugging]: https://wikipedia.org/wiki/Rubber_duck_debugging
+[xyproblem]: https://wikipedia.org/wiki/XY_problem

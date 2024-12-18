@@ -5,7 +5,6 @@
 
 namespace NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.Output;
 
-using System;
 using System.Globalization;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -14,9 +13,9 @@ using NuGet.Versioning;
 using NuGetTransitiveDependencyFinder.ConsoleApp.Output;
 using NuGetTransitiveDependencyFinder.ConsoleApp.Resources.Messages;
 using NuGetTransitiveDependencyFinder.Output;
+using NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.TestUtilities;
 using NuGetTransitiveDependencyFinder.UnitTests.Utilities.Globalization;
 using NuGetTransitiveDependencyFinder.UnitTests.Utilities.Logging;
-using NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.TestUtilities;
 using static System.FormattableString;
 
 /// <summary>
@@ -28,64 +27,64 @@ public class DependencyWriterUnitTests
     /// The default project names for use within the unit tests.
     /// </summary>
     private static readonly string[] ProjectNames =
-    {
+    [
         "Project A",
         "Project B",
-    };
+    ];
 
     /// <summary>
     /// The default framework names for use within the unit tests.
     /// </summary>
     private static readonly string[] FrameworkNames =
-    {
+    [
         "Framework A",
         "Framework B",
-    };
+    ];
 
     /// <summary>
     /// The default dependency names for use within the unit tests.
     /// </summary>
     private static readonly string[] DependencyNames =
-    {
+    [
         "Dependency A",
         "Dependency B",
-    };
+    ];
 
     /// <summary>
     /// The default framework identifiers for use within the unit tests.
     /// </summary>
     private static readonly NuGetFramework[] FrameworkIdentifiers =
-    {
+    [
         new(FrameworkNames[0], new(2, 1, 0, 0)),
         new(FrameworkNames[1], new(3, 2, 1, 2)),
-    };
+    ];
 
     /// <summary>
     /// The default dependency versions for use within the unit tests.
     /// </summary>
     private static readonly NuGetVersion[] DependencyVersions =
-    {
+    [
         new(4, 3, 0, 0),
         new(5, 4, 1, 2),
-    };
+    ];
 
     /// <summary>
     /// The frameworks expected to be returned by the <see cref="DependencyWriter"/>.
     /// </summary>
     private static readonly string[] ExpectedFrameworks =
-    {
+    [
         Invariant($"    {FrameworkNames[0]} v2.1"),
         Invariant($"    {FrameworkNames[1]} v3.2.1.2"),
-    };
+    ];
 
     /// <summary>
     /// The dependencies expected to be returned by the <see cref="DependencyWriter"/>.
     /// </summary>
     private static readonly string[] ExpectedDependencies =
-    {
+    [
         Invariant($"        {DependencyNames[0]} v4.3.0"),
         Invariant($"        {DependencyNames[1]} v5.4.1.2"),
-    };
+    ];
 
     /// <summary>
     /// The mock <see cref="ILogger{DependencyWriter}"/> object.

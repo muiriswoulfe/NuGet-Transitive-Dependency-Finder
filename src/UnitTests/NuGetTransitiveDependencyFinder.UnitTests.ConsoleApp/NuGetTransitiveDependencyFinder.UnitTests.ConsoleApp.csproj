@@ -3,15 +3,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+    <PackageReference Include="StyleCop.Analyzers">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Product\NuGetTransitiveDependencyFinder.ConsoleApp\NuGetTransitiveDependencyFinder.ConsoleApp.csproj" />
-    <ProjectReference Include="..\NuGetTransitiveDependencyFinder.UnitTests.Utilities\NuGetTransitiveDependencyFinder.UnitTests.Utilities.csproj" />
+    <ProjectReference
+      Include="..\..\Product\NuGetTransitiveDependencyFinder.ConsoleApp\NuGetTransitiveDependencyFinder.ConsoleApp.csproj" />
+    <ProjectReference
+      Include="..\NuGetTransitiveDependencyFinder.UnitTests.Utilities\NuGetTransitiveDependencyFinder.UnitTests.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

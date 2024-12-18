@@ -15,20 +15,9 @@ using NuGetLogLevel = NuGet.Common.LogLevel;
 /// <summary>
 /// A class that manages logging from within the NuGet infrastructure.
 /// </summary>
-internal class NuGetLogger : LoggerBase
+/// <param name="logger">The underlying logging functionality.</param>
+internal class NuGetLogger(ILogger<NuGetLogger> logger) : LoggerBase
 {
-    /// <summary>
-    /// The underlying logging functionality.
-    /// </summary>
-    private readonly ILogger<NuGetLogger> logger;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="NuGetLogger"/> class.
-    /// </summary>
-    /// <param name="logger">The underlying logging functionality.</param>
-    public NuGetLogger(ILogger<NuGetLogger> logger) =>
-        this.logger = logger;
-
     /// <summary>
     /// Logs a message.
     /// </summary>
@@ -53,9 +42,9 @@ internal class NuGetLogger : LoggerBase
                 LogLevel.None,
         };
 
-        this.logger.Log(
+        logger.Log(
             level,
-            "[{time}] {warningLevel} – {message} ({projectPath})",
+            "[{Time}] {WarningLevel} – {Message} ({ProjectPath})",
             message.Time.ToString(
                 CultureInfo.InvariantCulture.DateTimeFormat.UniversalSortableDateTimePattern,
                 CultureInfo.InvariantCulture),

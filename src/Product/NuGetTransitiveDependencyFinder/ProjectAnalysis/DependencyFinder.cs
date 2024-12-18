@@ -17,18 +17,11 @@ using NuGetTransitiveDependencyFinder.Output;
 /// An internal class that manages the overall process of finding transitive NuGet dependencies, abstracting away
 /// internal APIs from applications consuming the library.
 /// </summary>
-internal class DependencyFinder : IDependencyFinder
+/// <param name="assets">The object representing the contents of a "project.assets.json" file.</param>
+/// <param name="dependencyGraph">The object representing a dependency graph of .NET projects and their NuGet
+/// dependencies.</param>
+internal class DependencyFinder(IAssets assets, IDependencyGraph dependencyGraph) : IDependencyFinder
 {
-    /// <summary>
-    /// The object representing the contents of a "project.assets.json" file.
-    /// </summary>
-    private readonly IAssets assets;
-
-    /// <summary>
-    /// The object representing a dependency graph of .NET projects and their NuGet dependencies.
-    /// </summary>
-    private readonly IDependencyGraph dependencyGraph;
-
     /// <summary>
     /// The collection of dependencies recorded and stored temporarily for the purposes of finding transitive NuGet
     /// dependencies.
@@ -37,18 +30,6 @@ internal class DependencyFinder : IDependencyFinder
     /// information.</remarks>
     private readonly IDictionary<string, Dependency> dependencies =
         new Dictionary<string, Dependency>(StringComparer.OrdinalIgnoreCase);
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="DependencyFinder"/> class.
-    /// </summary>
-    /// <param name="assets">The object representing the contents of a "project.assets.json" file.</param>
-    /// <param name="dependencyGraph">The object representing a dependency graph of .NET projects and their NuGet
-    /// dependencies.</param>
-    public DependencyFinder(IAssets assets, IDependencyGraph dependencyGraph)
-    {
-        this.assets = assets;
-        this.dependencyGraph = dependencyGraph;
-    }
 
     /// <inheritdoc/>
     public Projects Run(string projectOrSolutionPath, bool collateAllDependencies, Regex? filter)
@@ -83,7 +64,7 @@ internal class DependencyFinder : IDependencyFinder
                     .Targets
                     .First(target => target.TargetFramework == framework.FrameworkName)
                     .Libraries
-                    .ToImmutableDictionary(library => library.Name, StringComparer.OrdinalIgnoreCase);
+                    .ToImmutableDictionary(library => library.Name!, StringComparer.OrdinalIgnoreCase);
 
                 var projectDependencies = projectDependencyGroup
                     .Dependencies
@@ -125,7 +106,7 @@ internal class DependencyFinder : IDependencyFinder
     /// name.</param>
     /// <returns>The project dependency graph.</returns>
     private DependencyGraphSpec CreateProjectDependencyGraph(string projectOrSolutionPath) =>
-        this.dependencyGraph.Create(projectOrSolutionPath);
+        dependencyGraph.Create(projectOrSolutionPath);
 
     /// <summary>
     /// Creates the assets file to be analyzed.
@@ -133,7 +114,7 @@ internal class DependencyFinder : IDependencyFinder
     /// <param name="project">The .NET project to analyze.</param>
     /// <returns>The assets file.</returns>
     private LockFile? CreateAssetsFile(PackageSpec project) =>
-        this.assets.Create(project.FilePath, project.RestoreMetadata.OutputPath);
+        assets.Create(project.FilePath, project.RestoreMetadata.OutputPath);
 
     /// <summary>
     /// Populates the collection of dependencies for a .NET project and framework combination.
@@ -162,6 +143,11 @@ internal class DependencyFinder : IDependencyFinder
         Dependency? parent,
         IReadOnlyDictionary<string, LockFileTargetLibrary> libraries)
     {
+        if (library.Name == null || library.Version == null)
+        {
+            return;
+        }
+
         if (!this.dependencies.ContainsKey(library.Name))
         {
             this.dependencies.Add(library.Name, new(library.Name, library.Version));
@@ -198,7 +184,7 @@ internal class DependencyFinder : IDependencyFinder
         foreach (var dependency in dependencies
             .Select(dependency =>
                 !string.Equals(dependency.Name, "NETStandard.Library", StringComparison.OrdinalIgnoreCase) &&
-                this.dependencies.TryGetValue(dependency.Name, out var value) ? value : null)
+                this.dependencies.TryGetValue(dependency.Name!, out var value) ? value : null)
             .Where(dependency => dependency is not null && dependency!.Via.Count > 0))
         {
             dependency!.IsTransitive = true;

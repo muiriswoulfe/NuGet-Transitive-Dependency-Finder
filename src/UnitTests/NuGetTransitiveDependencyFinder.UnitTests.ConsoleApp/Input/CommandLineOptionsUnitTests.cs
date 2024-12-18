@@ -44,7 +44,7 @@ public class CommandLineOptionsUnitTests
     [AllCulturesTheory]
     [InlineData(null)]
     [InlineData("ProjectOrSolution")]
-    public void ProjectOrSolution_AfterSetting_ReturnsValue(string value)
+    public void ProjectOrSolution_AfterSetting_ReturnsValue(string? value)
     {
         // Arrange & Act
         var commandLineOptions = new CommandLineOptions
@@ -65,7 +65,7 @@ public class CommandLineOptionsUnitTests
     [AllCulturesTheory]
     [InlineData(null)]
     [InlineData("Filter")]
-    public void Filter_AfterSetting_ReturnsValue(string value)
+    public void Filter_AfterSetting_ReturnsValue(string? value)
     {
         // Arrange & Act
         var filter = value is not null ? new Regex(value) : null;

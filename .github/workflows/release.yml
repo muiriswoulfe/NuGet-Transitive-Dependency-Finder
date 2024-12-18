@@ -2,19 +2,10 @@
 # Licensed under the MIT License
 
 ---
-
 name: Release
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: Version
-        required: true
-        default: 1.0.0
-      release-notes:
-        description: Release Notes
-        required: true
+  workflow_dispatch: null
 
 permissions: {}
 
@@ -27,9 +18,24 @@ jobs:
       discussions: write
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
         with:
           egress-policy: audit
+
+      # Initialization
+      - name: INITIALIZATION – Read Version
+        id: version
+        shell: pwsh
+        run: |
+          $Version = Get-Content -Path '.github/workflows/input/version.txt' | Select-Object -First 1
+          Write-Output -InputObject "VERSION=$Version" >> $Env:GITHUB_OUTPUT
+
+      - name: INITIALIZATION – Read Release Notes
+        id: release-notes
+        shell: pwsh
+        run: |
+          $ReleaseNotes = Get-Content -Path '.github/workflows/input/release_notes.txt'
+          Write-Output -InputObject "RELEASE_NOTES=$ReleaseNotes" >> $Env:GITHUB_OUTPUT
 
       # Release
       - name: RELEASE – Create URLs
@@ -37,19 +43,17 @@ jobs:
         shell: pwsh
         run: |-
           $UrlPrefix = '${{ github.server_url }}/${{ github.repository }}'
-          $UrlSuffix = '+milestone%3A%22${{ github.event.inputs.version }}%22+is%3Aclosed'
+          $UrlSuffix = '+milestone%3A%22${{ steps.version.outputs.VERSION }}%22+is%3Aclosed'
           Write-Output -InputObject "URL_PREFIX=$UrlPrefix" >> $Env:GITHUB_OUTPUT
           Write-Output -InputObject "URL_SUFFIX=$UrlSuffix" >> $Env:GITHUB_OUTPUT
 
       - name: RELEASE – Create Release
-        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v0.1.15
+        uses: softprops/action-gh-release@7b4da11513bf3f43f9999e90eabced41ab8bb048 # v0.1.15
         with:
-          discussion_category_name: Releases
-          files: ${{ github.workspace }}/ms-omex.PRMetrics.vsix
-          release_notes: |-
+          body: |-
             ## Release Notes
 
-            ${{ github.event.inputs.release-notes }}
+            ${{ steps.release-notes.outputs.RELEASE_NOTES }}
 
             ## Changes
 
@@ -70,9 +74,11 @@ jobs:
               ${{ steps.urls.outputs.URL_PREFIX }}/issues?q=is%3Aissue${{ steps.urls.outputs.URL_SUFFIX }}
             [prs]:
               ${{ steps.urls.outputs.ASSET_NAME }}/pulls?q=is%3Apr${{ steps.urls.outputs.URL_SUFFIX }}
+          discussion_category_name: Releases
+          files: ${{ github.workspace }}/ms-omex.PRMetrics.vsix
           generate_release_notes: true
-          name: Release v${{ github.event.inputs.version }}
-          tag_name: v${{ github.event.inputs.version }}
+          name: Release v${{ steps.version.outputs.VERSION }}
+          tag_name: v${{ steps.version.outputs.VERSION }}
 
   create-asset:
     name: Create Asset
@@ -91,20 +97,26 @@ jobs:
             linux-musl-x64,
             linux-x64,
             osx-x64,
-            win-arm,
             win-arm64,
             win-x64,
-            win-x86
+            win-x86,
           ]
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
         with:
           egress-policy: audit
 
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: INITIALIZATION – Read Version
+        id: version
+        shell: pwsh
+        run: |
+          $Version = Get-Content -Path '.github/workflows/input/version.txt'
+          Write-Output -InputObject "VERSION=$Version" >> $Env:GITHUB_OUTPUT
 
       - name: INITIALIZATION – Get Tag
         env:
@@ -116,11 +128,11 @@ jobs:
         shell: pwsh
         run: |-
           $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
-          $FileContent = $FileContent -replace '0.0.0', '${{ github.event.inputs.version }}'
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.VERSION }}'
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
+        uses: actions/setup-dotnet@3e891b0cb619bf60e2c25674b222b8940e2c1c25 # v4.1.0
 
       # Build
       - name: BUILD – Project Restore
@@ -170,7 +182,7 @@ jobs:
         run: |-
           $Extension = '${{ fromJson(env.extension)[steps.platform.outputs.PLATFORM] }}'
           $AssetName = "NuGetTransitiveDependencyFinder.ConsoleApp.${{ matrix.runtime }}$Extension"
-          $AssetPath = '${{ github.workspace }}/src/${{ env.project }}/bin/Release/net7.0/'
+          $AssetPath = '${{ github.workspace }}/src/${{ env.project }}/bin/Release/net9.0/'
           $AssetPath += "${{ matrix.runtime }}/publish/${{ env.project }}$Extension"
           Write-Output -InputObject "ASSET_NAME=$AssetName" >> $Env:GITHUB_OUTPUT
           Write-Output -InputObject "ASSET_PATH=$AssetPath" >> $Env:GITHUB_OUTPUT
@@ -194,23 +206,37 @@ jobs:
       nuget-package-prefix: src/Product/NuGetTransitiveDependencyFinder/bin/Release/NuGetTransitiveDependencyFinder
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
         with:
           egress-policy: audit
 
       # Initialization
       - name: INITIALIZATION – Checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: INITIALIZATION – Read Version
+        id: version
+        shell: pwsh
+        run: |
+          $Version = Get-Content -Path '.github/workflows/input/version.txt'
+          Write-Output -InputObject "VERSION=$Version" >> $Env:GITHUB_OUTPUT
+
+      - name: INITIALIZATION – Read Release Notes
+        id: release-notes
+        shell: pwsh
+        run: |
+          $ReleaseNotes = Get-Content -Path '.github/workflows/input/release_notes.txt'
+          Write-Output -InputObject "RELEASE_NOTES=$ReleaseNotes" >> $Env:GITHUB_OUTPUT
 
       - name: INITIALIZATION – Version Replace
         shell: pwsh
         run: |-
           $FileContent = Get-Content -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Raw
-          $FileContent = $FileContent -replace '0.0.0', '${{ github.event.inputs.version }}'
+          $FileContent = $FileContent -replace '0.0.0', '${{ steps.version.outputs.VERSION }}'
           Set-Content -NoNewline -Path 'src/Shared/Properties/AssemblyAttributes.cs' -Value $FileContent
 
       - name: INITIALIZATION – .NET Install
-        uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
+        uses: actions/setup-dotnet@3e891b0cb619bf60e2c25674b222b8940e2c1c25 # v4.1.0
 
       # Create Logo
       - name: CREATE LOGO – Install svgexport
@@ -328,8 +354,8 @@ jobs:
           dotnet pack src/Product/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj
           --configuration Release
           --no-build
-          /property:PackageReleaseNotes="${{ github.event.inputs.release-notes }}"
-          /property:PackageVersion=${{ github.event.inputs.version }}
+          /property:PackageReleaseNotes="${{ steps.release-notes.outputs.RELEASE_NOTES }}"
+          /property:PackageVersion=${{ steps.version.outputs.VERSION }}
           /property:RepositoryCommit=${{ github.sha }}
 
       - name: UPLOAD – Upload Packages to NuGet.org
@@ -338,7 +364,7 @@ jobs:
         shell: pwsh
         run: >-
           dotnet nuget push
-          ${{ env.nuget-package-prefix }}.${{ github.event.inputs.version }}.nupkg
+          ${{ env.nuget-package-prefix }}.${{ steps.version.outputs.VERSION }}.nupkg
           --api-key ${{ secrets.NUGET_API_KEY }}
           --skip-duplicate
           --source https://api.nuget.org/v3/index.json
@@ -349,9 +375,7 @@ jobs:
         shell: pwsh
         run: >-
           dotnet nuget push
-          ${{ env.nuget-package-prefix }}.${{ github.event.inputs.version }}.nupkg
+          ${{ env.nuget-package-prefix }}.${{ steps.version.outputs.VERSION }}.nupkg
           --api-key ${{ secrets.GITHUB_TOKEN }}
           --skip-duplicate
           --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
-
-...

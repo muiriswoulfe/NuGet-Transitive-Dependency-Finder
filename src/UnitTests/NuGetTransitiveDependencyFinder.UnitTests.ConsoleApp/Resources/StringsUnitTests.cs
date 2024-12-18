@@ -21,13 +21,13 @@ public class StringsUnitTests
     /// The collection of all resources in the application.
     /// </summary>
     private static readonly string[] AllResources =
-    {
+    [
         Invariant($"{nameof(CommandLineHelp)}_{nameof(CommandLineHelp.All)}"),
         Invariant($"{nameof(CommandLineHelp)}_{nameof(CommandLineHelp.ProjectOrSolution)}"),
         Invariant($"{nameof(Information)}_{nameof(Information.CommencingAnalysis)}"),
         Invariant($"{nameof(Information)}_{nameof(Information.NoDependencies)}"),
         Invariant($"{nameof(Information)}_{nameof(Information.TransitiveDependency)}"),
-    };
+    ];
 
     /// <summary>
     /// Tests that when <see cref="Strings.GetString(string)"/> is called with a valid resource name, it returns a

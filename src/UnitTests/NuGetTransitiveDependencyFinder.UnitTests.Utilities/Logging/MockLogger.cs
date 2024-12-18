@@ -18,7 +18,7 @@ public class MockLogger<TCategoryName> : ILogger<TCategoryName>
     /// <summary>
     /// The collection of log entries.
     /// </summary>
-    private readonly List<LogEntry> entries = new();
+    private readonly List<LogEntry> entries = [];
 
     /// <summary>
     /// Gets the collection of log entries.

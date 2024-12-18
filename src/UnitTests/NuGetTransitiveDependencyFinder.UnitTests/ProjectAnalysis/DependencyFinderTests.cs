@@ -5,7 +5,6 @@
 
 namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis;
 
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using FluentAssertions;
 using Moq;
@@ -79,7 +78,7 @@ public partial class DependencyFinderTests
         LockFile? lockFile = null;
         var dependencyGraphSpec = new DependencyGraphSpec();
         dependencyGraphSpec.AddProject(
-            new PackageSpec(new[] { new TargetFrameworkInformation() })
+            new PackageSpec([new TargetFrameworkInformation()])
             {
                 RestoreMetadata = new ProjectRestoreMetadata()
                 {
@@ -114,13 +113,12 @@ public partial class DependencyFinderTests
         var dependencyGraphSpec = new DependencyGraphSpec();
         dependencyGraphSpec.AddProject(
             new PackageSpec(
-                new[]
-                {
+                [
                     new TargetFrameworkInformation
                     {
                         FrameworkName = new NuGetFramework(frameworkName)
                     }
-                })
+                ])
             {
                 FilePath = filePath,
                 Name = projectName,
@@ -133,13 +131,13 @@ public partial class DependencyFinderTests
         _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
         var lockFile = new LockFile()
         {
-            Targets = new List<LockFileTarget>(1)
-            {
-                new LockFileTarget
+            Targets =
+            [
+                new()
                 {
                     TargetFramework = new NuGetFramework(frameworkName)
                 }
-            }
+            ]
         };
         _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
 
@@ -167,13 +165,12 @@ public partial class DependencyFinderTests
         var dependencyGraphSpec = new DependencyGraphSpec();
         dependencyGraphSpec.AddProject(
             new PackageSpec(
-                new[]
-                {
+                [
                     new TargetFrameworkInformation
                     {
                         FrameworkName = new NuGetFramework(frameworkName)
                     }
-                })
+                ])
             {
                 FilePath = filePath,
                 Name = projectName,
@@ -186,24 +183,24 @@ public partial class DependencyFinderTests
         _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
         var lockFile = new LockFile()
         {
-            Targets = new List<LockFileTarget>(1)
-            {
-                new LockFileTarget
+            Targets =
+            [
+                new()
                 {
                     TargetFramework = new NuGetFramework(frameworkName),
-                    Libraries = new List<LockFileTargetLibrary>(1)
-                    {
-                        new LockFileTargetLibrary
+                    Libraries =
+                    [
+                        new()
                         {
                             Name = "Dependency 1"
                         }
-                    }
+                    ]
                 }
-            },
-            ProjectFileDependencyGroups = new List<ProjectFileDependencyGroup>(1)
-            {
-                new ProjectFileDependencyGroup(frameworkName, new List<string>(1) { "Dependency 1" })
-            }
+            ],
+            ProjectFileDependencyGroups =
+            [
+                new(frameworkName, ["Dependency 1"])
+            ]
         };
         _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
 
@@ -232,13 +229,12 @@ public partial class DependencyFinderTests
         var dependencyGraphSpec = new DependencyGraphSpec();
         dependencyGraphSpec.AddProject(
             new PackageSpec(
-                new[]
-                {
+                [
                     new TargetFrameworkInformation
                     {
                         FrameworkName = new NuGetFramework(frameworkName, frameworkVersion)
                     }
-                })
+                ])
             {
                 FilePath = filePath,
                 Name = projectName,
@@ -251,30 +247,30 @@ public partial class DependencyFinderTests
         _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
         var lockFile = new LockFile()
         {
-            ProjectFileDependencyGroups = new[]
-            {
-                new ProjectFileDependencyGroup($"{frameworkName},Version=v{frameworkVersion}", new string[] { })
-            },
-            Targets = new List<LockFileTarget>(1)
-            {
-                new LockFileTarget
+            ProjectFileDependencyGroups =
+            [
+                new ProjectFileDependencyGroup($"{frameworkName},Version=v{frameworkVersion}", [])
+            ],
+            Targets =
+            [
+                new()
                 {
                     TargetFramework = new NuGetFramework(frameworkName, frameworkVersion),
-                    Libraries = new List<LockFileTargetLibrary>
-                    {
-                        new LockFileTargetLibrary
+                    Libraries =
+                    [
+                        new()
                         {
                             Name = "Newtonsoft.Json",
                             Version = NuGetVersion.Parse("12.0.3")
                         }
-                    }
+                    ]
                 }
-            }
+            ]
         };
         _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
 
         // Act
-        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, MatchingProjectsRegex());
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, MatchingProjectsRegex);
 
         // Assert
         _ = result.HasChildren
@@ -298,13 +294,12 @@ public partial class DependencyFinderTests
         var dependencyGraphSpec = new DependencyGraphSpec();
         dependencyGraphSpec.AddProject(
             new PackageSpec(
-                new[]
-                {
+                [
                     new TargetFrameworkInformation
                     {
                         FrameworkName = new NuGetFramework(frameworkName, frameworkVersion)
                     }
-                })
+                ])
             {
                 FilePath = filePath,
                 Name = projectName,
@@ -317,33 +312,33 @@ public partial class DependencyFinderTests
         _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
         var lockFile = new LockFile()
         {
-            ProjectFileDependencyGroups = new[]
-            {
-                new ProjectFileDependencyGroup($"{frameworkName},Version=v{frameworkVersion}", new string[]
-                {
+            ProjectFileDependencyGroups =
+            [
+                new ProjectFileDependencyGroup($"{frameworkName},Version=v{frameworkVersion}",
+                [
                     "Newtonsoft.Json,Version=v12.0.3"
-                })
-            },
-            Targets = new List<LockFileTarget>(1)
-            {
-                new LockFileTarget
+                ])
+            ],
+            Targets =
+            [
+                new()
                 {
                     TargetFramework = new NuGetFramework(frameworkName, frameworkVersion),
-                    Libraries = new List<LockFileTargetLibrary>
-                    {
-                        new LockFileTargetLibrary
+                    Libraries =
+                    [
+                        new()
                         {
                             Name = "Newtonsoft.Json",
                             Version = NuGetVersion.Parse("12.0.3")
                         }
-                    }
+                    ]
                 }
-            }
+            ]
         };
         _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
 
         // Act
-        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, MatchingProjectsRegex());
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, MatchingProjectsRegex);
 
         // Assert
         _ = result.HasChildren
@@ -351,9 +346,8 @@ public partial class DependencyFinderTests
     }
 
     /// <summary>
-    /// A regular expression representing the package <c>Newtonsoft.Json</c>, which is used by the unit tests.
+    /// Gets a regular expression representing the package <c>Newtonsoft.Json</c>, which is used by the unit tests.
     /// </summary>
-    /// <returns>The regular expression.</returns>
     [GeneratedRegex("Newtonsoft\\.Json")]
-    private static partial Regex MatchingProjectsRegex();
+    private static partial Regex MatchingProjectsRegex { get; }
 }

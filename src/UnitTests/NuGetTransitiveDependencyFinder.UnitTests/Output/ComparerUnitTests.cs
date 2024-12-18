@@ -9,8 +9,9 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using NuGetTransitiveDependencyFinder.Output;
-using NuGetTransitiveDependencyFinder.UnitTests.Utilities.Globalization;
+using NuGetTransitiveDependencyFinder.UnitTests.Output.Serialization;
 using NuGetTransitiveDependencyFinder.UnitTests.Output.UnitTests.Utilities;
+using NuGetTransitiveDependencyFinder.UnitTests.Utilities.Globalization;
 using Xunit;
 
 /// <summary>
@@ -28,47 +29,47 @@ public class ComparerUnitTests
     /// <summary>
     /// The default test value.
     /// </summary>
-    private static readonly Version DefaultValue = new(1, 0, 0, 0);
+    private static readonly SerializedVersion DefaultValue = new(new(1, 0, 0, 0));
 
     /// <summary>
     /// A clone of <see cref="DefaultValue"/>, where the object content is identical, but the object reference is not.
     /// </summary>
-    private static readonly Version ClonedDefaultValue = (DefaultValue.Clone() as Version)!;
+    private static readonly SerializedVersion ClonedDefaultValue = new((DefaultValue.Version.Clone() as Version)!);
 
     /// <summary>
     /// The lesser test value, which occurs prior to <see cref="DefaultValue"/> according to an ordered sort.
     /// </summary>
-    private static readonly Version LesserValue = new(0, 9, 9, 9);
+    private static readonly SerializedVersion LesserValue = new(new(0, 9, 9, 9));
 
     /// <summary>
     /// The data for testing the operators.
     /// </summary>
-    private static readonly IReadOnlyCollection<ComparisonTestData<Version>> OperatorTestData =
+    private static readonly IReadOnlyCollection<ComparisonTestData<SerializedVersion>> OperatorTestData =
         ComparisonDataGenerator.GenerateOperatorTestData(
             DefaultValue,
             ClonedDefaultValue,
             LesserValue,
-            Array.Empty<ComparisonTestData<Version>>());
+            []);
 
     /// <summary>
     /// Gets the data for testing <see cref="Comparer.IsEqual{TValue}(TValue, TValue, Func{TValue, TValue, int})"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Version?, Version?, bool> IsEqualTestData =>
+    public static TheoryData<SerializedVersion?, SerializedVersion?, bool> IsEqualTestData =>
         ComparisonDataGenerator.GenerateOperatorEqualTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="Comparer.IsNotEqual{TValue}(TValue, TValue, Func{TValue, TValue, int})"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Version?, Version?, bool> IsNotEqualTestData =>
+    public static TheoryData<SerializedVersion?, SerializedVersion?, bool> IsNotEqualTestData =>
         ComparisonDataGenerator.GenerateOperatorNotEqualTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="Comparer.IsLess{TValue}(TValue, TValue, Func{TValue, TValue, int})"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Version?, Version?, bool> IsLessTestData =>
+    public static TheoryData<SerializedVersion?, SerializedVersion?, bool> IsLessTestData =>
         ComparisonDataGenerator.GenerateOperatorLessThanTestData(OperatorTestData);
 
     /// <summary>
@@ -76,14 +77,14 @@ public class ComparerUnitTests
     /// <see cref="Comparer.IsLessOrEqual{TValue}(TValue, TValue, Func{TValue, TValue, int})"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Version?, Version?, bool> IsLessOrEqualTestData =>
+    public static TheoryData<SerializedVersion?, SerializedVersion?, bool> IsLessOrEqualTestData =>
         ComparisonDataGenerator.GenerateOperatorLessThanOrEqualTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="Comparer.IsGreater{TValue}(TValue, TValue, Func{TValue, TValue, int})"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Version?, Version?, bool> IsGreaterTestData =>
+    public static TheoryData<SerializedVersion?, SerializedVersion?, bool> IsGreaterTestData =>
         ComparisonDataGenerator.GenerateOperatorGreaterThanTestData(OperatorTestData);
 
     /// <summary>
@@ -91,21 +92,21 @@ public class ComparerUnitTests
     /// <see cref="Comparer.IsGreaterOrEqual{TValue}(TValue, TValue, Func{TValue, TValue, int})"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Version?, Version?, bool> IsGreaterOrEqualTestData =>
+    public static TheoryData<SerializedVersion?, SerializedVersion?, bool> IsGreaterOrEqualTestData =>
         ComparisonDataGenerator.GenerateOperatorGreaterThanOrEqualTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="Comparer.CompareTo{TValue}(TValue, TValue, Func{TValue, TValue, int})"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Version, Version?, int> CompareToTestData =>
+    public static TheoryData<SerializedVersion, SerializedVersion?, int> CompareToTestData =>
         ComparisonDataGenerator.GenerateCompareToTestData(OperatorTestData);
 
     /// <summary>
     /// Gets the data for testing <see cref="IEquatable{Version}.Equals(Version)"/>.
     /// </summary>
     /// <returns>The generated data.</returns>
-    public static TheoryData<Version, Version?, bool> EqualsTestData =>
+    public static TheoryData<SerializedVersion, SerializedVersion?, bool> EqualsTestData =>
         ComparisonDataGenerator.GenerateEqualsTestData(OperatorTestData);
 
     /// <summary>
@@ -117,10 +118,10 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(IsEqualTestData))]
-    public void IsEqual_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
+    public void IsEqual_WithAllCases_ReturnsValue(SerializedVersion? left, SerializedVersion? right, bool expected)
     {
         // Act
-        var result = Comparer.IsEqual(left, right, ComparisonFunction);
+        var result = Comparer.IsEqual(left?.Version, right?.Version, ComparisonFunction);
 
         // Assert
         _ = result
@@ -136,10 +137,10 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(IsNotEqualTestData))]
-    public void IsNotEqual_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
+    public void IsNotEqual_WithAllCases_ReturnsValue(SerializedVersion? left, SerializedVersion? right, bool expected)
     {
         // Act
-        var result = Comparer.IsNotEqual(left, right, ComparisonFunction);
+        var result = Comparer.IsNotEqual(left?.Version, right?.Version, ComparisonFunction);
 
         // Assert
         _ = result
@@ -155,10 +156,10 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(IsLessTestData))]
-    public void IsLess_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
+    public void IsLess_WithAllCases_ReturnsValue(SerializedVersion? left, SerializedVersion? right, bool expected)
     {
         // Act
-        var result = Comparer.IsLess(left, right, ComparisonFunction);
+        var result = Comparer.IsLess(left?.Version, right?.Version, ComparisonFunction);
 
         // Assert
         _ = result
@@ -174,10 +175,13 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(IsLessOrEqualTestData))]
-    public void IsLessOrEqual_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
+    public void IsLessOrEqual_WithAllCases_ReturnsValue(
+        SerializedVersion? left,
+        SerializedVersion? right,
+        bool expected)
     {
         // Act
-        var result = Comparer.IsLessOrEqual(left, right, ComparisonFunction);
+        var result = Comparer.IsLessOrEqual(left?.Version, right?.Version, ComparisonFunction);
 
         // Assert
         _ = result
@@ -193,10 +197,10 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(IsGreaterTestData))]
-    public void IsGreater_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
+    public void IsGreater_WithAllCases_ReturnsValue(SerializedVersion? left, SerializedVersion? right, bool expected)
     {
         // Act
-        var result = Comparer.IsGreater(left, right, ComparisonFunction);
+        var result = Comparer.IsGreater(left?.Version, right?.Version, ComparisonFunction);
 
         // Assert
         _ = result
@@ -212,10 +216,13 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(IsGreaterOrEqualTestData))]
-    public void IsGreaterOrEqual_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
+    public void IsGreaterOrEqual_WithAllCases_ReturnsValue(
+        SerializedVersion? left,
+        SerializedVersion? right,
+        bool expected)
     {
         // Act
-        var result = Comparer.IsGreaterOrEqual(left, right, ComparisonFunction);
+        var result = Comparer.IsGreaterOrEqual(left?.Version, right?.Version, ComparisonFunction);
 
         // Assert
         _ = result
@@ -231,10 +238,10 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(CompareToTestData))]
-    public void CompareTo_WithAllCases_ReturnsValue(Version left, Version right, int expected)
+    public void CompareTo_WithAllCases_ReturnsValue(SerializedVersion left, SerializedVersion? right, int expected)
     {
         // Act
-        var result = Comparer.CompareTo(left, right, ComparisonFunction);
+        var result = Comparer.CompareTo(left.Version, right?.Version, ComparisonFunction);
 
         // Assert
         _ = result
@@ -250,10 +257,13 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(CompareToTestData))]
-    public void CompareToObject_WithAllCases_ReturnsValue(Version left, object right, int expected)
+    public void CompareToObject_WithAllCases_ReturnsValue(
+        SerializedVersion left,
+        SerializedVersion? right,
+        int expected)
     {
         // Act
-        var result = Comparer.CompareTo(left, right, ComparisonFunction, nameof(Version));
+        var result = Comparer.CompareTo(left.Version, right?.Version, ComparisonFunction, nameof(Version));
 
         // Assert
         _ = result
@@ -268,7 +278,7 @@ public class ComparerUnitTests
     public void CompareToObject_WithDifferentObjectTypes_ThrowsArgumentException()
     {
         // Act
-        Action action = () => Comparer.CompareTo(DefaultValue, "value", ComparisonFunction, nameof(Version));
+        Action action = () => Comparer.CompareTo(DefaultValue.Version, "value", ComparisonFunction, nameof(Version));
 
         // Assert
         _ = action
@@ -285,10 +295,10 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(EqualsTestData))]
-    public void Equals_WithAllCases_ReturnsValue(Version left, Version right, bool expected)
+    public void Equals_WithAllCases_ReturnsValue(SerializedVersion left, SerializedVersion? right, bool expected)
     {
         // Act
-        var result = Comparer.Equals(left, right, ComparisonFunction);
+        var result = Comparer.Equals(left.Version, right?.Version, ComparisonFunction);
 
         // Assert
         _ = result
@@ -304,10 +314,10 @@ public class ComparerUnitTests
     /// <param name="expected">The expected result.</param>
     [AllCulturesTheory]
     [MemberData(nameof(EqualsTestData))]
-    public void EqualsObject_WithAllCases_ReturnsValue(Version left, object right, bool expected)
+    public void EqualsObject_WithAllCases_ReturnsValue(SerializedVersion left, SerializedVersion? right, bool expected)
     {
         // Act
-        var result = Comparer.Equals(left, right, ComparisonFunction);
+        var result = Comparer.Equals(left.Version, right?.Version as object, ComparisonFunction);
 
         // Assert
         _ = result
@@ -322,7 +332,7 @@ public class ComparerUnitTests
     public void EqualsObject_WithDifferentObjectTypes_ReturnsFalse()
     {
         // Act
-        var result = Comparer.Equals(DefaultValue, "value", ComparisonFunction);
+        var result = Comparer.Equals(DefaultValue.Version, "value", ComparisonFunction);
 
         // Assert
         _ = result

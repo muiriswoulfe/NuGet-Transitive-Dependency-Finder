@@ -15,23 +15,16 @@ using static System.FormattableString;
 /// <summary>
 /// A class representing a dependency graph of .NET projects and their NuGet dependencies.
 /// </summary>
-internal sealed class DependencyGraph : IDependencyGraph
+/// <param name="dotNetRunner">The object managing the running of .NET commands on project and solution
+/// files.</param>
+/// <param name="processWrapper">The wrapper around <see cref="Process"/>.</param>
+internal sealed class DependencyGraph(IDotNetRunner dotNetRunner, IProcessWrapper processWrapper) : IDependencyGraph
 {
-    /// <summary>
-    /// The object managing the running of .NET commands on project and solution files.
-    /// </summary>
-    private readonly IDotNetRunner dotNetRunner;
-
-    /// <summary>
-    /// The wrapper around <see cref="Process"/>.
-    /// </summary>
-    private readonly IProcessWrapper processWrapper;
-
     /// <summary>
     /// A temporary file for storing the dependency graph information.
     /// </summary>
     /// <remarks>This file will be deleted when <see cref="Dispose()"/> is invoked.</remarks>
-    private readonly string filePath;
+    private readonly string filePath = Path.Join(AppContext.BaseDirectory, Path.GetRandomFileName());
 
     /// <summary>
     /// The output from the command to check for the existence of MSBuild.
@@ -42,20 +35,6 @@ internal sealed class DependencyGraph : IDependencyGraph
     /// A value tracking whether <see cref="Dispose()"/> has been invoked.
     /// </summary>
     private bool disposedValue;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="DependencyGraph"/> class.
-    /// </summary>
-    /// <param name="dotNetRunner">The object managing the running of .NET commands on project and solution
-    /// files.</param>
-    /// <param name="processWrapper">The wrapper around <see cref="Process"/>.</param>
-    public DependencyGraph(IDotNetRunner dotNetRunner, IProcessWrapper processWrapper)
-    {
-        this.dotNetRunner = dotNetRunner;
-        this.processWrapper = processWrapper;
-
-        this.filePath = Path.Join(AppContext.BaseDirectory, Path.GetRandomFileName());
-    }
 
     /// <summary>
     /// Finalizes an instance of the <see cref="DependencyGraph"/> class.
@@ -80,9 +59,36 @@ internal sealed class DependencyGraph : IDependencyGraph
         var arguments =
             Invariant($"{buildCommand} \"{projectOrSolutionPath}\" /maxCpuCount /target:GenerateRestoreGraphFile ") +
             Invariant($"/property:RestoreGraphOutputPath=\"{this.filePath}\"");
-        this.dotNetRunner.Run(arguments, projectOrSolutionDirectory);
+        dotNetRunner.Run(arguments, projectOrSolutionDirectory);
 
         return DependencyGraphSpec.Load(this.filePath);
+    }
+
+    /// <summary>
+    /// Handles messages sent to the Standard Error stream.
+    /// </summary>
+    /// <param name="sender">The event sender.</param>
+    /// <param name="eventParameters">The event parameters.</param>
+    /// <exception cref="InvalidOperationException">Thrown if an error occurs.</exception>
+    private static void LogError(object sender, DataReceivedEventArgs eventParameters)
+    {
+        if (!string.IsNullOrWhiteSpace(eventParameters.Data))
+        {
+            throw new InvalidOperationException(eventParameters.Data);
+        }
+    }
+
+    /// <summary>
+    /// Records messages sent to the Standard Output stream.
+    /// </summary>
+    /// <param name="sender">The event sender.</param>
+    /// <param name="eventParameters">The event parameters.</param>
+    private void LogOutput(object sender, DataReceivedEventArgs eventParameters)
+    {
+        if (!string.IsNullOrWhiteSpace(eventParameters.Data))
+        {
+            this.msBuildCheckOutput += eventParameters.Data;
+        }
     }
 
     /// <summary>
@@ -102,12 +108,12 @@ internal sealed class DependencyGraph : IDependencyGraph
 
         this.msBuildCheckOutput = string.Empty;
 
-        this.processWrapper.Start(startInfo, this.LogOutput!, this.LogError!);
+        processWrapper.Start(startInfo, this.LogOutput, LogError);
 
-        this.processWrapper.BeginErrorReadLine();
-        this.processWrapper.BeginOutputReadLine();
+        processWrapper.BeginErrorReadLine();
+        processWrapper.BeginOutputReadLine();
 
-        this.processWrapper.WaitForExit();
+        processWrapper.WaitForExit();
 
         return !string.IsNullOrWhiteSpace(this.msBuildCheckOutput);
     }
@@ -127,33 +133,6 @@ internal sealed class DependencyGraph : IDependencyGraph
             }
 
             this.disposedValue = true;
-        }
-    }
-
-    /// <summary>
-    /// Handles messages sent to the Standard Error stream.
-    /// </summary>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="eventParameters">The event parameters.</param>
-    /// <exception cref="InvalidOperationException">Thrown if an error occurs.</exception>
-    private void LogError(object sender, DataReceivedEventArgs eventParameters)
-    {
-        if (!string.IsNullOrWhiteSpace(eventParameters.Data))
-        {
-            throw new InvalidOperationException(eventParameters.Data);
-        }
-    }
-
-    /// <summary>
-    /// Records messages sent to the Standard Output stream.
-    /// </summary>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="eventParameters">The event parameters.</param>
-    private void LogOutput(object sender, DataReceivedEventArgs eventParameters)
-    {
-        if (!string.IsNullOrWhiteSpace(eventParameters.Data))
-        {
-            this.msBuildCheckOutput += eventParameters.Data;
         }
     }
 }
