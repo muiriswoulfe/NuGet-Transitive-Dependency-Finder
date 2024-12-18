@@ -9,4 +9,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference
+      Include="..\Product\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj" />
+  </ItemGroup>
+
 </Project>
