@@ -75,24 +75,25 @@ public class SystemTests
             UseShellExecute = false,
         };
 
-        Console.WriteLine(processStartInfo.FileName);
-
-        return Task.CompletedTask;
-
+        // The following code currently creates problems on Windows.
         //// using var process = new Process
         //// {
         ////     StartInfo = processStartInfo,
         //// };
 
-        //// // Act
+        // Act
         //// var result = process.Start();
         //// var output = process.StandardOutput.ReadToEndAsync();
         //// await process.WaitForExitAsync();
 
-        //// // Assert
+        // Assert
         //// _ = result
         ////     .Should().BeTrue();
         //// _ = (await output)
         ////     .Should().NotBeEmpty();
+
+        _ = processStartInfo.FileName
+            .Should().Be("dotnet");
+        return Task.CompletedTask;
     }
 }
