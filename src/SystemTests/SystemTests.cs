@@ -6,6 +6,7 @@
 namespace NuGetTransitiveDependencyFinder.SystemTests;
 
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
@@ -62,6 +63,12 @@ public class SystemTests
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     private async Task Test(string path)
     {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            // This test is unsupported on Windows due to differing filepaths on the platform.
+            return;
+        }
+
         // Arrange
         var fullPath = Path.GetFullPath(path);
         var processStartInfo = new ProcessStartInfo
@@ -74,27 +81,20 @@ public class SystemTests
             RedirectStandardOutput = true,
             UseShellExecute = false,
         };
-        try
+        using var process = new Process
         {
-            using var process = new Process
-            {
-                StartInfo = processStartInfo,
-            };
+            StartInfo = processStartInfo,
+        };
 
-            // Act
-            var result = process.Start();
-            var output = process.StandardOutput.ReadToEndAsync();
-            await process.WaitForExitAsync();
+        // Act
+        var result = process.Start();
+        var output = process.StandardOutput.ReadToEndAsync();
+        await process.WaitForExitAsync();
 
-            // Assert
-            _ = result
-                .Should().BeTrue();
-            _ = (await output)
-                .Should().NotBeEmpty();
-        }
-        catch (InvalidOperationException)
-        {
-            // Ignore any exceptions.
-        }
+        // Assert
+        _ = result
+            .Should().BeTrue();
+        _ = (await output)
+            .Should().NotBeEmpty();
     }
 }
