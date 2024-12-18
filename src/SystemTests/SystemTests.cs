@@ -60,7 +60,7 @@ public class SystemTests
     /// </summary>
     /// <param name="path">The path to the project or solution.</param>
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-    private Task Test(string path)
+    private async Task Test(string path)
     {
         // Arrange
         var fullPath = Path.GetFullPath(path);
@@ -74,26 +74,20 @@ public class SystemTests
             RedirectStandardOutput = true,
             UseShellExecute = false,
         };
-
-        // The following code currently creates problems on Windows.
-        //// using var process = new Process
-        //// {
-        ////     StartInfo = processStartInfo,
-        //// };
+        using var process = new Process
+        {
+            StartInfo = processStartInfo,
+        };
 
         // Act
-        //// var result = process.Start();
-        //// var output = process.StandardOutput.ReadToEndAsync();
-        //// await process.WaitForExitAsync();
+        var result = process.Start();
+        var output = process.StandardOutput.ReadToEndAsync();
+        await process.WaitForExitAsync();
 
         // Assert
-        //// _ = result
-        ////     .Should().BeTrue();
-        //// _ = (await output)
-        ////     .Should().NotBeEmpty();
-
-        _ = processStartInfo.FileName
-            .Should().Be("dotnet");
-        return Task.CompletedTask;
+        _ = result
+            .Should().BeTrue();
+        _ = (await output)
+            .Should().NotBeEmpty();
     }
 }
