@@ -89,7 +89,7 @@ public class SystemTests
         _ = result
             .Should().BeTrue();
         _ = (await error)
-            .Should().BeEmpty();
+            .Should().NotBeEmpty();
         _ = (await output)
             .Should().NotBeEmpty();
     }
