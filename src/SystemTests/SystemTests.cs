@@ -6,7 +6,6 @@
 namespace NuGetTransitiveDependencyFinder.SystemTests;
 
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
@@ -63,7 +62,7 @@ public class SystemTests
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     private async Task Test(string path)
     {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        if (path.Contains(@":\", StringComparison.Ordinal))
         {
             // This test is unsupported on Windows due to differing filepaths on the platform.
             return;
