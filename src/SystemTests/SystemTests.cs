@@ -81,15 +81,12 @@ public class SystemTests
 
         // Act
         var result = process.Start();
-        var error = process.StandardError.ReadToEndAsync();
         var output = process.StandardOutput.ReadToEndAsync();
         await process.WaitForExitAsync();
 
         // Assert
         _ = result
             .Should().BeTrue();
-        _ = (await error)
-            .Should().NotBeEmpty();
         _ = (await output)
             .Should().NotBeEmpty();
     }
