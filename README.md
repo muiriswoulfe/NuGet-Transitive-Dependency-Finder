@@ -2,6 +2,11 @@
 
 <!-- © Muiris Woulfe. Licensed under the MIT License. -->
 
+> **Please note that the NuGet Transitive Dependency Finder project is now
+> archived and no longer actively maintained.** While you can still use the
+> existing code and releases, there is no intention to provide further updates
+> or support.
+
 ![Build Status][buildbadge]
 [![SonarCloud Quality Gate Status][sonarcloudbadge]][sonarcloud]
 
