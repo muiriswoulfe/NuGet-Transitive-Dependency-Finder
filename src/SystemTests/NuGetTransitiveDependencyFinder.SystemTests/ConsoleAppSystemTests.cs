@@ -88,4 +88,66 @@ public sealed class ConsoleAppSystemTests
         _ = result.ExitCode
             .Should().NotBe(0);
     }
+
+    /// <summary>
+    /// Tests that invoking the ConsoleApp with the <c>--all</c> flag against a project with transitive dependencies
+    /// exits successfully.
+    /// </summary>
+    [Fact]
+    public void Run_WithAllFlag_ExitsSuccessfully()
+    {
+        // Act
+        var result = ConsoleAppRunner.Run(
+            $"--projectOrSolution \"{SystemTestPaths.TransitiveDependenciesProject}\" --all");
+
+        // Assert
+        _ = result.ExitCode
+            .Should().Be(0);
+    }
+
+    /// <summary>
+    /// Tests that invoking the ConsoleApp using the short-form <c>-p</c> argument for <c>--projectOrSolution</c>
+    /// exits successfully.
+    /// </summary>
+    [Fact]
+    public void Run_WithShortFormProjectArgument_ExitsSuccessfully()
+    {
+        // Act
+        var result = ConsoleAppRunner.Run(
+            $"-p \"{SystemTestPaths.NoTransitiveDependenciesProject}\"");
+
+        // Assert
+        _ = result.ExitCode
+            .Should().Be(0);
+    }
+
+    /// <summary>
+    /// Tests that invoking the ConsoleApp with a non-existent project path yields a non-zero exit code.
+    /// </summary>
+    [Fact]
+    public void Run_WithNonExistentProject_ExitsNonZero()
+    {
+        // Act
+        var result = ConsoleAppRunner.Run("--projectOrSolution \"/tmp/does-not-exist-xyz.csproj\"");
+
+        // Assert
+        _ = result.ExitCode
+            .Should().NotBe(0);
+    }
+
+    /// <summary>
+    /// Tests that invoking the ConsoleApp with a matching <c>--filter</c> regex against a project with transitive
+    /// dependencies exits successfully.
+    /// </summary>
+    [Fact]
+    public void Run_WithFilterRegex_ExitsSuccessfully()
+    {
+        // Act
+        var result = ConsoleAppRunner.Run(
+            $"--projectOrSolution \"{SystemTestPaths.TransitiveDependenciesProject}\" --filter \".*\"");
+
+        // Assert
+        _ = result.ExitCode
+            .Should().Be(0);
+    }
 }

@@ -148,6 +148,71 @@ public sealed partial class TransitiveDependencyFinderIntegrationTests
     }
 
     /// <summary>
+    /// Tests that running the finder twice against the same project yields results with equivalent dependency
+    /// identifiers, demonstrating that the finder is safely re-runnable.
+    /// </summary>
+    [Fact]
+    public void Run_CalledTwice_ReturnsSameDependencies()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var first = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null))
+            .Select(dependency => dependency.Identifier).Order().ToList();
+        var second = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null))
+            .Select(dependency => dependency.Identifier).Order().ToList();
+
+        // Assert
+        _ = second
+            .Should().Equal(first);
+    }
+
+    /// <summary>
+    /// Tests that two independent <see cref="ITransitiveDependencyFinder"/> instances from the DI container produce
+    /// identical results when run against the same project.
+    /// </summary>
+    [Fact]
+    public void Run_WithTwoInstances_ProducesEquivalentResults()
+    {
+        // Arrange
+        using var first = CreateFinder();
+        using var second = CreateFinder();
+
+        // Act
+        var firstResult = EnumerateDependencies(
+            first.Run(TestCollateralPaths.NoTransitiveDependenciesProject, true, null))
+            .Select(dependency => dependency.Identifier).Order().ToList();
+        var secondResult = EnumerateDependencies(
+            second.Run(TestCollateralPaths.NoTransitiveDependenciesProject, true, null))
+            .Select(dependency => dependency.Identifier).Order().ToList();
+
+        // Assert
+        _ = secondResult
+            .Should().Equal(firstResult);
+    }
+
+    /// <summary>
+    /// Tests that <see cref="ITransitiveDependencyFinder"/> is correctly resolved from the DI container as a
+    /// disposable instance.
+    /// </summary>
+    [Fact]
+    public void ITransitiveDependencyFinder_ResolvedFromContainer_IsDisposable()
+    {
+        // Arrange
+        var finder = CreateFinder();
+
+        // Act
+        Action action = finder.Dispose;
+
+        // Assert
+        _ = action
+            .Should().NotThrow();
+    }
+
+    /// <summary>
     /// Returns a regex that cannot match any realistic dependency identifier.
     /// </summary>
     /// <returns>The regex.</returns>

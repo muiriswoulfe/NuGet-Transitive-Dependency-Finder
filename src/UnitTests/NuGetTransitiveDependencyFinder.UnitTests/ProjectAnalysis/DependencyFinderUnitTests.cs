@@ -5,10 +5,12 @@
 
 namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis;
 
+using System.Linq;
 using System.Text.RegularExpressions;
 using FluentAssertions;
 using Moq;
 using NuGet.Frameworks;
+using NuGet.Packaging.Core;
 using NuGet.ProjectModel;
 using NuGet.Versioning;
 using NuGetTransitiveDependencyFinder.ProjectAnalysis;
@@ -344,6 +346,280 @@ public partial class DependencyFinderUnitTests
         _ = result.HasChildren
             .Should().BeFalse();
     }
+
+    /// <summary>
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called with a graph where a direct
+    /// project dependency pulls in a transitive library, the transitive library is surfaced as a child dependency.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithTransitiveLibrary_MarksLibraryAsTransitive()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string filePath = "C:\\project\\project.csproj";
+        const string outputPath = "C:\\project\\bin";
+        const string frameworkName = ".NETCoreApp";
+        Version frameworkVersion = new(7, 0);
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(
+                [
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = new NuGetFramework(frameworkName, frameworkVersion),
+                    },
+                ])
+            {
+                FilePath = filePath,
+                Name = "Project 1",
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath,
+                },
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+
+        var direct = new LockFileTargetLibrary
+        {
+            Name = "Direct",
+            Version = NuGetVersion.Parse("1.0.0"),
+            Dependencies =
+            [
+                new PackageDependency("Transitive", new VersionRange(NuGetVersion.Parse("1.0.0"))),
+            ],
+        };
+        var transitive = new LockFileTargetLibrary
+        {
+            Name = "Transitive",
+            Version = NuGetVersion.Parse("1.0.0"),
+        };
+        var lockFile = new LockFile
+        {
+            ProjectFileDependencyGroups =
+            [
+                new ProjectFileDependencyGroup(
+                    $"{frameworkName},Version=v{frameworkVersion}",
+                    ["Direct >= 1.0.0", "Transitive >= 1.0.0"]),
+            ],
+            Targets =
+            [
+                new LockFileTarget
+                {
+                    TargetFramework = new NuGetFramework(frameworkName, frameworkVersion),
+                    Libraries = [direct, transitive],
+                },
+            ],
+        };
+        _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
+
+        // Act
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, null);
+
+        // Assert
+        _ = result.HasChildren
+            .Should().BeTrue();
+        var dependencies = result.SortedChildren
+            .SelectMany(project => project.SortedChildren)
+            .SelectMany(framework => framework.SortedChildren)
+            .ToList();
+        _ = dependencies
+            .Should().ContainSingle(dependency => dependency.Identifier == "Transitive");
+    }
+
+    /// <summary>
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called with
+    /// <c>collateAllDependencies</c> set to <see langword="true"/>, both direct and transitive libraries are returned.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithCollateAllDependenciesTrue_ReturnsBothDirectAndTransitive()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string filePath = "C:\\project\\project.csproj";
+        const string outputPath = "C:\\project\\bin";
+        const string frameworkName = ".NETCoreApp";
+        Version frameworkVersion = new(7, 0);
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(
+                [
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = new NuGetFramework(frameworkName, frameworkVersion),
+                    },
+                ])
+            {
+                FilePath = filePath,
+                Name = "Project 1",
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath,
+                },
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+
+        var direct = new LockFileTargetLibrary
+        {
+            Name = "Direct",
+            Version = NuGetVersion.Parse("1.0.0"),
+            Dependencies =
+            [
+                new PackageDependency("Transitive", new VersionRange(NuGetVersion.Parse("1.0.0"))),
+            ],
+        };
+        var transitive = new LockFileTargetLibrary
+        {
+            Name = "Transitive",
+            Version = NuGetVersion.Parse("1.0.0"),
+        };
+        var lockFile = new LockFile
+        {
+            ProjectFileDependencyGroups =
+            [
+                new ProjectFileDependencyGroup(
+                    $"{frameworkName},Version=v{frameworkVersion}",
+                    ["Direct >= 1.0.0"]),
+            ],
+            Targets =
+            [
+                new LockFileTarget
+                {
+                    TargetFramework = new NuGetFramework(frameworkName, frameworkVersion),
+                    Libraries = [direct, transitive],
+                },
+            ],
+        };
+        _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
+
+        // Act
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, true, null);
+
+        // Assert
+        var dependencies = result.SortedChildren
+            .SelectMany(project => project.SortedChildren)
+            .SelectMany(framework => framework.SortedChildren)
+            .Select(dependency => dependency.Identifier)
+            .ToList();
+        _ = dependencies
+            .Should().Contain(["Direct", "Transitive"]);
+    }
+
+    /// <summary>
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called with a filter, only
+    /// dependencies whose identifiers match the filter are returned.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithFilter_ReturnsOnlyMatchingDependencies()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string filePath = "C:\\project\\project.csproj";
+        const string outputPath = "C:\\project\\bin";
+        const string frameworkName = ".NETCoreApp";
+        Version frameworkVersion = new(7, 0);
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(
+                [
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = new NuGetFramework(frameworkName, frameworkVersion),
+                    },
+                ])
+            {
+                FilePath = filePath,
+                Name = "Project 1",
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath,
+                },
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+
+        var matching = new LockFileTargetLibrary
+        {
+            Name = "Matching",
+            Version = NuGetVersion.Parse("1.0.0"),
+        };
+        var other = new LockFileTargetLibrary
+        {
+            Name = "Other",
+            Version = NuGetVersion.Parse("1.0.0"),
+        };
+        var lockFile = new LockFile
+        {
+            ProjectFileDependencyGroups =
+            [
+                new ProjectFileDependencyGroup(
+                    $"{frameworkName},Version=v{frameworkVersion}",
+                    ["Matching >= 1.0.0", "Other >= 1.0.0"]),
+            ],
+            Targets =
+            [
+                new LockFileTarget
+                {
+                    TargetFramework = new NuGetFramework(frameworkName, frameworkVersion),
+                    Libraries = [matching, other],
+                },
+            ],
+        };
+        _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
+
+        // Act
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, true, MatchingRegex);
+
+        // Assert
+        var dependencies = result.SortedChildren
+            .SelectMany(project => project.SortedChildren)
+            .SelectMany(framework => framework.SortedChildren)
+            .Select(dependency => dependency.Identifier)
+            .ToList();
+        _ = dependencies
+            .Should().Contain("Matching");
+        _ = dependencies
+            .Should().NotContain("Other");
+    }
+
+    /// <summary>
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called, projects whose
+    /// <c>ProjectStyle</c> is not <see cref="ProjectStyle.PackageReference"/> are skipped.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithNonPackageReferenceProject_SkipsProject()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec([new TargetFrameworkInformation()])
+            {
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.Unknown,
+                    OutputPath = "C:\\ignored",
+                },
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+
+        // Act
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, null);
+
+        // Assert
+        _ = result.HasChildren
+            .Should().BeFalse();
+        this.assetsMock.Verify(
+            mock => mock.Create(It.IsAny<string>(), It.IsAny<string>()),
+            Times.Never);
+    }
+
+    /// <summary>
+    /// Gets a regular expression matching dependencies named <c>Matching</c>, used by the unit tests.
+    /// </summary>
+    [GeneratedRegex("^Matching$")]
+    private static partial Regex MatchingRegex { get; }
 
     /// <summary>
     /// Gets a regular expression representing the package <c>Newtonsoft.Json</c>, which is used by the unit tests.
