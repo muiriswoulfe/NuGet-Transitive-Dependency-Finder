@@ -1,0 +1,48 @@
+<!-- © Muiris Woulfe. Licensed under the MIT License. -->
+
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <ConsoleAppOutputDirectory>$(MSBuildThisFileDirectory)..\..\Product\NuGetTransitiveDependencyFinder.ConsoleApp\bin\$(Configuration)\net10.0\</ConsoleAppOutputDirectory>
+    <TestCollateralNoTransitiveDependenciesProject>$(MSBuildThisFileDirectory)..\..\TestCollateral\NoTransitiveDependencies\NoTransitiveDependencies.csproj</TestCollateralNoTransitiveDependenciesProject>
+    <TestCollateralTransitiveDependenciesProject>$(MSBuildThisFileDirectory)..\..\TestCollateral\TransitiveDependencies\TransitiveDependencies.csproj</TestCollateralTransitiveDependenciesProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\Shared\Properties\AssemblyAttributes.cs" />
+    <ProjectReference
+      Include="..\..\Product\NuGetTransitiveDependencyFinder.ConsoleApp\NuGetTransitiveDependencyFinder.ConsoleApp.csproj"
+      ReferenceOutputAssembly="false" />
+    <ProjectReference
+      Include="..\..\TestCollateral\NoTransitiveDependencies\NoTransitiveDependencies.csproj"
+      ReferenceOutputAssembly="false" />
+    <ProjectReference
+      Include="..\..\TestCollateral\TransitiveDependencies\TransitiveDependencies.csproj"
+      ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <Target Name="WriteSystemTestPathsFile" BeforeTargets="CoreCompile">
+    <PropertyGroup>
+      <_SystemTestPathsFile>$(IntermediateOutputPath)SystemTestPaths.Generated.cs</_SystemTestPathsFile>
+      <_SystemTestPathsContent>// &lt;auto-generated /&gt;
+namespace NuGetTransitiveDependencyFinder.SystemTests%3B
+internal static partial class SystemTestPaths
+{
+    public const string ConsoleAppOutputDirectory = @"$(ConsoleAppOutputDirectory)"%3B
+    public const string NoTransitiveDependenciesProject = @"$(TestCollateralNoTransitiveDependenciesProject)"%3B
+    public const string TransitiveDependenciesProject = @"$(TestCollateralTransitiveDependenciesProject)"%3B
+}
+</_SystemTestPathsContent>
+    </PropertyGroup>
+    <WriteLinesToFile
+      File="$(_SystemTestPathsFile)"
+      Lines="$(_SystemTestPathsContent)"
+      Overwrite="true"
+      WriteOnlyWhenDifferent="true" />
+    <ItemGroup>
+      <Compile Include="$(_SystemTestPathsFile)" />
+      <FileWrites Include="$(_SystemTestPathsFile)" />
+    </ItemGroup>
+  </Target>
+
+</Project>

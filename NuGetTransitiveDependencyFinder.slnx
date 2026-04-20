@@ -7,6 +7,9 @@
   <Folder Name="/src/IntegrationTests/">
     <Project Path="src/IntegrationTests/NuGetTransitiveDependencyFinder.IntegrationTests/NuGetTransitiveDependencyFinder.IntegrationTests.csproj" />
   </Folder>
+  <Folder Name="/src/SystemTests/">
+    <Project Path="src/SystemTests/NuGetTransitiveDependencyFinder.SystemTests/NuGetTransitiveDependencyFinder.SystemTests.csproj" />
+  </Folder>
   <Folder Name="/UnitTests/">
     <Project Path="src/UnitTests/NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp/NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.csproj" />
     <Project Path="src/UnitTests/NuGetTransitiveDependencyFinder.UnitTests.Utilities/NuGetTransitiveDependencyFinder.UnitTests.Utilities.csproj" />
