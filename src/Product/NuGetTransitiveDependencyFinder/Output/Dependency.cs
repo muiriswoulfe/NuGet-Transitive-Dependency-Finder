@@ -19,7 +19,7 @@ public sealed class Dependency : IComparable, IComparable<Dependency>, IEquatabl
     /// <see cref="Dependency"/> and returns an <see cref="int"/>.
     /// </summary>
     private static readonly Func<Dependency, Dependency, int> ComparisonFunction =
-        (Dependency current, Dependency other) =>
+        (current, other) =>
         {
             var result = Comparer.MapCompareTo(
                 StringComparer.OrdinalIgnoreCase.Compare(current.Identifier, other.Identifier));

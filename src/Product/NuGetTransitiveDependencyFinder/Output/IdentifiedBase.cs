@@ -24,7 +24,7 @@ public abstract class IdentifiedBase<TIdentifier, TChild> : Base<TChild>
     /// </summary>
     internal static readonly Func<IdentifiedBase<TIdentifier, TChild>, IdentifiedBase<TIdentifier, TChild>, int>
         InternalComparisonFunction =
-        (IdentifiedBase<TIdentifier, TChild> current, IdentifiedBase<TIdentifier, TChild> other) =>
+        (current, other) =>
             Comparer.MapCompareTo(
                 StringComparer.OrdinalIgnoreCase.Compare(
                     current.Identifier.ToString(),

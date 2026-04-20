@@ -42,7 +42,9 @@ public abstract class Base<TChild>
     /// <param name="children">The child elements with which to initialize the collection.</param>
     internal Base(IReadOnlyCollection<TChild> children)
     {
+#pragma warning disable IDE0028, IDE0306 // Collection expression conflicts with StyleCop SA1010 on older versions.
         this.children = new(children);
+#pragma warning restore IDE0028, IDE0306
         this.areChildrenSorted = false;
     }
 

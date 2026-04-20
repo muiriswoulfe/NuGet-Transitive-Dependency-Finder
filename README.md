@@ -43,7 +43,7 @@ errors or warnings into your build process.
 To build the NuGet Transitive Dependency Finder, you will need to install:
 
 - [Git][git]
-- [.NET Core SDK 6][netcoresdk] or later
+- [.NET SDK 10][netcoresdk] or later
 
 You can simplify the process by also installing one of the following:
 
@@ -62,7 +62,7 @@ git clone git@github.com:muiriswoulfe/NuGet-Transitive-Dependency-Finder.git
 ### Build Process
 
 The easiest way to build the NuGet Transitive Dependency Finder is to open
-[NuGetTransitiveDependencyFinder.sln][codesolution] in one of the following:
+[NuGetTransitiveDependencyFinder.slnx][codesolution] in one of the following:
 
 - [Visual Studio Code][vscode] with the [C# Extension][vscodecsharp]
 - [Visual Studio][vs]
@@ -71,7 +71,7 @@ The easiest way to build the NuGet Transitive Dependency Finder is to open
 
 1. Select _File_ > _Open..._
 1. Navigate to your local copy of
-   [NuGetTransitiveDependencyFinder.sln][codesolution] and click _Open_.
+   [NuGetTransitiveDependencyFinder.slnx][codesolution] and click _Open_.
 1. Select _View_ > _Command Palette..._
 1. In the _Command Palette_, enter _Task: Run Build Task_.
 1. In the next _Command Palette_ view, enter _Build Debug_ or _Build Release_
@@ -82,7 +82,7 @@ The easiest way to build the NuGet Transitive Dependency Finder is to open
 
 1. Select _File_ > _Open_ > _Project/Solution..._
 1. Navigate to your local copy of
-   [NuGetTransitiveDependencyFinder.sln][codesolution] and click _Open_.
+   [NuGetTransitiveDependencyFinder.slnx][codesolution] and click _Open_.
 1. In the toolbar, click the _Solution Configurations_ dropdown to select the
    configuration you wish to build. Most consumers should use the Release
    configuration.
@@ -95,8 +95,8 @@ To build directly from the command-line, enter the command appropriate to which
 configuration you wish to build:
 
 ```Batchfile
-dotnet build NuGetTransitiveDependencyFinder.sln --configuration Debug
-dotnet build NuGetTransitiveDependencyFinder.sln --configuration Release
+dotnet build NuGetTransitiveDependencyFinder.slnx --configuration Debug
+dotnet build NuGetTransitiveDependencyFinder.slnx --configuration Release
 ```
 
 Most consumers should use the Release configuration.
@@ -209,10 +209,10 @@ be located [here][sonarcloud].
 [sonarcloud]: https://sonarcloud.io/dashboard?id=muiriswoulfe_NuGet-Transitive-Dependency-Finder
 [codelibrary]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/Product/NuGetTransitiveDependencyFinder
 [codeconsoleapp]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/tree/main/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp
-[codesolution]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/blob/main/NuGetTransitiveDependencyFinder.sln
+[codesolution]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder/blob/main/NuGetTransitiveDependencyFinder.slnx
 [git]: https://git-scm.com/
 [github]: https://github.com/muiriswoulfe/NuGet-Transitive-Dependency-Finder
-[netcoresdk]: https://dotnet.microsoft.com/download/dotnet-core/8.0
+[netcoresdk]: https://dotnet.microsoft.com/download/dotnet/10.0
 [vs]: https://visualstudio.microsoft.com/
 [vscode]: https://code.visualstudio.com/
 [vscodecsharp]: https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp

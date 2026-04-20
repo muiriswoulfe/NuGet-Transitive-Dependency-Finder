@@ -9,7 +9,7 @@
       "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net9.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--projectOrSolution",
-        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.slnx"
       ],
       "cwd": "${workspaceFolder}"
     },
@@ -21,7 +21,7 @@
       "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net9.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--projectOrSolution",
-        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln",
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.slnx",
         "--all"
       ],
       "cwd": "${workspaceFolder}",
@@ -53,7 +53,7 @@
       "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Release/net9.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--projectOrSolution",
-        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.slnx"
       ],
       "cwd": "${workspaceFolder}"
     },
@@ -65,7 +65,7 @@
       "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net9.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--projectOrSolution",
-        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.slnx"
       ],
       "cwd": "${workspaceFolder}",
       "console": "externalTerminal"
@@ -78,7 +78,7 @@
       "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Debug/net9.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--projectOrSolution",
-        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln",
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.slnx",
         "--all"
       ],
       "cwd": "${workspaceFolder}",
@@ -112,7 +112,7 @@
       "program": "${workspaceFolder}/src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/Release/net9.0/NuGetTransitiveDependencyFinder.ConsoleApp.dll",
       "args": [
         "--projectOrSolution",
-        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.slnx"
       ],
       "cwd": "${workspaceFolder}",
       "console": "externalTerminal"

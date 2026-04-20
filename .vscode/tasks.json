@@ -10,7 +10,7 @@
         "--configuration",
         "Debug",
         "/maxCpuCount",
-        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.slnx"
       ],
       "group": "build",
       "problemMatcher": "$msCompile"
@@ -24,7 +24,7 @@
         "--configuration",
         "Release",
         "/maxCpuCount",
-        "${workspaceFolder}/NuGetTransitiveDependencyFinder.sln"
+        "${workspaceFolder}/NuGetTransitiveDependencyFinder.slnx"
       ],
       "group": "build",
       "problemMatcher": "$msCompile"
