@@ -101,6 +101,30 @@ dotnet build NuGetTransitiveDependencyFinder.slnx --configuration Release
 
 Most consumers should use the Release configuration.
 
+### Testing
+
+The solution contains three layers of automated tests, all of which run under
+`dotnet test`:
+
+| Layer | Project | Purpose |
+| --- | --- | --- |
+| Unit | `src/UnitTests/NuGetTransitiveDependencyFinder.UnitTests` | Exercises the library in isolation with mocked collaborators. |
+| Unit | `src/UnitTests/NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp` | Exercises the ConsoleApp in isolation. |
+| Integration | `src/IntegrationTests/NuGetTransitiveDependencyFinder.IntegrationTests` | Drives the public `ITransitiveDependencyFinder` façade against real TestCollateral projects. |
+| System | `src/SystemTests/NuGetTransitiveDependencyFinder.SystemTests` | Invokes the compiled ConsoleApp out-of-process and asserts on exit code and console output. |
+
+To run every layer in one invocation:
+
+```Batchfile
+dotnet test NuGetTransitiveDependencyFinder.slnx --configuration Release
+```
+
+To run a single layer, target the corresponding project file, for example:
+
+```Batchfile
+dotnet test src/IntegrationTests/NuGetTransitiveDependencyFinder.IntegrationTests/NuGetTransitiveDependencyFinder.IntegrationTests.csproj
+```
+
 ## Using
 
 After building a copy of the solution or downloading a [release][releases], the
