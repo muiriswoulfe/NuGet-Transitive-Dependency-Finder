@@ -616,6 +616,75 @@ public partial class DependencyFinderUnitTests
     }
 
     /// <summary>
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called and the target library has
+    /// a <see langword="null"/> <see cref="LockFileTargetLibrary.Version"/>, the library is silently skipped during
+    /// dependency recording, exercising the early-return guard in <c>RecordDependency</c>.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithLibraryHavingNullVersion_SilentlySkipsLibrary()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string filePath = "C:\\project\\project.csproj";
+        const string outputPath = "C:\\project\\bin";
+        const string frameworkName = ".NETCoreApp";
+        Version frameworkVersion = new(7, 0);
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(
+                [
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = new NuGetFramework(frameworkName, frameworkVersion),
+                    },
+                ])
+            {
+                FilePath = filePath,
+                Name = "Project 1",
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath,
+                },
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+
+        var libraryWithoutVersion = new LockFileTargetLibrary
+        {
+            Name = "NoVersion",
+        };
+        var lockFile = new LockFile
+        {
+            ProjectFileDependencyGroups =
+            [
+                new ProjectFileDependencyGroup(
+                    $"{frameworkName},Version=v{frameworkVersion}",
+                    ["NoVersion >= 1.0.0"]),
+            ],
+            Targets =
+            [
+                new LockFileTarget
+                {
+                    TargetFramework = new NuGetFramework(frameworkName, frameworkVersion),
+                    Libraries = [libraryWithoutVersion],
+                },
+            ],
+        };
+        _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
+
+        // Act
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, true, null);
+
+        // Assert
+        var dependencies = result.SortedChildren
+            .SelectMany(project => project.SortedChildren)
+            .SelectMany(framework => framework.SortedChildren)
+            .ToList();
+        _ = dependencies
+            .Should().BeEmpty();
+    }
+
+    /// <summary>
     /// Gets a regular expression matching dependencies named <c>Matching</c>, used by the unit tests.
     /// </summary>
     [GeneratedRegex("^Matching$")]

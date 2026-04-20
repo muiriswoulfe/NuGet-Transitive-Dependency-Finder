@@ -367,4 +367,50 @@ public class DependencyWriterUnitTests
         _ = this.logger.Entries[15].Message
             .Should().Be(string.Empty);
     }
+
+    /// <summary>
+    /// Tests that when <see cref="DependencyWriter.Write(Projects)"/> is called with a transitive dependency that
+    /// declares <c>Via</c> entries, those entries are written at <see cref="LogLevel.Debug"/> after the transitive
+    /// warning, using the expected three-level indentation prefix.
+    /// </summary>
+    [AllCulturesFact]
+    public void Write_WithTransitiveDependencyHavingViaEntries_WritesViaEntries()
+    {
+        // Arrange
+        var transitive = InternalAccessor.Construct<Dependency>(DependencyNames[0], DependencyVersions[0]);
+        transitive.SetProperty(nameof(transitive.IsTransitive), true);
+        var via1 = InternalAccessor.Construct<Dependency>(DependencyNames[1], DependencyVersions[1]);
+        _ = transitive.Via.Add(via1);
+#pragma warning disable S3878 // Arrays should not be created for varargs parameters
+        var framework = InternalAccessor.Construct<Framework>(FrameworkIdentifiers[0], new[] { transitive });
+#pragma warning restore S3878 // Arrays should not be created for varargs parameters
+        var project = InternalAccessor.Construct<Project>(ProjectNames[0], 1);
+        var projects = InternalAccessor.Construct<Projects>(1);
+        project.Add(framework);
+        projects.Add(project);
+        var dependencyWriter = new DependencyWriter(this.logger);
+
+        // Act
+        dependencyWriter.Write(projects);
+
+        // Assert
+        _ = this.logger.Entries
+            .Should().HaveCount(5);
+        _ = this.logger.Entries[2].LogLevel
+            .Should().Be(LogLevel.Warning);
+        _ = this.logger.Entries[2].Message
+            .Should().Be(
+                string.Format(
+                    CultureInfo.CurrentCulture,
+                    Information.TransitiveDependency,
+                    ExpectedDependencies[0]));
+        _ = this.logger.Entries[3].LogLevel
+            .Should().Be(LogLevel.Debug);
+        _ = this.logger.Entries[3].Message
+            .Should().Be(Invariant($"            {via1}"));
+        _ = this.logger.Entries[4].LogLevel
+            .Should().Be(LogLevel.Information);
+        _ = this.logger.Entries[4].Message
+            .Should().Be(string.Empty);
+    }
 }
