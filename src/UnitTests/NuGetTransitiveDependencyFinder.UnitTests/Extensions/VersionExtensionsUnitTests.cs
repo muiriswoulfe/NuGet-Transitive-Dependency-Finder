@@ -48,4 +48,40 @@ public class VersionExtensionsUnitTests
         _ = result
             .Should().Be(expected);
     }
+
+    /// <summary>
+    /// Tests that when <see cref="VersionExtensions.ToShortenedString(Version)"/> is called with a
+    /// <see langword="null"/> <see cref="Version"/>, it throws a <see cref="NullReferenceException"/>.
+    /// </summary>
+    [AllCulturesFact]
+    public void ToShortenedString_WithNullVersion_ThrowsNullReferenceException()
+    {
+        // Arrange
+        Version? value = null;
+
+        // Act
+        Action action = () => value!.ToShortenedString();
+
+        // Assert
+        _ = action
+            .Should().Throw<NullReferenceException>();
+    }
+
+    /// <summary>
+    /// Tests that when <see cref="VersionExtensions.ToShortenedString(Version)"/> is called with a
+    /// <see cref="Version"/> whose revision is set but whose build is zero, both trailing components are retained.
+    /// </summary>
+    [AllCulturesFact]
+    public void ToShortenedString_WithRevisionSetButBuildZero_IncludesBothComponents()
+    {
+        // Arrange
+        var value = new Version(2, 3, 0, 4);
+
+        // Act
+        var result = value.ToShortenedString();
+
+        // Assert
+        _ = result
+            .Should().Be("2.3.0.4");
+    }
 }

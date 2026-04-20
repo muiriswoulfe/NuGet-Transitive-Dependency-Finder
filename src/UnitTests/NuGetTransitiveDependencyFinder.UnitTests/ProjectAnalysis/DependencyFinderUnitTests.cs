@@ -1,4 +1,4 @@
-// <copyright file="DependencyFinderTests.cs" company="Muiris Woulfe">
+// <copyright file="DependencyFinderUnitTests.cs" company="Muiris Woulfe">
 // © Muiris Woulfe
 // Licensed under the MIT License
 // </copyright>
@@ -17,7 +17,7 @@ using NuGetTransitiveDependencyFinder.UnitTests.Utilities.Globalization;
 /// <summary>
 /// Unit tests for the <see cref="DependencyFinder"/> class.
 /// </summary>
-public partial class DependencyFinderTests
+public partial class DependencyFinderUnitTests
 {
     /// <summary>
     /// The mock object for <see cref="IAssets"/>.
@@ -35,9 +35,9 @@ public partial class DependencyFinderTests
     private readonly DependencyFinder dependencyFinder;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="DependencyFinderTests"/> class.
+    /// Initializes a new instance of the <see cref="DependencyFinderUnitTests"/> class.
     /// </summary>
-    public DependencyFinderTests()
+    public DependencyFinderUnitTests()
     {
         this.assetsMock = new Mock<IAssets>();
         this.dependencyGraphMock = new Mock<IDependencyGraph>();

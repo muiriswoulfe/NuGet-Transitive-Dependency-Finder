@@ -109,6 +109,46 @@ public class TransitiveDependencyFinderUnitTests
     }
 
     /// <summary>
+    /// Tests that when <see cref="TransitiveDependencyFinder.Run(string?, bool, Regex?)"/> is called with a
+    /// valid <c>projectOrSolutionPath</c> pointing at a non-existent file, it bubbles a <see cref="Exception"/>
+    /// from the underlying finder rather than swallowing it.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithNonExistentPath_ThrowsException()
+    {
+        // Arrange
+        using var transitiveDependencyFinder = new TransitiveDependencyFinder(LoggingBuilderAction);
+        var missingPath = System.IO.Path.Combine(
+            System.IO.Path.GetTempPath(),
+            $"nuget-tdf-missing-{Guid.NewGuid()}.csproj");
+
+        // Act
+        Action action = () => transitiveDependencyFinder.Run(missingPath, false, null);
+
+        // Assert
+        _ = action
+            .Should().Throw<Exception>();
+    }
+
+    /// <summary>
+    /// Tests that the <see cref="TransitiveDependencyFinder"/> can be constructed and disposed without performing any
+    /// operation.
+    /// </summary>
+    [AllCulturesFact]
+    public void Construction_WithValidLoggingBuilderAction_Succeeds()
+    {
+        // Act
+        Action action = () =>
+        {
+            using var _ = new TransitiveDependencyFinder(LoggingBuilderAction);
+        };
+
+        // Assert
+        _ = action
+            .Should().NotThrow();
+    }
+
+    /// <summary>
     /// Creates a <see cref="WeakReference"/> to an object.
     /// </summary>
     /// <typeparam name="TReference">The type of the object to be constructed.</typeparam>

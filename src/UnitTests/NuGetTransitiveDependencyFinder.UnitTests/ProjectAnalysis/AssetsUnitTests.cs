@@ -49,4 +49,88 @@ public class AssetsUnitTests
         var lockFilePath = Path.Join(outputDirectory, "project.assets.json");
         lockFileUtilitiesWrapper.Verify(mock => mock.GetLockFile(lockFilePath), Times.Once);
     }
+
+    /// <summary>
+    /// Tests that when <see cref="Assets.Create(string, string)"/> is called with a project path whose directory
+    /// cannot be parsed, the wrapper is still invoked with a sensible output path.
+    /// </summary>
+    [AllCulturesFact]
+    public void Create_WithNestedProjectPath_ForwardsCorrectWorkingDirectory()
+    {
+        // Arrange
+        var dotNetRunner = new Mock<IDotNetRunner>();
+        var lockFileUtilitiesWrapper = new Mock<ILockFileUtilitiesWrapper>();
+        _ = lockFileUtilitiesWrapper
+            .Setup(mock => mock.GetLockFile(It.IsAny<string>()))
+            .Returns(new LockFile());
+        var assets = new Assets(dotNetRunner.Object, lockFileUtilitiesWrapper.Object);
+        var projectPath = Path.Combine("repo", "src", "Sample", "Sample.csproj");
+        var expectedWorkingDirectory = Path.GetDirectoryName(projectPath)!;
+        var outputDirectory = Path.Combine("out", "sample");
+
+        // Act
+        var result = assets.Create(projectPath, outputDirectory);
+
+        // Assert
+        _ = result
+            .Should().NotBeNull();
+        dotNetRunner.Verify(
+            mock => mock.Run(Invariant($@"restore ""{projectPath}"""), expectedWorkingDirectory),
+            Times.Once);
+        lockFileUtilitiesWrapper.Verify(
+            mock => mock.GetLockFile(Path.Combine(outputDirectory, "project.assets.json")),
+            Times.Once);
+    }
+
+    /// <summary>
+    /// Tests that when <see cref="Assets.Create(string, string)"/> is called and the underlying wrapper returns
+    /// <see langword="null"/>, the method propagates <see langword="null"/> unchanged.
+    /// </summary>
+    [AllCulturesFact]
+    public void Create_WhenWrapperReturnsNull_PropagatesNull()
+    {
+        // Arrange
+        var dotNetRunner = new Mock<IDotNetRunner>();
+        var lockFileUtilitiesWrapper = new Mock<ILockFileUtilitiesWrapper>();
+        _ = lockFileUtilitiesWrapper
+            .Setup(mock => mock.GetLockFile(It.IsAny<string>()))
+            .Returns((LockFile)null!);
+        var assets = new Assets(dotNetRunner.Object, lockFileUtilitiesWrapper.Object);
+
+        // Act
+        var result = assets.Create(
+            Path.Combine(Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture), "p.csproj"),
+            Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture));
+
+        // Assert
+        _ = result
+            .Should().BeNull();
+    }
+
+    /// <summary>
+    /// Tests that <see cref="Assets.Create(string, string)"/> calls the dotnet runner exactly once per invocation.
+    /// </summary>
+    [AllCulturesFact]
+    public void Create_WhenInvokedOnce_CallsDotNetRunnerExactlyOnce()
+    {
+        // Arrange
+        var dotNetRunner = new Mock<IDotNetRunner>();
+        var lockFileUtilitiesWrapper = new Mock<ILockFileUtilitiesWrapper>();
+        _ = lockFileUtilitiesWrapper
+            .Setup(mock => mock.GetLockFile(It.IsAny<string>()))
+            .Returns(new LockFile());
+        var assets = new Assets(dotNetRunner.Object, lockFileUtilitiesWrapper.Object);
+        var sep = Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture);
+
+        // Act
+        _ = assets.Create(Path.Combine(sep, "in.csproj"), sep);
+
+        // Assert
+        dotNetRunner.Verify(
+            mock => mock.Run(It.IsAny<string>(), It.IsAny<string>()),
+            Times.Once);
+        lockFileUtilitiesWrapper.Verify(
+            mock => mock.GetLockFile(It.IsAny<string>()),
+            Times.Once);
+    }
 }
