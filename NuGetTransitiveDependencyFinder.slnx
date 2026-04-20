@@ -3,6 +3,10 @@
     <Project Path="src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/NuGetTransitiveDependencyFinder.ConsoleApp.csproj" />
     <Project Path="src/Product/NuGetTransitiveDependencyFinder/NuGetTransitiveDependencyFinder.csproj" />
   </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/IntegrationTests/">
+    <Project Path="src/IntegrationTests/NuGetTransitiveDependencyFinder.IntegrationTests/NuGetTransitiveDependencyFinder.IntegrationTests.csproj" />
+  </Folder>
   <Folder Name="/UnitTests/">
     <Project Path="src/UnitTests/NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp/NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.csproj" />
     <Project Path="src/UnitTests/NuGetTransitiveDependencyFinder.UnitTests.Utilities/NuGetTransitiveDependencyFinder.UnitTests.Utilities.csproj" />
