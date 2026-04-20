@@ -685,6 +685,233 @@ public partial class DependencyFinderUnitTests
     }
 
     /// <summary>
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called and the matching
+    /// <see cref="ProjectFileDependencyGroup"/> is not the first group in the collection, the non-matching group is
+    /// skipped and the correct matching group is used. This exercises the <see langword="false"/> branch of the
+    /// framework-matching predicate in <c>FirstOrDefault</c>.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithNonMatchingProjectFileDependencyGroupBeforeMatchingGroup_UsesMatchingGroup()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string filePath = "C:\\project\\project.csproj";
+        const string outputPath = "C:\\project\\bin";
+        const string frameworkName = ".NETCoreApp";
+        Version frameworkVersion = new(7, 0);
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(
+                [
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = new NuGetFramework(frameworkName, frameworkVersion),
+                    },
+                ])
+            {
+                FilePath = filePath,
+                Name = "Project 1",
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath,
+                },
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+
+        var library = new LockFileTargetLibrary
+        {
+            Name = "Library",
+            Version = NuGetVersion.Parse("1.0.0"),
+        };
+        var lockFile = new LockFile
+        {
+            ProjectFileDependencyGroups =
+            [
+                // Non-matching group first — lambda must return false for this entry.
+                new ProjectFileDependencyGroup(
+                    ".NETFramework,Version=v4.7.2",
+                    ["OtherLibrary >= 1.0.0"]),
+                // Matching group second — lambda returns true, FirstOrDefault selects it.
+                new ProjectFileDependencyGroup(
+                    $"{frameworkName},Version=v{frameworkVersion}",
+                    ["Library >= 1.0.0"]),
+            ],
+            Targets =
+            [
+                new LockFileTarget
+                {
+                    TargetFramework = new NuGetFramework(frameworkName, frameworkVersion),
+                    Libraries = [library],
+                },
+            ],
+        };
+        _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
+
+        // Act
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, true, null);
+
+        // Assert
+        var dependencies = result.SortedChildren
+            .SelectMany(project => project.SortedChildren)
+            .SelectMany(framework => framework.SortedChildren)
+            .ToList();
+        _ = dependencies
+            .Should().ContainSingle(dependency => dependency.Identifier == "Library");
+    }
+
+    /// <summary>
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called with a dependency named
+    /// <c>NETStandard.Library</c>, that dependency is never marked as transitive, even if it appears as a direct
+    /// dependency pulled in by another library. This exercises the explicit NETStandard.Library exclusion in
+    /// <c>FindTransitiveDependencies</c>.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithNetStandardLibrary_DoesNotMarkItAsTransitive()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string filePath = "C:\\project\\project.csproj";
+        const string outputPath = "C:\\project\\bin";
+        const string frameworkName = ".NETCoreApp";
+        Version frameworkVersion = new(7, 0);
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(
+                [
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = new NuGetFramework(frameworkName, frameworkVersion),
+                    },
+                ])
+            {
+                FilePath = filePath,
+                Name = "Project 1",
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath,
+                },
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+
+        var direct = new LockFileTargetLibrary
+        {
+            Name = "Direct",
+            Version = NuGetVersion.Parse("1.0.0"),
+            Dependencies =
+            [
+                new PackageDependency("NETStandard.Library", new VersionRange(NuGetVersion.Parse("2.0.0"))),
+            ],
+        };
+        var netStandard = new LockFileTargetLibrary
+        {
+            Name = "NETStandard.Library",
+            Version = NuGetVersion.Parse("2.0.0"),
+        };
+        var lockFile = new LockFile
+        {
+            ProjectFileDependencyGroups =
+            [
+                new ProjectFileDependencyGroup(
+                    $"{frameworkName},Version=v{frameworkVersion}",
+                    ["Direct >= 1.0.0", "NETStandard.Library >= 2.0.0"]),
+            ],
+            Targets =
+            [
+                new LockFileTarget
+                {
+                    TargetFramework = new NuGetFramework(frameworkName, frameworkVersion),
+                    Libraries = [direct, netStandard],
+                },
+            ],
+        };
+        _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
+
+        // Act: transitive-only mode (collateAllDependencies=false). NETStandard.Library has Via populated
+        // because Direct declares it as a dependency, so without the explicit exclusion it would be flagged.
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, null);
+
+        // Assert
+        _ = result.HasChildren
+            .Should().BeFalse();
+    }
+
+    /// <summary>
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called with a dependency named
+    /// using differently cased <c>netstandard.library</c>, the case-insensitive exclusion still applies.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithNetStandardLibraryDifferentCasing_DoesNotMarkItAsTransitive()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string filePath = "C:\\project\\project.csproj";
+        const string outputPath = "C:\\project\\bin";
+        const string frameworkName = ".NETCoreApp";
+        Version frameworkVersion = new(7, 0);
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(
+                [
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = new NuGetFramework(frameworkName, frameworkVersion),
+                    },
+                ])
+            {
+                FilePath = filePath,
+                Name = "Project 1",
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath,
+                },
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+
+        var direct = new LockFileTargetLibrary
+        {
+            Name = "Direct",
+            Version = NuGetVersion.Parse("1.0.0"),
+            Dependencies =
+            [
+                new PackageDependency("netstandard.library", new VersionRange(NuGetVersion.Parse("2.0.0"))),
+            ],
+        };
+        var netStandard = new LockFileTargetLibrary
+        {
+            Name = "netstandard.library",
+            Version = NuGetVersion.Parse("2.0.0"),
+        };
+        var lockFile = new LockFile
+        {
+            ProjectFileDependencyGroups =
+            [
+                new ProjectFileDependencyGroup(
+                    $"{frameworkName},Version=v{frameworkVersion}",
+                    ["Direct >= 1.0.0", "netstandard.library >= 2.0.0"]),
+            ],
+            Targets =
+            [
+                new LockFileTarget
+                {
+                    TargetFramework = new NuGetFramework(frameworkName, frameworkVersion),
+                    Libraries = [direct, netStandard],
+                },
+            ],
+        };
+        _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
+
+        // Act
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, null);
+
+        // Assert
+        _ = result.HasChildren
+            .Should().BeFalse();
+    }
+
+    /// <summary>
     /// Gets a regular expression matching dependencies named <c>Matching</c>, used by the unit tests.
     /// </summary>
     [GeneratedRegex("^Matching$")]
