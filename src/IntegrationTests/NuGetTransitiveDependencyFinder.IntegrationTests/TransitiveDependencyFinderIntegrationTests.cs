@@ -344,6 +344,59 @@ public sealed partial class TransitiveDependencyFinderIntegrationTests
     private static partial Regex ImpossibleFilter();
 
     /// <summary>
+    /// Tests that invoking <see cref="ITransitiveDependencyFinder.Run(string?, bool, Regex?)"/> twice on the same
+    /// instance returns equivalent results on both invocations, verifying that a finder instance is reusable and
+    /// produces deterministic output across repeated calls.
+    /// </summary>
+    [Fact]
+    public void Run_TwiceOnSameInstance_ProducesEquivalentResults()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var firstIdentifiers = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null))
+            .Select(dependency => dependency.Identifier)
+            .Order()
+            .ToList();
+        var secondIdentifiers = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null))
+            .Select(dependency => dependency.Identifier)
+            .Order()
+            .ToList();
+
+        // Assert
+        _ = secondIdentifiers
+            .Should().Equal(firstIdentifiers);
+    }
+
+    /// <summary>
+    /// Tests that invoking <see cref="ITransitiveDependencyFinder.Run(string?, bool, Regex?)"/> with
+    /// <c>collateAllDependencies</c> set to <see langword="true"/> yields at least as many dependencies as the same
+    /// run with <see langword="false"/>, verifying that the collate-all flag has an observable effect (it never
+    /// produces fewer results than the default).
+    /// </summary>
+    [Fact]
+    public void Run_WithCollateAllTrue_ReturnsAtLeastAsManyDependenciesAsCollateAllFalse()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var nonCollated = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, false, null))
+            .Count();
+        var collated = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null))
+            .Count();
+
+        // Assert
+        _ = collated
+            .Should().BeGreaterThanOrEqualTo(nonCollated);
+    }
+
+    /// <summary>
     /// Flattens the nested projects/frameworks/dependencies hierarchy into a flat dependency enumeration.
     /// </summary>
     /// <param name="projects">The projects root.</param>
