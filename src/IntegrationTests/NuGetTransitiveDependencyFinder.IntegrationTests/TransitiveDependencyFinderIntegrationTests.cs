@@ -213,6 +213,130 @@ public sealed partial class TransitiveDependencyFinderIntegrationTests
     }
 
     /// <summary>
+    /// Tests that <see cref="ITransitiveDependencyFinder.Run(string?, bool, Regex?)"/> called after
+    /// <see cref="IDisposable.Dispose"/> throws an <see cref="ObjectDisposedException"/> because the underlying
+    /// <c>IServiceProvider</c> has been torn down.
+    /// </summary>
+    [Fact]
+    public void Run_AfterDispose_ThrowsObjectDisposedException()
+    {
+        // Arrange
+        var finder = CreateFinder();
+        finder.Dispose();
+
+        // Act
+        Action action = () => finder.Run(TestCollateralPaths.NoTransitiveDependenciesProject, false, null);
+
+        // Assert
+        _ = action
+            .Should().Throw<ObjectDisposedException>();
+    }
+
+    /// <summary>
+    /// Tests that <see cref="IDisposable.Dispose"/> can be called twice on the same finder without throwing,
+    /// verifying idempotent disposal.
+    /// </summary>
+    [Fact]
+    public void Dispose_CalledTwice_DoesNotThrow()
+    {
+        // Arrange
+        var finder = CreateFinder();
+
+        // Act
+        finder.Dispose();
+        Action action = finder.Dispose;
+
+        // Assert
+        _ = action
+            .Should().NotThrow();
+    }
+
+    /// <summary>
+    /// Tests that running the finder against the TestCollateral solution file (<c>.sln</c>) — which contains multiple
+    /// projects — returns a result that includes a project entry for each project in the solution, exercising the
+    /// multi-project code path that per-project runs cannot.
+    /// </summary>
+    [Fact]
+    public void Run_AgainstSolution_ReturnsMultipleProjects()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var result = finder.Run(TestCollateralPaths.TestCollateralSolution, true, null);
+
+        // Assert
+        _ = result
+            .Should().NotBeNull();
+        _ = result.SortedChildren
+            .Should().HaveCountGreaterThanOrEqualTo(2, "the TestCollateral solution references both the " +
+                "NoTransitiveDependencies and TransitiveDependencies projects");
+    }
+
+    /// <summary>
+    /// Tests that running the finder with a regex filter that matches a real dependency actually surfaces that
+    /// dependency when <c>collateAllDependencies</c> is <see langword="true"/>, verifying that the filter is applied
+    /// in the positive case (all existing filter tests exercise only the empty-result case).
+    /// </summary>
+    [Fact]
+    public void Run_WithFilterMatchingRealDependency_ReturnsOnlyMatchingDependencies()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+        var allDependencyIdentifiers = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null))
+            .Select(dependency => dependency.Identifier)
+            .Distinct()
+            .ToList();
+        allDependencyIdentifiers
+            .Should().NotBeEmpty("this test requires at least one real dependency to match against");
+        var target = allDependencyIdentifiers[0];
+        var filter = new Regex($"^{Regex.Escape(target)}$");
+
+        // Act
+        var filtered = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, filter))
+            .ToList();
+
+        // Assert
+        _ = filtered
+            .Should().NotBeEmpty();
+        _ = filtered
+            .Should().OnlyContain(dependency => dependency.Identifier == target);
+    }
+
+    /// <summary>
+    /// Tests that two <see cref="ITransitiveDependencyFinder"/> instances run concurrently on different threads
+    /// against the same project both complete successfully and produce identical results, verifying that the library
+    /// is safe to use in multi-finder concurrent scenarios (each finder has its own service provider).
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task Run_ConcurrentlyOnSeparateInstances_ProducesEquivalentResultsAsync()
+    {
+        // Arrange
+        var tasks = Enumerable.Range(0, 4).Select(_ => System.Threading.Tasks.Task.Run(() =>
+        {
+            using var finder = CreateFinder();
+            return EnumerateDependencies(
+                finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null))
+                .Select(dependency => dependency.Identifier)
+                .Order()
+                .ToList();
+        })).ToArray();
+
+        // Act
+        var results = await System.Threading.Tasks.Task.WhenAll(tasks);
+
+        // Assert
+        var baseline = results[0];
+        foreach (var result in results)
+        {
+            _ = result
+                .Should().Equal(baseline);
+        }
+    }
+
+    /// <summary>
     /// Returns a regex that cannot match any realistic dependency identifier.
     /// </summary>
     /// <returns>The regex.</returns>

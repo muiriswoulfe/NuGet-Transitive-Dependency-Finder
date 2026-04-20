@@ -150,4 +150,88 @@ public sealed class ConsoleAppSystemTests
         _ = result.ExitCode
             .Should().Be(0);
     }
+
+    /// <summary>
+    /// Tests that invoking the ConsoleApp against the TestCollateral <c>.sln</c> solution file exits successfully,
+    /// exercising the multi-project solution-level path that individual project runs do not cover.
+    /// </summary>
+    [Fact]
+    public void Run_AgainstSolution_ExitsSuccessfully()
+    {
+        // Act
+        var result = ConsoleAppRunner.Run(
+            $"--projectOrSolution \"{SystemTestPaths.TestCollateralSolution}\"");
+
+        // Assert
+        _ = result.ExitCode
+            .Should().Be(0);
+    }
+
+    /// <summary>
+    /// Tests that invoking the ConsoleApp against the solution file writes output that mentions both project names,
+    /// verifying the output formatting processes every project in the solution.
+    /// </summary>
+    [Fact]
+    public void Run_AgainstSolution_WritesBothProjectNamesToOutput()
+    {
+        // Act
+        var result = ConsoleAppRunner.Run(
+            $"--projectOrSolution \"{SystemTestPaths.TestCollateralSolution}\" --all");
+        var combined = result.StandardOutput + result.StandardError;
+
+        // Assert
+        _ = combined
+            .Should().Contain("NoTransitiveDependencies");
+        _ = combined
+            .Should().Contain("TransitiveDependencies");
+    }
+
+    /// <summary>
+    /// Tests that invoking the ConsoleApp with <c>--all</c> against a project with transitive dependencies emits
+    /// dependency output, verifying that the collate-all code path produces visible console output (not just a
+    /// success exit code).
+    /// </summary>
+    [Fact]
+    public void Run_WithAllFlag_WritesDependencyOutput()
+    {
+        // Act
+        var result = ConsoleAppRunner.Run(
+            $"--projectOrSolution \"{SystemTestPaths.TransitiveDependenciesProject}\" --all");
+
+        // Assert: --all emits at least one line of output beyond any banner.
+        _ = result.StandardOutput
+            .Should().NotBeNullOrWhiteSpace();
+    }
+
+    /// <summary>
+    /// Tests that invoking the ConsoleApp with the combined <c>--all</c> and <c>--filter</c> flags exits successfully,
+    /// exercising the interaction between the two options (collate-all + filter pipeline).
+    /// </summary>
+    [Fact]
+    public void Run_WithAllAndFilterFlags_ExitsSuccessfully()
+    {
+        // Act
+        var result = ConsoleAppRunner.Run(
+            $"--projectOrSolution \"{SystemTestPaths.TransitiveDependenciesProject}\" --all --filter \".*\"");
+
+        // Assert
+        _ = result.ExitCode
+            .Should().Be(0);
+    }
+
+    /// <summary>
+    /// Tests that invoking the ConsoleApp with an unknown flag yields a non-zero exit code, verifying the argument
+    /// parser rejects unrecognised options rather than silently ignoring them.
+    /// </summary>
+    [Fact]
+    public void Run_WithUnknownFlag_ExitsNonZero()
+    {
+        // Act
+        var result = ConsoleAppRunner.Run(
+            $"--projectOrSolution \"{SystemTestPaths.NoTransitiveDependenciesProject}\" --not-a-real-flag");
+
+        // Assert
+        _ = result.ExitCode
+            .Should().NotBe(0);
+    }
 }

@@ -6,6 +6,7 @@
     <ConsoleAppOutputDirectory>$(MSBuildThisFileDirectory)..\..\Product\NuGetTransitiveDependencyFinder.ConsoleApp\bin\$(Configuration)\net10.0\</ConsoleAppOutputDirectory>
     <TestCollateralNoTransitiveDependenciesProject>$(MSBuildThisFileDirectory)..\..\TestCollateral\NoTransitiveDependencies\NoTransitiveDependencies.csproj</TestCollateralNoTransitiveDependenciesProject>
     <TestCollateralTransitiveDependenciesProject>$(MSBuildThisFileDirectory)..\..\TestCollateral\TransitiveDependencies\TransitiveDependencies.csproj</TestCollateralTransitiveDependenciesProject>
+    <TestCollateralSolution>$(MSBuildThisFileDirectory)..\..\TestCollateral\TestCollateral.sln</TestCollateralSolution>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,6 +32,7 @@ internal static partial class SystemTestPaths
     public const string ConsoleAppOutputDirectory = @"$(ConsoleAppOutputDirectory)"%3B
     public const string NoTransitiveDependenciesProject = @"$(TestCollateralNoTransitiveDependenciesProject)"%3B
     public const string TransitiveDependenciesProject = @"$(TestCollateralTransitiveDependenciesProject)"%3B
+    public const string TestCollateralSolution = @"$(TestCollateralSolution)"%3B
 }
 </_SystemTestPathsContent>
     </PropertyGroup>
