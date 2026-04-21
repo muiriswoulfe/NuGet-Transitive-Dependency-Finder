@@ -4,7 +4,6 @@
         "test-projects": [
             "src/UnitTests/NuGetTransitiveDependencyFinder.UnitTests/NuGetTransitiveDependencyFinder.UnitTests.csproj"
         ],
-        "solution": "NuGetTransitiveDependencyFinder.sln",
         "reporters": [
             "progress",
             "html",
@@ -21,6 +20,7 @@
             "src/Product/NuGetTransitiveDependencyFinder/**/*.cs",
             "!src/Product/NuGetTransitiveDependencyFinder/obj/**/*.cs",
             "!src/Product/NuGetTransitiveDependencyFinder/bin/**/*.cs"
-        ]
+        ],
+        "solution": "NuGetTransitiveDependencyFinder.slnx"
     }
 }
