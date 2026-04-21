@@ -401,3 +401,7 @@ FodyWeavers.xsd
 *.lscache
 coverage.opencover.xml
 lcov.info
+
+# Stryker.NET
+StrykerOutput/
+stryker.log
