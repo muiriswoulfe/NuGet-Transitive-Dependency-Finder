@@ -220,6 +220,38 @@ public sealed class ConsoleAppSystemTests
     }
 
     /// <summary>
+    /// Tests that invoking the ConsoleApp with the short-form <c>-f</c> filter flag exits successfully, exercising
+    /// the short option alias to complement the existing long-form <c>--filter</c> test.
+    /// </summary>
+    [Fact]
+    public void Run_WithShortFilterFlag_ExitsSuccessfully()
+    {
+        // Act
+        var result = ConsoleAppRunner.Run(
+            $"-p \"{SystemTestPaths.TransitiveDependenciesProject}\" -f \".*\"");
+
+        // Assert
+        _ = result.ExitCode
+            .Should().Be(0);
+    }
+
+    /// <summary>
+    /// Tests that invoking the ConsoleApp with a filter that matches no real dependency identifier still exits
+    /// successfully, since an empty match is a valid outcome rather than an error condition.
+    /// </summary>
+    [Fact]
+    public void Run_WithNonMatchingFilter_ExitsSuccessfully()
+    {
+        // Act
+        var result = ConsoleAppRunner.Run(
+            $"--projectOrSolution \"{SystemTestPaths.TransitiveDependenciesProject}\" --filter \"^ZzNoSuchPackage$\"");
+
+        // Assert
+        _ = result.ExitCode
+            .Should().Be(0);
+    }
+
+    /// <summary>
     /// Tests that invoking the ConsoleApp with an unknown flag yields a non-zero exit code, verifying the argument
     /// parser rejects unrecognised options rather than silently ignoring them.
     /// </summary>
