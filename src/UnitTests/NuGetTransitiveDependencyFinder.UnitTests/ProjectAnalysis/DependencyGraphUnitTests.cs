@@ -410,6 +410,66 @@ public partial class DependencyGraphUnitTests
     }
 
     /// <summary>
+    /// Tests that when <see cref="DependencyGraph"/> instances are constructed, they each use a distinct temporary
+    /// file path. This guards against regressions where the temporary file path is made static or otherwise shared,
+    /// which would cause concurrent or sequential graph instances to corrupt each other's output.
+    /// </summary>
+    [AllCulturesFact]
+    public void Create_AcrossInstances_UsesDistinctTemporaryFilePaths()
+    {
+        // Arrange
+        static DependencyGraph CreateInstance(out System.Collections.Generic.List<string> capturedArgumentsBuffer)
+        {
+            var capturedArguments = new System.Collections.Generic.List<string>();
+            capturedArgumentsBuffer = capturedArguments;
+            var dotNetRunnerMock = new Mock<IDotNetRunner>();
+            var processWrapperMock = new Mock<IProcessWrapper>();
+            _ = dotNetRunnerMock
+                .Setup(mock => mock.Run(It.IsAny<string>(), It.IsAny<string>()))
+                .Callback<string, string>((arguments, _) =>
+                {
+                    capturedArguments.Add(arguments);
+                    WriteMinimalDependencyGraph(arguments);
+                });
+            return new DependencyGraph(dotNetRunnerMock.Object, processWrapperMock.Object);
+        }
+
+        using var first = CreateInstance(out var firstArguments);
+        using var second = CreateInstance(out var secondArguments);
+
+        // Act
+        _ = first.Create("/some/project.csproj");
+        _ = second.Create("/some/project.csproj");
+
+        // Assert
+        var firstPath = ExtractRestoreGraphOutputPath(firstArguments[0]);
+        var secondPath = ExtractRestoreGraphOutputPath(secondArguments[0]);
+        _ = firstPath
+            .Should().NotBeNullOrWhiteSpace();
+        _ = secondPath
+            .Should().NotBe(firstPath);
+    }
+
+    /// <summary>
+    /// Extracts the value of <c>/property:RestoreGraphOutputPath=</c> from a captured build-command argument string.
+    /// </summary>
+    /// <param name="arguments">The captured build-command argument string.</param>
+    /// <returns>The restore-graph output path.</returns>
+    private static string ExtractRestoreGraphOutputPath(string arguments)
+    {
+        const string marker = "/property:RestoreGraphOutputPath=\"";
+        var index = arguments.IndexOf(marker, StringComparison.Ordinal);
+        if (index < 0)
+        {
+            return string.Empty;
+        }
+
+        var start = index + marker.Length;
+        var end = arguments.IndexOf('"', start);
+        return end < 0 ? string.Empty : arguments[start..end];
+    }
+
+    /// <summary>
     /// Tests that <see cref="DependencyGraph"/> implements <see cref="IDependencyGraph"/> and
     /// <see cref="IDisposable"/>.
     /// </summary>
