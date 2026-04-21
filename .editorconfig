@@ -187,6 +187,10 @@ dotnet_diagnostic.IDE0058.severity = suggestion
 csharp_style_unused_value_assignment_preference = discard_variable:suggestion
 dotnet_diagnostic.IDE0059.severity = suggestion
 
+# IDE0370: Suppression is unnecessary — conflicts with CS8618 for `default!` initializers on
+# non-nullable reference-typed auto-properties with a parameterless constructor.
+dotnet_diagnostic.IDE0370.severity = none
+
 ##########################################
 # Formatting Rules
 # https://docs.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/formatting-rules

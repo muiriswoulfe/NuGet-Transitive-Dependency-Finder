@@ -399,13 +399,13 @@ public partial class DependencyGraphUnitTests
                 capturedFilePath = WriteMinimalDependencyGraph(arguments));
         var dependencyGraph = new DependencyGraph(dotNetRunnerMock.Object, processWrapperMock.Object);
         _ = dependencyGraph.Create("/some/project.csproj");
-        File.Exists(capturedFilePath!).Should().BeTrue();
+        File.Exists(capturedFilePath).Should().BeTrue();
 
         // Act
         dependencyGraph.Dispose();
 
         // Assert
-        _ = File.Exists(capturedFilePath!)
+        _ = File.Exists(capturedFilePath)
             .Should().BeFalse();
     }
 

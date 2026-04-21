@@ -48,7 +48,7 @@ public sealed class TestCollateralFixture : IDisposable
     {
         var startInfo = new ProcessStartInfo("dotnet", $"restore \"{projectPath}\"")
         {
-            WorkingDirectory = Path.GetDirectoryName(projectPath)!,
+            WorkingDirectory = Path.GetDirectoryName(projectPath),
             RedirectStandardOutput = true,
             RedirectStandardError = true,
         };
