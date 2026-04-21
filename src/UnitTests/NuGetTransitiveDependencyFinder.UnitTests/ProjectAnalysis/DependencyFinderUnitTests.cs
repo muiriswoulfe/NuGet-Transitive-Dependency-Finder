@@ -1197,6 +1197,95 @@ public partial class DependencyFinderUnitTests
     }
 
     /// <summary>
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called against a project whose
+    /// assets file identifies its project-dependency group using the framework's
+    /// <c>TargetAlias</c> (short form such as <c>net7.0</c>) rather than the full <c>DotNetFrameworkName</c>
+    /// (such as <c>.NETCoreApp,Version=v7.0</c>), the dependency group is still resolved. This pins the left-hand
+    /// operand of the disjunction that matches project dependency groups in <c>DependencyFinder.Run</c>: all other
+    /// unit tests use the <c>DotNetFrameworkName</c> format, so the <c>TargetAlias</c> branch would otherwise be
+    /// unreached and silently removing it would not be caught.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithProjectDependencyGroupKeyedByTargetAlias_ResolvesDependencies()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string filePath = "C:\\project\\project.csproj";
+        const string outputPath = "C:\\project\\bin";
+        const string frameworkName = ".NETCoreApp";
+        const string targetAlias = "net7.0";
+        Version frameworkVersion = new(7, 0);
+        var framework = new NuGetFramework(frameworkName, frameworkVersion);
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(
+                [
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = framework,
+                        TargetAlias = targetAlias,
+                    },
+                ])
+            {
+                FilePath = filePath,
+                Name = "Project 1",
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath,
+                },
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+
+        var direct = new LockFileTargetLibrary
+        {
+            Name = "Direct",
+            Version = NuGetVersion.Parse("1.0.0"),
+            Dependencies =
+            [
+                new PackageDependency("Transitive", new VersionRange(NuGetVersion.Parse("2.0.0"))),
+            ],
+        };
+        var transitive = new LockFileTargetLibrary
+        {
+            Name = "Transitive",
+            Version = NuGetVersion.Parse("2.0.0"),
+        };
+        var lockFile = new LockFile
+        {
+            ProjectFileDependencyGroups =
+            [
+                // Keyed by the short TargetAlias (e.g. "net7.0") rather than the full DotNetFrameworkName.
+                new ProjectFileDependencyGroup(
+                    targetAlias,
+                    ["Direct >= 1.0.0", "Transitive >= 2.0.0"]),
+            ],
+            Targets =
+            [
+                new LockFileTarget
+                {
+                    TargetFramework = framework,
+                    Libraries = [direct, transitive],
+                },
+            ],
+        };
+        _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
+
+        // Act: transitive-only mode so a successful match is demonstrated by the transitive surfacing.
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, null);
+
+        // Assert: the project dependency group was matched via TargetAlias, so dependencies resolve as normal.
+        var dependencies = result.SortedChildren
+            .SelectMany(project => project.SortedChildren)
+            .SelectMany(frameworkResult => frameworkResult.SortedChildren)
+            .Select(dependency => dependency.Identifier)
+            .ToList();
+        _ = dependencies
+            .Should().ContainSingle()
+            .Which.Should().Be("Transitive");
+    }
+
+    /// <summary>
     /// Gets a regular expression matching dependencies named <c>Matching</c>, used by the unit tests.
     /// </summary>
     [GeneratedRegex("^Matching$")]
