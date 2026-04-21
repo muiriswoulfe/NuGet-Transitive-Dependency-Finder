@@ -133,4 +133,34 @@ public class AssetsUnitTests
             mock => mock.GetLockFile(It.IsAny<string>()),
             Times.Once);
     }
+
+    /// <summary>
+    /// Tests that <see cref="Assets.Create(string, string)"/> invokes the <see cref="IDotNetRunner"/> before the
+    /// <see cref="ILockFileUtilitiesWrapper"/>: the NuGet restore must happen before the resulting
+    /// <c>project.assets.json</c> is read, otherwise the lock file would be stale or missing.
+    /// </summary>
+    [AllCulturesFact]
+    public void Create_InvokesDotNetRunnerBeforeReadingLockFile()
+    {
+        // Arrange
+        var invocationOrder = new System.Collections.Generic.List<string>();
+        var dotNetRunner = new Mock<IDotNetRunner>();
+        var lockFileUtilitiesWrapper = new Mock<ILockFileUtilitiesWrapper>();
+        _ = dotNetRunner
+            .Setup(mock => mock.Run(It.IsAny<string>(), It.IsAny<string>()))
+            .Callback(() => invocationOrder.Add("runner"));
+        _ = lockFileUtilitiesWrapper
+            .Setup(mock => mock.GetLockFile(It.IsAny<string>()))
+            .Callback(() => invocationOrder.Add("wrapper"))
+            .Returns(new LockFile());
+        var assets = new Assets(dotNetRunner.Object, lockFileUtilitiesWrapper.Object);
+        var sep = Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture);
+
+        // Act
+        _ = assets.Create(Path.Combine(sep, "in.csproj"), sep);
+
+        // Assert
+        _ = invocationOrder
+            .Should().Equal("runner", "wrapper");
+    }
 }
