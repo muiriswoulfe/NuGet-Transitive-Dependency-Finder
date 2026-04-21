@@ -534,6 +534,31 @@ public class FrameworkUnitTests
     }
 
     /// <summary>
+    /// Tests that <see cref="Framework.IsAddValid(Dependency?)"/> accepts dependencies regardless of their
+    /// <see cref="Dependency.IsTransitive"/> flag. This guards against regressions where the framework might begin
+    /// filtering direct or transitive dependencies at the add stage instead of leaving that responsibility to callers.
+    /// </summary>
+    /// <param name="isTransitive">The value of <see cref="Dependency.IsTransitive"/> on the candidate dependency.</param>
+    [AllCulturesTheory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void IsAddValid_RegardlessOfIsTransitive_ReturnsTrue(bool isTransitive)
+    {
+        // Arrange
+        var dependency = new Dependency(DefaultIdentifierFramework, new("1.0.0"))
+        {
+            IsTransitive = isTransitive,
+        };
+
+        // Act
+        var result = DefaultValue.Framework.IsAddValid(dependency);
+
+        // Assert
+        _ = result
+            .Should().BeTrue();
+    }
+
+    /// <summary>
     /// Tests that when <see cref="Base{Dependency}.HasChildren"/> is called for a <see cref="Framework"/> object not
     /// comprising children, it returns <see langword="false"/>.
     /// </summary>
