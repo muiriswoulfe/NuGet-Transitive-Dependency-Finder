@@ -337,6 +337,30 @@ public sealed partial class TransitiveDependencyFinderIntegrationTests
     }
 
     /// <summary>
+    /// Tests that invoking <see cref="ITransitiveDependencyFinder.Run(string?, bool, Regex?)"/> with
+    /// <c>collateAllDependencies</c> set to <see langword="true"/> exposes the full dependency set,
+    /// which must include at least one direct (non-transitive) dependency in addition to any transitive
+    /// dependencies. This guards the <see cref="Dependency.IsTransitive"/> flag being correctly
+    /// surfaced for direct package references.
+    /// </summary>
+    [Fact]
+    public void Run_WithCollateAllTrue_IncludesDirectDependencies()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var dependencies = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null))
+            .ToList();
+
+        // Assert
+        _ = dependencies
+            .Should().NotBeEmpty()
+            .And.Contain(dependency => !dependency.IsTransitive);
+    }
+
+    /// <summary>
     /// Returns a regex that cannot match any realistic dependency identifier.
     /// </summary>
     /// <returns>The regex.</returns>
