@@ -300,4 +300,32 @@ public class ProjectsUnitTests
             .Should().BeInAscendingOrder()
             .And.Equal(SortedChildrenTestData);
     }
+
+    /// <summary>
+    /// Tests that when <see cref="Base{Project}.SortedChildren"/> is called for a <see cref="Projects"/> object
+    /// comprising children with identifiers that differ in casing, it returns the children sorted case-insensitively.
+    /// This pins down the <c>StringComparer.OrdinalIgnoreCase</c> semantics of the comparison function in
+    /// <see cref="IdentifiedBase{TIdentifier, TChild}"/>: ordinal comparison would sort <c>"Banana"</c> before
+    /// <c>"apple"</c> because uppercase letters have lower code points than lowercase letters, whereas
+    /// case-insensitive comparison correctly yields <c>"apple"</c> first.
+    /// </summary>
+    [AllCulturesFact]
+    public void SortedChildren_ComprisingChildrenWithMixedCaseIdentifiers_ReturnsCaseInsensitivelySortedChildren()
+    {
+        // Arrange
+        var lowerApple = new Project("apple", 1);
+        lowerApple.Add(DefaultFramework);
+        var upperBanana = new Project("Banana", 1);
+        upperBanana.Add(DefaultFramework);
+        var projects = new Projects(2);
+        projects.Add(upperBanana);
+        projects.Add(lowerApple);
+
+        // Act
+        var result = projects.SortedChildren;
+
+        // Assert
+        _ = result
+            .Should().Equal(lowerApple, upperBanana);
+    }
 }
