@@ -912,6 +912,118 @@ public partial class DependencyFinderUnitTests
     }
 
     /// <summary>
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, System.Text.RegularExpressions.Regex?)"/>
+    /// is called against a project targeting multiple frameworks, dependency state from an earlier framework does
+    /// not leak into a later framework's result. This pins down the <c>this.dependencies.Clear()</c> invariant at
+    /// the start of each framework iteration: removing that call would cause the transitive dependency recorded
+    /// for the first framework to be surfaced against the second framework even though the second framework does
+    /// not reference it.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithMultipleFrameworks_DoesNotLeakDependenciesBetweenFrameworks()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string filePath = "C:\\project\\project.csproj";
+        const string outputPath = "C:\\project\\bin";
+        const string frameworkName = ".NETCoreApp";
+        Version firstFrameworkVersion = new(7, 0);
+        Version secondFrameworkVersion = new(8, 0);
+        var firstFramework = new NuGetFramework(frameworkName, firstFrameworkVersion);
+        var secondFramework = new NuGetFramework(frameworkName, secondFrameworkVersion);
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(
+                [
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = firstFramework,
+                    },
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = secondFramework,
+                    },
+                ])
+            {
+                FilePath = filePath,
+                Name = "Project 1",
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath,
+                },
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+
+        var firstDirect = new LockFileTargetLibrary
+        {
+            Name = "FirstDirect",
+            Version = NuGetVersion.Parse("1.0.0"),
+            Dependencies =
+            [
+                new PackageDependency("FirstTransitive", new VersionRange(NuGetVersion.Parse("1.0.0"))),
+            ],
+        };
+        var firstTransitive = new LockFileTargetLibrary
+        {
+            Name = "FirstTransitive",
+            Version = NuGetVersion.Parse("1.0.0"),
+        };
+        var secondDirect = new LockFileTargetLibrary
+        {
+            Name = "SecondDirect",
+            Version = NuGetVersion.Parse("1.0.0"),
+        };
+        var lockFile = new LockFile
+        {
+            ProjectFileDependencyGroups =
+            [
+                new ProjectFileDependencyGroup(
+                    $"{frameworkName},Version=v{firstFrameworkVersion}",
+                    ["FirstDirect >= 1.0.0"]),
+                new ProjectFileDependencyGroup(
+                    $"{frameworkName},Version=v{secondFrameworkVersion}",
+                    ["SecondDirect >= 1.0.0"]),
+            ],
+            Targets =
+            [
+                new LockFileTarget
+                {
+                    TargetFramework = firstFramework,
+                    Libraries = [firstDirect, firstTransitive],
+                },
+                new LockFileTarget
+                {
+                    TargetFramework = secondFramework,
+                    Libraries = [secondDirect],
+                },
+            ],
+        };
+        _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
+
+        // Act
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, true, null);
+
+        // Assert
+        var firstFrameworkDependencies = result.SortedChildren
+            .SelectMany(project => project.SortedChildren)
+            .Where(framework => framework.Identifier == firstFramework)
+            .SelectMany(framework => framework.SortedChildren)
+            .Select(dependency => dependency.Identifier)
+            .ToList();
+        var secondFrameworkDependencies = result.SortedChildren
+            .SelectMany(project => project.SortedChildren)
+            .Where(framework => framework.Identifier == secondFramework)
+            .SelectMany(framework => framework.SortedChildren)
+            .Select(dependency => dependency.Identifier)
+            .ToList();
+        _ = firstFrameworkDependencies
+            .Should().BeEquivalentTo("FirstDirect", "FirstTransitive");
+        _ = secondFrameworkDependencies
+            .Should().BeEquivalentTo("SecondDirect");
+    }
+
+    /// <summary>
     /// Gets a regular expression matching dependencies named <c>Matching</c>, used by the unit tests.
     /// </summary>
     [GeneratedRegex("^Matching$")]
