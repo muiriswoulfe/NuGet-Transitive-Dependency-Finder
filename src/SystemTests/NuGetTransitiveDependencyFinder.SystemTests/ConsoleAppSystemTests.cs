@@ -31,17 +31,39 @@ public sealed class ConsoleAppSystemTests
 
     /// <summary>
     /// Tests that invoking the ConsoleApp with <c>--help</c> exits with code <c>0</c> or <c>1</c> (CommandLineParser
-    /// behaviour) and writes output describing the tool.
+    /// behaviour) and writes output describing every documented option, serving as a regression guard that all
+    /// options remain exposed in the help screen.
     /// </summary>
     [Fact]
     public void Run_WithHelpOption_WritesHelpOutput()
     {
         // Act
         var result = ConsoleAppRunner.Run("--help");
+        var combined = result.StandardOutput + result.StandardError;
 
         // Assert
-        _ = (result.StandardOutput + result.StandardError)
+        _ = combined
             .Should().Contain("projectOrSolution");
+        _ = combined
+            .Should().Contain("all");
+        _ = combined
+            .Should().Contain("filter");
+    }
+
+    /// <summary>
+    /// Tests that invoking the ConsoleApp with <c>--version</c> writes a non-empty version string to the standard
+    /// streams, verifying that the tool identifies itself when asked.
+    /// </summary>
+    [Fact]
+    public void Run_WithVersionOption_WritesVersionOutput()
+    {
+        // Act
+        var result = ConsoleAppRunner.Run("--version");
+        var combined = result.StandardOutput + result.StandardError;
+
+        // Assert
+        _ = combined
+            .Should().NotBeNullOrWhiteSpace();
     }
 
     /// <summary>
