@@ -273,6 +273,30 @@ public class DependencyUnitTests
     }
 
     /// <summary>
+    /// Tests that <see cref="Dependency.IsTransitive"/> is not part of the equality or hash-code contract: two
+    /// otherwise-identical dependencies that differ only in their transitive flag must compare equal and produce the
+    /// same hash code. This is required for <see cref="Dependency.Via"/>, whose <see cref="HashSet{T}"/>-based
+    /// deduplication relies on the flag being excluded from identity.
+    /// </summary>
+    [AllCulturesFact]
+    public void IsTransitive_DoesNotAffectEqualityOrHashCode()
+    {
+        // Arrange
+        var transitive = new Dependency(DefaultIdentifier, DefaultVersion) { IsTransitive = true };
+        var direct = new Dependency(DefaultIdentifier, DefaultVersion) { IsTransitive = false };
+
+        // Assert
+        _ = transitive.Equals(direct)
+            .Should().BeTrue();
+        _ = (transitive == direct)
+            .Should().BeTrue();
+        _ = transitive.CompareTo(direct)
+            .Should().Be(0);
+        _ = transitive.GetHashCode()
+            .Should().Be(direct.GetHashCode());
+    }
+
+    /// <summary>
     /// Tests that when <see cref="Dependency.operator ==(Dependency?, Dependency?)"/> is called with different values,
     /// it returns the expected value in each case.
     /// </summary>
