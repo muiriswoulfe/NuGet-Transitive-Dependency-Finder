@@ -292,6 +292,57 @@ public partial class DependencyGraphUnitTests
     }
 
     /// <summary>
+    /// Tests that the MSBuild availability check is reset between sequential <see cref="DependencyGraph.Create(string)"/>
+    /// invocations: if the first probe succeeds (MSBuild available) and the second emits no output (MSBuild
+    /// unavailable), the second call must invoke <c>dotnet build</c>. This guards against regressions where the
+    /// internal probe-output buffer is not reset between calls, causing the second probe to incorrectly report MSBuild
+    /// as available based on stale state.
+    /// </summary>
+    [AllCulturesFact]
+    public void Create_SecondCallAfterMSBuildWasAvailable_ResetsProbeStateWhenNoLongerAvailable()
+    {
+        // Arrange
+        var dotNetRunnerMock = new Mock<IDotNetRunner>();
+        var processWrapperMock = new Mock<IProcessWrapper>();
+        var probeInvocationCount = 0;
+        _ = processWrapperMock
+            .Setup(mock => mock.Start(
+                It.IsAny<ProcessStartInfo>(),
+                It.IsAny<DataReceivedEventHandler>(),
+                It.IsAny<DataReceivedEventHandler>()))
+            .Callback<ProcessStartInfo, DataReceivedEventHandler, DataReceivedEventHandler>(
+                (_, onOutput, _) =>
+                {
+                    probeInvocationCount++;
+                    if (probeInvocationCount == 1)
+                    {
+                        onOutput(this, CreateDataReceivedEventArguments("/usr/bin/msbuild"));
+                    }
+                });
+        var capturedArguments = new System.Collections.Generic.List<string>();
+        _ = dotNetRunnerMock
+            .Setup(mock => mock.Run(It.IsAny<string>(), It.IsAny<string>()))
+            .Callback<string, string>((arguments, _) =>
+            {
+                capturedArguments.Add(arguments);
+                WriteMinimalDependencyGraph(arguments);
+            });
+        using var dependencyGraph = new DependencyGraph(dotNetRunnerMock.Object, processWrapperMock.Object);
+
+        // Act
+        _ = dependencyGraph.Create("/some/project.csproj");
+        _ = dependencyGraph.Create("/some/project.csproj");
+
+        // Assert
+        _ = capturedArguments
+            .Should().HaveCount(2);
+        _ = capturedArguments[0]
+            .Should().StartWith("msbuild ");
+        _ = capturedArguments[1]
+            .Should().StartWith("dotnet build ");
+    }
+
+    /// <summary>
     /// Tests that when <see cref="DependencyGraph.Dispose()"/> is called before <see cref="DependencyGraph.Create"/>,
     /// it does not throw because the temporary file has not yet been created.
     /// </summary>
