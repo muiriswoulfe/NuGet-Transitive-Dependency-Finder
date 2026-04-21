@@ -2,6 +2,10 @@
 
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\Product\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj" />
     <ProjectReference Include="..\NuGetTransitiveDependencyFinder.UnitTests.Utilities\NuGetTransitiveDependencyFinder.UnitTests.Utilities.csproj" />
