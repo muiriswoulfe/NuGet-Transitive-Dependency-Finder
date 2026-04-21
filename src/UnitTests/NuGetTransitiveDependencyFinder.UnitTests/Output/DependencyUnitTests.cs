@@ -227,6 +227,32 @@ public class DependencyUnitTests
     }
 
     /// <summary>
+    /// Tests that <see cref="Dependency.Via"/> behaves as a set: adding two <see cref="Dependency"/> instances that
+    /// compare equal yields only a single element, and <see cref="ISet{T}.Add(T)"/> returns <see langword="false"/> on
+    /// the duplicate insertion.
+    /// </summary>
+    [AllCulturesFact]
+    public void Via_WhenAddingEqualDependencyTwice_RetainsSingleEntry()
+    {
+        // Arrange
+        var dependency = new Dependency(DefaultIdentifier, new("1.0.0"));
+        var first = new Dependency("SameId", new("1.2.3"));
+        var second = new Dependency("sameid", new("1.2.3"));
+
+        // Act
+        var firstAdd = dependency.Via.Add(first);
+        var secondAdd = dependency.Via.Add(second);
+
+        // Assert
+        _ = firstAdd
+            .Should().BeTrue();
+        _ = secondAdd
+            .Should().BeFalse();
+        _ = dependency.Via
+            .Should().HaveCount(1);
+    }
+
+    /// <summary>
     /// Tests that when <see cref="Dependency.IsTransitive"/> is called after being set, it returns the value specified.
     /// </summary>
     /// <param name="value">The value of <see cref="Dependency.IsTransitive"/>.</param>
