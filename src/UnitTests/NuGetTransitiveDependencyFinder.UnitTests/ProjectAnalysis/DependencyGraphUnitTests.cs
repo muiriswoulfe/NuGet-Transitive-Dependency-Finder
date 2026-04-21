@@ -480,6 +480,47 @@ public partial class DependencyGraphUnitTests
             .And.Implement<IDisposable>();
 
     /// <summary>
+    /// Tests that the finalizer runs successfully when the <see cref="DependencyGraph"/> instance is garbage
+    /// collected without having been explicitly disposed, ensuring the finalizer's <c>Dispose(false)</c> path is
+    /// exercised.
+    /// </summary>
+    [AllCulturesFact]
+    public void Finalizer_Invoked_RunsSuccessfully()
+    {
+        // Arrange
+        DependencyGraph? dependencyGraph;
+        var dependencyGraphReference = CreateWithWeakReference(() =>
+        {
+            var temporary = new DependencyGraph(
+                new Mock<IDotNetRunner>().Object,
+                new Mock<IProcessWrapper>().Object);
+            dependencyGraph = temporary;
+            return temporary;
+        });
+
+        // Act
+        dependencyGraph = null;
+#pragma warning disable S1215 // "GC.Collect" should not be called
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+#pragma warning restore S1215 // "GC.Collect" should not be called
+
+        // Assert
+        _ = dependencyGraphReference.IsAlive
+            .Should().BeFalse();
+    }
+
+    /// <summary>
+    /// Creates a <see cref="WeakReference"/> to an object, isolating the local created by
+    /// <paramref name="factory"/> so that the enclosing test can release its only strong reference.
+    /// </summary>
+    /// <typeparam name="TReference">The type of the object to be constructed.</typeparam>
+    /// <param name="factory">The factory that constructs the object.</param>
+    /// <returns>A <see cref="WeakReference"/> to the constructed object.</returns>
+    private static WeakReference CreateWithWeakReference<TReference>(Func<TReference> factory) =>
+        new(factory());
+
+    /// <summary>
     /// Creates a <see cref="DataReceivedEventArgs"/> instance via reflection for the <paramref name="data"/> value.
     /// This is necessary because <see cref="DataReceivedEventArgs"/> has no public constructor.
     /// </summary>
