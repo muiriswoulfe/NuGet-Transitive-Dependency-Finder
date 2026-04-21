@@ -1111,6 +1111,92 @@ public partial class DependencyFinderUnitTests
     }
 
     /// <summary>
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called in transitive-only mode
+    /// (i.e. <c>collateAllDependencies</c> is <see langword="false"/>) against a graph that contains one direct
+    /// dependency that declares one transitive dependency, exactly one dependency — the transitive one — is
+    /// returned. This pins the <c>dependency!.Via.Count &gt; 0</c> filter in
+    /// <c>FindTransitiveDependencies</c> that marks only packages whose <c>Via</c> set is non-empty as transitive:
+    /// relaxing that filter to <c>&gt;= 0</c> (always true) would erroneously mark the direct dependency as
+    /// transitive and surface it in transitive-only mode as well.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithDirectAndTransitiveDependenciesInTransitiveOnlyMode_OmitsDirectDependency()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string filePath = "C:\\project\\project.csproj";
+        const string outputPath = "C:\\project\\bin";
+        const string frameworkName = ".NETCoreApp";
+        Version frameworkVersion = new(7, 0);
+        var framework = new NuGetFramework(frameworkName, frameworkVersion);
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(
+                [
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = framework,
+                    },
+                ])
+            {
+                FilePath = filePath,
+                Name = "Project 1",
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath,
+                },
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+
+        var direct = new LockFileTargetLibrary
+        {
+            Name = "Direct",
+            Version = NuGetVersion.Parse("1.0.0"),
+            Dependencies =
+            [
+                new PackageDependency("Transitive", new VersionRange(NuGetVersion.Parse("2.0.0"))),
+            ],
+        };
+        var transitive = new LockFileTargetLibrary
+        {
+            Name = "Transitive",
+            Version = NuGetVersion.Parse("2.0.0"),
+        };
+        var lockFile = new LockFile
+        {
+            ProjectFileDependencyGroups =
+            [
+                new ProjectFileDependencyGroup(
+                    $"{frameworkName},Version=v{frameworkVersion}",
+                    ["Direct >= 1.0.0", "Transitive >= 2.0.0"]),
+            ],
+            Targets =
+            [
+                new LockFileTarget
+                {
+                    TargetFramework = framework,
+                    Libraries = [direct, transitive],
+                },
+            ],
+        };
+        _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
+
+        // Act: transitive-only mode (collateAllDependencies=false).
+        var result = this.dependencyFinder.Run(projectOrSolutionPath, false, null);
+
+        // Assert: exactly one dependency — "Transitive" — is returned, with no trace of "Direct".
+        var dependencies = result.SortedChildren
+            .SelectMany(project => project.SortedChildren)
+            .SelectMany(frameworkResult => frameworkResult.SortedChildren)
+            .Select(dependency => dependency.Identifier)
+            .ToList();
+        _ = dependencies
+            .Should().ContainSingle()
+            .Which.Should().Be("Transitive");
+    }
+
+    /// <summary>
     /// Gets a regular expression matching dependencies named <c>Matching</c>, used by the unit tests.
     /// </summary>
     [GeneratedRegex("^Matching$")]
