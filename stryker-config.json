@@ -12,9 +12,9 @@
         ],
         "mutation-level": "Advanced",
         "thresholds": {
-            "high": 85,
-            "low": 70,
-            "break": 60
+            "high": 97,
+            "low": 90,
+            "break": 95
         },
         "solution": "NuGetTransitiveDependencyFinder.slnx"
     }
