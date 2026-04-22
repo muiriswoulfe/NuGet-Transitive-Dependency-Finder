@@ -5,6 +5,7 @@
 
 namespace NuGetTransitiveDependencyFinder.UnitTests.ProjectAnalysis;
 
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using FluentAssertions;
@@ -277,6 +278,78 @@ public partial class DependencyFinderUnitTests
         // Assert
         _ = result.HasChildren
             .Should().BeFalse();
+    }
+
+    /// <summary>
+    /// Tests that when <see cref="DependencyFinder.Run(string, bool, Regex?)"/> is called with a lock file whose
+    /// <see cref="LockFile.ProjectFileDependencyGroups"/> contains a match for the project's framework but whose
+    /// <see cref="LockFile.Targets"/> does not, the method throws an <see cref="InvalidOperationException"/>. This
+    /// pins down the use of <see cref="Enumerable.First{TSource}(IEnumerable{TSource}, System.Func{TSource, bool})"/>
+    /// on <see cref="LockFile.Targets"/>, eliminating a LINQ mutation to
+    /// <see cref="Enumerable.FirstOrDefault{TSource}(IEnumerable{TSource}, System.Func{TSource, bool})"/> that would
+    /// silently return <see langword="null"/> and surface as a <see cref="System.NullReferenceException"/> on the
+    /// subsequent <see cref="LockFileTarget.Libraries"/> dereference.
+    /// </summary>
+    [AllCulturesFact]
+    public void Run_WithMatchingProjectFileDependencyGroupsButNoMatchingTarget_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        const string projectOrSolutionPath = "C:\\project\\solution.sln";
+        const string filePath = "C:\\project\\project.csproj";
+        const string outputPath = "C:\\project\\bin";
+        const string projectName = "Project 1";
+        const string frameworkName = ".NETCoreApp";
+        const string unrelatedFrameworkName = ".NETFramework";
+        Version frameworkVersion = new(7, 0);
+        var dependencyGraphSpec = new DependencyGraphSpec();
+        dependencyGraphSpec.AddProject(
+            new PackageSpec(
+                [
+                    new TargetFrameworkInformation
+                    {
+                        FrameworkName = new NuGetFramework(frameworkName, frameworkVersion)
+                    }
+                ])
+            {
+                FilePath = filePath,
+                Name = projectName,
+                RestoreMetadata = new ProjectRestoreMetadata()
+                {
+                    ProjectStyle = ProjectStyle.PackageReference,
+                    OutputPath = outputPath
+                }
+            });
+        _ = this.dependencyGraphMock.Setup(mock => mock.Create(projectOrSolutionPath)).Returns(dependencyGraphSpec);
+        var lockFile = new LockFile()
+        {
+            ProjectFileDependencyGroups =
+            [
+                new ProjectFileDependencyGroup($"{frameworkName},Version=v{frameworkVersion}", ["Newtonsoft.Json"])
+            ],
+            Targets =
+            [
+                new()
+                {
+                    TargetFramework = new NuGetFramework(unrelatedFrameworkName, frameworkVersion),
+                    Libraries =
+                    [
+                        new()
+                        {
+                            Name = "Newtonsoft.Json",
+                            Version = NuGetVersion.Parse("12.0.3")
+                        }
+                    ]
+                }
+            ]
+        };
+        _ = this.assetsMock.Setup(mock => mock.Create(filePath, outputPath)).Returns(lockFile);
+
+        // Act
+        Action action = () => this.dependencyFinder.Run(projectOrSolutionPath, false, null);
+
+        // Assert
+        _ = action
+            .Should().Throw<InvalidOperationException>();
     }
 
     /// <summary>
