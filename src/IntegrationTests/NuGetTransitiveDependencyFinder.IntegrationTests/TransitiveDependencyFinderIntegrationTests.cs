@@ -421,6 +421,92 @@ public sealed partial class TransitiveDependencyFinderIntegrationTests
     }
 
     /// <summary>
+    /// Tests that running the finder with <c>collateAllDependencies</c> set to <see langword="false"/> against a
+    /// project that declares <c>Microsoft.Extensions.Logging</c> as a top-level <c>PackageReference</c> despite it
+    /// already being pulled in transitively by <c>Microsoft.Extensions.Logging.Console</c> surfaces
+    /// <c>Microsoft.Extensions.Logging</c> in the output and marks it as removable (i.e. transitive). This is the
+    /// canonical scenario the library exists to detect.
+    /// </summary>
+    [Fact]
+    public void Run_WithRedundantTopLevelPackage_FlagsItAsTransitive()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var result = finder.Run(TestCollateralPaths.RedundantTransitiveDependenciesProject, false, null);
+        var dependencies = EnumerateDependencies(result).ToList();
+
+        // Assert
+        _ = dependencies
+            .Should().Contain(
+                dependency =>
+                    dependency.Identifier == "Microsoft.Extensions.Logging" &&
+                    dependency.IsTransitive,
+                "Microsoft.Extensions.Logging is declared at the top level but is also transitively provided by " +
+                "Microsoft.Extensions.Logging.Console, so it is a removable redundant reference");
+    }
+
+    /// <summary>
+    /// Tests that the non-redundant top-level package <c>Microsoft.Extensions.Logging.Console</c> in the
+    /// <c>RedundantTransitiveDependencies</c> fixture is <em>not</em> surfaced as a removable (transitive) dependency
+    /// when <c>collateAllDependencies</c> is <see langword="false"/>. This is the complement of
+    /// <see cref="Run_WithRedundantTopLevelPackage_FlagsItAsTransitive"/> and asserts that the library does not
+    /// incorrectly flag a top-level package that no other top-level package pulls in — a false-positive here would
+    /// cause consumers to delete references they genuinely need.
+    /// </summary>
+    [Fact]
+    public void Run_WithRedundantTopLevelPackage_DoesNotFlagNonRedundantPackageAsTransitive()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var result = finder.Run(TestCollateralPaths.RedundantTransitiveDependenciesProject, false, null);
+        var removable = EnumerateDependencies(result)
+            .Where(dependency => dependency.IsTransitive)
+            .Select(dependency => dependency.Identifier)
+            .ToList();
+
+        // Assert
+        _ = removable
+            .Should().NotContain(
+                "Microsoft.Extensions.Logging.Console",
+                "it is the top-level package that transitively pulls in Microsoft.Extensions.Logging and therefore " +
+                "is not itself redundant");
+    }
+
+    /// <summary>
+    /// Tests that with <c>collateAllDependencies</c> set to <see langword="true"/> against the redundant fixture,
+    /// both the redundant top-level <c>Microsoft.Extensions.Logging</c> and the non-redundant top-level
+    /// <c>Microsoft.Extensions.Logging.Console</c> appear, with only the former marked transitive. This pins down
+    /// that the <see cref="Dependency.IsTransitive"/> flag is set correctly on a per-package basis within the same
+    /// project and framework.
+    /// </summary>
+    [Fact]
+    public void Run_WithRedundantTopLevelPackageAndCollateAllTrue_ClassifiesPackagesIndependently()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var result = finder.Run(TestCollateralPaths.RedundantTransitiveDependenciesProject, true, null);
+        var byIdentifier = EnumerateDependencies(result)
+            .GroupBy(dependency => dependency.Identifier)
+            .ToDictionary(group => group.Key, group => group.Any(dependency => dependency.IsTransitive));
+
+        // Assert
+        _ = byIdentifier
+            .Should().ContainKey("Microsoft.Extensions.Logging")
+            .WhoseValue
+            .Should().BeTrue("the redundant top-level package is removable");
+        _ = byIdentifier
+            .Should().ContainKey("Microsoft.Extensions.Logging.Console")
+            .WhoseValue
+            .Should().BeFalse("the non-redundant top-level package is not removable");
+    }
+
+    /// <summary>
     /// Flattens the nested projects/frameworks/dependencies hierarchy into a flat dependency enumeration.
     /// </summary>
     /// <param name="projects">The projects root.</param>
