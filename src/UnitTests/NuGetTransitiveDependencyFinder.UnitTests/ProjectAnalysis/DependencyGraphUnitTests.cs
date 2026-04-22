@@ -511,6 +511,109 @@ public partial class DependencyGraphUnitTests
     }
 
     /// <summary>
+    /// Tests that the finalizer does not delete the temporary dependency-graph file. The finalizer must dispatch
+    /// through <c>Dispose(false)</c>, which skips the managed-resource cleanup branch that calls
+    /// <see cref="File.Delete(string)"/>. This pins down the <c>disposing</c> argument of the finalizer's dispatch,
+    /// killing a mutation that would change it to <see langword="true"/> and cause the finalizer to delete the
+    /// underlying file, breaking finalization safety for managed resources that have already been released.
+    /// </summary>
+    [AllCulturesFact]
+    public void Finalizer_Invoked_DoesNotDeleteFile()
+    {
+        // Arrange
+        var temporaryFilePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+        File.WriteAllText(temporaryFilePath, "sentinel");
+        try
+        {
+            DependencyGraph? dependencyGraph;
+            var dependencyGraphReference = CreateWithWeakReference(() =>
+            {
+                var temporary = new DependencyGraph(
+                    new Mock<IDotNetRunner>().Object,
+                    new Mock<IProcessWrapper>().Object);
+                typeof(DependencyGraph)
+                    .GetField("filePath", BindingFlags.Instance | BindingFlags.NonPublic)!
+                    .SetValue(temporary, temporaryFilePath);
+                dependencyGraph = temporary;
+                return temporary;
+            });
+
+            // Act
+            dependencyGraph = null;
+#pragma warning disable S1215 // "GC.Collect" should not be called
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+#pragma warning restore S1215 // "GC.Collect" should not be called
+
+            // Assert
+            _ = dependencyGraphReference.IsAlive
+                .Should().BeFalse();
+            _ = File.Exists(temporaryFilePath)
+                .Should().BeTrue(
+                    "the finalizer must call Dispose(false) and must not delete the file, because the managed "
+                        + "resource may already have been reclaimed");
+        }
+        finally
+        {
+            if (File.Exists(temporaryFilePath))
+            {
+                File.Delete(temporaryFilePath);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Tests that a newly-constructed <see cref="DependencyGraph"/> instance initializes its internal MSBuild-probe
+    /// output buffer to an empty string. This pins down the field initializer, killing a string mutation that would
+    /// seed the buffer with a non-empty value and potentially cause the MSBuild-availability check to return a false
+    /// positive before the probe has actually written anything.
+    /// </summary>
+    [AllCulturesFact]
+    public void Constructor_WhenInvoked_InitializesMSBuildCheckOutputToEmptyString()
+    {
+        // Arrange
+        using var dependencyGraph = new DependencyGraph(
+            new Mock<IDotNetRunner>().Object,
+            new Mock<IProcessWrapper>().Object);
+
+        // Act
+        var value = typeof(DependencyGraph)
+            .GetField("msBuildCheckOutput", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .GetValue(dependencyGraph);
+
+        // Assert
+        _ = value
+            .Should().Be(string.Empty);
+    }
+
+    /// <summary>
+    /// Tests that calling <see cref="DependencyGraph.Dispose()"/> marks the instance's internal disposed flag as
+    /// <see langword="true"/>. This pins down the assignment inside the dispose dispatcher, killing a boolean mutation
+    /// that would leave the flag as <see langword="false"/> and break the idempotence guarantee of
+    /// <see cref="IDisposable.Dispose"/>.
+    /// </summary>
+    [AllCulturesFact]
+    public void Dispose_WhenInvoked_MarksInstanceAsDisposed()
+    {
+        // Arrange
+        var dependencyGraph = new DependencyGraph(
+            new Mock<IDotNetRunner>().Object,
+            new Mock<IProcessWrapper>().Object);
+        var disposedField = typeof(DependencyGraph)
+            .GetField("disposedValue", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        _ = ((bool)disposedField.GetValue(dependencyGraph)!)
+            .Should().BeFalse("a freshly-constructed instance is not yet disposed");
+
+        // Act
+        dependencyGraph.Dispose();
+
+        // Assert
+        _ = ((bool)disposedField.GetValue(dependencyGraph)!)
+            .Should().BeTrue(
+                "after Dispose has run, the internal flag must be set so that a second Dispose call is a no-op");
+    }
+
+    /// <summary>
     /// Creates a <see cref="WeakReference"/> to an object, isolating the local created by
     /// <paramref name="factory"/> so that the enclosing test can release its only strong reference.
     /// </summary>

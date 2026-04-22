@@ -16,11 +16,6 @@
             "low": 70,
             "break": 60
         },
-        "mutate": [
-            "src/Product/NuGetTransitiveDependencyFinder/**/*.cs",
-            "!src/Product/NuGetTransitiveDependencyFinder/obj/**/*.cs",
-            "!src/Product/NuGetTransitiveDependencyFinder/bin/**/*.cs"
-        ],
         "solution": "NuGetTransitiveDependencyFinder.slnx"
     }
 }

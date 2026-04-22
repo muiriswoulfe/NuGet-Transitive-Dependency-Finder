@@ -6,6 +6,7 @@
 namespace NuGetTransitiveDependencyFinder.UnitTests.Output;
 
 using System.Collections.Generic;
+using System.Reflection;
 using FluentAssertions;
 using NuGetTransitiveDependencyFinder.Output;
 using NuGetTransitiveDependencyFinder.UnitTests.Utilities.Globalization;
@@ -327,5 +328,36 @@ public class ProjectsUnitTests
         // Assert
         _ = result
             .Should().Equal(lowerApple, upperBanana);
+    }
+
+    /// <summary>
+    /// Tests that accessing <see cref="Base{Project}.SortedChildren"/> on an unsorted collection marks the cache flag
+    /// as sorted, so that subsequent accesses do not re-sort the collection. This pins down the post-sort assignment
+    /// in the getter, preventing a mutation that would make every access re-sort.
+    /// </summary>
+    [AllCulturesFact]
+    public void SortedChildren_AfterAccessingOnUnsortedCollection_MarksCollectionAsSorted()
+    {
+        // Arrange
+        var projects = new Projects(3);
+        projects.Add(SortedChildrenTestData[5]);
+        projects.Add(SortedChildrenTestData[4]);
+        projects.Add(SortedChildrenTestData[1]);
+        var cacheField = typeof(Base<Project>).GetField(
+            "areChildrenSorted",
+            BindingFlags.Instance | BindingFlags.NonPublic);
+        _ = cacheField
+            .Should().NotBeNull("Base<TChild>.areChildrenSorted must be present for the cache to work");
+        _ = ((bool)cacheField!.GetValue(projects)!)
+            .Should().BeFalse("adding children to the collection should invalidate the sorted-cache flag");
+
+        // Act
+        _ = projects.SortedChildren;
+
+        // Assert
+        _ = ((bool)cacheField.GetValue(projects)!)
+            .Should().BeTrue(
+                "after SortedChildren has sorted the collection, the cache flag must remain set so that the next "
+                    + "access skips the sort");
     }
 }
