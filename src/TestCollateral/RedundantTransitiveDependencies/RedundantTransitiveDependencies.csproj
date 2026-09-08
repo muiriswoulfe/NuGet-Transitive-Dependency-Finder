@@ -1,0 +1,19 @@
+<!-- © Muiris Woulfe. Licensed under the MIT License. -->
+
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+      Microsoft.Extensions.Logging.Console transitively depends on Microsoft.Extensions.Logging, so the latter is a
+      redundant top-level reference that the transitive-dependency finder is expected to flag as removable.
+    -->
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+  </ItemGroup>
+
+</Project>

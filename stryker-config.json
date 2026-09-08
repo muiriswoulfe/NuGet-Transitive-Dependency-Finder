@@ -1,0 +1,21 @@
+{
+    "stryker-config": {
+        "project": "NuGetTransitiveDependencyFinder.csproj",
+        "test-projects": [
+            "src/UnitTests/NuGetTransitiveDependencyFinder.UnitTests/NuGetTransitiveDependencyFinder.UnitTests.csproj"
+        ],
+        "reporters": [
+            "progress",
+            "html",
+            "cleartext",
+            "json"
+        ],
+        "mutation-level": "Advanced",
+        "thresholds": {
+            "high": 97,
+            "low": 90,
+            "break": 95
+        },
+        "solution": "NuGetTransitiveDependencyFinder.slnx"
+    }
+}

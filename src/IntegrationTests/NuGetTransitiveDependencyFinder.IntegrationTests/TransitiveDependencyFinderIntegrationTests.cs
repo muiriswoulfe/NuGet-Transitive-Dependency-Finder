@@ -1,0 +1,530 @@
+// <copyright file="TransitiveDependencyFinderIntegrationTests.cs" company="Muiris Woulfe">
+// © Muiris Woulfe
+// Licensed under the MIT License
+// </copyright>
+
+namespace NuGetTransitiveDependencyFinder.IntegrationTests;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using NuGetTransitiveDependencyFinder.Extensions;
+using NuGetTransitiveDependencyFinder.Output;
+using Xunit;
+
+/// <summary>
+/// Integration tests that exercise the public <see cref="ITransitiveDependencyFinder"/> façade end-to-end against the
+/// TestCollateral projects. These tests run the real library against real project files; they do not mock the
+/// dependency-analysis pipeline.
+/// </summary>
+[Collection("TestCollateral")]
+public sealed partial class TransitiveDependencyFinderIntegrationTests
+{
+    /// <summary>
+    /// The logging builder configuration used by all integration tests. Suppresses output via
+    /// <see cref="NullLoggerProvider"/>.
+    /// </summary>
+    private static readonly Action<ILoggingBuilder> LoggingBuilderAction =
+        configure => configure.AddProvider(NullLoggerProvider.Instance);
+
+    /// <summary>
+    /// Tests that running the finder against a project with no transitive dependencies returns an empty result set.
+    /// </summary>
+    [Fact]
+    public void Run_WithNoTransitiveDependenciesProject_ReturnsEmptyResult()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var result = finder.Run(TestCollateralPaths.NoTransitiveDependenciesProject, false, null);
+
+        // Assert
+        _ = result
+            .Should().NotBeNull();
+        _ = EnumerateDependencies(result)
+            .Should().BeEmpty();
+    }
+
+    /// <summary>
+    /// Tests that running the finder against a project with known transitive dependencies returns a non-null result.
+    /// The count may be zero if no transitive dependencies are surfaced in the restored graph.
+    /// </summary>
+    [Fact]
+    public void Run_WithTransitiveDependenciesProject_ReturnsNonNullResult()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var result = finder.Run(TestCollateralPaths.TransitiveDependenciesProject, false, null);
+
+        // Assert
+        _ = result
+            .Should().NotBeNull();
+    }
+
+    /// <summary>
+    /// Tests that when a regex filter that does not match any dependency is supplied, all dependencies are filtered
+    /// out.
+    /// </summary>
+    [Fact]
+    public void Run_WithRegexFilterThatMatchesNothing_ReturnsEmptyDependencyLists()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+        var filter = ImpossibleFilter();
+
+        // Act
+        var result = finder.Run(TestCollateralPaths.TransitiveDependenciesProject, false, filter);
+
+        // Assert
+        _ = EnumerateDependencies(result)
+            .Should().BeEmpty();
+    }
+
+    /// <summary>
+    /// Tests that <see cref="ITransitiveDependencyFinder.Run(string?, bool, Regex?)"/> with a
+    /// <see langword="null"/> path throws <see cref="ArgumentNullException"/>.
+    /// </summary>
+    [Fact]
+    public void Run_WithNullPath_ThrowsArgumentNullException()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        Action action = () => finder.Run(null, false, null);
+
+        // Assert
+        _ = action
+            .Should().Throw<ArgumentNullException>();
+    }
+
+    /// <summary>
+    /// Tests that <see cref="ITransitiveDependencyFinder.Run(string?, bool, Regex?)"/> with an invalid path
+    /// propagates an exception rather than silently returning.
+    /// </summary>
+    [Fact]
+    public void Run_WithInvalidPath_ThrowsException()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+        var missing = Path.Combine(
+            Path.GetTempPath(),
+            $"nuget-tdf-integration-{Guid.NewGuid()}.csproj");
+
+        // Act
+        Action action = () => finder.Run(missing, false, null);
+
+        // Assert
+        _ = action
+            .Should().Throw<Exception>();
+    }
+
+    /// <summary>
+    /// Tests that when <c>collateAllDependencies</c> is <see langword="true"/>, the result contains at least as many
+    /// dependencies as when it is <see langword="false"/>.
+    /// </summary>
+    [Fact]
+    public void Run_WithCollateAllDependenciesTrue_ReturnsAtLeastAsManyAsTransitiveOnly()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+        var transitive = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, false, null)).ToList();
+        var all = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null)).ToList();
+
+        // Assert
+        _ = all.Count
+            .Should().BeGreaterThanOrEqualTo(transitive.Count);
+    }
+
+    /// <summary>
+    /// Tests that running the finder twice against the same project yields results with equivalent dependency
+    /// identifiers, demonstrating that the finder is safely re-runnable.
+    /// </summary>
+    [Fact]
+    public void Run_CalledTwice_ReturnsSameDependencies()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var first = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null))
+            .Select(dependency => dependency.Identifier).Order().ToList();
+        var second = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null))
+            .Select(dependency => dependency.Identifier).Order().ToList();
+
+        // Assert
+        _ = second
+            .Should().Equal(first);
+    }
+
+    /// <summary>
+    /// Tests that two independent <see cref="ITransitiveDependencyFinder"/> instances from the DI container produce
+    /// identical results when run against the same project.
+    /// </summary>
+    [Fact]
+    public void Run_WithTwoInstances_ProducesEquivalentResults()
+    {
+        // Arrange
+        using var first = CreateFinder();
+        using var second = CreateFinder();
+
+        // Act
+        var firstResult = EnumerateDependencies(
+            first.Run(TestCollateralPaths.NoTransitiveDependenciesProject, true, null))
+            .Select(dependency => dependency.Identifier).Order().ToList();
+        var secondResult = EnumerateDependencies(
+            second.Run(TestCollateralPaths.NoTransitiveDependenciesProject, true, null))
+            .Select(dependency => dependency.Identifier).Order().ToList();
+
+        // Assert
+        _ = secondResult
+            .Should().Equal(firstResult);
+    }
+
+    /// <summary>
+    /// Tests that <see cref="ITransitiveDependencyFinder"/> is correctly resolved from the DI container as a
+    /// disposable instance.
+    /// </summary>
+    [Fact]
+    public void ITransitiveDependencyFinder_ResolvedFromContainer_IsDisposable()
+    {
+        // Arrange
+        var finder = CreateFinder();
+
+        // Act
+        Action action = finder.Dispose;
+
+        // Assert
+        _ = action
+            .Should().NotThrow();
+    }
+
+    /// <summary>
+    /// Tests that <see cref="ITransitiveDependencyFinder.Run(string?, bool, Regex?)"/> called after
+    /// <see cref="IDisposable.Dispose"/> throws an <see cref="ObjectDisposedException"/> because the underlying
+    /// <c>IServiceProvider</c> has been torn down.
+    /// </summary>
+    [Fact]
+    public void Run_AfterDispose_ThrowsObjectDisposedException()
+    {
+        // Arrange
+        var finder = CreateFinder();
+        finder.Dispose();
+
+        // Act
+        Action action = () => finder.Run(TestCollateralPaths.NoTransitiveDependenciesProject, false, null);
+
+        // Assert
+        _ = action
+            .Should().Throw<ObjectDisposedException>();
+    }
+
+    /// <summary>
+    /// Tests that <see cref="IDisposable.Dispose"/> can be called twice on the same finder without throwing,
+    /// verifying idempotent disposal.
+    /// </summary>
+    [Fact]
+    public void Dispose_CalledTwice_DoesNotThrow()
+    {
+        // Arrange
+        var finder = CreateFinder();
+
+        // Act
+        finder.Dispose();
+        Action action = finder.Dispose;
+
+        // Assert
+        _ = action
+            .Should().NotThrow();
+    }
+
+    /// <summary>
+    /// Tests that running the finder against the TestCollateral solution file (<c>.sln</c>) — which contains multiple
+    /// projects — returns a result that includes a project entry for each project in the solution, exercising the
+    /// multi-project code path that per-project runs cannot.
+    /// </summary>
+    [Fact]
+    public void Run_AgainstSolution_ReturnsMultipleProjects()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var result = finder.Run(TestCollateralPaths.TestCollateralSolution, true, null);
+
+        // Assert
+        _ = result
+            .Should().NotBeNull();
+        _ = result.SortedChildren
+            .Should().HaveCountGreaterThanOrEqualTo(2, "the TestCollateral solution references both the " +
+                "NoTransitiveDependencies and TransitiveDependencies projects");
+    }
+
+    /// <summary>
+    /// Tests that running the finder with a regex filter that matches a real dependency actually surfaces that
+    /// dependency when <c>collateAllDependencies</c> is <see langword="true"/>, verifying that the filter is applied
+    /// in the positive case (all existing filter tests exercise only the empty-result case).
+    /// </summary>
+    [Fact]
+    public void Run_WithFilterMatchingRealDependency_ReturnsOnlyMatchingDependencies()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+        var allDependencyIdentifiers = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null))
+            .Select(dependency => dependency.Identifier)
+            .Distinct()
+            .ToList();
+        allDependencyIdentifiers
+            .Should().NotBeEmpty("this test requires at least one real dependency to match against");
+        var target = allDependencyIdentifiers[0];
+        var filter = new Regex($"^{Regex.Escape(target)}$");
+
+        // Act
+        var filtered = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, filter))
+            .ToList();
+
+        // Assert
+        _ = filtered
+            .Should().NotBeEmpty();
+        _ = filtered
+            .Should().OnlyContain(dependency => dependency.Identifier == target);
+    }
+
+    /// <summary>
+    /// Tests that two <see cref="ITransitiveDependencyFinder"/> instances run concurrently on different threads
+    /// against the same project both complete successfully and produce identical results, verifying that the library
+    /// is safe to use in multi-finder concurrent scenarios (each finder has its own service provider).
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task Run_ConcurrentlyOnSeparateInstances_ProducesEquivalentResultsAsync()
+    {
+        // Arrange
+        var tasks = Enumerable.Range(0, 4).Select(_ => System.Threading.Tasks.Task.Run(() =>
+        {
+            using var finder = CreateFinder();
+            return EnumerateDependencies(
+                finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null))
+                .Select(dependency => dependency.Identifier)
+                .Order()
+                .ToList();
+        })).ToArray();
+
+        // Act
+        var results = await System.Threading.Tasks.Task.WhenAll(tasks);
+
+        // Assert
+        var baseline = results[0];
+        foreach (var result in results)
+        {
+            _ = result
+                .Should().Equal(baseline);
+        }
+    }
+
+    /// <summary>
+    /// Tests that invoking <see cref="ITransitiveDependencyFinder.Run(string?, bool, Regex?)"/> with
+    /// <c>collateAllDependencies</c> set to <see langword="true"/> exposes the full dependency set,
+    /// which must include at least one direct (non-transitive) dependency in addition to any transitive
+    /// dependencies. This guards the <see cref="Dependency.IsTransitive"/> flag being correctly
+    /// surfaced for direct package references.
+    /// </summary>
+    [Fact]
+    public void Run_WithCollateAllTrue_IncludesDirectDependencies()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var dependencies = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null))
+            .ToList();
+
+        // Assert
+        _ = dependencies
+            .Should().NotBeEmpty()
+            .And.Contain(dependency => !dependency.IsTransitive);
+    }
+
+    /// <summary>
+    /// Returns a regex that cannot match any realistic dependency identifier.
+    /// </summary>
+    /// <returns>The regex.</returns>
+    [GeneratedRegex("^ThisPackageDoesNotExist_zzzzz$")]
+    private static partial Regex ImpossibleFilter();
+
+    /// <summary>
+    /// Tests that invoking <see cref="ITransitiveDependencyFinder.Run(string?, bool, Regex?)"/> twice on the same
+    /// instance returns equivalent results on both invocations, verifying that a finder instance is reusable and
+    /// produces deterministic output across repeated calls.
+    /// </summary>
+    [Fact]
+    public void Run_TwiceOnSameInstance_ProducesEquivalentResults()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var firstIdentifiers = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null))
+            .Select(dependency => dependency.Identifier)
+            .Order()
+            .ToList();
+        var secondIdentifiers = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null))
+            .Select(dependency => dependency.Identifier)
+            .Order()
+            .ToList();
+
+        // Assert
+        _ = secondIdentifiers
+            .Should().Equal(firstIdentifiers);
+    }
+
+    /// <summary>
+    /// Tests that invoking <see cref="ITransitiveDependencyFinder.Run(string?, bool, Regex?)"/> with
+    /// <c>collateAllDependencies</c> set to <see langword="true"/> yields at least as many dependencies as the same
+    /// run with <see langword="false"/>, verifying that the collate-all flag has an observable effect (it never
+    /// produces fewer results than the default).
+    /// </summary>
+    [Fact]
+    public void Run_WithCollateAllTrue_ReturnsAtLeastAsManyDependenciesAsCollateAllFalse()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var nonCollated = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, false, null))
+            .Count();
+        var collated = EnumerateDependencies(
+            finder.Run(TestCollateralPaths.TransitiveDependenciesProject, true, null))
+            .Count();
+
+        // Assert
+        _ = collated
+            .Should().BeGreaterThanOrEqualTo(nonCollated);
+    }
+
+    /// <summary>
+    /// Tests that running the finder with <c>collateAllDependencies</c> set to <see langword="false"/> against a
+    /// project that declares <c>Microsoft.Extensions.Logging</c> as a top-level <c>PackageReference</c> despite it
+    /// already being pulled in transitively by <c>Microsoft.Extensions.Logging.Console</c> surfaces
+    /// <c>Microsoft.Extensions.Logging</c> in the output and marks it as removable (i.e. transitive). This is the
+    /// canonical scenario the library exists to detect.
+    /// </summary>
+    [Fact]
+    public void Run_WithRedundantTopLevelPackage_FlagsItAsTransitive()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var result = finder.Run(TestCollateralPaths.RedundantTransitiveDependenciesProject, false, null);
+        var dependencies = EnumerateDependencies(result).ToList();
+
+        // Assert
+        _ = dependencies
+            .Should().Contain(
+                dependency =>
+                    dependency.Identifier == "Microsoft.Extensions.Logging" &&
+                    dependency.IsTransitive,
+                "Microsoft.Extensions.Logging is declared at the top level but is also transitively provided by " +
+                "Microsoft.Extensions.Logging.Console, so it is a removable redundant reference");
+    }
+
+    /// <summary>
+    /// Tests that the non-redundant top-level package <c>Microsoft.Extensions.Logging.Console</c> in the
+    /// <c>RedundantTransitiveDependencies</c> fixture is <em>not</em> surfaced as a removable (transitive) dependency
+    /// when <c>collateAllDependencies</c> is <see langword="false"/>. This is the complement of
+    /// <see cref="Run_WithRedundantTopLevelPackage_FlagsItAsTransitive"/> and asserts that the library does not
+    /// incorrectly flag a top-level package that no other top-level package pulls in — a false-positive here would
+    /// cause consumers to delete references they genuinely need.
+    /// </summary>
+    [Fact]
+    public void Run_WithRedundantTopLevelPackage_DoesNotFlagNonRedundantPackageAsTransitive()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var result = finder.Run(TestCollateralPaths.RedundantTransitiveDependenciesProject, false, null);
+        var removable = EnumerateDependencies(result)
+            .Where(dependency => dependency.IsTransitive)
+            .Select(dependency => dependency.Identifier)
+            .ToList();
+
+        // Assert
+        _ = removable
+            .Should().NotContain(
+                "Microsoft.Extensions.Logging.Console",
+                "it is the top-level package that transitively pulls in Microsoft.Extensions.Logging and therefore " +
+                "is not itself redundant");
+    }
+
+    /// <summary>
+    /// Tests that with <c>collateAllDependencies</c> set to <see langword="true"/> against the redundant fixture,
+    /// both the redundant top-level <c>Microsoft.Extensions.Logging</c> and the non-redundant top-level
+    /// <c>Microsoft.Extensions.Logging.Console</c> appear, with only the former marked transitive. This pins down
+    /// that the <see cref="Dependency.IsTransitive"/> flag is set correctly on a per-package basis within the same
+    /// project and framework.
+    /// </summary>
+    [Fact]
+    public void Run_WithRedundantTopLevelPackageAndCollateAllTrue_ClassifiesPackagesIndependently()
+    {
+        // Arrange
+        using var finder = CreateFinder();
+
+        // Act
+        var result = finder.Run(TestCollateralPaths.RedundantTransitiveDependenciesProject, true, null);
+        var byIdentifier = EnumerateDependencies(result)
+            .GroupBy(dependency => dependency.Identifier)
+            .ToDictionary(group => group.Key, group => group.Any(dependency => dependency.IsTransitive));
+
+        // Assert
+        _ = byIdentifier
+            .Should().ContainKey("Microsoft.Extensions.Logging")
+            .WhoseValue
+            .Should().BeTrue("the redundant top-level package is removable");
+        _ = byIdentifier
+            .Should().ContainKey("Microsoft.Extensions.Logging.Console")
+            .WhoseValue
+            .Should().BeFalse("the non-redundant top-level package is not removable");
+    }
+
+    /// <summary>
+    /// Flattens the nested projects/frameworks/dependencies hierarchy into a flat dependency enumeration.
+    /// </summary>
+    /// <param name="projects">The projects root.</param>
+    /// <returns>An enumerable of all dependencies across all projects and frameworks.</returns>
+    private static IEnumerable<Dependency> EnumerateDependencies(Projects projects) =>
+        projects.SortedChildren
+            .SelectMany(project => project.SortedChildren)
+            .SelectMany(framework => framework.SortedChildren);
+
+    /// <summary>
+    /// Constructs a fresh <see cref="ITransitiveDependencyFinder"/> instance from the DI container configured by
+    /// <see cref="ServiceCollectionExtensions.AddNuGetTransitiveDependencyFinder(IServiceCollection?,
+    /// Action{ILoggingBuilder}?)"/>.
+    /// </summary>
+    /// <returns>A disposable <see cref="ITransitiveDependencyFinder"/>.</returns>
+    private static ITransitiveDependencyFinder CreateFinder() =>
+        new ServiceCollection()
+            .AddNuGetTransitiveDependencyFinder(LoggingBuilderAction)
+            .BuildServiceProvider()
+            .GetRequiredService<ITransitiveDependencyFinder>();
+}

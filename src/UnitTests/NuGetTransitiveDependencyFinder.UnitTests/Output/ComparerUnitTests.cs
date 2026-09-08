@@ -23,7 +23,7 @@ public class ComparerUnitTests
     /// The comparison logic specific to <see cref="Version"/>, which takes two objects of type <see cref="Version"/>
     /// and returns an <see cref="int"/>.
     /// </summary>
-    private static readonly Func<Version, Version, int> ComparisonFunction = (Version current, Version other) =>
+    private static readonly Func<Version, Version, int> ComparisonFunction = (current, other) =>
         current.CompareTo(other);
 
     /// <summary>

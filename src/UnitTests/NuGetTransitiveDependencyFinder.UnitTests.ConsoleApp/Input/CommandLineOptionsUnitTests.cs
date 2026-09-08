@@ -78,4 +78,31 @@ public class CommandLineOptionsUnitTests
         _ = commandLineOptions.Filter
             .Should().Be(filter);
     }
+
+    /// <summary>
+    /// Tests that when a default-constructed <see cref="CommandLineOptions"/> instance is inspected, each property
+    /// exposes its documented default value.
+    /// </summary>
+    [AllCulturesFact]
+    public void DefaultConstructed_ExposesDocumentedDefaults()
+    {
+        // Arrange & Act
+        var commandLineOptions = new CommandLineOptions();
+
+        // Assert
+        _ = commandLineOptions.All
+            .Should().BeFalse();
+        _ = commandLineOptions.ProjectOrSolution
+            .Should().BeNull();
+        _ = commandLineOptions.Filter
+            .Should().BeNull();
+    }
+
+    /// <summary>
+    /// Tests that <see cref="CommandLineOptions"/> implements <see cref="ICommandLineOptions"/>.
+    /// </summary>
+    [AllCulturesFact]
+    public void Type_ImplementsICommandLineOptions() =>
+        _ = typeof(CommandLineOptions)
+            .Should().Implement<ICommandLineOptions>();
 }

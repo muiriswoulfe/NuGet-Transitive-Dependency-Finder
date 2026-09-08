@@ -1,0 +1,26 @@
+{
+    "stryker-config": {
+        "project": "NuGetTransitiveDependencyFinder.ConsoleApp.csproj",
+        "test-projects": [
+            "src/UnitTests/NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp/NuGetTransitiveDependencyFinder.UnitTests.ConsoleApp.csproj"
+        ],
+        "reporters": [
+            "progress",
+            "html",
+            "cleartext",
+            "json"
+        ],
+        "mutation-level": "Advanced",
+        "thresholds": {
+            "high": 85,
+            "low": 70,
+            "break": 60
+        },
+        "mutate": [
+            "src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/**/*.cs",
+            "!src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/obj/**/*.cs",
+            "!src/Product/NuGetTransitiveDependencyFinder.ConsoleApp/bin/**/*.cs"
+        ],
+        "solution": "NuGetTransitiveDependencyFinder.slnx"
+    }
+}

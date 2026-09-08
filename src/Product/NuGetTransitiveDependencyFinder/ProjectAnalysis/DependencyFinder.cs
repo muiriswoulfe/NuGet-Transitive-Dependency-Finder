@@ -93,10 +93,12 @@ internal class DependencyFinder(IAssets assets, IDependencyGraph dependencyGraph
     /// name.</param>
     /// <returns>The collection of .NET projects.</returns>
     private IReadOnlyCollection<PackageSpec> CreateProjects(string projectOrSolutionPath) =>
+#pragma warning disable IDE0305 // Collection expression conflicts with StyleCop SA1010 on older versions.
         this.CreateProjectDependencyGraph(projectOrSolutionPath)
             .Projects
             .Where(project => project.RestoreMetadata.ProjectStyle == ProjectStyle.PackageReference)
             .ToArray();
+#pragma warning restore IDE0305
 
     /// <summary>
     /// Creates the project dependency graph, which is used for generating the collection of .NET projects to be
@@ -200,6 +202,8 @@ internal class DependencyFinder(IAssets assets, IDependencyGraph dependencyGraph
                 .Where(dependency => filter.Match(dependency.Identifier).Success);
         }
 
+#pragma warning disable IDE0305 // Collection expression conflicts with StyleCop SA1010 on older versions.
         return new(framework.FrameworkName, frameworkDependencies.ToList());
+#pragma warning restore IDE0305
     }
 }

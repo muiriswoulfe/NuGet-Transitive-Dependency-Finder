@@ -64,7 +64,7 @@ public class PlainConsoleFormatterUnitTests
                 new(0),
                 "State",
                 new NotSupportedException(),
-                (string state, Exception? exception) => Invariant($"{state} {exception}")),
+                (state, exception) => Invariant($"{state} {exception}")),
             ExternalScopeProviderMock.Object,
             result);
 
@@ -98,7 +98,7 @@ public class PlainConsoleFormatterUnitTests
                     new(0),
                     "State",
                     new NotSupportedException(),
-                    (string state, Exception? exception) => Invariant($"{state} {exception}")),
+                    (state, exception) => Invariant($"{state} {exception}")),
                 ExternalScopeProviderMock.Object,
                 result)));
 
@@ -130,7 +130,7 @@ public class PlainConsoleFormatterUnitTests
                 new(0),
                 "State",
                 new NotSupportedException(),
-                (string state, Exception? exception) => Invariant($"{state} {exception}")),
+                (state, exception) => Invariant($"{state} {exception}")),
             ExternalScopeProviderMock.Object,
             result);
 

@@ -42,4 +42,20 @@ public class CommandLineHelpUnitTests
         _ = result
             .Should().Be("The file name of the .NET project or solution to analyze.");
     }
+
+    /// <summary>
+    /// Tests that when <see cref="CommandLineHelp.Filter"/> is called, it returns a non-empty string, verifying the
+    /// accessor resolves the <c>CommandLineHelp_Filter</c> resource and does not regress on the accessor's presence
+    /// or resource-lookup behaviour.
+    /// </summary>
+    [AllCulturesFact]
+    public void Filter_Called_ReturnsNonEmptyString()
+    {
+        // Act
+        var result = CommandLineHelp.Filter;
+
+        // Assert
+        _ = result
+            .Should().NotBeNullOrWhiteSpace();
+    }
 }

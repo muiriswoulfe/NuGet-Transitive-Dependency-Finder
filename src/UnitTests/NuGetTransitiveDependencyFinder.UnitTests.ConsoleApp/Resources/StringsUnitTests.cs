@@ -23,6 +23,7 @@ public class StringsUnitTests
     private static readonly string[] AllResources =
     [
         Invariant($"{nameof(CommandLineHelp)}_{nameof(CommandLineHelp.All)}"),
+        Invariant($"{nameof(CommandLineHelp)}_{nameof(CommandLineHelp.Filter)}"),
         Invariant($"{nameof(CommandLineHelp)}_{nameof(CommandLineHelp.ProjectOrSolution)}"),
         Invariant($"{nameof(Information)}_{nameof(Information.CommencingAnalysis)}"),
         Invariant($"{nameof(Information)}_{nameof(Information.NoDependencies)}"),

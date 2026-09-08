@@ -227,6 +227,32 @@ public class DependencyUnitTests
     }
 
     /// <summary>
+    /// Tests that <see cref="Dependency.Via"/> behaves as a set: adding two <see cref="Dependency"/> instances that
+    /// compare equal yields only a single element, and <see cref="ISet{T}.Add(T)"/> returns <see langword="false"/> on
+    /// the duplicate insertion.
+    /// </summary>
+    [AllCulturesFact]
+    public void Via_WhenAddingEqualDependencyTwice_RetainsSingleEntry()
+    {
+        // Arrange
+        var dependency = new Dependency(DefaultIdentifier, new("1.0.0"));
+        var first = new Dependency("SameId", new("1.2.3"));
+        var second = new Dependency("sameid", new("1.2.3"));
+
+        // Act
+        var firstAdd = dependency.Via.Add(first);
+        var secondAdd = dependency.Via.Add(second);
+
+        // Assert
+        _ = firstAdd
+            .Should().BeTrue();
+        _ = secondAdd
+            .Should().BeFalse();
+        _ = dependency.Via
+            .Should().HaveCount(1);
+    }
+
+    /// <summary>
     /// Tests that when <see cref="Dependency.IsTransitive"/> is called after being set, it returns the value specified.
     /// </summary>
     /// <param name="value">The value of <see cref="Dependency.IsTransitive"/>.</param>
@@ -244,6 +270,30 @@ public class DependencyUnitTests
         // Assert
         _ = value
             .Should().Be(dependency.IsTransitive);
+    }
+
+    /// <summary>
+    /// Tests that <see cref="Dependency.IsTransitive"/> is not part of the equality or hash-code contract: two
+    /// otherwise-identical dependencies that differ only in their transitive flag must compare equal and produce the
+    /// same hash code. This is required for <see cref="Dependency.Via"/>, whose <see cref="HashSet{T}"/>-based
+    /// deduplication relies on the flag being excluded from identity.
+    /// </summary>
+    [AllCulturesFact]
+    public void IsTransitive_DoesNotAffectEqualityOrHashCode()
+    {
+        // Arrange
+        var transitive = new Dependency(DefaultIdentifier, DefaultVersion) { IsTransitive = true };
+        var direct = new Dependency(DefaultIdentifier, DefaultVersion) { IsTransitive = false };
+
+        // Assert
+        _ = transitive.Equals(direct)
+            .Should().BeTrue();
+        _ = (transitive == direct)
+            .Should().BeTrue();
+        _ = transitive.CompareTo(direct)
+            .Should().Be(0);
+        _ = transitive.GetHashCode()
+            .Should().Be(direct.GetHashCode());
     }
 
     /// <summary>

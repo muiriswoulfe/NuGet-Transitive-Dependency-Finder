@@ -1,0 +1,53 @@
+<!-- © Muiris Woulfe. Licensed under the MIT License. -->
+
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <TestCollateralNoTransitiveDependenciesProject>$(MSBuildThisFileDirectory)..\..\TestCollateral\NoTransitiveDependencies\NoTransitiveDependencies.csproj</TestCollateralNoTransitiveDependenciesProject>
+    <TestCollateralTransitiveDependenciesProject>$(MSBuildThisFileDirectory)..\..\TestCollateral\TransitiveDependencies\TransitiveDependencies.csproj</TestCollateralTransitiveDependenciesProject>
+    <TestCollateralRedundantTransitiveDependenciesProject>$(MSBuildThisFileDirectory)..\..\TestCollateral\RedundantTransitiveDependencies\RedundantTransitiveDependencies.csproj</TestCollateralRedundantTransitiveDependenciesProject>
+    <TestCollateralSolution>$(MSBuildThisFileDirectory)..\..\TestCollateral\TestCollateral.sln</TestCollateralSolution>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Product\NuGetTransitiveDependencyFinder\NuGetTransitiveDependencyFinder.csproj" />
+    <ProjectReference Include="..\..\UnitTests\NuGetTransitiveDependencyFinder.UnitTests.Utilities\NuGetTransitiveDependencyFinder.UnitTests.Utilities.csproj" />
+    <ProjectReference
+      Include="..\..\TestCollateral\NoTransitiveDependencies\NoTransitiveDependencies.csproj"
+      ReferenceOutputAssembly="false" />
+    <ProjectReference
+      Include="..\..\TestCollateral\TransitiveDependencies\TransitiveDependencies.csproj"
+      ReferenceOutputAssembly="false" />
+    <ProjectReference
+      Include="..\..\TestCollateral\RedundantTransitiveDependencies\RedundantTransitiveDependencies.csproj"
+      ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <Target Name="WriteTestCollateralPathsFile" BeforeTargets="CoreCompile">
+    <PropertyGroup>
+      <_TestCollateralPathsFile>$(IntermediateOutputPath)TestCollateralPaths.Generated.cs</_TestCollateralPathsFile>
+      <_TestCollateralPathsContent>// &lt;auto-generated /&gt;
+namespace NuGetTransitiveDependencyFinder.IntegrationTests%3B
+internal static partial class TestCollateralPaths
+{
+    public const string NoTransitiveDependenciesProject = @"$(TestCollateralNoTransitiveDependenciesProject)"%3B
+    public const string TransitiveDependenciesProject = @"$(TestCollateralTransitiveDependenciesProject)"%3B
+    public const string RedundantTransitiveDependenciesProject = @"$(TestCollateralRedundantTransitiveDependenciesProject)"%3B
+    public const string TestCollateralSolution = @"$(TestCollateralSolution)"%3B
+}
+</_TestCollateralPathsContent>
+    </PropertyGroup>
+    <WriteLinesToFile
+      File="$(_TestCollateralPathsFile)"
+      Lines="$(_TestCollateralPathsContent)"
+      Overwrite="true"
+      WriteOnlyWhenDifferent="true" />
+    <ItemGroup>
+      <Compile Include="$(_TestCollateralPathsFile)" />
+      <FileWrites Include="$(_TestCollateralPathsFile)" />
+    </ItemGroup>
+  </Target>
+
+</Project>
+

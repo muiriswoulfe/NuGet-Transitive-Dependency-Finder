@@ -398,5 +398,10 @@ FodyWeavers.xsd
 *.sln.iml
 
 # Project-Specific
+*.lscache
 coverage.opencover.xml
 lcov.info
+
+# Stryker.NET
+StrykerOutput/
+stryker.log

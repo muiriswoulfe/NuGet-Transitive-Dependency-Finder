@@ -26,7 +26,7 @@ internal class DotNetRunner(ILogger<DotNetRunner> logger, IProcessWrapper proces
             WorkingDirectory = workingDirectory,
         };
 
-        processWrapper.Start(startInfo, this.LogOutput!, this.LogError!);
+        processWrapper.Start(startInfo, this.LogOutput, this.LogError);
 
         processWrapper.BeginErrorReadLine();
         processWrapper.BeginOutputReadLine();

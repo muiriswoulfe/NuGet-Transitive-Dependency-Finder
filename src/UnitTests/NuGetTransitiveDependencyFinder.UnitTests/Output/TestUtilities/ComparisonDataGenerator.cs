@@ -176,9 +176,9 @@ internal static class ComparisonDataGenerator
         TValue lesserValue,
         TheoryData<TValue, TValue> supplementalTestData)
     {
-        supplementalTestData.Add(defaultValue!, defaultValue!);
-        supplementalTestData.Add(lesserValue!, lesserValue!);
-        supplementalTestData.Add(defaultValue!, clonedDefaultValue!);
+        supplementalTestData.Add(defaultValue, defaultValue);
+        supplementalTestData.Add(lesserValue, lesserValue);
+        supplementalTestData.Add(defaultValue, clonedDefaultValue);
         return supplementalTestData;
     }
 

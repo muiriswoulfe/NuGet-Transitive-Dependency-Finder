@@ -86,4 +86,67 @@ public class ServiceCollectionExtensionsUnitTests
         _ = result.GetService<Action<ILoggingBuilder>>()
             .Should().Be(LoggingBuilderAction);
     }
+
+    /// <summary>
+    /// Tests that <see cref="ServiceCollectionExtensions.AddNuGetTransitiveDependencyFinder(IServiceCollection,
+    /// Action{ILoggingBuilder})"/> is fluent: it returns the same <see cref="IServiceCollection"/> instance it was
+    /// called on.
+    /// </summary>
+    [AllCulturesFact]
+    public void AddNuGetTransitiveDependencyFinder_ReturnsSameServiceCollection()
+    {
+        // Arrange
+        var serviceCollection = new ServiceCollection();
+
+        // Act
+        var result = serviceCollection.AddNuGetTransitiveDependencyFinder(LoggingBuilderAction);
+
+        // Assert
+        _ = result
+            .Should().BeSameAs(serviceCollection);
+    }
+
+    /// <summary>
+    /// Tests that <see cref="ITransitiveDependencyFinder"/> is registered with a transient lifetime, yielding a new
+    /// instance on each resolve.
+    /// </summary>
+    [AllCulturesFact]
+    public void AddNuGetTransitiveDependencyFinder_RegistersITransitiveDependencyFinderAsTransient()
+    {
+        // Arrange
+        var serviceCollection = new ServiceCollection();
+        using var provider = serviceCollection
+            .AddNuGetTransitiveDependencyFinder(LoggingBuilderAction)
+            .BuildServiceProvider();
+
+        // Act
+        var first = provider.GetService<ITransitiveDependencyFinder>();
+        var second = provider.GetService<ITransitiveDependencyFinder>();
+
+        // Assert
+        _ = first
+            .Should().NotBeSameAs(second);
+    }
+
+    /// <summary>
+    /// Tests that <see cref="Action{ILoggingBuilder}"/> is registered as a singleton, yielding the same instance on
+    /// each resolve.
+    /// </summary>
+    [AllCulturesFact]
+    public void AddNuGetTransitiveDependencyFinder_RegistersLoggingBuilderActionAsSingleton()
+    {
+        // Arrange
+        var serviceCollection = new ServiceCollection();
+        using var provider = serviceCollection
+            .AddNuGetTransitiveDependencyFinder(LoggingBuilderAction)
+            .BuildServiceProvider();
+
+        // Act
+        var first = provider.GetService<Action<ILoggingBuilder>>();
+        var second = provider.GetService<Action<ILoggingBuilder>>();
+
+        // Assert
+        _ = first
+            .Should().BeSameAs(second);
+    }
 }
